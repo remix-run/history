@@ -42,7 +42,7 @@ class History {
 
   _notifyChange() {
     for (var i = 0, len = this.changeListeners.length; i < len; ++i)
-      this.changeListeners[i].call(this);
+      this.changeListeners[i].call(this, this.location);
   }
 
   addChangeListener(listener) {
@@ -53,6 +53,18 @@ class History {
     this.changeListeners = this.changeListeners.filter(function (li) {
       return li !== listener;
     });
+  }
+
+  listen(listener) {
+    this.addChangeListener(listener);
+
+    if (this.location) {
+      listener.call(this, this.location);
+    } else {
+      this.setup();
+    }
+
+    return this.removeChangeListener.bind(this, listener);
   }
 
   onBeforeChange(listener) {

@@ -1,5 +1,6 @@
 import assert from 'assert';
 import expect, { createSpy, spyOn } from 'expect';
+import NavigationTypes from '../NavigationTypes';
 import History, { RequiredSubclassMethods } from '../History';
 
 function describeHistory(history) {
@@ -43,6 +44,32 @@ function describeHistory(history) {
       expect(goSpy).toHaveBeenCalled();
 
       expect(spy.calls.length).toEqual(1);
+    });
+  });
+
+  describe('pushState', function () {
+    var unlisten, listener, location;
+    beforeEach(function () {
+      window.location.href = '/';
+
+      unlisten = history.listen(listener = function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      unlisten();
+      unlisten = listener = location = null;
+    });
+
+    it('calls change listeners with the new location', function () {
+      history.pushState({ the: 'state' }, '/home?the=query');
+
+      assert(location);
+      expect(location.pathname).toEqual('/home');
+      expect(location.query).toEqual({ the: 'query' });
+      //expect(location.state).toEqual({ the: 'state' });
+      expect(location.navigationType).toEqual(NavigationTypes.PUSH);
     });
   });
 }
