@@ -17,6 +17,10 @@ export var RequiredSubclassMethods = [ 'pushState', 'replaceState', 'go' ];
  */
 class History {
 
+  static isHistory(object) {
+    return object instanceof History;
+  }
+
   constructor(options={}) {
     RequiredSubclassMethods.forEach(function (method) {
       invariant(
