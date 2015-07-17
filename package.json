@@ -11,9 +11,8 @@
   "scripts": {
     "build": "scripts/build.sh",
     "watch": "babel ./modules --watch -d lib",
-    "examples": "webpack-dev-server --config examples/webpack.config.js --content-base examples --inline",
     "prepublish": "npm run build",
-    "test": "eslint modules && karma start"
+    "test": "eslint modules && mocha -r ./jsdom -r babel/register --globals document,window,navigator modules/**/*-test.js"
   },
   "authors": [
     "Michael Jackson"
@@ -32,15 +31,8 @@
     "babel-loader": "^5.0.0",
     "eslint": "^1.0.0-rc-1",
     "expect": "^1.6.0",
-    "karma": "^0.12.28",
-    "karma-chrome-launcher": "^0.1.7",
-    "karma-cli": "0.0.4",
-    "karma-firefox-launcher": "^0.1.3",
-    "karma-mocha": "^0.1.10",
-    "karma-sourcemap-loader": "^0.3.2",
-    "karma-webpack": "^1.3.1",
+    "jsdom": "^5.6.1",
     "mocha": "^2.0.1",
-    "react": "0.13.x",
     "rf-changelog": "^0.4.0",
     "webpack": "^1.4.13",
     "webpack-dev-server": "^1.6.6"
