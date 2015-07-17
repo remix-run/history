@@ -1,9 +1,10 @@
+import assert from 'assert';
 import expect, { createSpy, spyOn } from 'expect';
 import History, { RequiredSubclassMethods } from '../History';
 
-export default function describeHistory(history) {
-  it('is an instanceof History', function () {
-    expect(history).toBeA(History);
+function describeHistory(history) {
+  it('is a History', function () {
+    assert(History.isHistory(history));
   });
 
   RequiredSubclassMethods.forEach(function (method) {
@@ -13,22 +14,19 @@ export default function describeHistory(history) {
   });
 
   describe('adding/removing a listener', function () {
-    var pushState, go, pushStateSpy, goSpy;
+    var pushStateSpy, goSpy;
     beforeEach(function () {
       // It's a bit tricky to test change listeners properly because
       // they are triggered when the URL changes. So we need to stub
       // out push/go to only notify listeners ... but we can't make
       // assertions on the location because it will be wrong.
-      pushState = history.pushState;
       pushStateSpy = spyOn(history, 'pushState').andCall(history._notifyChange);
-
-      go = history.go;
       goSpy = spyOn(history, 'go').andCall(history._notifyChange);
     });
 
     afterEach(function () {
-      history.push = pushState;
-      history.go = go;
+      pushStateSpy.restore();
+      goSpy.restore();
     });
 
     it('works', function () {
@@ -48,3 +46,5 @@ export default function describeHistory(history) {
     });
   });
 }
+
+export default describeHistory;
