@@ -22,6 +22,16 @@ class DOMHistory extends History {
     super.teardown();
   }
 
+  handleBeforeUnload(event) {
+    var message = this.getTransitionConfirmationMessage();
+
+    if (message != null) {
+      // cross browser, see https://developer.mozilla.org/en-US/docs/Web/Events/beforeunload
+      (event || window.event).returnValue = message;
+      return message;
+    }
+  }
+
   go(n) {
     if (n === 0)
       return;
@@ -47,25 +57,15 @@ class DOMHistory extends History {
     return null;
   }
 
-  beforeChange(location, done) {
-    super.beforeChange(location, () => {
-      if (location.navigationType === NavigationTypes.PUSH && this.canUpdateState()) {
-        var scrollPosition = this.getScrollPosition();
-        this.updateState(scrollPosition);
-      }
-      done();
-    });
-  }
-
-  handleBeforeUnload(event) {
-    var message = this.beforeChangeListener.call(this);
-
-    if (message != null) {
-      // cross browser, see https://developer.mozilla.org/en-US/docs/Web/Events/beforeunload
-      (event || window.event).returnValue = message;
-      return message;
-    }
-  }
+//  beforeChange(location, done) {
+//    super.beforeChange(location, () => {
+//      if (location.navigationType === NavigationTypes.PUSH && this.canUpdateState()) {
+//        var scrollPosition = this.getScrollPosition();
+//        this.updateState(scrollPosition);
+//      }
+//      done();
+//    });
+//  }
 
 }
 

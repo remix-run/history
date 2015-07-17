@@ -47,6 +47,56 @@ function describeHistory(history) {
     });
   });
 
+  describe('when the user cancels a transition', function () {
+    var location, confirmationMessage, getTransitionConfirmationMessageSpy, getUserConfirmationSpy;
+    beforeEach(function () {
+      window.location.href = '/';
+      confirmationMessage = 'Are you sure?';
+      getTransitionConfirmationMessageSpy = spyOn(history, 'getTransitionConfirmationMessage').andReturn(confirmationMessage);
+      getUserConfirmationSpy = spyOn(history, 'getUserConfirmation').andCall(function (message, callback) {
+        expect(message).toBe(confirmationMessage);
+        callback(false);
+      });
+      location = history.location;
+    });
+
+    afterEach(function () {
+      getTransitionConfirmationMessageSpy.restore();
+      getUserConfirmationSpy.restore();
+      location = null;
+    });
+
+    it('does not update the location', function () {
+      history.pushState(null, '/home');
+      expect(history.location).toBe(location);
+    });
+  });
+
+  describe('when the user confirms a transition', function () {
+    var location, confirmationMessage, getTransitionConfirmationMessageSpy, getUserConfirmationSpy;
+    beforeEach(function () {
+      window.location.href = '/';
+      confirmationMessage = 'Are you sure?';
+      getTransitionConfirmationMessageSpy = spyOn(history, 'getTransitionConfirmationMessage').andReturn(confirmationMessage);
+      getUserConfirmationSpy = spyOn(history, 'getUserConfirmation').andCall(function (message, callback) {
+        expect(message).toBe(confirmationMessage);
+        callback(true);
+      });
+      location = history.location;
+    });
+
+    afterEach(function () {
+      getTransitionConfirmationMessageSpy.restore();
+      getUserConfirmationSpy.restore();
+      location = null;
+    });
+
+    it('updates the location', function () {
+      history.pushState(null, '/home');
+      expect(history.location).toNotBe(location);
+    });
+  });
+
   describe('pushState', function () {
     var unlisten, listener, location;
     beforeEach(function () {

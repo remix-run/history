@@ -6,6 +6,10 @@ import Location from './Location';
 
 export var RequiredSubclassMethods = [ 'pushState', 'replaceState', 'go' ];
 
+function removeItem(array, object) {
+  return array.filter(item => item !== object);
+}
+
 /**
  * A history interface that normalizes the differences across
  * various environments and implementations. Requires concrete
@@ -30,12 +34,45 @@ class History {
       );
     }, this);
 
+    this.getUserConfirmation = options.getUserConfirmation;
+
+    this.transitionHooks = [];
     this.changeListeners = [];
-    this.beforeChangeListener = null;
 
     this.path = null;
     this.location = null;
-    this._pendingLocation = null;
+  }
+
+  registerTransitionHook(hook) {
+    var hooks = this.transitionHooks;
+
+    if (hooks.indexOf(hook) === -1)
+      hooks.push(hook);
+  }
+
+  unregisterTransitionHook(hook) {
+    this.transitionHooks = removeItem(this.transitionHooks, hook);
+  }
+
+  getTransitionConfirmationMessage() {
+    var hooks = this.transitionHooks;
+
+    var message;
+    for (var i = 0, len = hooks.length; i < len && typeof message !== 'string'; ++i)
+      message = hooks[i].call(this);
+
+    return message;
+  }
+
+  confirmTransition(callback) {
+    var message;
+    if (this.getUserConfirmation && (message = this.getTransitionConfirmationMessage())) {
+      this.getUserConfirmation(message, (ok) => {
+        callback.call(this, ok !== false);
+      });
+    } else {
+      callback.call(this, true);
+    }
   }
 
   _notifyChange() {
@@ -48,9 +85,7 @@ class History {
   }
 
   removeChangeListener(listener) {
-    this.changeListeners = this.changeListeners.filter(function (li) {
-      return li !== listener;
-    });
+    this.changeListeners = removeItem(this.changeListeners, listener);
   }
 
   listen(listener) {
@@ -63,15 +98,6 @@ class History {
     }
 
     return this.removeChangeListener.bind(this, listener);
-  }
-
-  onBeforeChange(listener) {
-    warning(
-      this.beforeChangeListener != null,
-      'beforeChange listener of History should not be overwritten'
-    );
-
-    this.beforeChangeListener = listener;
   }
 
   setup(path, entry = {}) {
@@ -91,11 +117,9 @@ class History {
 
   teardown() {
     this.changeListeners = [];
-    this.beforeChangeListener = null;
 
     this.path = null;
     this.location = null;
-    this._pendingLocation = null;
   }
 
   handlePop(path, entry={}) {
@@ -105,8 +129,9 @@ class History {
 
     var pendingLocation = this._createLocation(path, state, entry, NavigationTypes.POP);
 
-    this.beforeChange(pendingLocation, () => {
-      this._update(path, pendingLocation);
+    this.confirmTransition(ok => {
+      if (ok)
+        this._update(path, pendingLocation);
     });
   }
 
@@ -150,31 +175,10 @@ class History {
     this.saveState(key, { ...state, ...extraState });
   }
 
-  beforeChange(location, done) {
-    if (!this.beforeChangeListener) {
-      done();
-    } else {
-      this._pendingLocation = location;
-
-      this.beforeChangeListener.call(this, location, () => {
-        if (this._pendingLocation === location) {
-          this._pendingLocation = null;
-          done();
-          return true;
-        }
-        return false;
-      });
-    }
-  }
-
-  isPending(location) {
-    return this._pendingLocation === location;
-  }
-
   pushState(state, path) {
-    var pendingLocation = this._createLocation(path, state, null, NavigationTypes.PUSH);
-    this.beforeChange(pendingLocation, () => {
-      this._doPushState(state, path)
+    this.confirmTransition(ok => {
+      if (ok)
+        this._doPushState(state, path)
     });
   }
 
@@ -199,9 +203,9 @@ class History {
   }
 
   replaceState(state, path) {
-    var pendingLocation = this._createLocation(path, state, null, NavigationTypes.REPLACE);
-    this.beforeChange(pendingLocation, () => {
-      this._doReplaceState(state, path);
+    this.confirmTransition(ok => {
+      if (ok)
+        this._doReplaceState(state, path);
     });
   }
 
@@ -230,7 +234,6 @@ class History {
   _update(path, location, notify=true) {
     this.path = path;
     this.location = location;
-    this._pendingLocation = null;
 
     if (notify)
       this._notifyChange();
