@@ -1,14 +1,12 @@
 import expect, { createSpy, spyOn } from 'expect';
-import History from '../History';
+import History, { RequiredSubclassMethods } from '../History';
 
 export default function describeHistory(history) {
   it('is an instanceof History', function () {
     expect(history).toBeA(History);
   });
 
-  var RequiredMethods = [ 'pushState', 'replaceState', 'go' ];
-
-  RequiredMethods.forEach(function (method) {
+  RequiredSubclassMethods.forEach(function (method) {
     it('has a ' + method + ' method', function () {
       expect(history[method]).toBeA('function');
     });

@@ -4,7 +4,7 @@ import NavigationTypes from './NavigationTypes';
 import { getPathname, getQueryString, parseQueryString } from './URLUtils';
 import Location from './Location';
 
-var RequiredHistorySubclassMethods = [ 'push', 'replace', 'go' ];
+export var RequiredSubclassMethods = [ 'pushState', 'replaceState', 'go' ];
 
 /**
  * A history interface that normalizes the differences across
@@ -18,7 +18,7 @@ var RequiredHistorySubclassMethods = [ 'push', 'replace', 'go' ];
 class History {
 
   constructor(options={}) {
-    RequiredHistorySubclassMethods.forEach(function (method) {
+    RequiredSubclassMethods.forEach(function (method) {
       invariant(
         typeof this[method] === 'function',
         '%s needs a "%s" method',
