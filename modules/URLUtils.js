@@ -1,16 +1,12 @@
-import qs from 'qs';
-
-export var parseQueryString = qs.parse;
-
-var queryMatcher = /\?([\s\S]*)$/;
+var searchMatcher = /\?[\s\S]*$/;
 
 export function getPathname(path) {
-  return path.replace(queryMatcher, '');
+  return path.replace(searchMatcher, '');
 }
 
-export function getQueryString(path) {
-  var match = path.match(queryMatcher);
-  return match ? match[1] : '';
+export function getSearchString(path) {
+  var match = path.match(searchMatcher);
+  return match ? match[0] : '';
 }
 
 export function isAbsolutePath(path) {

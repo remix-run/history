@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { getPathname, getQueryString } from '../URLUtils';
+import { getPathname, getSearchString } from '../URLUtils';
 
 describe('getPathname', function () {
   it('returns the pathname portion of a path', function () {
@@ -7,8 +7,8 @@ describe('getPathname', function () {
   });
 });
 
-describe('getQueryString', function () {
-  it('returns the query string portion of a path', function () {
-    expect(getQueryString('/a/b/?id=def')).toEqual('id=def');
+describe('getSearchString', function () {
+  it('returns the search portion of a path', function () {
+    expect(getSearchString('/a/b/?id=def')).toEqual('?id=def');
   });
 });

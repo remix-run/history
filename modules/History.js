@@ -1,7 +1,7 @@
 import invariant from 'invariant';
 import warning from 'warning';
 import NavigationTypes from './NavigationTypes';
-import { getPathname, getQueryString, parseQueryString } from './URLUtils';
+import { getPathname, getSearchString } from './URLUtils';
 import Location from './Location';
 
 export var RequiredSubclassMethods = [ 'pushState', 'replaceState', 'go' ];
@@ -29,8 +29,6 @@ class History {
         this.constructor.name, method
       );
     }, this);
-
-    this.parseQueryString = options.parseQueryString || parseQueryString;
 
     this.changeListeners = [];
     this.beforeChangeListener = null;
@@ -240,9 +238,8 @@ class History {
 
   _createLocation(path, state, entry, navigationType) {
     var pathname = getPathname(path);
-    var queryString = getQueryString(path);
-    var query = queryString ? this.parseQueryString(queryString) : null;
-    return new Location(pathname, query, {...state, ...entry}, navigationType);
+    var searchString = getSearchString(path);
+    return new Location(pathname, searchString, {...state, ...entry}, navigationType);
   }
 
 }

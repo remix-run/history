@@ -67,7 +67,7 @@ function describeHistory(history) {
 
       assert(location);
       expect(location.pathname).toEqual('/home');
-      expect(location.query).toEqual({ the: 'query' });
+      expect(location.search).toEqual('?the=query');
       //expect(location.state).toEqual({ the: 'state' });
       expect(location.navigationType).toEqual(NavigationTypes.PUSH);
     });

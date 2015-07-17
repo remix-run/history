@@ -12,9 +12,9 @@ class Location {
     return object instanceof Location;
   }
 
-  constructor(pathname='/', query=null, state=null, navigationType=NavigationTypes.POP) {
+  constructor(pathname='/', search='', state=null, navigationType=NavigationTypes.POP) {
     this.pathname = pathname;
-    this.query = query;
+    this.search = search;
     this.state = state;
     this.navigationType = navigationType;
   }
