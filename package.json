@@ -1,7 +1,7 @@
 {
   "name": "history",
   "version": "1.0.0",
-  "description": "A minimal, modular history implementation",
+  "description": "A minimal, functional history implementation",
   "main": "lib/index",
   "repository": {
     "type": "git",
