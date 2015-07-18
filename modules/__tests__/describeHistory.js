@@ -1,125 +1,176 @@
 import assert from 'assert';
-import expect, { createSpy, spyOn } from 'expect';
+import expect from 'expect';
 import NavigationTypes from '../NavigationTypes';
-import History, { RequiredSubclassMethods } from '../History';
 
-function describeHistory(history) {
-  beforeEach(function () {
-    window.location.href = '/';
-  });
-
-  it('is a History', function () {
-    assert(History.isHistory(history));
-  });
-
-  RequiredSubclassMethods.forEach(function (method) {
-    it('has a ' + method + ' method', function () {
-      expect(history[method]).toBeA('function');
-    });
-  });
-
-  describe('adding/removing a listener', function () {
-    var pushStateSpy, goSpy;
-    beforeEach(function () {
-      // It's a bit tricky to test change listeners properly because
-      // they are triggered when the URL changes. So we need to stub
-      // out push/go to only notify listeners ... but we can't make
-      // assertions on the location because it will be wrong.
-      pushStateSpy = spyOn(history, 'pushState').andCall(history._notifyChange);
-      goSpy = spyOn(history, 'go').andCall(history._notifyChange);
-    });
-
-    afterEach(function () {
-      pushStateSpy.restore();
-      goSpy.restore();
-    });
-
-    it('works', function () {
-      var spy = expect.createSpy(function () {});
-
-      history.addChangeListener(spy);
-      history.pushState(null, '/home'); // call #1
-      expect(pushStateSpy).toHaveBeenCalled();
-
-      expect(spy.calls.length).toEqual(1);
-
-      history.removeChangeListener(spy)
-      history.back(); // call #2
-      expect(goSpy).toHaveBeenCalled();
-
-      expect(spy.calls.length).toEqual(1);
-    });
-  });
-
-  describe('when the user cancels a transition', function () {
-    var location, confirmationMessage, getTransitionConfirmationMessageSpy, getUserConfirmationSpy;
-    beforeEach(function () {
-      location = history.location;
-      confirmationMessage = 'Are you sure?';
-      getTransitionConfirmationMessageSpy = spyOn(history, 'getTransitionConfirmationMessage').andReturn(confirmationMessage);
-      getUserConfirmationSpy = spyOn(history, 'getUserConfirmation').andCall(function (message, callback) {
-        expect(message).toBe(confirmationMessage);
-        callback(false);
-      });
-    });
-
-    afterEach(function () {
-      getTransitionConfirmationMessageSpy.restore();
-      getUserConfirmationSpy.restore();
-      location = null;
-    });
-
-    it('does not update the location', function () {
-      history.pushState(null, '/home');
-      expect(history.location).toBe(location);
-    });
-  });
-
+function describeHistory(createHistory) {
   describe('when the user confirms a transition', function () {
-    var location, confirmationMessage, getTransitionConfirmationMessageSpy, getUserConfirmationSpy;
+    var confirmationMessage, location, history, unlisten;
     beforeEach(function () {
-      location = history.location;
-      confirmationMessage = 'Are you sure?';
-      getTransitionConfirmationMessageSpy = spyOn(history, 'getTransitionConfirmationMessage').andReturn(confirmationMessage);
-      getUserConfirmationSpy = spyOn(history, 'getUserConfirmation').andCall(function (message, callback) {
-        expect(message).toBe(confirmationMessage);
-        callback(true);
-      });
-    });
-
-    afterEach(function () {
-      getTransitionConfirmationMessageSpy.restore();
-      getUserConfirmationSpy.restore();
       location = null;
-    });
+      confirmationMessage = 'Are you sure?';
 
-    it('updates the location', function () {
-      history.pushState(null, '/home');
-      expect(history.location).toNotBe(location);
-    });
-  });
+      history = createHistory({
+        getUserConfirmation(message, callback) {
+          expect(message).toBe(confirmationMessage);
+          callback(true);
+        }
+      });
 
-  describe('pushState', function () {
-    var unlisten, listener, location;
-    beforeEach(function () {
-      unlisten = history.listen(listener = function (loc) {
+      history.registerTransitionHook(function () {
+        return confirmationMessage;
+      });
+
+      unlisten = history.listen(function (loc) {
         location = loc;
       });
     });
 
     afterEach(function () {
-      unlisten();
-      unlisten = listener = location = null;
+      if (unlisten)
+        unlisten();
+    });
+
+    it('updates the location', function () {
+      var initialLocation = location;
+      history.pushState({ the: 'state' }, '/home?the=query');
+      expect(initialLocation).toNotBe(location);
+
+      assert(location);
+      assert(location.key);
+      expect(location.state).toEqual({ the: 'state' });
+      expect(location.pathname).toEqual('/home');
+      expect(location.search).toEqual('?the=query');
+      expect(location.navigationType).toEqual(NavigationTypes.PUSH);
+    });
+  });
+
+  describe('when the user cancels a transition', function () {
+    var confirmationMessage, location, history, unlisten;
+    beforeEach(function () {
+      location = null;
+      confirmationMessage = 'Are you sure?';
+
+      history = createHistory({
+        getUserConfirmation(message, callback) {
+          expect(message).toBe(confirmationMessage);
+          callback(false);
+        }
+      });
+
+      history.registerTransitionHook(function () {
+        return confirmationMessage;
+      });
+
+      unlisten = history.listen(function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('does not update the location', function () {
+      var initialLocation = location;
+      history.pushState(null, '/home');
+      expect(initialLocation).toBe(location);
+    });
+  });
+
+  describe('pushState', function () {
+    var location, history, unlisten;
+    beforeEach(function () {
+      location = null;
+      history = createHistory();
+      unlisten = history.listen(function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
     });
 
     it('calls change listeners with the new location', function () {
       history.pushState({ the: 'state' }, '/home?the=query');
 
       assert(location);
+      assert(location.key);
+      expect(location.state).toEqual({ the: 'state' });
       expect(location.pathname).toEqual('/home');
       expect(location.search).toEqual('?the=query');
-      //expect(location.state).toEqual({ the: 'state' });
       expect(location.navigationType).toEqual(NavigationTypes.PUSH);
+    });
+  });
+
+  describe('replaceState', function () {
+    var location, history, unlisten;
+    beforeEach(function () {
+      location = null;
+      history = createHistory();
+      unlisten = history.listen(function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('calls change listeners with the new location', function () {
+      history.replaceState({ more: 'state' }, '/feed?more=query');
+
+      assert(location);
+      assert(location.key);
+      expect(location.state).toEqual({ more: 'state' });
+      expect(location.pathname).toEqual('/feed');
+      expect(location.search).toEqual('?more=query');
+      expect(location.navigationType).toEqual(NavigationTypes.REPLACE);
+    });
+  });
+
+  describe.skip('goBack', function () {
+    var history, unlisten;
+    beforeEach(function () {
+      history = createHistory();
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('calls change listeners with the previous location', function (done) {
+      var initialLocation;
+      var steps = [
+        function (location) {
+          initialLocation = location;
+          history.pushState({ the: 'state' }, '/two?a=query');
+        },
+        function (location) {
+          expect(location.state).toEqual({ the: 'state' });
+          expect(location.pathname).toEqual('/two');
+          expect(location.search).toEqual('?a=query');
+          history.goBack();
+        },
+        function (location) {
+          expect(initialLocation).toEqual(location);
+          done();
+        }
+      ];
+
+      function execNextStep() {
+        try {
+          steps.shift().apply(this, arguments);
+        } catch (error) {
+          done(error);
+        }
+      }
+
+      unlisten = history.listen(execNextStep);
     });
   });
 }

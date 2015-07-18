@@ -34,17 +34,6 @@ export function getWindowPath() {
   return window.location.pathname + window.location.search;
 }
 
-export function getWindowScrollPosition() {
-  return {
-    scrollX: window.pageXOffset || document.documentElement.scrollLeft,
-    scrollY: window.pageYOffset || document.documentElement.scrollTop
-  };
-}
-
-export function setWindowScrollPosition(scrollX, scrollY) {
-  window.scrollTo(scrollX, scrollY);
-}
-
 export function saveState(key, state) {
   window.sessionStorage.setItem(key, JSON.stringify(state));
 }

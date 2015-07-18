@@ -1,16 +1,25 @@
 import expect from 'expect';
-import Location from '../Location';
+import NavigationTypes from '../NavigationTypes';
+import createLocation from '../createLocation';
 
-describe('Location.isLocation', function () {
-  it('returns true for Location objects', function () {
-    expect(Location.isLocation(new Location)).toBe(true);
+describe('a location', function () {
+  it('has null state by default', function () {
+    var location = createLocation();
+    expect(location.state).toBe(null);
   });
 
-  it('returns false for other objects', function () {
-    expect(Location.isLocation('path')).toBe(false);
-    expect(Location.isLocation(1)).toBe(false);
-    expect(Location.isLocation(true)).toBe(false);
-    expect(Location.isLocation(undefined)).toBe(false);
-    expect(Location.isLocation(null)).toBe(false);
+  it('knows its pathname', function () {
+    var location = createLocation(null, null, '/home?the=query');
+    expect(location.pathname).toEqual('/home');
   });
+
+  it('knows its search string', function () {
+    var location = createLocation(null, null, '/home?the=query');
+    expect(location.search).toEqual('?the=query');
+  });
+
+  it('uses pop navigation by default', function () {
+    var location = createLocation();
+    expect(location.navigationType).toBe(NavigationTypes.POP);
+  })
 });

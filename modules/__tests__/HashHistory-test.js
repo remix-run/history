@@ -1,7 +1,6 @@
-import describeHistory from './describeHistory';
-import HashHistory, { history } from '../HashHistory';
+import describeDOMHistory from './describeDOMHistory';
+import createHashHistory from '../createHashHistory';
 
-describe('HashHistory', function () {
-  describeHistory(new HashHistory);
-  describeHistory(history);
+describe('hash history', function () {
+  describeDOMHistory(createHashHistory);
 });

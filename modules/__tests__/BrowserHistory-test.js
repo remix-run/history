@@ -1,7 +1,6 @@
-import describeHistory from './describeHistory';
-import BrowserHistory, { history } from '../BrowserHistory';
+import describeDOMHistory from './describeDOMHistory';
+import createBrowserHistory from '../createBrowserHistory';
 
-describe('BrowserHistory', function () {
-  describeHistory(new BrowserHistory);
-  describeHistory(history);
+describe('browser history', function () {
+  describeDOMHistory(createBrowserHistory);
 });
