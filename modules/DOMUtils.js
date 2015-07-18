@@ -2,19 +2,19 @@ export var canUseDOM = !!(
   typeof window !== 'undefined' && window.document && window.document.createElement
 );
 
-export function addEventListener(node, type, listener) {
+export function addEventListener(node, event, listener) {
   if (node.addEventListener) {
-    node.addEventListener(type, listener, false);
+    node.addEventListener(event, listener, false);
   } else {
-    node.attachEvent('on' + type, listener);
+    node.attachEvent('on' + event, listener);
   }
 }
 
-export function removeEventListener(node, type, listener) {
+export function removeEventListener(node, event, listener) {
   if (node.removeEventListener) {
-    node.removeEventListener(type, listener, false);
+    node.removeEventListener(event, listener, false);
   } else {
-    node.detachEvent('on' + type, listener);
+    node.detachEvent('on' + event, listener);
   }
 }
 
@@ -43,6 +43,29 @@ export function getWindowScrollPosition() {
 
 export function setWindowScrollPosition(scrollX, scrollY) {
   window.scrollTo(scrollX, scrollY);
+}
+
+export function saveState(key, state) {
+  window.sessionStorage.setItem(key, JSON.stringify(state));
+}
+
+export function readState(key) {
+  var json = window.sessionStorage.getItem(key);
+
+  if (json) {
+    try {
+      return JSON.parse(json);
+    } catch (error) {
+      // Ignore invalid JSON.
+    }
+  }
+
+  return null;
+}
+
+export function go(n) {
+  if (n)
+    window.history.go(n);
 }
 
 /**
