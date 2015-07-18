@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { getPathname, getSearchString } from '../URLUtils';
+import { getPathname, getSearchString } from '../StringUtils';
 
 describe('getPathname', function () {
   it('returns the pathname portion of a path', function () {
