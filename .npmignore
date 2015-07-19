@@ -1,9 +1,4 @@
-examples
-scripts
-website
-__tests__
-bower.json
-karma.conf.js
-tests.webpack.js
-webpack.config.js
 .babelrc
+__tests__
+scripts
+webpack.config.js
