@@ -29,7 +29,7 @@ var unlisten = history.listen(function (location) {
   location.state;             // The state that was given to push/replaceState
   location.pathname;          // The URL pathname, without the query string
   location.search;            // The URL query string, including the ?
-  location.navigationType;    // One of PUSH, REPLACE, or POP
+  location.action;    // One of PUSH, REPLACE, or POP
 });
 
 history.pushState(state, url);
