@@ -3,4 +3,4 @@ export createHashHistory from './createHashHistory';
 export createMemoryHistory from './createMemoryHistory';
 export createLocation from './createLocation';
 
-export NavigationTypes from './NavigationTypes';
+export Actions from './Actions';

@@ -1,6 +1,6 @@
-import { POP } from './NavigationTypes';
+import { POP } from './Actions';
 
-function createLocation(key, state=null, path='/', navigationType=POP) {
+function createLocation(key, state=null, path='/', action=POP) {
   var index = path.indexOf('?');
 
   var pathname, search;
@@ -20,7 +20,7 @@ function createLocation(key, state=null, path='/', navigationType=POP) {
     state,
     pathname,
     search,
-    navigationType
+    action
   };
 }
 

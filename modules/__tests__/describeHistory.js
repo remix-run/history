@@ -1,6 +1,6 @@
 import assert from 'assert';
 import expect from 'expect';
-import { PUSH, REPLACE } from '../NavigationTypes';
+import { PUSH, REPLACE } from '../Actions';
 
 function describeHistory(createHistory) {
   describe('when the user confirms a transition', function () {
@@ -40,7 +40,7 @@ function describeHistory(createHistory) {
       expect(location.state).toEqual({ the: 'state' });
       expect(location.pathname).toEqual('/home');
       expect(location.search).toEqual('?the=query');
-      expect(location.navigationType).toEqual(PUSH);
+      expect(location.action).toEqual(PUSH);
     });
   });
 
@@ -101,7 +101,7 @@ function describeHistory(createHistory) {
       expect(location.state).toEqual({ the: 'state' });
       expect(location.pathname).toEqual('/home');
       expect(location.search).toEqual('?the=query');
-      expect(location.navigationType).toEqual(PUSH);
+      expect(location.action).toEqual(PUSH);
     });
   });
 
@@ -128,7 +128,7 @@ function describeHistory(createHistory) {
       expect(location.state).toEqual({ more: 'state' });
       expect(location.pathname).toEqual('/feed');
       expect(location.search).toEqual('?more=query');
-      expect(location.navigationType).toEqual(REPLACE);
+      expect(location.action).toEqual(REPLACE);
     });
   });
 

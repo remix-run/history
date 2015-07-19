@@ -1,5 +1,5 @@
 import warning from 'warning';
-import { PUSH, REPLACE, POP } from './NavigationTypes';
+import { PUSH, REPLACE, POP } from './Actions';
 import { addEventListener, removeEventListener, readState, getHashPath, replaceHashPath, go } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
@@ -95,7 +95,7 @@ function createHashHistory(options={}) {
       'You cannot push/replace the same path using hash history'
     );
 
-    switch (location.navigationType) {
+    switch (location.action) {
       case PUSH:
         if (hashWillChange) {
           ignoreNextHashChange = true;
@@ -112,7 +112,7 @@ function createHashHistory(options={}) {
   }
 
   function cancelTransition(location) {
-    if (location.navigationType === POP) {
+    if (location.action === POP) {
       var n = 0; // TODO: Figure out what n will put the URL back.
 
       if (n) {

@@ -1,4 +1,4 @@
-import { PUSH, REPLACE } from './NavigationTypes';
+import { PUSH, REPLACE } from './Actions';
 import createLocation from './createLocation';
 
 var DefaultKeyLength = 6;
