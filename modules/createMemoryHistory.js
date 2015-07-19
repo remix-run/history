@@ -75,7 +75,7 @@ function createMemoryHistory(options={}) {
   function getCurrentLocation() {
     var { key, pathname, search } = entries[current];
     var state = readState(key);
-    return createLocation(key, state, pathname + search);
+    return createLocation(key, state, pathname + (search || ''));
   }
 
   function canGo(n) {
