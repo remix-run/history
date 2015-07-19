@@ -1,5 +1,5 @@
 import { PUSH, REPLACE, POP } from './Actions';
-import { addEventListener, removeEventListener, readState, getWindowPath, go } from './DOMUtils';
+import { addEventListener, removeEventListener, readState, saveState, getWindowPath, go } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -38,18 +38,17 @@ function startPopStateListener({ transitionTo }) {
 }
 
 function finishTransition(location) {
-  var { key, pathname, search } = location;
+  var { key, pathname, search, state } = location;
   var path = pathname + search;
-  var state = {
-    key
-  };
 
   switch (location.action) {
     case PUSH:
-      window.history.pushState(state, null, path);
+      saveState(key, state);
+      window.history.pushState({ key }, null, path);
       break;
     case REPLACE:
-      window.history.replaceState(state, null, path);
+      saveState(key, state);
+      window.history.replaceState({ key }, null, path);
       break;
   }
 }
