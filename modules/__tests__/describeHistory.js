@@ -210,9 +210,7 @@ function describeHistory(createHistory) {
           history.goForward();
         },
         function (location) {
-          console.log(nextLocation, location);
           const nextLocationPop = { ...nextLocation, action: POP };
-          console.log(nextLocationPop);
           expect(nextLocationPop).toEqual(location);
           done()
         }
