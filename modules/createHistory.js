@@ -12,7 +12,7 @@ function createHistory(options={}) {
   var changeListeners = [];
   var location, pendingLocation;
 
-  var { keyLength, saveState, readState, getCurrentLocation, finishTransition, cancelTransition, getUserConfirmation, go } = options;
+  var { saveState, readState, getCurrentLocation, finishTransition, cancelTransition, go, keyLength, getUserConfirmation } = options;
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength;
