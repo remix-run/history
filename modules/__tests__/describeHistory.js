@@ -1,6 +1,6 @@
 import assert from 'assert';
 import expect from 'expect';
-import { PUSH, REPLACE } from '../Actions';
+import { PUSH, REPLACE, POP } from '../Actions';
 
 function describeHistory(createHistory) {
   describe('when the user confirms a transition', function () {
@@ -135,6 +135,7 @@ function describeHistory(createHistory) {
   describe.skip('goBack', function () {
     var history, unlisten;
     beforeEach(function () {
+      window.history.replaceState(null, null, '/');
       history = createHistory();
     });
 
@@ -154,11 +155,64 @@ function describeHistory(createHistory) {
           expect(location.state).toEqual({ the: 'state' });
           expect(location.pathname).toEqual('/two');
           expect(location.search).toEqual('?a=query');
+          expect(location.action).toEqual(PUSH);
           history.goBack();
         },
         function (location) {
+          expect(location.action).toEqual(POP);
           expect(initialLocation).toEqual(location);
           done();
+        }
+      ];
+
+      function execNextStep() {
+        try {
+          steps.shift().apply(this, arguments);
+        } catch (error) {
+          done(error);
+        }
+      }
+
+      unlisten = history.listen(execNextStep);
+    });
+  });
+
+  describe.skip('goForward', function () {
+    var history, unlisten;
+    beforeEach(function () {
+      window.history.replaceState(null, null, '/');
+      history = createHistory();
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('calls change listeners with the previous location', function (done) {
+      var initialLocation, nextLocation;
+      var steps = [
+        function (location) {
+          initialLocation = location;
+          history.pushState({ the: 'state' }, '/two?a=query');
+        },
+        function (location) {
+          nextLocation = location;
+          expect(location.state).toEqual({ the: 'state' });
+          expect(location.pathname).toEqual('/two');
+          expect(location.search).toEqual('?a=query');
+          expect(location.action).toEqual(PUSH);
+          history.goBack();
+        },
+        function (location) {
+          expect(location.action).toEqual(POP);
+          expect(initialLocation).toEqual(location);
+          history.goForward();
+        },
+        function (location) {
+          const nextLocationPop = { ...nextLocation, action: POP };
+          expect(nextLocationPop).toEqual(location);
+          done()
         }
       ];
 
