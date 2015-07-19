@@ -3,11 +3,11 @@ Not much to see here ... yet.
 ### Features
 
 ```js
-import { createHistory } from 'history';        // in-memory
+import { createMemoryHistory } from 'history';  // in-memory
 import { createHashHistory } from 'history';    // window.location.hash
-import { createBrowserHistory } from 'history'; // HTML5 history
+import { createHistory } from 'history';        // HTML5
 
-var history = createBrowserHistory({
+var history = createHistory({
   getUserConfirmation(message, callback) {
     // Use this hook to get the user's confirmation that
     // they want to leave the current page.
