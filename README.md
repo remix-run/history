@@ -3,9 +3,9 @@ Not much to see here ... yet.
 ### Features
 
 ```js
-//import createHistory from 'history'; // in-memory
-//import createHashHistory from 'history'; // uses window.location.hash
-import createBrowserHistory from 'history'; // uses HTML5 history API
+import { createHistory } from 'history';        // in-memory
+import { createHashHistory } from 'history';    // window.location.hash
+import { createBrowserHistory } from 'history'; // HTML5 history
 
 var history = createBrowserHistory({
   getUserConfirmation(message, callback) {
@@ -24,12 +24,12 @@ history.registerTransitionHook(function () {
 
 // Listen for changes to the page location. This is called
 // once immediately.
-history.listen(function (location) {
-  location.key;
-  location.state;
-  location.pathname; 
-  location.search;
-  location.navigationType;
+var unlisten = history.listen(function (location) {
+  location.key;               // A unique key for this location
+  location.state;             // The state that was given to push/replaceState
+  location.pathname;          // The URL pathname, without the query string
+  location.search;            // The URL query string, including the ?
+  location.navigationType;    // One of PUSH, REPLACE, or POP
 });
 
 history.pushState(state, url);
@@ -37,4 +37,7 @@ history.replaceState(state, url);
 history.go(-1);
 history.goBack();
 history.goForward();
+
+// Stop listening for location changes.
+unlisten();
 ```
