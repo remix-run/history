@@ -17,3 +17,9 @@ export var REPLACE = 'REPLACE';
  * for more information.
  */
 export var POP = 'POP';
+
+export default {
+  PUSH,
+  REPLACE,
+  POP
+};

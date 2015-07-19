@@ -1,5 +1,5 @@
 import expect from 'expect';
-import NavigationTypes from '../NavigationTypes';
+import { POP } from '../NavigationTypes';
 import createLocation from '../createLocation';
 
 describe('a location', function () {
@@ -20,6 +20,6 @@ describe('a location', function () {
 
   it('uses pop navigation by default', function () {
     var location = createLocation();
-    expect(location.navigationType).toBe(NavigationTypes.POP);
+    expect(location.navigationType).toBe(POP);
   })
 });

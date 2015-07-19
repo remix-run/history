@@ -1,4 +1,4 @@
-import NavigationTypes from './NavigationTypes';
+import { PUSH, REPLACE, POP } from './NavigationTypes';
 import { addEventListener, removeEventListener, readState, getWindowPath, go } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
@@ -45,17 +45,17 @@ function finishTransition(location) {
   };
 
   switch (location.navigationType) {
-    case NavigationTypes.PUSH:
+    case PUSH:
       window.history.pushState(state, null, path);
       break;
-    case NavigationTypes.REPLACE:
+    case REPLACE:
       window.history.replaceState(state, null, path);
       break;
   }
 }
 
 function cancelTransition(location) {
-  if (location.navigationType === NavigationTypes.POP) {
+  if (location.navigationType === POP) {
     var n = 0; // TODO: Figure out what n will put the URL back.
 
     if (n) {

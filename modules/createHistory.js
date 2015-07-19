@@ -1,4 +1,4 @@
-import NavigationTypes from './NavigationTypes';
+import { PUSH, REPLACE } from './NavigationTypes';
 import createLocation from './createLocation';
 
 var DefaultKeyLength = 6;
@@ -95,13 +95,13 @@ function createHistory(options={}) {
 
   function pushState(state, path) {
     transitionTo(
-      createLocation(createKey(), state, path, NavigationTypes.PUSH)
+      createLocation(createKey(), state, path, PUSH)
     );
   }
 
   function replaceState(state, path) {
     transitionTo(
-      createLocation(createKey(), state, path, NavigationTypes.REPLACE)
+      createLocation(createKey(), state, path, REPLACE)
     );
   }
 

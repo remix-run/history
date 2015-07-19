@@ -1,5 +1,5 @@
 import warning from 'warning';
-import NavigationTypes from './NavigationTypes';
+import { PUSH, REPLACE, POP } from './NavigationTypes';
 import { addEventListener, removeEventListener, readState, getHashPath, replaceHashPath, go } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
@@ -96,13 +96,13 @@ function createHashHistory(options={}) {
     );
 
     switch (location.navigationType) {
-      case NavigationTypes.PUSH:
+      case PUSH:
         if (hashWillChange) {
           ignoreNextHashChange = true;
           window.location.hash = path;
         }
         break;
-      case NavigationTypes.REPLACE:
+      case REPLACE:
         if (hashWillChange) {
           ignoreNextHashChange = true;
           replaceHashPath(path);
@@ -112,7 +112,7 @@ function createHashHistory(options={}) {
   }
 
   function cancelTransition(location) {
-    if (location.navigationType === NavigationTypes.POP) {
+    if (location.navigationType === POP) {
       var n = 0; // TODO: Figure out what n will put the URL back.
 
       if (n) {

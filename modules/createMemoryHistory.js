@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import NavigationTypes from './NavigationTypes';
+import { PUSH, REPLACE, POP } from './NavigationTypes';
 import createLocation from './createLocation';
 import createHistory from './createHistory';
 
@@ -99,17 +99,17 @@ function createMemoryHistory(options={}) {
 
   function finishTransition(location) {
     switch (location.navigationType) {
-      case NavigationTypes.PUSH:
+      case PUSH:
         current += 1;
         // fall through
-      case NavigationTypes.REPLACE:
+      case REPLACE:
         saveState(location.key, location.state);
         break;
     }
   }
 
   function cancelTransition(location) {
-    if (location.navigationType === NavigationTypes.POP) {
+    if (location.navigationType === POP) {
       var n = 0; // TODO: Figure out what n will restore current.
       current += n;
     }

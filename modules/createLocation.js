@@ -1,6 +1,6 @@
-import NavigationTypes from './NavigationTypes';
+import { POP } from './NavigationTypes';
 
-function createLocation(key, state=null, path='/', navigationType=NavigationTypes.POP) {
+function createLocation(key, state=null, path='/', navigationType=POP) {
   var index = path.indexOf('?');
 
   var pathname, search;
