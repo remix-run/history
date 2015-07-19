@@ -40,7 +40,7 @@ function createMemoryHistory(options={}) {
     var key = history.createKey();
 
     if (typeof entry === 'string')
-      return { path: entry, key };
+      return { pathname: entry, key };
 
     if (typeof entry === 'object' && entry)
       return { ...entry, key };
@@ -73,9 +73,9 @@ function createMemoryHistory(options={}) {
   }
 
   function getCurrentLocation() {
-    var { key, path } = entries[current];
+    var { key, pathname, search } = entries[current];
     var state = readState(key);
-    return createLocation(key, state, path);
+    return createLocation(key, state, pathname + search);
   }
 
   function canGo(n) {
@@ -93,7 +93,9 @@ function createMemoryHistory(options={}) {
 
       current += n;
 
-      history.transitionTo(getCurrentLocation());
+      const currentLocation = getCurrentLocation();
+      // change action to POP
+      history.transitionTo({ ...currentLocation, action: POP });
     }
   }
 
@@ -102,6 +104,7 @@ function createMemoryHistory(options={}) {
       case PUSH:
         current += 1;
         // fall through
+        entries.push(location);
       case REPLACE:
         saveState(location.key, location.state);
         break;
