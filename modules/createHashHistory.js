@@ -133,18 +133,15 @@ function createHashHistory(options={}) {
   var stopHashChangeListener;
 
   function listen(listener) {
-    listenerCount += 1;
-
-    if (listenerCount === 1)
+    if (++listenerCount === 1)
       stopHashChangeListener = startHashChangeListener(history);
 
     var unlisten = history.listen(listener);
 
     return function () {
       unlisten();
-      listenerCount -= 1;
 
-      if (listenerCount === 0)
+      if (--listenerCount === 0)
         stopHashChangeListener();
     };
   }
