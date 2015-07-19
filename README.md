@@ -25,10 +25,10 @@ history.registerTransitionHook(function () {
 // Listen for changes to the page location. This is called
 // once immediately.
 var unlisten = history.listen(function (location) {
-  location.key;               // A unique key for this location
-  location.state;             // The state that was given to push/replaceState
-  location.pathname;          // The URL pathname, without the query string
-  location.search;            // The URL query string, including the ?
+  location.key;       // A unique key for this location
+  location.state;     // The state that was given to push/replaceState
+  location.pathname;  // The URL pathname, without the query string
+  location.search;    // The URL query string, including the ?
   location.action;    // One of PUSH, REPLACE, or POP
 });
 
