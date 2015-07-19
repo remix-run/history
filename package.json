@@ -20,7 +20,6 @@
   "license": "MIT",
   "dependencies": {
     "invariant": "^2.0.0",
-    "keymirror": "^0.1.1",
     "warning": "^2.0.0"
   },
   "devDependencies": {
