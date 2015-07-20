@@ -5,11 +5,11 @@ import createHistory from './createHistory';
 
 function createStorage(entries) {
   return entries
-      .filter(entry => entry.state)
-      .reduce((memo, entry) => {
-        memo[entry.key] = entry.state;
-        return memo;
-      }, {});
+    .filter(entry => entry.state)
+    .reduce((memo, entry) => {
+      memo[entry.key] = entry.state;
+      return memo;
+    }, {});
 }
 
 function createMemoryHistory(options={}) {
