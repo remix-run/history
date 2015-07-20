@@ -5,11 +5,11 @@ import createHistory from './createHistory';
 
 function createStorage(entries) {
   return entries
-    .filter(entry => entry.state)
-    .reduce((memo, entry) => {
-      memo[entry.key] = entry.state;
-      return memo;
-    }, {});
+      .filter(entry => entry.state)
+      .reduce((memo, entry) => {
+        memo[entry.key] = entry.state;
+        return memo;
+      }, {});
 }
 
 function createMemoryHistory(options={}) {
@@ -46,9 +46,9 @@ function createMemoryHistory(options={}) {
       return { ...entry, key };
 
     invariant(
-      false,
-      'Unable to create history entry from %s',
-      entry
+        false,
+        'Unable to create history entry from %s',
+        entry
     );
   });
 
@@ -56,9 +56,9 @@ function createMemoryHistory(options={}) {
     current = entries.length - 1;
   } else {
     invariant(
-      current >= 0 && current < entries.length,
-      'Current index must be >= 0 and < %s, was %s',
-      entries.length, current
+        current >= 0 && current < entries.length,
+        'Current index must be >= 0 and < %s, was %s',
+        entries.length, current
     );
   }
 
@@ -86,9 +86,9 @@ function createMemoryHistory(options={}) {
   function go(n) {
     if (n) {
       invariant(
-        canGo(n),
-        'Cannot go(%s); there is not enough history',
-        n
+          canGo(n),
+          'Cannot go(%s); there is not enough history',
+          n
       );
 
       current += n;
@@ -105,7 +105,11 @@ function createMemoryHistory(options={}) {
         current += 1;
         // fall through
         entries.push(location);
+        saveState(location.key, location.state);
+        break;
       case REPLACE:
+        //console.log('finish transition', location.key, location.state);
+        entries[current] = location;
         saveState(location.key, location.state);
         break;
     }

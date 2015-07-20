@@ -227,6 +227,77 @@ function describeHistory(createHistory) {
       unlisten = history.listen(execNextStep);
     });
   });
+
+  describe('when the user replaces state and goes back/forth', function() {
+    var history, unlisten;
+    beforeEach(function () {
+      window.history.replaceState(null, null, '/');
+      history = createHistory();
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('replaces current history record with a new state', function(done) {
+      var locations = {};
+      var steps = [
+        function (location) {
+          locations[0] = location;
+          history.pushState({ the: 'state' }, '/two?a=query');
+        },
+        function (location) {
+          locations[1] = location;
+          expect(location.state).toEqual({ the: 'state' });
+          expect(location.pathname).toEqual('/two');
+          expect(location.search).toEqual('?a=query');
+          expect(location.action).toEqual(PUSH);
+          history.goBack();
+        },
+        function (location) {
+          expect(location.action).toEqual(POP);
+          expect(locations[0]).toEqual(location);
+          history.replaceState({ the: 'new state' }, location.pathname + (location.search || ''))
+        },
+        function (location) {
+          locations[0] = location;
+          history.goForward();
+        },
+        function (location) {
+          const loc = locations[1];
+          const nextLocationPop = { ...loc, action: POP };
+          expect(nextLocationPop).toEqual(location);
+          history.replaceState({ the: 'new state 2' }, location.pathname + (location.search || ''));
+        },
+        function (location) {
+          locations[1] = location;
+          history.goBack();
+        },
+        function(location) {
+          expect(location.state).toEqual({ the: 'new state' });
+          expect(location.key).toEqual(locations[0].key);
+          expect(locations[0]).toNotEqual(location);
+          history.goForward();
+        },
+        function(location) {
+          expect(location.state).toEqual({ the: 'new state 2' });
+          expect(location.key).toEqual(locations[1].key);
+          done();
+        }
+      ];
+
+      function execNextStep() {
+        try {
+          steps.shift().apply(this, arguments);
+        } catch (error) {
+          done(error);
+        }
+      }
+
+      unlisten = history.listen(execNextStep);
+    });
+  });
 }
 
 export default describeHistory;
