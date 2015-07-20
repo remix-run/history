@@ -132,7 +132,7 @@ function describeHistory(createHistory) {
     });
   });
 
-  describe.skip('goBack', function () {
+  describe('goBack', function () {
     var history, unlisten;
     beforeEach(function () {
       window.history.replaceState(null, null, '/');
@@ -177,7 +177,7 @@ function describeHistory(createHistory) {
     });
   });
 
-  describe.skip('goForward', function () {
+  describe('goForward', function () {
     var history, unlisten;
     beforeEach(function () {
       window.history.replaceState(null, null, '/');

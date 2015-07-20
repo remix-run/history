@@ -13,7 +13,7 @@
     "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
     "test": "eslint modules && mocha -r ./jsdom -r babel/register --globals document,window,navigator modules/**/*-test.js",
-    "test:zuul:local": "zuul --local 8080 -- test/*-test.js"
+    "test:zuul:local": "zuul --local 8080 -- modules/__tests__/*-test.js"
   },
   "authors": [
     "Michael Jackson"
