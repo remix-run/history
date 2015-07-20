@@ -103,12 +103,10 @@ function createMemoryHistory(options={}) {
     switch (location.action) {
       case PUSH:
         current += 1;
-        // fall through
         entries.push(location);
         saveState(location.key, location.state);
         break;
       case REPLACE:
-        //console.log('finish transition', location.key, location.state);
         entries[current] = location;
         saveState(location.key, location.state);
         break;
