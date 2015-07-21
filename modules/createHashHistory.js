@@ -1,6 +1,6 @@
 import warning from 'warning';
 import { PUSH, REPLACE, POP } from './Actions';
-import { addEventListener, removeEventListener, readState, getHashPath, replaceHashPath, go } from './DOMUtils';
+import { addEventListener, removeEventListener, readState, saveState, getHashPath, replaceHashPath, go } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -23,6 +23,10 @@ function addQueryStringValueToPath(path, key, value) {
   return path + (path.indexOf('?') === -1 ? '?' : '&') + `${key}=${value}`;
 }
 
+function stripQueryStringValueFromPath(path, key) {
+  return path.replace(new RegExp(`[?&]?${key}=[a-zA-Z0-9]+`), '');
+}
+
 function getQueryStringValueFromPath(path, key) {
   var match = path.match(new RegExp(`\\?.*?\\b${key}=(.+?)\\b`));
   return match && match[1];
@@ -33,7 +37,7 @@ var DefaultQueryKey = '_k';
 function createHashHistory(options={}) {
   var { queryKey } = options;
 
-  if (queryKey && typeof queryKey !== 'string')
+  if (typeof queryKey !== 'string')
     queryKey = DefaultQueryKey;
 
   function getCurrentLocation() {
@@ -42,6 +46,7 @@ function createHashHistory(options={}) {
     var key, state;
     if (queryKey) {
       key = getQueryStringValueFromPath(path, queryKey);
+      path = stripQueryStringValueFromPath(path, queryKey);
       state = key && readState(key);
     }
 
@@ -99,12 +104,14 @@ function createHashHistory(options={}) {
       case PUSH:
         if (hashWillChange) {
           ignoreNextHashChange = true;
+          saveState(location.key, location.state);
           window.location.hash = path;
         }
         break;
       case REPLACE:
         if (hashWillChange) {
           ignoreNextHashChange = true;
+          saveState(location.key, location.state);
           replaceHashPath(path);
         }
         break;

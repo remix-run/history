@@ -1,5 +1,5 @@
 import { PUSH, REPLACE, POP } from './Actions';
-import { addEventListener, removeEventListener, readState, getWindowPath, go } from './DOMUtils';
+import { addEventListener, removeEventListener, readState, saveState, getWindowPath, go } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -46,9 +46,11 @@ function finishTransition(location) {
 
   switch (location.action) {
     case PUSH:
+      saveState(location.key, location.state);
       window.history.pushState(state, null, path);
       break;
     case REPLACE:
+      saveState(location.key, location.state);
       window.history.replaceState(state, null, path);
       break;
   }

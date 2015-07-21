@@ -12,7 +12,7 @@
     "build": "scripts/build.sh",
     "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
-    "test": "eslint modules && mocha -r ./jsdom -r babel/register --globals document,window,navigator modules/**/*-test.js"
+    "test": "zuul --local 8080 -- modules/__tests__/*-test.js"
   },
   "authors": [
     "Michael Jackson"
@@ -31,7 +31,9 @@
     "expect": "^1.8.0",
     "jsdom": "^5.6.1",
     "mocha": "^2.0.1",
-    "webpack": "^1.4.13"
+    "webpack": "^1.4.13",
+    "zuul": "^3.2.0",
+    "zuul-builder-webpack": "^1.1.0"
   },
   "tags": [
     "history",
