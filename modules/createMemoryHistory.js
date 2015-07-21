@@ -46,9 +46,9 @@ function createMemoryHistory(options={}) {
       return { ...entry, key };
 
     invariant(
-        false,
-        'Unable to create history entry from %s',
-        entry
+      false,
+      'Unable to create history entry from %s',
+      entry
     );
   });
 
@@ -56,9 +56,9 @@ function createMemoryHistory(options={}) {
     current = entries.length - 1;
   } else {
     invariant(
-        current >= 0 && current < entries.length,
-        'Current index must be >= 0 and < %s, was %s',
-        entries.length, current
+      current >= 0 && current < entries.length,
+      'Current index must be >= 0 and < %s, was %s',
+      entries.length, current
     );
   }
 
@@ -88,9 +88,9 @@ function createMemoryHistory(options={}) {
   function go(n) {
     if (n) {
       invariant(
-          canGo(n),
-          'Cannot go(%s); there is not enough history',
-          n
+        canGo(n),
+        'Cannot go(%s); there is not enough history',
+        n
       );
 
       current += n;
