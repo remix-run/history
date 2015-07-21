@@ -22,8 +22,6 @@ function createMemoryHistory(options={}) {
   var history = createHistory({
     ...options,
     getCurrentLocation,
-    saveState,
-    readState,
     finishTransition,
     cancelTransition,
     go
