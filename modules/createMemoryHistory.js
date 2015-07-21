@@ -25,6 +25,7 @@ function createMemoryHistory(options={}) {
     saveState,
     readState,
     finishTransition,
+    cancelTransition,
     go
   });
 
