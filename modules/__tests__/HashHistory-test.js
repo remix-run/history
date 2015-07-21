@@ -7,19 +7,16 @@ import execSteps from './execSteps';
 
 describe('hash history', function () {
   afterEach(function () {
-    window.location.hash = '';
+    if (window.location.hash !== '')
+      window.location.hash = '';
   });
 
   describeDOMHistory(createHashHistory);
 
   describe('when the user does not want to persist a state', function() {
-    var location, history, unlisten;
+    var history, unlisten;
     beforeEach(function () {
-      location = null;
       history = createHashHistory({ queryKey: false });
-      unlisten = history.listen(function (loc) {
-        location = loc;
-      });
     });
 
     afterEach(function () {
@@ -39,7 +36,7 @@ describe('hash history', function () {
           expect(location.action).toEqual(PUSH);
           history.goBack();
         },
-        function () {
+        function (location) {
           history.goForward();
         },
         function (location) {
