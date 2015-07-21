@@ -1,5 +1,5 @@
-import describeDOMHistory from './describeDOMHistory';
 import createBrowserHistory from '../createBrowserHistory';
+import describeDOMHistory from './describeDOMHistory';
 
 describe('browser history', function () {
   beforeEach(function () {
@@ -7,4 +7,8 @@ describe('browser history', function () {
   });
 
   describeDOMHistory(createBrowserHistory);
+
+  describe('when the user cancels a POP transition', function () {
+    it('puts the URL back');
+  });
 });

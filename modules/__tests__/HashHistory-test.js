@@ -92,4 +92,8 @@ describe('hash history', function () {
       unlisten = history.listen(execSteps(steps, done));
     });
   });
+
+  describe('when the user cancels a POP transition', function () {
+    it('puts the URL back');
+  });
 });
