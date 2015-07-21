@@ -29,7 +29,6 @@
     "babel-loader": "^5.0.0",
     "eslint": "^1.0.0-rc-1",
     "expect": "^1.8.0",
-    "jsdom": "^5.6.1",
     "mocha": "^2.0.1",
     "webpack": "^1.4.13",
     "zuul": "^3.2.0",
