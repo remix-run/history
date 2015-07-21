@@ -13,6 +13,7 @@
     "lint": "eslint modules",
     "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
+    "test-manual": "http-server .",
     "test-cloud": "npm run lint && zuul -- modules/**/*-test.js",
     "test": "npm run lint && zuul --local 8080 -- modules/**/*-test.js"
   },
@@ -31,6 +32,7 @@
     "babel-loader": "^5.0.0",
     "eslint": "^1.0.0-rc-1",
     "expect": "^1.8.0",
+    "http-server": "^0.8.0",
     "mocha": "^2.0.1",
     "webpack": "^1.4.13",
     "zuul": "^3.2.0",
