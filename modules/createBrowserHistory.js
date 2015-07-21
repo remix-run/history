@@ -10,7 +10,7 @@ function getCurrentLocation(historyState) {
   var state = key && readState(key);
   var path = getWindowPath();
 
-  return createLocation(key, state, path);
+  return createLocation(path, state, undefined, key);
 }
 
 var ignoreNextPopState = false;

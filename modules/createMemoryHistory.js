@@ -74,8 +74,10 @@ function createMemoryHistory(options={}) {
 
   function getCurrentLocation() {
     var { key, pathname, search } = entries[current];
+    var path = pathname + (search || '');
     var state = readState(key);
-    return createLocation(key, state, pathname + (search || ''));
+
+    return createLocation(path, state, undefined, key);
   }
 
   function canGo(n) {
@@ -93,7 +95,8 @@ function createMemoryHistory(options={}) {
 
       current += n;
 
-      const currentLocation = getCurrentLocation();
+      var currentLocation = getCurrentLocation();
+
       // change action to POP
       history.transitionTo({ ...currentLocation, action: POP });
     }

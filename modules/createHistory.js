@@ -95,13 +95,13 @@ function createHistory(options={}) {
 
   function pushState(state, path) {
     transitionTo(
-      createLocation(createKey(), state, path, PUSH)
+      createLocation(path, state, PUSH, createKey())
     );
   }
 
   function replaceState(state, path) {
     transitionTo(
-      createLocation(createKey(), state, path, REPLACE)
+      createLocation(path, state, REPLACE, createKey())
     );
   }
 

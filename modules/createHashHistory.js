@@ -45,7 +45,7 @@ function createHashHistory(options={}) {
       state = key && readState(key);
     }
 
-    return createLocation(key, state, path);
+    return createLocation(path, state, undefined, key);
   }
 
   var ignoreNextHashChange = false;
