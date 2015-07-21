@@ -35,7 +35,7 @@ unlisten();
 
 ### Location
 
-A `location` object is conceptually similar to `document.location` in web browsers, with a few extra goodies. `location` objects have the following properties:
+A `location` object is conceptually similar to [`document.location` in web browsers](https://developer.mozilla.org/en-US/docs/Web/API/Document/location), with a few extra goodies. `location` objects have the following properties:
 
 ```
 pathname      The pathname portion of the URL, without query string
