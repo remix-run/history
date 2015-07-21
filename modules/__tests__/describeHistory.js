@@ -73,9 +73,11 @@ function describeHistory(createHistory) {
     });
 
     it('does not update the location', function () {
-      var initialLocation = location;
+      var prevLocation = location;
+
       history.pushState(null, '/home');
-      expect(initialLocation).toBe(location);
+
+      expect(prevLocation).toBe(location);
     });
   });
 
