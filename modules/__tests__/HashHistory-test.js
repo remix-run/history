@@ -1,8 +1,9 @@
-import describeDOMHistory from './describeDOMHistory';
-import createHashHistory from '../createHashHistory';
 import assert from 'assert';
 import expect from 'expect';
 import { PUSH } from '../Actions';
+import createHashHistory from '../createHashHistory';
+import describeDOMHistory from './describeDOMHistory';
+import execSteps from './execSteps';
 
 describe('hash history', function () {
   describeDOMHistory(createHashHistory);
@@ -45,15 +46,7 @@ describe('hash history', function () {
         }
       ];
 
-      function execNextStep() {
-        try {
-          steps.shift().apply(this, arguments);
-        } catch (error) {
-          done(error);
-        }
-      }
-
-      unlisten = history.listen(execNextStep);
+      unlisten = history.listen(execSteps(steps, done));
     });
   });
 
@@ -96,15 +89,7 @@ describe('hash history', function () {
         }
       ];
 
-      function execNextStep() {
-        try {
-          steps.shift().apply(this, arguments);
-        } catch (error) {
-          done(error);
-        }
-      }
-
-      unlisten = history.listen(execNextStep);
+      unlisten = history.listen(execSteps(steps, done));
     });
   });
 });

@@ -1,16 +1,7 @@
 import assert from 'assert';
 import expect from 'expect';
 import { PUSH, REPLACE, POP } from '../Actions';
-
-function execSteps(steps, done) {
-  return function () {
-    try {
-      steps.shift().apply(this, arguments);
-    } catch (error) {
-      done(error);
-    }
-  };
-}
+import execSteps from './execSteps';
 
 function describeHistory(createHistory) {
   describe('when the user confirms a transition', function () {
@@ -145,7 +136,6 @@ function describeHistory(createHistory) {
   describe('goBack', function () {
     var history, unlisten;
     beforeEach(function () {
-      window.history.replaceState(null, null, '/');
       history = createHistory();
     });
 
@@ -182,7 +172,6 @@ function describeHistory(createHistory) {
   describe('goForward', function () {
     var history, unlisten;
     beforeEach(function () {
-      window.history.replaceState(null, null, '/');
       history = createHistory();
     });
 
