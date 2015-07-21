@@ -1,43 +1,15 @@
-Not much to see here ... yet.
+[![build status](https://img.shields.io/travis/rackt/history/master.svg?style=flat-square)](https://travis-ci.org/rackt/history)
+[![npm package](https://img.shields.io/npm/v/history.svg?style=flat-square)](https://www.npmjs.org/package/history)
+[![react-router channel on slack](https://img.shields.io/badge/slack-react--router@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
 
-### Features
+`history` is a lightweight, but powerful JavaScript library that lets you easily manage session history in browsers, testing environments, and (soon, via React Native) native devices. `history` abstracts away the differences in these different platforms and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions. `history` is library-agnostic and may easily be included in any JavaScript project.
 
-```js
-import { createMemoryHistory } from 'history';  // in-memory
-import { createHashHistory } from 'history';    // window.location.hash
-import { createHistory } from 'history';        // HTML5
+- [Documentation](docs)
 
-var history = createHistory({
-  getUserConfirmation(message, callback) {
-    // Use this hook to get the user's confirmation that
-    // they want to leave the current page.
-    callback(window.confirm(message));
-  }
-});
+### Installation
 
-// Use registerTransitionHook to register a function that
-// returns a message when the user navigates away. Return
-// nothing to allow the transition.
-history.registerTransitionHook(function () {
-  return 'Are you sure you want to leave this page?';
-});
+    $ npm install history
 
-// Listen for changes to the page location. This is called
-// once immediately.
-var unlisten = history.listen(function (location) {
-  location.key;       // A unique key for this location
-  location.state;     // The state that was given to push/replaceState
-  location.pathname;  // The URL pathname, without the query string
-  location.search;    // The URL query string, including the ?
-  location.action;    // One of PUSH, REPLACE, or POP
-});
+### Thanks
 
-history.pushState(state, url);
-history.replaceState(state, url);
-history.go(-1);
-history.goBack();
-history.goForward();
-
-// Stop listening for location changes.
-unlisten();
-```
+A big thank-you to [Dan Shaw](https://github.com/dshaw) for donating the `history` npm package name!
