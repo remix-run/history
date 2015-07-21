@@ -10,6 +10,7 @@
   "bugs": "https://github.com/rackt/history/issues",
   "scripts": {
     "build": "scripts/build.sh",
+    "lint": "eslint modules",
     "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
     "test": "zuul --local 8080 -- modules/__tests__/*-test.js"
