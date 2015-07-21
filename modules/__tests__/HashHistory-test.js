@@ -42,7 +42,6 @@ describe('hash history', function () {
           expect(location.state).toEqual(null);
           expect(location.search).toEqual('?the=query');
           expect(window.location.hash).toEqual('#/home?the=query');
-          done()
         }
       ];
 
@@ -85,7 +84,6 @@ describe('hash history', function () {
           expect(location.state).toEqual({ the: 'state' });
           expect(location.search).toEqual('?the=query');
           expect(window.location.hash).toEqual('#/home?the=query&a=' + location.key);
-          done()
         }
       ];
 

@@ -161,7 +161,6 @@ function describeHistory(createHistory) {
         function (location) {
           expect(location.action).toEqual(POP);
           expect(initialLocation).toEqual(location);
-          done();
         }
       ];
 
@@ -203,7 +202,6 @@ function describeHistory(createHistory) {
         function (location) {
           const nextLocationPop = { ...nextLocation, action: POP };
           expect(nextLocationPop).toEqual(location);
-          done()
         }
       ];
 
