@@ -32,9 +32,9 @@ function describeHistory(createHistory) {
     });
 
     it('updates the location', function () {
-      var initialLocation = location;
+      var prevLocation = location;
       history.pushState({ the: 'state' }, '/home?the=query');
-      expect(initialLocation).toNotBe(location);
+      expect(prevLocation).toNotBe(location);
 
       assert(location);
       assert(location.key);
@@ -147,10 +147,10 @@ function describeHistory(createHistory) {
     });
 
     it('calls change listeners with the previous location', function (done) {
-      var initialLocation;
+      var prevLocation;
       var steps = [
         function (location) {
-          initialLocation = location;
+          prevLocation = location;
           history.pushState({ the: 'state' }, '/two?a=query');
         },
         function (location) {
@@ -162,7 +162,7 @@ function describeHistory(createHistory) {
         },
         function (location) {
           expect(location.action).toEqual(POP);
-          expect(initialLocation).toEqual(location);
+          expect(prevLocation).toEqual(location);
         }
       ];
 
@@ -182,10 +182,10 @@ function describeHistory(createHistory) {
     });
 
     it('calls change listeners with the previous location', function (done) {
-      var initialLocation, nextLocation;
+      var prevLocation, nextLocation;
       var steps = [
         function (location) {
-          initialLocation = location;
+          prevLocation = location;
           history.pushState({ the: 'state' }, '/two?a=query');
         },
         function (location) {
@@ -198,11 +198,11 @@ function describeHistory(createHistory) {
         },
         function (location) {
           expect(location.action).toEqual(POP);
-          expect(initialLocation).toEqual(location);
+          expect(prevLocation).toEqual(location);
           history.goForward();
         },
         function (location) {
-          const nextLocationPop = { ...nextLocation, action: POP };
+          var nextLocationPop = { ...nextLocation, action: POP };
           expect(nextLocationPop).toEqual(location);
         }
       ];
