@@ -37,8 +37,9 @@ var DefaultQueryKey = '_k';
 function createHashHistory(options={}) {
   var { queryKey } = options;
 
-  if (typeof queryKey !== 'string')
-    queryKey = DefaultQueryKey;
+  if (queryKey === undefined || !!queryKey) {
+    queryKey = typeof queryKey === 'string' ? queryKey : DefaultQueryKey;
+  }
 
   function getCurrentLocation() {
     var path = getHashPath();
@@ -104,14 +105,22 @@ function createHashHistory(options={}) {
       case PUSH:
         if (hashWillChange) {
           ignoreNextHashChange = true;
-          saveState(location.key, location.state);
+
+          if (queryKey) {
+            saveState(location.key, location.state);
+          }
+
           window.location.hash = path;
         }
         break;
       case REPLACE:
         if (hashWillChange) {
           ignoreNextHashChange = true;
-          saveState(location.key, location.state);
+
+          if (!!queryKey) {
+            saveState(location.key, location.state);
+          }
+
           replaceHashPath(path);
         }
         break;
