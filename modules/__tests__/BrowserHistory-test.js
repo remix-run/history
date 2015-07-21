@@ -2,8 +2,13 @@ import createBrowserHistory from '../createBrowserHistory';
 import describeDOMHistory from './describeDOMHistory';
 
 describe('browser history', function () {
+  var path;
   beforeEach(function () {
-    window.history.replaceState(null, null, '/');
+    path = window.location.pathname + window.location.search;
+  });
+
+  afterEach(function () {
+    window.history.replaceState(null, null, path);
   });
 
   describeDOMHistory(createBrowserHistory);

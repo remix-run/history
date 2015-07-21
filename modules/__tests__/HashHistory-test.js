@@ -6,6 +6,10 @@ import describeDOMHistory from './describeDOMHistory';
 import execSteps from './execSteps';
 
 describe('hash history', function () {
+  afterEach(function () {
+    window.location.hash = '';
+  });
+
   describeDOMHistory(createHashHistory);
 
   describe('when the user does not want to persist a state', function() {
