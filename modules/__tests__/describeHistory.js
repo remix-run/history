@@ -2,6 +2,16 @@ import assert from 'assert';
 import expect from 'expect';
 import { PUSH, REPLACE, POP } from '../Actions';
 
+function execSteps(steps, done) {
+  return function () {
+    try {
+      steps.shift().apply(this, arguments);
+    } catch (error) {
+      done(error);
+    }
+  };
+}
+
 function describeHistory(createHistory) {
   describe('when the user confirms a transition', function () {
     var confirmationMessage, location, history, unlisten;
@@ -165,15 +175,7 @@ function describeHistory(createHistory) {
         }
       ];
 
-      function execNextStep() {
-        try {
-          steps.shift().apply(this, arguments);
-        } catch (error) {
-          done(error);
-        }
-      }
-
-      unlisten = history.listen(execNextStep);
+      unlisten = history.listen(execSteps(steps, done));
     });
   });
 
@@ -216,15 +218,7 @@ function describeHistory(createHistory) {
         }
       ];
 
-      function execNextStep() {
-        try {
-          steps.shift().apply(this, arguments);
-        } catch (error) {
-          done(error);
-        }
-      }
-
-      unlisten = history.listen(execNextStep);
+      unlisten = history.listen(execSteps(steps, done));
     });
   });
 }
