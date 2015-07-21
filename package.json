@@ -13,8 +13,8 @@
     "lint": "eslint modules",
     "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
-    "test-cloud": "zuul -- modules/**/*-test.js",
-    "test": "zuul --local 8080 -- modules/**/*-test.js"
+    "test-cloud": "npm run lint && zuul -- modules/**/*-test.js",
+    "test": "npm run lint && zuul --local 8080 -- modules/**/*-test.js"
   },
   "authors": [
     "Michael Jackson"
