@@ -10,11 +10,9 @@
   "bugs": "https://github.com/rackt/history/issues",
   "scripts": {
     "build": "scripts/build.sh",
-    "lint": "eslint modules",
     "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
-    "test-cloud": "npm run lint && zuul -- modules/**/*-test.js",
-    "test": "npm run lint && zuul --local 8080 -- modules/**/*-test.js"
+    "test": "eslint modules && karma start"
   },
   "authors": [
     "Michael Jackson"
@@ -31,11 +29,16 @@
     "babel-loader": "^5.0.0",
     "eslint": "^1.0.0-rc-1",
     "expect": "^1.8.0",
+    "karma": "^0.12.28",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-cli": "^0.0.4",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-mocha": "^0.1.10",
+    "karma-sourcemap-loader": "^0.3.2",
+    "karma-webpack": "^1.3.1",
     "mach": "^1.3.8",
     "mocha": "^2.0.1",
-    "webpack": "^1.4.13",
-    "zuul": "^3.2.0",
-    "zuul-builder-webpack": "^1.1.0"
+    "webpack": "^1.4.13"
   },
   "tags": [
     "history",
