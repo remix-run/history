@@ -53,18 +53,16 @@ function createHashHistory(options={}) {
     return createLocation(path, state, undefined, key);
   }
 
-  var ignoreNextHashChange = false;
-  var lastHashPath;
+  var ignoreNextHashChange = false, lastHashPath;
 
   function startHashChangeListener({ transitionTo }) {
     function listener() {
-      var hashPath = getHashPath();
-
       if (!ensureSlash())
         return; // Always make sure hashes are preceeded with a /.
 
-      if (lastHashPath === hashPath)
-        return; // Prevent false positives.
+      var hashPath = getHashPath();
+      if (hashPath === lastHashPath)
+        return; // Ignore consecutive identical hashes (it hasn't actually changed!).
 
       lastHashPath = hashPath;
 
@@ -87,40 +85,33 @@ function createHashHistory(options={}) {
   }
 
   function finishTransition(location) {
-    var { key, pathname, search } = location;
+    var { key, pathname, search, action } = location;
+
+    if (action === POP)
+      return; // Nothing to do.
+
     var path = pathname + search;
 
     if (queryKey)
       path = addQueryStringValueToPath(path, queryKey, key);
 
-    var hashWillChange = (path !== getHashPath());
+    if (path === getHashPath()) {
+      warning(
+        false,
+        'You cannot %s the same path using hash history',
+        action
+      );
+    } else {
+      ignoreNextHashChange = true;
 
-    warning(
-      hashWillChange,
-      'You cannot push/replace the same path using hash history'
-    );
+      if (queryKey)
+        saveState(location.key, location.state);
 
-    switch (location.action) {
-      case PUSH:
-        if (hashWillChange) {
-          ignoreNextHashChange = true;
-
-          if (queryKey)
-            saveState(location.key, location.state);
-
-          window.location.hash = path;
-        }
-        break;
-      case REPLACE:
-        if (hashWillChange) {
-          ignoreNextHashChange = true;
-
-          if (!!queryKey)
-            saveState(location.key, location.state);
-
-          replaceHashPath(path);
-        }
-        break;
+      if (action === PUSH) {
+        window.location.hash = path;
+      } else {
+        replaceHashPath(path);
+      }
     }
   }
 
