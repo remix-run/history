@@ -1,6 +1,6 @@
 import invariant from 'invariant';
 import deepEqual from 'deep-equal';
-import { PUSH, REPLACE } from './Actions';
+import { PUSH, REPLACE, POP } from './Actions';
 import createLocation from './createLocation';
 
 function createRandomKey(length) {
@@ -28,7 +28,12 @@ function createHistory(options={}) {
   var location;
 
   function updateLocation(newLocation) {
-    location = newLocation;
+    // if previous location is unknown, we are probably replacing on initial load
+    if (!location) {
+      location = { ...newLocation, action: POP };
+    } else {
+      location = newLocation;
+    }
 
     changeListeners.forEach(function (listener) {
       listener(location);
@@ -49,7 +54,9 @@ function createHistory(options={}) {
     if (location) {
       listener(location);
     } else {
-      updateLocation(getCurrentLocation());
+      var locationReplacement = getCurrentLocation();
+      replaceState(locationReplacement.state, locationReplacement.pathname + locationReplacement.search);
+      //updateLocation(getCurrentLocation());
     }
 
     return function () {
