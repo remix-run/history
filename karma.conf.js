@@ -1,13 +1,39 @@
 var webpack = require('webpack');
 
 module.exports = function (config) {
+  var isTravis = !!process.env.TRAVIS;
+
+  // Browsers to run on Sauce Labs
+  var customLaunchers = {
+    'SL_Chrome': {
+      base: 'SauceLabs',
+      browserName: 'chrome'
+    },
+    'SL_InternetExplorer': {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      version: '10'
+    },
+    'SL_Firefox': {
+      base: 'SauceLabs',
+      browserName: 'firefox',
+    }
+  };
+
   config.set({
+    browserNoActivityTimeout: 120000,
 
-    browserNoActivityTimeout: 30000,
+    browsers: isTravis ? Object.keys(customLaunchers) : [ 'Chrome' ],
 
-    browsers: [ process.env.CONTINUOUS_INTEGRATION ? 'Firefox' : 'Chrome' ],
+    sauceLabs: {
+      testName: 'history'
+    },
 
-    singleRun: process.env.CONTINUOUS_INTEGRATION === 'true',
+    captureTimeout: 120000,
+
+    customLaunchers: customLaunchers,
+
+    singleRun: isTravis,
 
     frameworks: [ 'mocha' ],
 
@@ -38,6 +64,5 @@ module.exports = function (config) {
     webpackServer: {
       noInfo: true
     }
-
   });
 };
