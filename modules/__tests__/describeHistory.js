@@ -151,12 +151,12 @@ function describeHistory(createHistory) {
       var steps = [
         function (location) {
           prevLocation = location;
-          history.pushState({ the: 'state' }, '/two?a=query');
+          history.pushState({ the: 'state' }, '/one?the=query');
         },
         function (location) {
           expect(location.state).toEqual({ the: 'state' });
-          expect(location.pathname).toEqual('/two');
-          expect(location.search).toEqual('?a=query');
+          expect(location.pathname).toEqual('/one');
+          expect(location.search).toEqual('?the=query');
           expect(location.action).toEqual(PUSH);
           history.goBack();
         },
@@ -186,13 +186,13 @@ function describeHistory(createHistory) {
       var steps = [
         function (location) {
           prevLocation = location;
-          history.pushState({ the: 'state' }, '/two?a=query');
+          history.pushState({ the: 'state' }, '/one?the=query');
         },
         function (location) {
           nextLocation = location;
           expect(location.state).toEqual({ the: 'state' });
-          expect(location.pathname).toEqual('/two');
-          expect(location.search).toEqual('?a=query');
+          expect(location.pathname).toEqual('/one');
+          expect(location.search).toEqual('?the=query');
           expect(location.action).toEqual(PUSH);
           history.goBack();
         },
