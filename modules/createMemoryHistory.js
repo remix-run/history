@@ -105,6 +105,13 @@ function createMemoryHistory(options={}) {
     switch (location.action) {
       case PUSH:
         current += 1;
+
+        // if we are not on the top of stack
+        // remove rest and push new
+        if (current < (entries.length - 1)) {
+          entries.splice(current);
+        }
+
         entries.push(location);
         saveState(location.key, location.state);
         break;
