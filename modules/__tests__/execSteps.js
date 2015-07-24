@@ -1,12 +1,12 @@
-function execSteps(steps, callback) {
+function execSteps(steps, done) {
   return function () {
     try {
       steps.shift().apply(this, arguments);
 
       if (steps.length === 0)
-        callback();
+        done();
     } catch (error) {
-      callback(error);
+      done(error);
     }
   };
 }

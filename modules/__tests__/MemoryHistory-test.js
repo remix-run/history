@@ -7,38 +7,38 @@ describe('memory history', function () {
 
   describe('when the user pushState in middle of stack', function() {
     it('clears rest of stack so the user can not go forward', function() {
-      var history = createMemoryHistory(), currentLocation;
+      var history = createMemoryHistory(), location;
 
       history.listen(function(loc) {
-        currentLocation = loc;
+        location = loc;
       });
 
-      history.pushState({ state: 1 }, '/1');
-      history.pushState({ state: 2 }, '/2');
-      history.pushState({ state: 3 }, '/3');
-      history.pushState({ state: 4 }, '/4');
+      history.pushState({ id: 1 }, '/1');
+      history.pushState({ id: 2 }, '/2');
+      history.pushState({ id: 3 }, '/3');
+      history.pushState({ id: 4 }, '/4');
 
-      expect(currentLocation.state).toEqual({ state: 4 });
+      expect(location.state).toEqual({ id: 4 });
 
       history.go(-2);
 
-      expect(currentLocation.state).toEqual({ state: 2 });
+      expect(location.state).toEqual({ id: 2 });
 
-      history.pushState({ state: 5 }, '/5');
+      history.pushState({ id: 5 }, '/5');
 
-      expect(currentLocation.state).toEqual({ state: 5 });
-      expect(currentLocation.pathname).toEqual('/5');
+      expect(location.state).toEqual({ id: 5 });
+      expect(location.pathname).toEqual('/5');
 
       history.goBack();
 
-      expect(currentLocation.state).toEqual({ state: 2 });
+      expect(location.state).toEqual({ id: 2 });
 
       history.goForward();
 
-      expect(currentLocation.state).toEqual({ state: 5 });
-      expect(currentLocation.pathname).toEqual('/5');
+      expect(location.state).toEqual({ id: 5 });
+      expect(location.pathname).toEqual('/5');
 
-      expect(function() {
+      expect(function () {
         history.goForward();
       }).toThrow(/Cannot go\(\d+\); there is not enough history/);
     });
