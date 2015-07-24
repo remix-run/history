@@ -75,8 +75,7 @@ function createBrowserHistory(options) {
     cancelTransition
   });
 
-  var listenerCount = 0;
-  var stopPopStateListener;
+  var listenerCount = 0, stopPopStateListener;
 
   function listen(listener) {
     if (++listenerCount === 1)

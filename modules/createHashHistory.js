@@ -133,8 +133,7 @@ function createHashHistory(options={}) {
     cancelTransition
   });
 
-  var listenerCount = 0;
-  var stopHashChangeListener;
+  var listenerCount = 0, stopHashChangeListener;
 
   function listen(listener) {
     if (++listenerCount === 1)
