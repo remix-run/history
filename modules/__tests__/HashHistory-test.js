@@ -5,15 +5,22 @@ import createHashHistory from '../createHashHistory';
 import describeDOMHistory from './describeDOMHistory';
 import execSteps from './execSteps';
 
+function isFirefox() {
+  return navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
+}
+
 describe('hash history', function () {
+  var goCausesReload = isFirefox();
+  var describeGo = goCausesReload ? describe.skip : describe;
+
   afterEach(function () {
     if (window.location.hash !== '')
       window.location.hash = '';
   });
 
-  describeDOMHistory(createHashHistory);
+  describeDOMHistory(createHashHistory, goCausesReload);
 
-  describe('when the user does not want to persist a state', function() {
+  describeGo('when the user does not want to persist a state', function() {
     var history, unlisten;
     beforeEach(function () {
       history = createHashHistory({ queryKey: false });
@@ -50,7 +57,7 @@ describe('hash history', function () {
     });
   });
 
-  describe('when the user wants to persist a state', function() {
+  describeGo('when the user wants to persist a state', function() {
     var location, history, unlisten;
     beforeEach(function () {
       location = null;

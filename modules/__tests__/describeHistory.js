@@ -3,7 +3,7 @@ import expect from 'expect';
 import { PUSH, REPLACE, POP } from '../Actions';
 import execSteps from './execSteps';
 
-function describeHistory(createHistory) {
+function describeHistory(createHistory, goCausesReload) {
   describe('when the user confirms a transition', function () {
     var confirmationMessage, location, history, unlisten;
     beforeEach(function () {
@@ -74,9 +74,7 @@ function describeHistory(createHistory) {
 
     it('does not update the location', function () {
       var prevLocation = location;
-
       history.pushState(null, '/home');
-
       expect(prevLocation).toBe(location);
     });
   });
@@ -135,7 +133,9 @@ function describeHistory(createHistory) {
     });
   });
 
-  describe('goBack', function () {
+  var describeGo = goCausesReload ? describe.skip : describe;
+
+  describeGo('goBack', function () {
     var history, unlisten;
     beforeEach(function () {
       history = createHistory();
@@ -170,7 +170,7 @@ function describeHistory(createHistory) {
     });
   });
 
-  describe('goForward', function () {
+  describeGo('goForward', function () {
     var history, unlisten;
     beforeEach(function () {
       history = createHistory();
