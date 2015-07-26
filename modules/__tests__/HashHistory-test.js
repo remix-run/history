@@ -1,26 +1,22 @@
 import assert from 'assert';
 import expect from 'expect';
 import { PUSH } from '../Actions';
+import { supportsGoUsingHashWithoutReload } from '../DOMUtils';
 import createHashHistory from '../createHashHistory';
 import describeDOMHistory from './describeDOMHistory';
 import execSteps from './execSteps';
 
-function isFirefox() {
-  return navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-}
-
 describe('hash history', function () {
-  var goCausesReload = isFirefox();
-  var describeGo = goCausesReload ? describe.skip : describe;
+  var canTestGo = supportsGoUsingHashWithoutReload();
 
   afterEach(function () {
     if (window.location.hash !== '')
       window.location.hash = '';
   });
 
-  describeDOMHistory(createHashHistory, goCausesReload);
+  describeDOMHistory(createHashHistory, canTestGo);
 
-  describeGo('when the user does not want to persist a state', function() {
+  describe('when the user does not want to persist a state', function() {
     var history, unlisten;
     beforeEach(function () {
       history = createHashHistory({ queryKey: false });
@@ -31,7 +27,7 @@ describe('hash history', function () {
         unlisten();
     });
 
-    it('forgets state across transitions and do not store key in query string', function (done) {
+    (canTestGo ? it : it.skip)('forgets state across transitions and do not store key in query string', function (done) {
       var steps = [
         function () {
           history.pushState({ the: 'state' }, '/home?the=query');
@@ -57,7 +53,7 @@ describe('hash history', function () {
     });
   });
 
-  describeGo('when the user wants to persist a state', function() {
+  describe('when the user wants to persist a state', function() {
     var location, history, unlisten;
     beforeEach(function () {
       location = null;
@@ -72,7 +68,7 @@ describe('hash history', function () {
         unlisten();
     });
 
-    it('remembers state across transitions and store key in the given query parameter', function (done) {
+    (canTestGo ? it : it.skip)('remembers state across transitions and store key in the given query parameter', function (done) {
       var steps = [
         function () {
           history.pushState({ the: 'state' }, '/home?the=query');

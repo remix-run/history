@@ -3,7 +3,7 @@ import expect from 'expect';
 import { PUSH, REPLACE, POP } from '../Actions';
 import execSteps from './execSteps';
 
-function describeHistory(createHistory, goCausesReload) {
+function describeHistory(createHistory, canTestGo) {
   describe('when the user confirms a transition', function () {
     var confirmationMessage, location, history, unlisten;
     beforeEach(function () {
@@ -133,9 +133,7 @@ function describeHistory(createHistory, goCausesReload) {
     });
   });
 
-  var describeGo = goCausesReload ? describe.skip : describe;
-
-  describeGo('goBack', function () {
+  describe('goBack', function () {
     var history, unlisten;
     beforeEach(function () {
       history = createHistory();
@@ -146,7 +144,7 @@ function describeHistory(createHistory, goCausesReload) {
         unlisten();
     });
 
-    it('calls change listeners with the previous location', function (done) {
+    (canTestGo ? it : it.skip)('calls change listeners with the previous location', function (done) {
       var prevLocation;
       var steps = [
         function (location) {
@@ -170,7 +168,7 @@ function describeHistory(createHistory, goCausesReload) {
     });
   });
 
-  describeGo('goForward', function () {
+  describe('goForward', function () {
     var history, unlisten;
     beforeEach(function () {
       history = createHistory();
@@ -181,7 +179,7 @@ function describeHistory(createHistory, goCausesReload) {
         unlisten();
     });
 
-    it('calls change listeners with the previous location', function (done) {
+    (canTestGo ? it : it.skip)('calls change listeners with the previous location', function (done) {
       var prevLocation, nextLocation;
       var steps = [
         function (location) {

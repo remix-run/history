@@ -51,8 +51,8 @@ module.exports = function (config) {
     browsers: [ 'Chrome' ],
     browserNoActivityTimeout: 30000,
     captureTimeout: 30000,
-
     frameworks: [ 'mocha' ],
+    reporters: [ 'dots', 'saucelabs' ],
 
     files: [
       'tests.webpack.js'
@@ -61,8 +61,6 @@ module.exports = function (config) {
     preprocessors: {
       'tests.webpack.js': [ 'webpack', 'sourcemap' ]
     },
-
-    reporters: [ 'dots', 'saucelabs' ],
 
     webpack: {
       devtool: 'inline-source-map',
