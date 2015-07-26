@@ -1,5 +1,7 @@
+import invariant from 'invariant';
 import { PUSH, REPLACE, POP } from './Actions';
-import { addEventListener, removeEventListener, readState, saveState, getWindowPath, go } from './DOMUtils';
+import { canUseDOM } from './ExecutionEnvironment';
+import { addEventListener, removeEventListener, readState, saveState, getWindowPath, go, supportsHistory } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -37,37 +39,49 @@ function startPopStateListener({ transitionTo }) {
   };
 }
 
-function finishTransition(location) {
-  var { key, pathname, search } = location;
-  var path = pathname + search;
-  var state = {
-    key
-  };
+function createBrowserHistory(options) {
+  var isSupported = supportsHistory();
 
-  switch (location.action) {
-    case PUSH:
-      saveState(location.key, location.state);
-      window.history.pushState(state, null, path);
-      break;
-    case REPLACE:
-      saveState(location.key, location.state);
-      window.history.replaceState(state, null, path);
-      break;
-  }
-}
+  function finishTransition(location) {
+    var { key, pathname, search } = location;
+    var path = pathname + search;
+    var historyState = {
+      key
+    };
 
-function cancelTransition(location) {
-  if (location.action === POP) {
-    var n = 0; // TODO: Figure out what n will put the URL back.
+    switch (location.action) {
+      case PUSH:
+        saveState(location.key, location.state);
 
-    if (n) {
-      ignoreNextPopState = true;
-      go(n);
+        if (isSupported) {
+          window.history.pushState(historyState, null, path);
+        } else {
+          window.location.href = path;
+        }
+        break;
+      case REPLACE:
+        saveState(location.key, location.state);
+
+        if (isSupported) {
+          window.history.replaceState(historyState, null, path);
+        } else {
+          window.location.replace(path);
+        }
+        break;
     }
   }
-}
 
-function createBrowserHistory(options) {
+  function cancelTransition(location) {
+    if (location.action === POP) {
+      var n = 0; // TODO: Figure out what n will put the URL back.
+
+      if (n) {
+        ignoreNextPopState = true;
+        go(n);
+      }
+    }
+  }
+
   var history = createDOMHistory({
     ...options,
     getCurrentLocation,
@@ -78,6 +92,11 @@ function createBrowserHistory(options) {
   var listenerCount = 0, stopPopStateListener;
 
   function listen(listener) {
+    invariant(
+      canUseDOM,
+      'Browser history needs a DOM'
+    );
+
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history);
 
