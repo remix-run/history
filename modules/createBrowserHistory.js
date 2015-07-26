@@ -39,6 +39,15 @@ function startPopStateListener({ transitionTo }) {
   };
 }
 
+/**
+ * Creates and returns a history object that uses HTML5's history API
+ * (pushState, replaceState, and the popstate event) to manage history.
+ * This is the recommended method of managing history in browsers because
+ * it provides the cleanest URLs.
+ *
+ * Note: In browsers that do not support the HTML5 history API full
+ * page reloads will be used to preserve URLs.
+ */
 function createBrowserHistory(options) {
   var isSupported = supportsHistory();
 
@@ -56,7 +65,7 @@ function createBrowserHistory(options) {
         if (isSupported) {
           window.history.pushState(historyState, null, path);
         } else {
-          window.location.href = path;
+          window.location.href = path; // Use page reload to preserve the URL.
         }
         break;
       case REPLACE:
@@ -65,7 +74,7 @@ function createBrowserHistory(options) {
         if (isSupported) {
           window.history.replaceState(historyState, null, path);
         } else {
-          window.location.replace(path);
+          window.location.replace(path); // Use page reload to preserve the URL.
         }
         break;
     }
