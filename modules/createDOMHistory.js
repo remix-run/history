@@ -1,3 +1,5 @@
+import invariant from 'invariant';
+import { canUseDOM } from './ExecutionEnvironment';
 import { addEventListener, removeEventListener, saveState, readState, go } from './DOMUtils';
 import createHistory from './createHistory';
 
@@ -35,18 +37,20 @@ function createDOMHistory(options) {
   var stopBeforeUnloadListener;
 
   function listen(listener) {
-    var unlisten = history.listen(listener);
+    invariant(
+      canUseDOM,
+      'DOM history needs a DOM'
+    );
 
-    listenerCount += 1;
-
-    if (listenerCount === 1)
+    if (++listenerCount === 1)
       stopBeforeUnloadListener = startBeforeUnloadListener(history);
+
+    var unlisten = history.listen(listener);
 
     return function () {
       unlisten();
-      listenerCount -= 1;
 
-      if (listenerCount === 0)
+      if (--listenerCount === 0)
         stopBeforeUnloadListener();
     };
   }

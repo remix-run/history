@@ -49,6 +49,11 @@ function startPopStateListener({ transitionTo }) {
  * page reloads will be used to preserve URLs.
  */
 function createBrowserHistory(options) {
+  invariant(
+    canUseDOM,
+    'Browser history needs a DOM'
+  );
+
   var isSupported = supportsHistory();
 
   function finishTransition(location) {
@@ -101,11 +106,6 @@ function createBrowserHistory(options) {
   var listenerCount = 0, stopPopStateListener;
 
   function listen(listener) {
-    invariant(
-      canUseDOM,
-      'Browser history needs a DOM'
-    );
-
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history);
 

@@ -1,7 +1,3 @@
-export var canUseDOM = !!(
-  typeof window !== 'undefined' && window.document && window.document.createElement
-);
-
 export function addEventListener(node, event, listener) {
   if (node.addEventListener) {
     node.addEventListener(event, listener, false);
@@ -58,7 +54,8 @@ export function go(n) {
 }
 
 /**
- * taken from modernizr
+ * Returns true if the HTML5 history API is supported. Taken from modernizr.
+ *
  * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
  * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
  * changed to avoid false negatives for Windows Phones: https://github.com/rackt/react-router/issues/586
@@ -69,4 +66,12 @@ export function supportsHistory() {
     return false;
   }
   return window.history && 'pushState' in window.history;
+}
+
+/**
+ * Returns false if using go(n) with hash history causes a full page reload.
+ */
+export function supportsGoUsingHashWithoutReload() {
+  var ua = navigator.userAgent;
+  return ua.indexOf('Firefox') === -1;
 }

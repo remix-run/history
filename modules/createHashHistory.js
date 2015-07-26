@@ -1,6 +1,8 @@
 import warning from 'warning';
+import invariant from 'invariant';
 import { PUSH, REPLACE, POP } from './Actions';
-import { addEventListener, removeEventListener, readState, saveState, getHashPath, replaceHashPath, go } from './DOMUtils';
+import { canUseDOM } from './ExecutionEnvironment';
+import { addEventListener, removeEventListener, readState, saveState, getHashPath, replaceHashPath, supportsGoUsingHashWithoutReload } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -35,6 +37,11 @@ function getQueryStringValueFromPath(path, key) {
 var DefaultQueryKey = '_k';
 
 function createHashHistory(options={}) {
+  invariant(
+    canUseDOM,
+    'Hash history needs a DOM'
+  );
+
   var { queryKey } = options;
 
   if (queryKey === undefined || !!queryKey)
@@ -147,6 +154,17 @@ function createHashHistory(options={}) {
       if (--listenerCount === 0)
         stopHashChangeListener();
     };
+  }
+
+  var goIsSupportedWithoutReload = supportsGoUsingHashWithoutReload();
+
+  function go(n) {
+    warning(
+      goIsSupportedWithoutReload,
+      'Hash history go(n) causes a full page reload in this browser'
+    );
+
+    history.go(n);
   }
 
   return {
