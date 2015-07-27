@@ -1,12 +1,18 @@
-import describeHistory from './describeHistory';
-import createMemoryHistory from '../createMemoryHistory';
 import expect from 'expect';
+import createMemoryHistory from '../createMemoryHistory';
+import describeTransitions from './describeTransitions';
+import describePushState from './describePushState';
+import describeReplaceState from './describeReplaceState';
+import describeGo from './describeGo';
 
 describe('memory history', function () {
-  describeHistory(createMemoryHistory);
+  describeTransitions(createMemoryHistory);
+  describePushState(createMemoryHistory);
+  describeReplaceState(createMemoryHistory);
+  describeGo(createMemoryHistory);
 
-  describe('when the user pushState in middle of stack', function() {
-    it('clears rest of stack so the user can not go forward', function() {
+  describe('when using pushState in the middle of the stack', function() {
+    it('clears rest of stack so the user cannot go forward', function() {
       var history = createMemoryHistory(), location;
 
       history.listen(function(loc) {
@@ -42,9 +48,5 @@ describe('memory history', function () {
         history.goForward();
       }).toThrow(/Cannot go\(\d+\); there is not enough history/);
     });
-  });
-
-  describe('when the user cancels a POP transition', function () {
-    it('preserves the existing URL');
   });
 });

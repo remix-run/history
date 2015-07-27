@@ -46,7 +46,7 @@ module.exports = function (config) {
     browserNoActivityTimeout: 30000,
     captureTimeout: 30000,
     frameworks: [ 'mocha' ],
-    reporters: [ 'dots', 'saucelabs' ],
+    reporters: [ 'mocha' ],
 
     files: [
       'tests.webpack.js'
@@ -77,6 +77,7 @@ module.exports = function (config) {
 
   if (process.env.TRAVIS) {
     config.browsers = Object.keys(customLaunchers);
+    config.reporters = [ 'saucelabs' ];
 
     // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs
     config.browserNoActivityTimeout = 120000;

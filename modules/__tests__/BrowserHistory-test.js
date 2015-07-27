@@ -1,5 +1,8 @@
 import createBrowserHistory from '../createBrowserHistory';
-import describeDOMHistory from './describeDOMHistory';
+import describeTransitions from './describeTransitions';
+import describePushState from './describePushState';
+import describeReplaceState from './describeReplaceState';
+import describeGo from './describeGo';
 
 describe('browser history', function () {
   var path;
@@ -11,9 +14,8 @@ describe('browser history', function () {
     window.history.replaceState(null, null, path);
   });
 
-  describeDOMHistory(createBrowserHistory);
-
-  describe('when the user cancels a POP transition', function () {
-    it('puts the URL back');
-  });
+  describeTransitions(createBrowserHistory);
+  describePushState(createBrowserHistory);
+  describeReplaceState(createBrowserHistory);
+  describeGo(createBrowserHistory);
 });

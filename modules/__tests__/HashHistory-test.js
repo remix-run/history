@@ -3,20 +3,14 @@ import expect from 'expect';
 import { PUSH } from '../Actions';
 import { supportsGoUsingHashWithoutReload } from '../DOMUtils';
 import createHashHistory from '../createHashHistory';
-import describeDOMHistory from './describeDOMHistory';
+import describeTransitions from './describeTransitions';
+import describePushState from './describePushState';
+import describeReplaceState from './describeReplaceState';
+import describeGo from './describeGo';
 import execSteps from './execSteps';
 
-describe('hash history', function () {
-  var canTestGo = supportsGoUsingHashWithoutReload();
-
-  afterEach(function () {
-    if (window.location.hash !== '')
-      window.location.hash = '';
-  });
-
-  describeDOMHistory(createHashHistory, canTestGo);
-
-  describe('when the user does not want to persist a state', function() {
+function describeHashStatePersistence(createHistory) {
+  describe('when the user does not want to persist a state', function () {
     var history, unlisten;
     beforeEach(function () {
       history = createHashHistory({ queryKey: false });
@@ -27,7 +21,7 @@ describe('hash history', function () {
         unlisten();
     });
 
-    (canTestGo ? it : it.skip)('forgets state across transitions and do not store key in query string', function (done) {
+    it('forgets state across transitions and do not store key in query string', function (done) {
       var steps = [
         function () {
           history.pushState({ the: 'state' }, '/home?the=query');
@@ -39,7 +33,7 @@ describe('hash history', function () {
           expect(location.action).toEqual(PUSH);
           history.goBack();
         },
-        function (location) {
+        function () {
           history.goForward();
         },
         function (location) {
@@ -53,7 +47,7 @@ describe('hash history', function () {
     });
   });
 
-  describe('when the user wants to persist a state', function() {
+  describe('when the user wants to persist a state', function () {
     var location, history, unlisten;
     beforeEach(function () {
       location = null;
@@ -68,7 +62,7 @@ describe('hash history', function () {
         unlisten();
     });
 
-    (canTestGo ? it : it.skip)('remembers state across transitions and store key in the given query parameter', function (done) {
+    it('remembers state across transitions and store key in the given query parameter', function (done) {
       var steps = [
         function () {
           history.pushState({ the: 'state' }, '/home?the=query');
@@ -94,8 +88,29 @@ describe('hash history', function () {
       unlisten = history.listen(execSteps(steps, done));
     });
   });
+}
 
-  describe('when the user cancels a POP transition', function () {
-    it('puts the URL back');
+describe('hash history', function () {
+  afterEach(function () {
+    if (window.location.hash !== '')
+      window.location.hash = '';
   });
+
+  describeTransitions(createHashHistory);
+  describePushState(createHashHistory);
+  describeReplaceState(createHashHistory);
+
+  var canTestGo = supportsGoUsingHashWithoutReload();
+
+  if (canTestGo) {
+    describe(null, function () {
+      describeGo(createHashHistory);
+      describeHashStatePersistence(createHashHistory);
+    });
+  } else {
+    describe.skip(null, function () {
+      describeGo(createHashHistory);
+      describeHashStatePersistence(createHashHistory);
+    });
+  }
 });
