@@ -2,7 +2,7 @@ import warning from 'warning';
 import invariant from 'invariant';
 import { PUSH, REPLACE, POP } from './Actions';
 import { canUseDOM } from './ExecutionEnvironment';
-import { addEventListener, removeEventListener, readState, saveState, getHashPath, replaceHashPath, supportsGoUsingHashWithoutReload } from './DOMUtils';
+import { addEventListener, removeEventListener, readState, saveState, getHashPath, replaceHashPath, supportsGoWithoutReloadUsingHash } from './DOMUtils';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -156,7 +156,7 @@ function createHashHistory(options={}) {
     };
   }
 
-  var goIsSupportedWithoutReload = supportsGoUsingHashWithoutReload();
+  var goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash();
 
   function go(n) {
     warning(
