@@ -109,10 +109,10 @@ function createHashHistory(options={}) {
         action
       );
     } else {
-      ignoreNextHashChange = true;
-
       if (queryKey)
         saveState(location.key, location.state);
+
+      ignoreNextHashChange = true;
 
       if (action === PUSH) {
         window.location.hash = path;

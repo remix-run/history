@@ -1,6 +1,6 @@
 import assert from 'assert';
 import expect from 'expect';
-import { PUSH } from '../Actions';
+import { PUSH, POP } from '../Actions';
 import { supportsGoUsingHashWithoutReload } from '../DOMUtils';
 import createHashHistory from '../createHashHistory';
 import describeTransitions from './describeTransitions';
@@ -9,11 +9,11 @@ import describeReplaceState from './describeReplaceState';
 import describeGo from './describeGo';
 import execSteps from './execSteps';
 
-function describeHashStatePersistence(createHistory) {
+function describeStatePersistence(createHistory) {
   describe('when the user does not want to persist a state', function () {
     var history, unlisten;
     beforeEach(function () {
-      history = createHashHistory({ queryKey: false });
+      history = createHistory({ queryKey: false });
     });
 
     afterEach(function () {
@@ -21,25 +21,37 @@ function describeHashStatePersistence(createHistory) {
         unlisten();
     });
 
-    it('forgets state across transitions and do not store key in query string', function (done) {
+    it('forgets state across transitions', function (done) {
       var steps = [
-        function () {
+        function (location) {
+          expect(location.pathname).toEqual('/');
+          expect(location.search).toEqual('');
+          expect(location.state).toEqual(null);
+          expect(location.action).toEqual(POP);
+
           history.pushState({ the: 'state' }, '/home?the=query');
         },
         function (location) {
-          expect(location.state).toEqual({ the: 'state' });
           expect(location.pathname).toEqual('/home');
           expect(location.search).toEqual('?the=query');
+          expect(location.state).toEqual({ the: 'state' });
           expect(location.action).toEqual(PUSH);
+
           history.goBack();
         },
-        function () {
+        function (location) {
+          expect(location.pathname).toEqual('/');
+          expect(location.search).toEqual('');
+          expect(location.state).toEqual(null);
+          expect(location.action).toEqual(POP);
+
           history.goForward();
         },
         function (location) {
-          expect(location.state).toEqual(null);
+          expect(location.pathname).toEqual('/home');
           expect(location.search).toEqual('?the=query');
-          expect(window.location.hash).toEqual('#/home?the=query');
+          expect(location.state).toEqual(null); // State is missing.
+          expect(location.action).toEqual(POP);
         }
       ];
 
@@ -51,7 +63,7 @@ function describeHashStatePersistence(createHistory) {
     var location, history, unlisten;
     beforeEach(function () {
       location = null;
-      history = createHashHistory({ queryKey: 'a' });
+      history = createHistory({ queryKey: 'a' });
       unlisten = history.listen(function (loc) {
         location = loc;
       });
@@ -62,26 +74,37 @@ function describeHashStatePersistence(createHistory) {
         unlisten();
     });
 
-    it('remembers state across transitions and store key in the given query parameter', function (done) {
+    it('remembers state across transitions', function (done) {
       var steps = [
-        function () {
+        function (location) {
+          expect(location.pathname).toEqual('/');
+          expect(location.search).toEqual('');
+          expect(location.state).toEqual(null);
+          expect(location.action).toEqual(POP);
+
           history.pushState({ the: 'state' }, '/home?the=query');
         },
         function (location) {
-          expect(location.state).toEqual({ the: 'state' });
           expect(location.pathname).toEqual('/home');
           expect(location.search).toEqual('?the=query');
+          expect(location.state).toEqual({ the: 'state' });
           expect(location.action).toEqual(PUSH);
-          expect(window.location.hash).toEqual('#/home?the=query&a=' + location.key);
+
           history.goBack();
         },
-        function () {
+        function (location) {
+          expect(location.pathname).toEqual('/');
+          expect(location.search).toEqual('');
+          expect(location.state).toEqual(null);
+          expect(location.action).toEqual(POP);
+
           history.goForward();
         },
         function (location) {
-          expect(location.state).toEqual({ the: 'state' });
+          expect(location.pathname).toEqual('/home');
           expect(location.search).toEqual('?the=query');
-          expect(window.location.hash).toEqual('#/home?the=query&a=' + location.key);
+          expect(location.state).toEqual({ the: 'state' }); // State is present.
+          expect(location.action).toEqual(POP);
         }
       ];
 
@@ -91,7 +114,7 @@ function describeHashStatePersistence(createHistory) {
 }
 
 describe('hash history', function () {
-  afterEach(function () {
+  beforeEach(function () {
     if (window.location.hash !== '')
       window.location.hash = '';
   });
@@ -105,12 +128,12 @@ describe('hash history', function () {
   if (canTestGo) {
     describe(null, function () {
       describeGo(createHashHistory);
-      describeHashStatePersistence(createHashHistory);
+      describeStatePersistence(createHashHistory);
     });
   } else {
     describe.skip(null, function () {
       describeGo(createHashHistory);
-      describeHashStatePersistence(createHashHistory);
+      describeStatePersistence(createHashHistory);
     });
   }
 });

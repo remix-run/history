@@ -1,12 +1,18 @@
 function execSteps(steps, done) {
-  return function () {
-    try {
-      steps.shift().apply(this, arguments);
+  var index = 0;
 
-      if (steps.length === 0)
-        done();
-    } catch (error) {
-      done(error);
+  return function () {
+    if (steps.length === 0) {
+      done();
+    } else {
+      try {
+        steps[index++].apply(this, arguments);
+
+        if (index === steps.length)
+          done();
+      } catch (error) {
+        done(error);
+      }
     }
   };
 }

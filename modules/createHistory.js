@@ -1,3 +1,4 @@
+import invariant from 'invariant';
 import { PUSH, REPLACE } from './Actions';
 import createLocation from './createLocation';
 
@@ -10,12 +11,13 @@ function createRandomKey(length) {
 function createHistory(options={}) {
   var transitionHooks = [];
   var changeListeners = [];
-  var location, pendingLocation;
 
   var { getCurrentLocation, finishTransition, cancelTransition, go, keyLength, getUserConfirmation } = options;
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength;
+
+  var location;
 
   function updateLocation(newLocation) {
     location = newLocation;
@@ -77,12 +79,18 @@ function createHistory(options={}) {
     }
   }
 
+  var pendingLocation;
+
   function transitionTo(nextLocation) {
+    invariant(
+      pendingLocation == null,
+      'You cannot use transitionTo while another transition is in progress'
+    );
+
     pendingLocation = nextLocation;
 
     confirmTransition(function (ok) {
-      if (pendingLocation !== nextLocation)
-        return; // Last transitionTo wins.
+      pendingLocation = null;
 
       if (ok) {
         finishTransition(nextLocation);

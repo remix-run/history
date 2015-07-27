@@ -1,32 +1,38 @@
-import assert from 'assert';
 import expect from 'expect';
-import { PUSH } from '../Actions';
+import { PUSH, POP } from '../Actions';
+import execSteps from './execSteps';
 
 function describePushState(createHistory) {
-  var location, history, unlisten;
-  beforeEach(function () {
-    location = null;
-    history = createHistory();
-    unlisten = history.listen(function (loc) {
-      location = loc;
-    });
-  });
-
-  afterEach(function () {
-    if (unlisten)
-      unlisten();
-  });
-
   describe('pushState', function () {
-    it('calls change listeners with the new location', function () {
-      history.pushState({ the: 'state' }, '/home?the=query');
+    var history, unlisten;
+    beforeEach(function () {
+      history = createHistory();
+    });
 
-      assert(location);
-      expect(location.pathname).toEqual('/home');
-      expect(location.search).toEqual('?the=query');
-      expect(location.state).toEqual({ the: 'state' });
-      expect(location.action).toEqual(PUSH);
-      assert(location.key);
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('calls change listeners with the new location', function (done) {
+      var steps = [
+        function (location) {
+          expect(location.pathname).toEqual('/');
+          expect(location.search).toEqual('');
+          expect(location.state).toEqual(null);
+          expect(location.action).toEqual(POP);
+
+          history.pushState({ the: 'state' }, '/home?the=query');
+        },
+        function (location) {
+          expect(location.pathname).toEqual('/home');
+          expect(location.search).toEqual('?the=query');
+          expect(location.state).toEqual({ the: 'state' });
+          expect(location.action).toEqual(PUSH);
+        }
+      ];
+
+      unlisten = history.listen(execSteps(steps, done));
     });
   });
 }

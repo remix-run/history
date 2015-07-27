@@ -1,32 +1,38 @@
-import assert from 'assert';
 import expect from 'expect';
-import { REPLACE } from '../Actions';
+import { REPLACE, POP } from '../Actions';
+import execSteps from './execSteps';
 
 function describeReplaceState(createHistory) {
-  var location, history, unlisten;
-  beforeEach(function () {
-    location = null;
-    history = createHistory();
-    unlisten = history.listen(function (loc) {
-      location = loc;
-    });
-  });
-
-  afterEach(function () {
-    if (unlisten)
-      unlisten();
-  });
-
   describe('replaceState', function () {
-    it('calls change listeners with the new location', function () {
-      history.replaceState({ more: 'state' }, '/feed?more=query');
+    var history, unlisten;
+    beforeEach(function () {
+      history = createHistory();
+    });
 
-      assert(location);
-      expect(location.pathname).toEqual('/feed');
-      expect(location.search).toEqual('?more=query');
-      expect(location.state).toEqual({ more: 'state' });
-      expect(location.action).toEqual(REPLACE);
-      assert(location.key);
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('calls change listeners with the new location', function (done) {
+      var steps = [
+        function (location) {
+          expect(location.pathname).toEqual('/');
+          expect(location.search).toEqual('');
+          expect(location.state).toEqual(null);
+          expect(location.action).toEqual(POP);
+
+          history.replaceState({ the: 'state' }, '/home?the=query');
+        },
+        function (location) {
+          expect(location.pathname).toEqual('/home');
+          expect(location.search).toEqual('?the=query');
+          expect(location.state).toEqual({ the: 'state' });
+          expect(location.action).toEqual(REPLACE);
+        }
+      ];
+
+      unlisten = history.listen(execSteps(steps, done));
     });
   });
 }
