@@ -71,7 +71,7 @@ export function supportsHistory() {
 /**
  * Returns false if using go(n) with hash history causes a full page reload.
  */
-export function supportsGoUsingHashWithoutReload() {
+export function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }

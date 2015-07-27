@@ -1,7 +1,7 @@
 import assert from 'assert';
 import expect from 'expect';
 import { PUSH, POP } from '../Actions';
-import { supportsGoUsingHashWithoutReload } from '../DOMUtils';
+import { supportsGoWithoutReloadUsingHash } from '../DOMUtils';
 import createHashHistory from '../createHashHistory';
 import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
@@ -123,13 +123,9 @@ describe('hash history', function () {
   describePushState(createHashHistory);
   describeReplaceState(createHashHistory);
 
-  var canTestGo = supportsGoUsingHashWithoutReload();
-
-  if (canTestGo) {
-    describe(null, function () {
-      describeGo(createHashHistory);
-      describeStatePersistence(createHashHistory);
-    });
+  if (supportsGoWithoutReloadUsingHash()) {
+    describeGo(createHashHistory);
+    describeStatePersistence(createHashHistory);
   } else {
     describe.skip(null, function () {
       describeGo(createHashHistory);

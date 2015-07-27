@@ -1,3 +1,4 @@
+import { supportsHistory } from '../DOMUtils';
 import createBrowserHistory from '../createBrowserHistory';
 import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
@@ -9,8 +10,17 @@ describe('browser history', function () {
     window.history.replaceState(null, null, '/');
   });
 
-  describeTransitions(createBrowserHistory);
-  describePushState(createBrowserHistory);
-  describeReplaceState(createBrowserHistory);
-  describeGo(createBrowserHistory);
+  if (supportsHistory()) {
+    describeTransitions(createBrowserHistory);
+    describePushState(createBrowserHistory);
+    describeReplaceState(createBrowserHistory);
+    describeGo(createBrowserHistory);
+  } else {
+    describe.skip(null, function () {
+      describeTransitions(createBrowserHistory);
+      describePushState(createBrowserHistory);
+      describeReplaceState(createBrowserHistory);
+      describeGo(createBrowserHistory);
+    });
+  }
 });
