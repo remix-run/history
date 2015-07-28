@@ -49,7 +49,7 @@ module.exports = function (config) {
       base: 'BrowserStack',
       os: 'ios',
       os_version: '7.0',
-      device: 'iPhone 5S'
+      browser: 'iphone'
     },
   };
 
