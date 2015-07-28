@@ -121,4 +121,4 @@ One other thing to keep in mind when using hash history is that you cannot also 
 
 ### Thanks
 
-A big thank-you to [Dan Shaw](https://github.com/dshaw) for letting us use the `history` npm package name! Thanks Dan!
+A big thank-you to [Dan Shaw](https://www.npmjs.com/~dshaw) for letting us use the `history` npm package name! Thanks Dan!
