@@ -37,4 +37,4 @@ git push origin master
 git push origin $next_ref
 git push origin latest -f
 
-#npm publish
+npm publish
