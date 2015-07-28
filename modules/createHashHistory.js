@@ -60,34 +60,21 @@ function createHashHistory(options={}) {
     return createLocation(path, state, undefined, key);
   }
 
-  var ignoreNextHashChange = false, lastHashPath;
-
   function startHashChangeListener({ transitionTo }) {
-    function listener() {
+     function hashChangeListener() {
       if (!ensureSlash())
         return; // Always make sure hashes are preceeded with a /.
-
-      var hashPath = getHashPath();
-      if (hashPath === lastHashPath)
-        return; // Ignore consecutive identical hashes (it hasn't actually changed!).
-
-      lastHashPath = hashPath;
-
-      if (ignoreNextHashChange) {
-        ignoreNextHashChange = false;
-        return;
-      }
 
       transitionTo(
         getCurrentLocation()
       );
-    }
+    };
 
     ensureSlash();
-    addEventListener(window, 'hashchange', listener);
+    addEventListener(window, 'hashchange', hashChangeListener);
 
     return function () {
-      removeEventListener(window, 'hashchange', listener);
+      removeEventListener(window, 'hashchange', hashChangeListener);
     };
   }
 
@@ -112,8 +99,6 @@ function createHashHistory(options={}) {
       if (queryKey)
         saveState(location.key, location.state);
 
-      ignoreNextHashChange = true;
-
       if (action === PUSH) {
         window.location.hash = path;
       } else {
@@ -125,11 +110,7 @@ function createHashHistory(options={}) {
   function cancelTransition(location) {
     if (location.action === POP) {
       var n = 0; // TODO: Figure out what n will put the URL back.
-
-      if (n) {
-        ignoreNextHashChange = true;
-        go(n);
-      }
+      go(n);
     }
   }
 

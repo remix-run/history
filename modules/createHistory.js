@@ -8,6 +8,16 @@ function createRandomKey(length) {
   return Math.random().toString(36).substr(2, length);
 }
 
+function locationsAreEqual(a, b) {
+  if (a.key)
+    return a.key === b.key;
+
+  if (b.key)
+    return false;
+
+  return a.pathname === b.pathname && a.search === b.search;
+}
+
 function createHistory(options={}) {
   var transitionHooks = [];
   var changeListeners = [];
@@ -82,9 +92,12 @@ function createHistory(options={}) {
   var pendingLocation;
 
   function transitionTo(nextLocation) {
+    if (location && locationsAreEqual(location, nextLocation))
+      return; // Nothing to do.
+
     invariant(
       pendingLocation == null,
-      'You cannot use transitionTo while another transition is in progress'
+      'transitionTo: Another transition is already in progress'
     );
 
     pendingLocation = nextLocation;

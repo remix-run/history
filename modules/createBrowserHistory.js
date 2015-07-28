@@ -15,27 +15,20 @@ function getCurrentLocation(historyState) {
   return createLocation(path, state, undefined, key);
 }
 
-var ignoreNextPopState = false;
-
 function startPopStateListener({ transitionTo }) {
-  function listener(event) {
+  function popStateListener(event) {
     if (event.state === undefined)
       return; // Ignore extraneous popstate events in WebKit.
-
-    if (ignoreNextPopState) {
-      ignoreNextPopState = false;
-      return;
-    }
 
     transitionTo(
       getCurrentLocation(event.state)
     );
   }
 
-  addEventListener(window, 'popstate', listener);
+  addEventListener(window, 'popstate', popStateListener);
 
   return function () {
-    removeEventListener(window, 'popstate', listener);
+    removeEventListener(window, 'popstate', popStateListener);
   };
 }
 
@@ -88,11 +81,7 @@ function createBrowserHistory(options) {
   function cancelTransition(location) {
     if (location.action === POP) {
       var n = 0; // TODO: Figure out what n will put the URL back.
-
-      if (n) {
-        ignoreNextPopState = true;
-        go(n);
-      }
+      go(n);
     }
   }
 

@@ -23,10 +23,10 @@ function describeGo(createHistory) {
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
 
-            history.pushState({ the: 'state' }, '/one?the=query');
+            history.pushState({ the: 'state' }, '/home?the=query');
           },
           function (location) {
-            expect(location.pathname).toEqual('/one');
+            expect(location.pathname).toEqual('/home');
             expect(location.search).toEqual('?the=query');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(PUSH);
@@ -54,10 +54,10 @@ function describeGo(createHistory) {
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
 
-            history.pushState({ the: 'state' }, '/one?the=query');
+            history.pushState({ the: 'state' }, '/home?the=query');
           },
           function (location) {
-            expect(location.pathname).toEqual('/one');
+            expect(location.pathname).toEqual('/home');
             expect(location.search).toEqual('?the=query');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(PUSH);
@@ -73,7 +73,7 @@ function describeGo(createHistory) {
             history.goForward();
           },
           function (location) {
-            expect(location.pathname).toEqual('/one');
+            expect(location.pathname).toEqual('/home');
             expect(location.search).toEqual('?the=query');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(POP);
