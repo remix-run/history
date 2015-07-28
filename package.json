@@ -10,7 +10,6 @@
   "bugs": "https://github.com/rackt/history/issues",
   "scripts": {
     "build": "scripts/build.sh",
-    "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "test": "eslint modules && karma start"
