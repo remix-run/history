@@ -96,8 +96,12 @@ function createHashHistory(options={}) {
         action
       );
     } else {
-      if (queryKey)
+      if (queryKey) {
         saveState(location.key, location.state);
+      } else {
+        // Drop key and state.
+        location.key = location.state = null;
+      }
 
       if (action === PUSH) {
         window.location.hash = path;
@@ -137,6 +141,24 @@ function createHashHistory(options={}) {
     };
   }
 
+  function pushState(state, path) {
+    warning(
+      queryKey || state == null,
+      'You cannot use state without a queryKey; it will be dropped'
+    );
+
+    history.pushState(state, path);
+  }
+
+  function replaceState(state, path) {
+    warning(
+      queryKey || state == null,
+      'You cannot use state without a queryKey; it will be dropped'
+    );
+
+    history.replaceState(state, path);
+  }
+
   var goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash();
 
   function go(n) {
@@ -150,7 +172,10 @@ function createHashHistory(options={}) {
 
   return {
     ...history,
-    listen
+    listen,
+    pushState,
+    replaceState,
+    go
   };
 }
 

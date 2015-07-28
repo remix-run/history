@@ -1,4 +1,5 @@
 import invariant from 'invariant';
+import deepEqual from 'deep-equal';
 import { PUSH, REPLACE } from './Actions';
 import createLocation from './createLocation';
 
@@ -9,13 +10,11 @@ function createRandomKey(length) {
 }
 
 function locationsAreEqual(a, b) {
-  if (a.key)
-    return a.key === b.key;
-
-  if (b.key)
-    return false;
-
-  return a.pathname === b.pathname && a.search === b.search;
+  return a.pathname === b.pathname &&
+    a.search === b.search &&
+    //a.action === b.action && // Different action !== location change.
+    a.key === b.key &&
+    deepEqual(a.state, b.state);
 }
 
 function createHistory(options={}) {

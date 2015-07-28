@@ -29,12 +29,12 @@ function describeStatePersistence(createHistory) {
           expect(location.state).toEqual(null);
           expect(location.action).toEqual(POP);
 
-          history.pushState({ the: 'state' }, '/home?the=query');
+          history.pushState(null, '/home?the=query');
         },
         function (location) {
           expect(location.pathname).toEqual('/home');
           expect(location.search).toEqual('?the=query');
-          expect(location.state).toEqual({ the: 'state' });
+          expect(location.state).toEqual(null);
           expect(location.action).toEqual(PUSH);
 
           history.goBack();
@@ -59,14 +59,10 @@ function describeStatePersistence(createHistory) {
     });
   });
 
-  describe('when the user wants to persist a state', function () {
-    var location, history, unlisten;
+  describe('when the user wants to persist state', function () {
+    var history, unlisten;
     beforeEach(function () {
-      location = null;
       history = createHistory({ queryKey: 'a' });
-      unlisten = history.listen(function (loc) {
-        location = loc;
-      });
     });
 
     afterEach(function () {
