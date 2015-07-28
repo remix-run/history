@@ -4,7 +4,7 @@ babel=node_modules/.bin/babel
 webpack=node_modules/.bin/webpack
 build_dir=lib
 
-rm -rf $build_dir
+git clean -f $build_dir
 
 $babel ./modules -d $build_dir --ignore "__tests__"
 
