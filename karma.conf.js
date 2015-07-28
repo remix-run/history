@@ -47,9 +47,9 @@ module.exports = function (config) {
     },
     BS_MobileSafari: {
       base: 'BrowserStack',
-      os: 'iOS',
-      os_version: '8.3',
-      device: 'iPhone 6'
+      os: 'ios',
+      os_version: '7.0',
+      device: 'iPhone 5S'
     },
   };
 
