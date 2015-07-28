@@ -57,8 +57,6 @@ module.exports = function (config) {
     customLaunchers: customLaunchers,
 
     browsers: [ 'Chrome' ],
-    browserNoActivityTimeout: 30000,
-    captureTimeout: 30000,
     frameworks: [ 'mocha' ],
     reporters: [ 'mocha' ],
 
@@ -93,14 +91,6 @@ module.exports = function (config) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = [ 'dots' ];
 
-    // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs
-    config.browserNoActivityTimeout = 120000;
-
-    // Allocating a browser in Sauce Labs can take a while (e.g. if we are out of
-    // capacity and need to wait for another build to finish) so captureTimeout
-    // typically kills an in-queue-pending request, which makes no sense.
-    config.captureTimeout = 0;
-
     config.browserStack = {
       username: process.env.BROWSER_STACK_USERNAME,
       accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
@@ -109,14 +99,6 @@ module.exports = function (config) {
   } else if (process.env.TRAVIS) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = [ 'dots' ];
-
-    // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs
-    config.browserNoActivityTimeout = 120000;
-
-    // Allocating a browser in Sauce Labs can take a while (e.g. if we are out of
-    // capacity and need to wait for another build to finish) so captureTimeout
-    // typically kills an in-queue-pending request, which makes no sense.
-    config.captureTimeout = 0;
 
     var buildLabel = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')';
 
