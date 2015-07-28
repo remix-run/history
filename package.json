@@ -12,6 +12,7 @@
     "build": "scripts/build.sh",
     "watch": "babel ./modules --watch -d lib",
     "prepublish": "npm run build",
+    "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "test": "eslint modules && karma start"
   },
   "authors": [
@@ -39,9 +40,9 @@
     "karma-mocha-reporter": "^1.0.3",
     "karma-sourcemap-loader": "^0.3.2",
     "karma-webpack": "^1.3.1",
-    "mach": "^1.3.8",
     "mocha": "^2.0.1",
-    "webpack": "^1.4.13"
+    "webpack": "^1.4.13",
+    "webpack-dev-server": "^1.10.1"
   },
   "tags": [
     "history",
