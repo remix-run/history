@@ -94,6 +94,7 @@ module.exports = function (config) {
     config.browserStack = {
       username: process.env.BROWSER_STACK_USERNAME,
       accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
+      pollingTimeout: 10000,
       startTunnel: true,
     };
   } else if (process.env.TRAVIS) {
@@ -105,7 +106,8 @@ module.exports = function (config) {
     config.browserStack = {
       username: process.env.BROWSER_STACK_USERNAME,
       accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-      startTunnel: true,
+      pollingTimeout: 10000,
+      startTunnel: false,
       project: 'history',
       build: buildLabel,
       name: process.env.TRAVIS_JOB_NUMBER,
