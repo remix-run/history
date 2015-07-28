@@ -61,7 +61,7 @@ function createHashHistory(options={}) {
   }
 
   function startHashChangeListener({ transitionTo }) {
-     function hashChangeListener() {
+    function hashChangeListener() {
       if (!ensureSlash())
         return; // Always make sure hashes are preceeded with a /.
 
