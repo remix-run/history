@@ -1,48 +1,56 @@
 var webpack = require('webpack');
 
 module.exports = function (config) {
-  // Browsers to run on Sauce Labs
+  // Browsers to run on BrowserStack
   var customLaunchers = {
-    'SL_Chrome': {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      version: '39'
+    BS_Chrome: {
+      base: 'BrowserStack',
+      os: 'OS X',
+      os_version: 'Yosemite',
+      browser: 'chrome',
+      browser_version: '39.0',
     },
-    'SL_Firefox': {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      version: '31'
+    BS_Firefox: {
+      base: 'BrowserStack',
+      os: 'OS X',
+      os_version: 'Yosemite',
+      browser: 'firefox',
+      browser_version: '32.0',
     },
-    'SL_Safari': {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.10',
-      version: '8'
+    BS_Safari: {
+      base: 'BrowserStack',
+      os: 'OS X',
+      os_version: 'Yosemite',
+      browser: 'safari',
+      browser_version: '8.0',
     },
-    'SL_IE_9': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 2008',
-      version: '9'
+//    BS_InternetExplorer_9: {
+//      base: 'BrowserStack',
+//      os: 'Windows',
+//      os_version: '7',
+//      browser: 'ie',
+//      browser_version: '9.0',
+//    },
+    BS_InternetExplorer_10: {
+      base: 'BrowserStack',
+      os: 'Windows',
+      os_version: '8',
+      browser: 'ie',
+      browser_version: '10.0',
     },
-    'SL_IE_10': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 2012',
-      version: '10'
+    BS_InternetExplorer_11: {
+      base: 'BrowserStack',
+      os: 'Windows',
+      os_version: '8.1',
+      browser: 'ie',
+      browser_version: '11.0',
     },
-    'SL_IE_11': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 8.1',
-      version: '11'
+    BS_MobileSafari: {
+      base: 'BrowserStack',
+      os: 'iOS',
+      os_version: '8.3',
+      device: 'iPhone 6'
     },
-    'SL_iOS': {
-      base: 'SauceLabs',
-      browserName: 'iphone',
-      platform: 'OS X 10.10',
-      version: '8.1'
-    }
   };
 
   config.set({
@@ -81,7 +89,7 @@ module.exports = function (config) {
     }
   });
 
-  if (process.env.USE_SAUCE) {
+  if (process.env.USE_CLOUD) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = [ 'dots' ];
 
@@ -93,13 +101,14 @@ module.exports = function (config) {
     // typically kills an in-queue-pending request, which makes no sense.
     config.captureTimeout = 0;
 
-    config.sauceLabs = {
-      testName: 'history',
-      startConnect: false
+    config.browserStack = {
+      username: process.env.BROWSER_STACK_USERNAME,
+      accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
+      startTunnel: true,
     };
   } else if (process.env.TRAVIS) {
     config.browsers = Object.keys(customLaunchers);
-    config.reporters = [ 'saucelabs' ];
+    config.reporters = [ 'dots' ];
 
     // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs
     config.browserNoActivityTimeout = 120000;
@@ -111,12 +120,13 @@ module.exports = function (config) {
 
     var buildLabel = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')';
 
-    config.sauceLabs = {
-      testName: 'history',
+    config.browserStack = {
+      username: process.env.BROWSER_STACK_USERNAME,
+      accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
+      startTunnel: true,
+      project: 'history',
       build: buildLabel,
-      startConnect: false,
-      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
-      recordScreenshots: false
+      name: process.env.TRAVIS_JOB_NUMBER,
     };
 
     config.singleRun = true;
