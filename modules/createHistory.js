@@ -3,8 +3,6 @@ import deepEqual from 'deep-equal';
 import { PUSH, REPLACE } from './Actions';
 import createLocation from './createLocation';
 
-var DefaultKeyLength = 6;
-
 function createRandomKey(length) {
   return Math.random().toString(36).substr(2, length);
 }
@@ -17,15 +15,16 @@ function locationsAreEqual(a, b) {
     deepEqual(a.state, b.state);
 }
 
-function createHistory(options={}) {
-  var transitionHooks = [];
-  var changeListeners = [];
+var DefaultKeyLength = 6;
 
+function createHistory(options={}) {
   var { getCurrentLocation, finishTransition, cancelTransition, go, keyLength, getUserConfirmation } = options;
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength;
 
+  var transitionHooks = [];
+  var changeListeners = [];
   var location;
 
   function updateLocation(newLocation) {
