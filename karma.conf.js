@@ -90,6 +90,7 @@ module.exports = function (config) {
   if (process.env.USE_CLOUD) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = [ 'dots' ];
+    config.captureTimeout = 120000;
 
     config.browserStack = {
       username: process.env.BROWSER_STACK_USERNAME,
@@ -100,6 +101,7 @@ module.exports = function (config) {
   } else if (process.env.TRAVIS) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = [ 'dots' ];
+    config.captureTimeout = 120000;
 
     var buildLabel = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')';
 
