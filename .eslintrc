@@ -7,7 +7,7 @@
   },
   "parser": "babel-eslint",
   "rules": {
-    "indent": [2, 2, {"indentSwitchCase": true}],
+    "indent": [2, 2, {"SwitchCase": 1}],
     "strict": 0
   }
 }
