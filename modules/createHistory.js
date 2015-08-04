@@ -136,6 +136,10 @@ function createHistory(options={}) {
     return createRandomKey(keyLength);
   }
 
+  function createHref(path) {
+    return path;
+  }
+
   return {
     listen,
     registerTransitionHook,
@@ -147,7 +151,8 @@ function createHistory(options={}) {
     go,
     goBack,
     goForward,
-    createKey
+    createKey,
+    createHref
   };
 }
 

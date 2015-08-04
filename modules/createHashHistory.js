@@ -170,12 +170,17 @@ function createHashHistory(options={}) {
     history.go(n);
   }
 
+  function createHref(path) {
+    return '#' + history.createHref(path);
+  }
+
   return {
     ...history,
     listen,
     pushState,
     replaceState,
-    go
+    go,
+    createHref
   };
 }
 

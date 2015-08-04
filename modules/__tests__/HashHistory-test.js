@@ -128,4 +128,9 @@ describe('hash history', function () {
       describeStatePersistence(createHashHistory);
     });
   }
+
+  it('knows how to make hrefs', function () {
+    var history = createHashHistory();
+    expect(history.createHref('/a/path')).toEqual('#/a/path');
+  });
 });
