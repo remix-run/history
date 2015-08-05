@@ -78,6 +78,35 @@ function describeTransitions(createHistory) {
     });
   });
 
+  describe('when the transition is cancelled from transition hook', function() {
+    var confirmationMessage, location, history, unlisten;
+    beforeEach(function () {
+      location = null;
+      confirmationMessage = 'Are you sure?';
+
+      history = createHistory();
+
+      history.registerTransitionHook(function () {
+        return false;
+      });
+
+      unlisten = history.listen(function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('does not update the location', function () {
+      var prevLocation = location;
+      history.pushState(null, '/home');
+      expect(prevLocation).toBe(location);
+    });
+  });
+
   describe('when the user cancels a POP transition', function () {
     it('puts the URL back');
   });
