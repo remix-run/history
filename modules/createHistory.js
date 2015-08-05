@@ -83,10 +83,8 @@ function createHistory(options={}) {
       getUserConfirmation(message, function (ok) {
         callback(ok !== false);
       });
-    } else if(message === false) {
-      callback(false);
     } else {
-      callback(true);
+      callback(message !== false);
     }
   }
 
