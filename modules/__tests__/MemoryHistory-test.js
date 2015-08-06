@@ -4,8 +4,10 @@ import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
 import describeGo from './describeGo';
+import describeInitialLocation from './describeInitialLocation';
 
 describe('memory history', function () {
+  describeInitialLocation(createMemoryHistory);
   describeTransitions(createMemoryHistory);
   describePushState(createMemoryHistory);
   describeReplaceState(createMemoryHistory);

@@ -8,6 +8,7 @@ import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
 import describeGo from './describeGo';
 import execSteps from './execSteps';
+import describeInitialLocation from './describeInitialLocation';
 
 function describeStatePersistence(createHistory) {
   describe('when the user does not want to persist a state', function () {
@@ -115,6 +116,7 @@ describe('hash history', function () {
       window.location.hash = '';
   });
 
+  describeInitialLocation(createHashHistory);
   describeTransitions(createHashHistory);
   describePushState(createHashHistory);
   describeReplaceState(createHashHistory);

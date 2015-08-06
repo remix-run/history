@@ -4,6 +4,7 @@ import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
 import describeGo from './describeGo';
+import describeInitialLocation from './describeInitialLocation';
 
 describe('browser history', function () {
   beforeEach(function () {
@@ -11,12 +12,14 @@ describe('browser history', function () {
   });
 
   if (supportsHistory()) {
+    describeInitialLocation(createBrowserHistory);
     describeTransitions(createBrowserHistory);
     describePushState(createBrowserHistory);
     describeReplaceState(createBrowserHistory);
     describeGo(createBrowserHistory);
   } else {
     describe.skip(null, function () {
+      describeInitialLocation(createBrowserHistory);
       describeTransitions(createBrowserHistory);
       describePushState(createBrowserHistory);
       describeReplaceState(createBrowserHistory);
