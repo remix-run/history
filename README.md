@@ -89,7 +89,7 @@ history.registerTransitionHook(function () {
 });
 ```
 
-You can dynamically add/remove transition hooks using `unregisterTransitionHook` as well.
+You can also simply `return false` to prevent a transition.
 
 In browsers, `history` uses [`window.confirm`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm) by default to display confirmation messages to users. However, you can provide your own custom confirmation dialog box using the `getUserConfirmation` hook when you create your `history` object.
 
