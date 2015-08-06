@@ -69,7 +69,7 @@ function createHistory(options={}) {
   function getTransitionConfirmationMessage() {
     var message = null;
 
-    for (var i = 0, len = transitionHooks.length; i < len && message === null; ++i)
+    for (var i = 0, len = transitionHooks.length; i < len && message == null; ++i)
       message = transitionHooks[i].call(this);
 
     return message;
@@ -78,7 +78,7 @@ function createHistory(options={}) {
   function confirmTransition(callback) {
     var message = getTransitionConfirmationMessage();
 
-    if (getUserConfirmation && message) {
+    if (getUserConfirmation && typeof message === 'string') {
       getUserConfirmation(message, function (ok) {
         callback(ok !== false);
       });
