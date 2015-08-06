@@ -69,21 +69,21 @@ function createHistory(options={}) {
   function getTransitionConfirmationMessage() {
     var message = null;
 
-    for (var i = 0, len = transitionHooks.length; i < len && typeof message !== 'string'; ++i)
+    for (var i = 0, len = transitionHooks.length; i < len && message == null; ++i)
       message = transitionHooks[i].call(this);
 
     return message;
   }
 
   function confirmTransition(callback) {
-    var message;
+    var message = getTransitionConfirmationMessage();
 
-    if (getUserConfirmation && (message = getTransitionConfirmationMessage())) {
+    if (getUserConfirmation && typeof message === 'string') {
       getUserConfirmation(message, function (ok) {
         callback(ok !== false);
       });
     } else {
-      callback(true);
+      callback(message !== false);
     }
   }
 
