@@ -95,7 +95,6 @@ module.exports = function (config) {
     config.browserNoActivityTimeout = 30000;
     config.captureTimeout = 120000;
 
-
     config.browserStack = {
       username: process.env.BROWSER_STACK_USERNAME,
       accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
