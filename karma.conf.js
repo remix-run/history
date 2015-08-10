@@ -24,21 +24,21 @@ module.exports = function (config) {
       browser: 'safari',
       browser_version: '8.0',
     },
-//    BS_InternetExplorer_9: {
+//    BS_InternetExplorer9: {
 //      base: 'BrowserStack',
 //      os: 'Windows',
 //      os_version: '7',
 //      browser: 'ie',
 //      browser_version: '9.0',
 //    },
-    BS_InternetExplorer_10: {
+    BS_InternetExplorer10: {
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '8',
       browser: 'ie',
       browser_version: '10.0',
     },
-    BS_InternetExplorer_11: {
+    BS_InternetExplorer11: {
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '8.1',
@@ -95,32 +95,27 @@ module.exports = function (config) {
     config.browserNoActivityTimeout = 30000;
     config.captureTimeout = 120000;
 
-    config.browserStack = {
-      username: process.env.BROWSER_STACK_USERNAME,
-      accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-      pollingTimeout: 10000,
-      startTunnel: true,
-    };
-  } else if (process.env.TRAVIS) {
-    config.browsers = Object.keys(customLaunchers);
-    config.reporters = [ 'dots' ];
-    config.browserDisconnectTimeout = 10000;
-    config.browserDisconnectTolerance = 3;
-    config.browserNoActivityTimeout = 30000;
-    config.captureTimeout = 120000;
+    if (process.env.TRAVIS) {
+      var buildLabel = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')';
 
-    var buildLabel = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')';
+      config.browserStack = {
+        username: process.env.BROWSER_STACK_USERNAME,
+        accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
+        pollingTimeout: 10000,
+        startTunnel: false,
+        project: 'history',
+        build: buildLabel,
+        name: process.env.TRAVIS_JOB_NUMBER,
+      };
 
-    config.browserStack = {
-      username: process.env.BROWSER_STACK_USERNAME,
-      accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-      pollingTimeout: 10000,
-      startTunnel: false,
-      project: 'history',
-      build: buildLabel,
-      name: process.env.TRAVIS_JOB_NUMBER,
-    };
-
-    config.singleRun = true;
+      config.singleRun = true;
+    } else {
+      config.browserStack = {
+        username: process.env.BROWSER_STACK_USERNAME,
+        accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
+        pollingTimeout: 10000,
+        startTunnel: true,
+      };
+    }
   }
 };
