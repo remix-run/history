@@ -1,6 +1,6 @@
 import { POP } from './Actions';
 
-function createLocation(path='/', state=null, action=POP, key=null) {
+function createLocation(path='/', state=null, action=POP, key=null, scrollX=undefined, scrollY=undefined) {
   var index = path.indexOf('?');
 
   var pathname, search;
@@ -20,7 +20,9 @@ function createLocation(path='/', state=null, action=POP, key=null) {
     search,
     state,
     action,
-    key
+    key,
+    scrollX,
+    scrollY
   };
 }
 
