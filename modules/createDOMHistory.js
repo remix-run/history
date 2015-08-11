@@ -24,13 +24,18 @@ function startBeforeUnloadListener({ getTransitionConfirmationMessage }) {
   };
 }
 
+function getScrollPosition() {
+  return { x: window.scrollX, y: window.scrollY };
+}
+
 function createDOMHistory(options) {
   var history = createHistory({
     getUserConfirmation,
     ...options,
     saveState,
     readState,
-    go
+    go,
+    getScrollPosition
   });
 
   var listenerCount = 0;

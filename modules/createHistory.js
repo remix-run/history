@@ -17,11 +17,18 @@ function locationsAreEqual(a, b) {
 
 var DefaultKeyLength = 6;
 
+function scrollPositionUnavailable() {
+  return { x: undefined, y: undefined };
+}
+
 function createHistory(options={}) {
-  var { getCurrentLocation, finishTransition, cancelTransition, go, keyLength, getUserConfirmation } = options;
+  var { getCurrentLocation, finishTransition, cancelTransition, go, keyLength, getUserConfirmation, getScrollPosition } = options;
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength;
+
+  if (!getScrollPosition)
+    getScrollPosition = scrollPositionUnavailable;
 
   var transitionHooks = [];
   var changeListeners = [];
@@ -113,14 +120,16 @@ function createHistory(options={}) {
   }
 
   function pushState(state, path) {
+    var { x, y } = getScrollPosition();
     transitionTo(
-      createLocation(path, state, PUSH, createKey())
+      createLocation(path, state, PUSH, createKey(), x, y)
     );
   }
 
   function replaceState(state, path) {
+    var { x, y } = getScrollPosition();
     transitionTo(
-      createLocation(path, state, REPLACE, createKey())
+      createLocation(path, state, REPLACE, createKey(), x, y)
     );
   }
 
