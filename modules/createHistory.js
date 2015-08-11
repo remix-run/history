@@ -105,7 +105,7 @@ function createHistory(options={}) {
     let pendingLocationCache = pendingLocation;
     handlers[0](pendingLocation, location, function (value) {
         if (pendingLocationCache === pendingLocation) {
-          if (arguments.length === 0) {
+          if (arguments.length === 0 || value === true) {
             // No value? Continue.
             processMiddleware(callback, handlers.slice(1));
           } else if (value === false) {
