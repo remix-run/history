@@ -106,6 +106,44 @@ function describeTransitions(createHistory) {
     });
   });
 
+  describe('when middleware delays a transition', function() {
+    var location, history, unlisten, unregister;
+    beforeEach(function () {
+      location = null;
+
+      history = createHistory();
+
+      unregister = history.registerTransitionMiddleware(function (nextLocation, prevLocation, fnNext) {
+        setTimeout(fnNext, 10);
+      });
+
+      unlisten = history.listen(function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      unlisten();
+      unregister();
+    });
+
+    it('does not immediately update the location', function () {
+      var prevLocation = location;
+      history.pushState(null, '/home1');
+      expect(prevLocation).toBe(location);
+    });
+
+    it('does update the location after the middleware completes', function (done) {
+      var prevLocation = location;
+      history.pushState(null, '/home2');
+      setTimeout(function() {
+        expect(prevLocation).toNotBe(location);
+        done();
+      }, 25);
+    });
+
+  });
+
   describe('when the user cancels a POP transition', function () {
     it('puts the URL back');
   });
