@@ -92,26 +92,30 @@ function createHistory(options={}) {
     transitionMiddlewareHandlers = transitionMiddlewareHandlers.filter(item => item !== handler);
   }
 
-  function processMiddleware(callback) {
-    let numCompletions = 0;
-    let numHandlers = transitionMiddlewareHandlers.length;
-    if (numHandlers === 0) {
+  function processMiddleware(callback, optionalMiddleware) {
+    let handlers = optionalMiddleware || transitionMiddlewareHandlers;
+
+    if (handlers.length === 0) {
+      // All handlers have been processed w/out aborting. Callback w/ OK status.
       callback(true);
-    } else {
-      transitionMiddlewareHandlers.forEach(handler => {
-        handler(pendingLocation, location,
-          () => {
-            numCompletions++;
-            if (numCompletions === numHandlers) {
-              callback(true);
-            }
-          },
-          () => {
-            callback(false);
-          }
-        )
-      });
+      return;
     }
+
+    // Cache pending location to detect if an intercepting transition occurs.
+    let pendingLocationCache = pendingLocation;
+
+    handlers[0](pendingLocation, location,
+      function() {
+        if (pendingLocationCache === pendingLocation) {
+          processMiddleware(callback, handlers.slice(1));
+        }
+      },
+      function() {
+        if (pendingLocationCache === pendingLocation) {
+          callback(false);
+        }
+      }
+    );
   }
 
   function getTransitionConfirmationMessage() {
