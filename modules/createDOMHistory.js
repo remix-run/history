@@ -1,6 +1,6 @@
 import invariant from 'invariant';
 import { canUseDOM } from './ExecutionEnvironment';
-import { addEventListener, removeEventListener, saveState, readState, go } from './DOMUtils';
+import { addEventListener, removeEventListener, go } from './DOMUtils';
 import createHistory from './createHistory';
 
 function getUserConfirmation(message, callback) {
@@ -28,8 +28,6 @@ function createDOMHistory(options) {
   var history = createHistory({
     getUserConfirmation,
     ...options,
-    saveState,
-    readState,
     go
   });
 
