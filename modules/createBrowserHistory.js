@@ -1,7 +1,8 @@
 import invariant from 'invariant';
 import { PUSH, REPLACE, POP } from './Actions';
 import { canUseDOM } from './ExecutionEnvironment';
-import { addEventListener, removeEventListener, readState, saveState, getWindowPath, go, supportsHistory } from './DOMUtils';
+import { addEventListener, removeEventListener, getWindowPath, go, supportsHistory } from './DOMUtils';
+import { saveState, readState } from './DOMStateStorage';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -50,31 +51,30 @@ function createBrowserHistory(options) {
   var isSupported = supportsHistory();
 
   function finishTransition(location) {
-    var { key, pathname, search } = location;
+    var { pathname, search, state, action, key } = location;
+
+    if (action === POP)
+      return; // Nothing to do.
+
+    saveState(key, state);
+
     var path = pathname + search;
     var historyState = {
       key
     };
 
-    switch (location.action) {
-      case PUSH:
-        saveState(location.key, location.state);
-
-        if (isSupported) {
-          window.history.pushState(historyState, null, path);
-        } else {
-          window.location.href = path; // Use page reload to preserve the URL.
-        }
-        break;
-      case REPLACE:
-        saveState(location.key, location.state);
-
-        if (isSupported) {
-          window.history.replaceState(historyState, null, path);
-        } else {
-          window.location.replace(path); // Use page reload to preserve the URL.
-        }
-        break;
+    if (action === PUSH) {
+      if (isSupported) {
+        window.history.pushState(historyState, null, path);
+      } else {
+        window.location.href = path; // Use page reload to preserve the URL.
+      }
+    } else { // REPLACE
+      if (isSupported) {
+        window.history.replaceState(historyState, null, path);
+      } else {
+        window.location.replace(path); // Use page reload to preserve the URL.
+      }
     }
   }
 
