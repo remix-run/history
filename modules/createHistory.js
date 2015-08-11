@@ -95,24 +95,28 @@ function createHistory(options={}) {
   function processMiddleware(callback, optionalMiddleware) {
     let handlers = optionalMiddleware || transitionMiddlewareHandlers;
 
+    // No hanldlers to process? We're done.
     if (handlers.length === 0) {
-      // All handlers have been processed w/out aborting. Callback w/ OK status.
       callback(true);
       return;
     }
 
-    // Cache pending location to detect if an intercepting transition occurs.
+    // Run middleware.
     let pendingLocationCache = pendingLocation;
-
-    handlers[0](pendingLocation, location,
-      function() {
+    handlers[0](pendingLocation, location, function (value) {
         if (pendingLocationCache === pendingLocation) {
-          processMiddleware(callback, handlers.slice(1));
-        }
-      },
-      function() {
-        if (pendingLocationCache === pendingLocation) {
-          callback(false);
+          if (arguments.length === 0) {
+            // No value? Continue.
+            processMiddleware(callback, handlers.slice(1));
+          } else if (value === false) {
+            // Abort on a value of false.
+            callback(false);
+          } else if (typeof value.pathname === 'string') {
+            // Redirect if the value is a location.
+            transitionTo(value);
+          } else {
+            invariant(false, 'Unexpected middleware value "%s"', value);
+          }
         }
       }
     );
