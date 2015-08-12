@@ -23,7 +23,6 @@ function createMemoryHistory(options={}) {
     ...options,
     getCurrentLocation,
     finishTransition,
-    cancelTransition,
     saveState,
     go
   });
@@ -129,13 +128,6 @@ function createMemoryHistory(options={}) {
         entries[current] = location;
         saveState(location.key, location.state);
         break;
-    }
-  }
-
-  function cancelTransition(location) {
-    if (location.action === POP) {
-      var n = 0; // TODO: Figure out what n will restore current.
-      current += n;
     }
   }
 

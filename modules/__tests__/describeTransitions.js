@@ -105,10 +105,6 @@ function describeTransitions(createHistory) {
       expect(prevLocation).toBe(location);
     });
   });
-
-  describe('when the user cancels a POP transition', function () {
-    it('puts the URL back');
-  });
 }
 
 export default describeTransitions;

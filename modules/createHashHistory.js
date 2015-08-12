@@ -119,18 +119,10 @@ function createHashHistory(options={}) {
     }
   }
 
-  function cancelTransition(location) {
-    if (location.action === POP) {
-      var n = 0; // TODO: Figure out what n will put the URL back.
-      go(n);
-    }
-  }
-
   var history = createDOMHistory({
     ...options,
     getCurrentLocation,
     finishTransition,
-    cancelTransition,
     saveState
   });
 

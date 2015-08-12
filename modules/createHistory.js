@@ -1,6 +1,6 @@
 import invariant from 'invariant';
 import deepEqual from 'deep-equal';
-import { PUSH, REPLACE } from './Actions';
+import { PUSH, REPLACE, POP } from './Actions';
 import createLocation from './createLocation';
 
 function createRandomKey(length) {
@@ -18,7 +18,7 @@ function locationsAreEqual(a, b) {
 var DefaultKeyLength = 6;
 
 function createHistory(options={}) {
-  var { getCurrentLocation, finishTransition, cancelTransition, saveState, go, keyLength, getUserConfirmation } = options;
+  var { getCurrentLocation, finishTransition, saveState, go, keyLength, getUserConfirmation } = options;
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength;
@@ -27,8 +27,16 @@ function createHistory(options={}) {
   var changeListeners = [];
   var location;
 
+  var allKeys = [];
+
   function updateLocation(newLocation) {
     location = newLocation;
+
+    if (location.action === PUSH) {
+      allKeys.push(location.key);
+    } else if (location.action === REPLACE) {
+      allKeys[allKeys.length - 1] = location.key;
+    }
 
     changeListeners.forEach(function (listener) {
       listener(location);
@@ -106,8 +114,12 @@ function createHistory(options={}) {
       if (ok) {
         finishTransition(nextLocation);
         updateLocation(nextLocation);
-      } else if (cancelTransition) {
-        cancelTransition(nextLocation);
+      } else if (location && nextLocation.action === POP) {
+        var prevIndex = allKeys.indexOf(location.key);
+        var nextIndex = allKeys.indexOf(nextLocation.key);
+
+        if (prevIndex !== -1 && nextIndex !== -1)
+          go(prevIndex - nextIndex); // Restore the URL.
       }
     });
   }
