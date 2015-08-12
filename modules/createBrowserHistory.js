@@ -104,16 +104,16 @@ function createBrowserHistory(options) {
   var listenerCount = 0, stopPopStateListener;
 
   function listen(listener) {
-    var unlisten = history.listen(listener);
-
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history);
 
+    var unlisten = history.listen(listener);
+
     return function () {
+      unlisten();
+
       if (--listenerCount === 0)
         stopPopStateListener();
-
-      unlisten();
     };
   }
 

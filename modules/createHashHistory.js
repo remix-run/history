@@ -137,16 +137,16 @@ function createHashHistory(options={}) {
   var listenerCount = 0, stopHashChangeListener;
 
   function listen(listener) {
-    var unlisten = history.listen(listener);
-
     if (++listenerCount === 1)
       stopHashChangeListener = startHashChangeListener(history);
 
+    var unlisten = history.listen(listener);
+
     return function () {
+      unlisten();
+
       if (--listenerCount === 0)
         stopHashChangeListener();
-
-      unlisten();
     };
   }
 
