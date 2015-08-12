@@ -72,9 +72,18 @@ function createMemoryHistory(options={}) {
   }
 
   function getCurrentLocation() {
-    var { key, pathname, search } = entries[current];
+    var entry = entries[current];
+    var { key, pathname, search } = entry;
     var path = pathname + (search || '');
-    var state = readState(key);
+
+    var state;
+    if (key) {
+      state = readState(key);
+    } else {
+      state = null;
+      key = history.createKey();
+      entry.key = key;
+    }
 
     return createLocation(path, state, undefined, key);
   }

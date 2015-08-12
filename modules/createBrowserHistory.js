@@ -6,33 +6,6 @@ import { saveState, readState } from './DOMStateStorage';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
-function getCurrentLocation(historyState) {
-  historyState = historyState || window.history.state || {};
-
-  var { key } = historyState;
-  var state = key && readState(key);
-  var path = getWindowPath();
-
-  return createLocation(path, state, undefined, key);
-}
-
-function startPopStateListener({ transitionTo }) {
-  function popStateListener(event) {
-    if (event.state === undefined)
-      return; // Ignore extraneous popstate events in WebKit.
-
-    transitionTo(
-      getCurrentLocation(event.state)
-    );
-  }
-
-  addEventListener(window, 'popstate', popStateListener);
-
-  return function () {
-    removeEventListener(window, 'popstate', popStateListener);
-  };
-}
-
 /**
  * Creates and returns a history object that uses HTML5's history API
  * (pushState, replaceState, and the popstate event) to manage history.
@@ -49,6 +22,41 @@ function createBrowserHistory(options) {
   );
 
   var isSupported = supportsHistory();
+
+  function getCurrentLocation(historyState) {
+    historyState = historyState || window.history.state || {};
+
+    var path = getWindowPath();
+    var { key } = historyState;
+
+    var state;
+    if (key) {
+      state = readState(key);
+    } else {
+      state = null;
+      key = history.createKey();
+      window.history.replaceState({ ...historyState, key }, path);
+    }
+
+    return createLocation(path, state, undefined, key);
+  }
+
+  function startPopStateListener({ transitionTo }) {
+    function popStateListener(event) {
+      if (event.state === undefined)
+        return; // Ignore extraneous popstate events in WebKit.
+
+      transitionTo(
+        getCurrentLocation(event.state)
+      );
+    }
+
+    addEventListener(window, 'popstate', popStateListener);
+
+    return function () {
+      removeEventListener(window, 'popstate', popStateListener);
+    };
+  }
 
   function finishTransition(location) {
     var { pathname, search, state, action, key } = location;
@@ -95,16 +103,16 @@ function createBrowserHistory(options) {
   var listenerCount = 0, stopPopStateListener;
 
   function listen(listener) {
+    var unlisten = history.listen(listener);
+
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history);
 
-    var unlisten = history.listen(listener);
-
     return function () {
-      unlisten();
-
       if (--listenerCount === 0)
         stopPopStateListener();
+
+      unlisten();
     };
   }
 

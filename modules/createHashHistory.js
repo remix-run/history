@@ -55,7 +55,14 @@ function createHashHistory(options={}) {
     if (queryKey) {
       key = getQueryStringValueFromPath(path, queryKey);
       path = stripQueryStringValueFromPath(path, queryKey);
-      state = key && readState(key);
+
+      if (key) {
+        state = readState(key);
+      } else {
+        state = null;
+        key = history.createKey();
+        replaceHashPath(addQueryStringValueToPath(path, queryKey, key));
+      }
     }
 
     return createLocation(path, state, undefined, key);
@@ -129,16 +136,16 @@ function createHashHistory(options={}) {
   var listenerCount = 0, stopHashChangeListener;
 
   function listen(listener) {
+    var unlisten = history.listen(listener);
+
     if (++listenerCount === 1)
       stopHashChangeListener = startHashChangeListener(history);
 
-    var unlisten = history.listen(listener);
-
     return function () {
-      unlisten();
-
       if (--listenerCount === 0)
         stopHashChangeListener();
+
+      unlisten();
     };
   }
 
