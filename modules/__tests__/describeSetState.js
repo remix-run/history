@@ -3,7 +3,7 @@ import { POP } from '../Actions';
 import execSteps from './execSteps';
 
 function describeSetState(createHistory) {
-  describe('pushState', function () {
+  describe('setState', function () {
     var history, unlisten;
     beforeEach(function () {
       history = createHistory();

@@ -1,7 +1,5 @@
 import expect from 'expect';
 import { POP } from '../Actions';
-import createBrowserHistory from '../createBrowserHistory';
-import createHashHistory from '../createHashHistory';
 import createMemoryHistory from '../createMemoryHistory';
 
 function describeInitialLocation(createHistory) {
