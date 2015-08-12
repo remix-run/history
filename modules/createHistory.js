@@ -24,7 +24,9 @@ function createHistory(options={}) {
     keyLength = DefaultKeyLength;
 
   var transitionHooks = [];
+  var transitionMiddlewareHandlers = [];
   var changeListeners = [];
+  var pendingLocation;
   var location;
 
   function updateLocation(newLocation) {
@@ -49,7 +51,19 @@ function createHistory(options={}) {
     if (location) {
       listener(location);
     } else {
-      updateLocation(getCurrentLocation());
+      var currentLocation = getCurrentLocation();
+      pendingLocation = currentLocation;
+      processMiddleware(function(ok) {
+        if (pendingLocation !== currentLocation) {
+          return; // An intercepting transition has occured.
+        }
+        pendingLocation = null;
+        if (ok) {
+          updateLocation(currentLocation);
+        } else {
+          invariant(false, 'The initial route location transition was aborted by middleware.');
+        }
+      });
     }
 
     return function () {
@@ -64,6 +78,48 @@ function createHistory(options={}) {
 
   function unregisterTransitionHook(hook) {
     transitionHooks = transitionHooks.filter(item => item !== hook);
+  }
+
+  function registerTransitionMiddleware(handler) {
+    if (transitionMiddlewareHandlers.indexOf(handler) === -1)
+      transitionMiddlewareHandlers.push(handler);
+    return function() {
+      unregisterTransitionMiddleware(handler);
+    }
+  }
+
+  function unregisterTransitionMiddleware(handler) {
+    transitionMiddlewareHandlers = transitionMiddlewareHandlers.filter(item => item !== handler);
+  }
+
+  function processMiddleware(callback, optionalMiddleware) {
+    let handlers = optionalMiddleware || transitionMiddlewareHandlers;
+
+    // No hanldlers to process? We're done.
+    if (handlers.length === 0) {
+      callback(true);
+      return;
+    }
+
+    // Run middleware.
+    let pendingLocationCache = pendingLocation;
+    handlers[0](pendingLocation, location, function (value) {
+        if (pendingLocationCache === pendingLocation) {
+          if (arguments.length === 0 || value === true) {
+            // No value? Continue.
+            processMiddleware(callback, handlers.slice(1));
+          } else if (value === false) {
+            // Abort on a value of false.
+            callback(false);
+          } else if (typeof value.pathname === 'string') {
+            // Redirect if the value is a location.
+            transitionTo(value);
+          } else {
+            invariant(false, 'Unexpected middleware value "%s"', value);
+          }
+        }
+      }
+    );
   }
 
   function getTransitionConfirmationMessage() {
@@ -87,26 +143,31 @@ function createHistory(options={}) {
     }
   }
 
-  var pendingLocation;
-
   function transitionTo(nextLocation) {
     if (location && locationsAreEqual(location, nextLocation))
       return; // Nothing to do.
 
-    invariant(
-      pendingLocation == null,
-      'transitionTo: Another transition is already in progress'
-    );
-
     pendingLocation = nextLocation;
 
-    confirmTransition(function (ok) {
-      pendingLocation = null;
-
+    processMiddleware(function(ok) {
+      if (pendingLocation !== nextLocation) {
+        return; // An interecepting transition has occurred.
+      }
       if (ok) {
-        finishTransition(nextLocation);
-        updateLocation(nextLocation);
+        confirmTransition(function (ok) {
+          if (pendingLocation !== nextLocation) {
+            return; // An interecepting transition has occurred.
+          }
+          pendingLocation = null;
+          if (ok) {
+            finishTransition(nextLocation);
+            updateLocation(nextLocation);
+          } else if (cancelTransition) {
+            cancelTransition(nextLocation);
+          }
+        });
       } else if (cancelTransition) {
+        pendingLocation = null;
         cancelTransition(nextLocation);
       }
     });
@@ -158,6 +219,8 @@ function createHistory(options={}) {
     listen,
     registerTransitionHook,
     unregisterTransitionHook,
+    registerTransitionMiddleware,
+    unregisterTransitionMiddleware,
     getTransitionConfirmationMessage,
     transitionTo,
     pushState,

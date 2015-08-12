@@ -1,6 +1,7 @@
 import assert from 'assert';
 import expect from 'expect';
 import { PUSH } from '../Actions';
+import createLocation from '../createLocation';
 
 function describeTransitions(createHistory) {
   describe('when the user confirms a transition', function () {
@@ -105,6 +106,79 @@ function describeTransitions(createHistory) {
       expect(prevLocation).toBe(location);
     });
   });
+
+  describe('when middleware delays a transition', function() {
+    var location, history, unlisten, unregister;
+    beforeEach(function () {
+      location = null;
+
+      history = createHistory();
+
+      unregister = history.registerTransitionMiddleware(function (nextLocation, prevLocation, fnNext) {
+        setTimeout(fnNext, 10);
+      });
+
+      unlisten = history.listen(function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      unlisten();
+      unregister();
+    });
+
+    it('does not immediately update the location', function () {
+      var prevLocation = location;
+      history.pushState(null, '/home1');
+      expect(prevLocation).toBe(location);
+    });
+
+    it('does update the location after the middleware completes', function (done) {
+      var prevLocation = location;
+      history.pushState(null, '/home2');
+      setTimeout(function() {
+        expect(prevLocation).toNotBe(location);
+        done();
+      }, 25);
+    });
+
+  });
+
+  describe('when middleware redirects a transition', function() {
+    var location, history, unlisten, unregister;
+    var redirectLocation = createLocation('/test', PUSH);
+
+    beforeEach(function () {
+      location = null;
+
+      history = createHistory();
+
+      unregister = history.registerTransitionMiddleware(function (nextLocation, prevLocation, fnNext) {
+        if (nextLocation.pathname === '/home') {
+          fnNext(redirectLocation);
+        } else {
+          fnNext();
+        }
+      });
+
+      unlisten = history.listen(function (loc) {
+        location = loc;
+      });
+    });
+
+    afterEach(function () {
+      unlisten();
+      unregister();
+    });
+
+    it('does update the location to the redirect location', function () {
+      history.pushState(null, '/home');
+      expect(location).toBe(redirectLocation);
+    });
+
+  });
+
 
   describe('when the user cancels a POP transition', function () {
     it('puts the URL back');
