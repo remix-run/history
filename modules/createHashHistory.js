@@ -2,7 +2,8 @@ import warning from 'warning';
 import invariant from 'invariant';
 import { PUSH, REPLACE, POP } from './Actions';
 import { canUseDOM } from './ExecutionEnvironment';
-import { addEventListener, removeEventListener, readState, saveState, getHashPath, replaceHashPath, supportsGoWithoutReloadUsingHash } from './DOMUtils';
+import { addEventListener, removeEventListener, getHashPath, replaceHashPath, supportsGoWithoutReloadUsingHash } from './DOMUtils';
+import { saveState, readState } from './DOMStateStorage';
 import createDOMHistory from './createDOMHistory';
 import createLocation from './createLocation';
 
@@ -79,7 +80,7 @@ function createHashHistory(options={}) {
   }
 
   function finishTransition(location) {
-    var { key, pathname, search, action } = location;
+    var { pathname, search, state, action, key } = location;
 
     if (action === POP)
       return; // Nothing to do.
@@ -97,7 +98,7 @@ function createHashHistory(options={}) {
       );
     } else {
       if (queryKey) {
-        saveState(location.key, location.state);
+        saveState(key, state);
       } else {
         // Drop key and state.
         location.key = location.state = null;
@@ -105,7 +106,7 @@ function createHashHistory(options={}) {
 
       if (action === PUSH) {
         window.location.hash = path;
-      } else {
+      } else { // REPLACE
         replaceHashPath(path);
       }
     }

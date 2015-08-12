@@ -89,7 +89,7 @@ history.registerTransitionHook(function () {
 });
 ```
 
-You can dynamically add/remove transition hooks using `unregisterTransitionHook` as well.
+You can also simply `return false` to prevent a transition.
 
 In browsers, `history` uses [`window.confirm`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm) by default to display confirmation messages to users. However, you can provide your own custom confirmation dialog box using the `getUserConfirmation` hook when you create your `history` object.
 
@@ -122,3 +122,5 @@ One other thing to keep in mind when using hash history is that you cannot also 
 ### Thanks
 
 A big thank-you to [Dan Shaw](https://www.npmjs.com/~dshaw) for letting us use the `history` npm package name! Thanks Dan!
+
+Also, thanks to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to run our build in real browsers.

@@ -30,24 +30,6 @@ export function getWindowPath() {
   return window.location.pathname + window.location.search;
 }
 
-export function saveState(key, state) {
-  window.sessionStorage.setItem(key, JSON.stringify(state));
-}
-
-export function readState(key) {
-  var json = window.sessionStorage.getItem(key);
-
-  if (json) {
-    try {
-      return JSON.parse(json);
-    } catch (error) {
-      // Ignore invalid JSON.
-    }
-  }
-
-  return null;
-}
-
 export function go(n) {
   if (n)
     window.history.go(n);
