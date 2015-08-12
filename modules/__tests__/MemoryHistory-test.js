@@ -3,6 +3,7 @@ import createMemoryHistory from '../createMemoryHistory';
 import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
+import describeSetState from './describeSetState';
 import describeGo from './describeGo';
 import describeInitialLocation from './describeInitialLocation';
 
@@ -11,6 +12,7 @@ describe('memory history', function () {
   describeTransitions(createMemoryHistory);
   describePushState(createMemoryHistory);
   describeReplaceState(createMemoryHistory);
+  describeSetState(createMemoryHistory);
   describeGo(createMemoryHistory);
 
   describe('when using pushState in the middle of the stack', function() {

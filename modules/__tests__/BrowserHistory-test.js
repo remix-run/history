@@ -3,6 +3,7 @@ import createBrowserHistory from '../createBrowserHistory';
 import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
+import describeSetState from './describeSetState';
 import describeGo from './describeGo';
 import describeInitialLocation from './describeInitialLocation';
 
@@ -16,6 +17,7 @@ describe('browser history', function () {
     describeTransitions(createBrowserHistory);
     describePushState(createBrowserHistory);
     describeReplaceState(createBrowserHistory);
+    describeSetState(createBrowserHistory);
     describeGo(createBrowserHistory);
   } else {
     describe.skip(null, function () {
@@ -23,6 +25,7 @@ describe('browser history', function () {
       describeTransitions(createBrowserHistory);
       describePushState(createBrowserHistory);
       describeReplaceState(createBrowserHistory);
+      describeSetState(createBrowserHistory);
       describeGo(createBrowserHistory);
     });
   }

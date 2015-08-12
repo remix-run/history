@@ -24,6 +24,7 @@ function createMemoryHistory(options={}) {
     getCurrentLocation,
     finishTransition,
     cancelTransition,
+    saveState,
     go
   });
 

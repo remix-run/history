@@ -130,7 +130,8 @@ function createHashHistory(options={}) {
     ...options,
     getCurrentLocation,
     finishTransition,
-    cancelTransition
+    cancelTransition,
+    saveState
   });
 
   var listenerCount = 0, stopHashChangeListener;

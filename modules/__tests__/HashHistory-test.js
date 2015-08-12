@@ -6,6 +6,7 @@ import createHashHistory from '../createHashHistory';
 import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
+import describeSetState from './describeSetState';
 import describeGo from './describeGo';
 import execSteps from './execSteps';
 import describeInitialLocation from './describeInitialLocation';
@@ -120,6 +121,7 @@ describe('hash history', function () {
   describeTransitions(createHashHistory);
   describePushState(createHashHistory);
   describeReplaceState(createHashHistory);
+  describeSetState(createHashHistory);
 
   if (supportsGoWithoutReloadUsingHash()) {
     describeGo(createHashHistory);

@@ -18,7 +18,7 @@ function locationsAreEqual(a, b) {
 var DefaultKeyLength = 6;
 
 function createHistory(options={}) {
-  var { getCurrentLocation, finishTransition, cancelTransition, go, keyLength, getUserConfirmation } = options;
+  var { getCurrentLocation, finishTransition, cancelTransition, saveState, go, keyLength, getUserConfirmation } = options;
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength;
@@ -124,6 +124,20 @@ function createHistory(options={}) {
     );
   }
 
+  function setState(state) {
+    if (location) {
+      updateLocationState(location, state);
+      updateLocation(location);
+    } else {
+      updateLocationState(getCurrentLocation(), state);
+    }
+  }
+
+  function updateLocationState(location, state) {
+    location.state = { ...location.state, ...state };
+    saveState(location.key, location.state);
+  }
+
   function goBack() {
     go(-1);
   }
@@ -148,6 +162,7 @@ function createHistory(options={}) {
     transitionTo,
     pushState,
     replaceState,
+    setState,
     go,
     goBack,
     goForward,

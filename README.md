@@ -59,11 +59,12 @@ You can also use a `history` object to programmatically change the current `loca
 
 - `pushState(state, path)`
 - `replaceState(state, path)`
+- `setState(state)`
 - `go(n)`
 - `goBack()`
 - `goForward()`
 
-The `path` argument to `pushState` and `replaceState` represents a complete URL path, including the query string. The `state` argument should be a JSON-serializable object.
+The `path` argument to `pushState` and `replaceState` represents a complete URL path, including the query string. The `state` argument should be a JSON-serializable object. In `setState`, the properties in `state` are shallowly merged into the current state.
 
 ```js
 // Push a new entry onto the history stack.
