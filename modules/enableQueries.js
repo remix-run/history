@@ -19,7 +19,9 @@ function enableQueries(history, options={}) {
 
   function listen(listener) {
     return history.listen(function (location) {
-      location.query = location.search ? parseQueryString(location.search.substring(1)) : {};
+      if (!location.query)
+        location.query = location.search ? parseQueryString(location.search.substring(1)) : {};
+
       listener(location);
     });
   }
