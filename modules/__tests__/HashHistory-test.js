@@ -3,13 +3,14 @@ import expect from 'expect';
 import { PUSH, POP } from '../Actions';
 import { supportsGoWithoutReloadUsingHash } from '../DOMUtils';
 import createHashHistory from '../createHashHistory';
+import describeInitialLocation from './describeInitialLocation';
 import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
+import describeQueries from './describeQueries';
 import describeSetState from './describeSetState';
 import describeGo from './describeGo';
 import execSteps from './execSteps';
-import describeInitialLocation from './describeInitialLocation';
 
 function describeStatePersistence(createHistory) {
   describe('when the user does not want to persist a state', function () {
@@ -121,6 +122,7 @@ describe('hash history', function () {
   describeTransitions(createHashHistory);
   describePushState(createHashHistory);
   describeReplaceState(createHashHistory);
+  describeQueries(createHashHistory);
   describeSetState(createHashHistory);
 
   if (supportsGoWithoutReloadUsingHash()) {

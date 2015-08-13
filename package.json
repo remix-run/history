@@ -21,6 +21,7 @@
   "dependencies": {
     "deep-equal": "^1.0.0",
     "invariant": "^2.0.0",
+    "qs": "^4.0.0",
     "warning": "^2.0.0"
   },
   "devDependencies": {

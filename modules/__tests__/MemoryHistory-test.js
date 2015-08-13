@@ -1,17 +1,19 @@
 import expect from 'expect';
 import createMemoryHistory from '../createMemoryHistory';
+import describeInitialLocation from './describeInitialLocation';
 import describeTransitions from './describeTransitions';
 import describePushState from './describePushState';
 import describeReplaceState from './describeReplaceState';
+import describeQueries from './describeQueries';
 import describeSetState from './describeSetState';
 import describeGo from './describeGo';
-import describeInitialLocation from './describeInitialLocation';
 
 describe('memory history', function () {
   describeInitialLocation(createMemoryHistory);
   describeTransitions(createMemoryHistory);
   describePushState(createMemoryHistory);
   describeReplaceState(createMemoryHistory);
+  describeQueries(createMemoryHistory);
   describeSetState(createMemoryHistory);
   describeGo(createMemoryHistory);
 
