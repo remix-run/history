@@ -1,4 +1,10 @@
 .babelrc
+.eslintrc
+.travis.yml
 __tests__
+index.html
+karma.conf.js
+modules
 scripts
+tests.webpack.js
 webpack.config.js
