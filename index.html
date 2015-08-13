@@ -4,19 +4,19 @@
     <script src="/bundle.js"></script>
     <script>
       var page = 0;
-      var MyHistory = History.createHistory();
+      var history = History.createHistory();
 
-      MyHistory.registerTransitionHook(function () {
+      history.registerTransitionHook(function () {
         return 'Are you sure?';
       });
 
-      MyHistory.listen(function (location) {
+      history.listen(function (location) {
         console.log(location);
       });
     </script>
   </head>
   <body>
-    <button onclick="page++; MyHistory.pushState({ page: page }, '/' + page)">history.pushState</button>
-    <button onclick="MyHistory.goBack()">history.goBack</button>
+    <button onclick="page++; history.pushState({ page: page }, '/' + page)">history.pushState</button>
+    <button onclick="history.goBack()">history.goBack</button>
   </body>
 </html>
