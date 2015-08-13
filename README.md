@@ -121,7 +121,7 @@ history.listen(function (location) {
 Query-enabled histories also accept URL queries as trailing arguments to `pushState`, `replaceState`, and `createHref`.
 
 ```js
-history.pushState(null, '/the/path', { the: 'query' });
+history.pushState(null, '/the/path', { the: 'query' }); // /the/path?the=query
 ```
 
 ### Caveats of Hash History
