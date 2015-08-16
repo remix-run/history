@@ -24,7 +24,10 @@ function createBrowserHistory(options) {
   var isSupported = supportsHistory();
 
   function getCurrentLocation(historyState) {
-    historyState = historyState || window.history.state || {};
+    if (typeof historyState === 'undefined')
+      historyState = window.history.state;
+
+    historyState = historyState || {};
 
     var path = getWindowPath();
     var { key } = historyState;

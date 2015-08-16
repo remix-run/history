@@ -27,4 +27,9 @@ describe('a location', function () {
     var location = createLocation();
     expect(location.key).toBe(null);
   });
+
+  it('has -1 current by default', function() {
+    var location = createLocation();
+    expect(location.current).toBe(-1);
+  });
 });
