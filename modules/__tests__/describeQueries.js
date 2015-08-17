@@ -11,7 +11,7 @@ function describeQueries(createHistory) {
   describe('query serialization', function () {
     var history, unlisten;
     beforeEach(function () {
-      history = enableQueries(createHistory());
+      history = enableQueries(createHistory)();
     });
 
     afterEach(function () {
