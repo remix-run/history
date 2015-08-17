@@ -21,6 +21,7 @@ function describeReplaceState(createHistory) {
           expect(location.search).toEqual('');
           expect(location.state).toEqual(null);
           expect(location.action).toEqual(POP);
+          expect(location.current).toEqual(0);
 
           history.replaceState({ the: 'state' }, '/home?the=query');
         },
@@ -29,6 +30,7 @@ function describeReplaceState(createHistory) {
           expect(location.search).toEqual('?the=query');
           expect(location.state).toEqual({ the: 'state' });
           expect(location.action).toEqual(REPLACE);
+          expect(location.current).toEqual(0);
         }
       ];
 

@@ -21,6 +21,7 @@ function describeSetState(createHistory) {
           expect(location.search).toEqual('');
           expect(location.state).toEqual(null);
           expect(location.action).toEqual(POP);
+          expect(location.current).toEqual(0);
 
           history.setState({ the: 'state' });
         },
@@ -29,6 +30,7 @@ function describeSetState(createHistory) {
           expect(location.search).toEqual('');
           expect(location.state).toEqual({ the: 'state' });
           expect(location.action).toEqual(POP);
+          expect(location.current).toEqual(0);
         }
       ];
 

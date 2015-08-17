@@ -29,14 +29,25 @@ function createHistory(options={}) {
 
   var allKeys = [];
 
-  function updateLocation(newLocation) {
-    location = newLocation;
-
-    if (location.action === PUSH) {
-      allKeys.push(location.key);
-    } else if (location.action === REPLACE) {
-      allKeys[allKeys.length - 1] = location.key;
+  function getCurrent() {
+    if (location) {
+      return location.current;
     }
+
+    return -1;
+  }
+
+  function updateLocation(newLocation) {
+    var current = getCurrent();
+    if (newLocation.action === PUSH) {
+      allKeys = [...allKeys.slice(0, current + 1), newLocation.key];
+    } else if (newLocation.action === REPLACE) {
+      allKeys[current] = newLocation.key;
+    }
+
+    newLocation.current = allKeys.indexOf(newLocation.key);
+
+    location = newLocation;
 
     changeListeners.forEach(function (listener) {
       listener(location);
@@ -57,7 +68,9 @@ function createHistory(options={}) {
     if (location) {
       listener(location);
     } else {
-      updateLocation(getCurrentLocation());
+      var location = getCurrentLocation();
+      allKeys = [location.key];
+      updateLocation(location);
     }
 
     return function () {
@@ -98,6 +111,18 @@ function createHistory(options={}) {
   var pendingLocation;
 
   function transitionTo(nextLocation) {
+    if (nextLocation.action === POP) {
+      var current = getCurrent();
+      var next = allKeys.indexOf(nextLocation.key);
+      if (next < 0) {
+        // edge case (e.g. hash change with BrowserHistory)
+        allKeys = [...allKeys.slice(0, current + 1), nextLocation.key];
+        next = allKeys.length - 1;
+      }
+
+      nextLocation.current = next;
+    }
+
     if (location && locationsAreEqual(location, nextLocation))
       return; // Nothing to do.
 
@@ -115,8 +140,8 @@ function createHistory(options={}) {
         finishTransition(nextLocation);
         updateLocation(nextLocation);
       } else if (location && nextLocation.action === POP) {
-        var prevIndex = allKeys.indexOf(location.key);
-        var nextIndex = allKeys.indexOf(nextLocation.key);
+        var prevIndex = location.current;
+        var nextIndex = nextLocation.current;
 
         if (prevIndex !== -1 && nextIndex !== -1)
           go(prevIndex - nextIndex); // Restore the URL.

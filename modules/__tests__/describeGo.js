@@ -22,6 +22,7 @@ function describeGo(createHistory) {
             expect(location.search).toEqual('');
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
+            expect(location.current).toEqual(0);
 
             history.pushState({ the: 'state' }, '/home?the=query');
           },
@@ -30,6 +31,7 @@ function describeGo(createHistory) {
             expect(location.search).toEqual('?the=query');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(PUSH);
+            expect(location.current).toEqual(1);
 
             history.goBack();
           },
@@ -38,6 +40,7 @@ function describeGo(createHistory) {
             expect(location.search).toEqual('');
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
+            expect(location.current).toEqual(0);
           }
         ];
 
@@ -53,6 +56,7 @@ function describeGo(createHistory) {
             expect(location.search).toEqual('');
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
+            expect(location.current).toEqual(0);
 
             history.pushState({ the: 'state' }, '/home?the=query');
           },
@@ -61,6 +65,7 @@ function describeGo(createHistory) {
             expect(location.search).toEqual('?the=query');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(PUSH);
+            expect(location.current).toEqual(1);
 
             history.goBack();
           },
@@ -69,6 +74,7 @@ function describeGo(createHistory) {
             expect(location.search).toEqual('');
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
+            expect(location.current).toEqual(0);
 
             history.goForward();
           },
@@ -77,6 +83,7 @@ function describeGo(createHistory) {
             expect(location.search).toEqual('?the=query');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(POP);
+            expect(location.current).toEqual(1);
           }
         ];
 
