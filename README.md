@@ -111,7 +111,7 @@ Support for parsing and serializing URL queries is provided by the `enableQuerie
 ```js
 import { createHistory, enableQueries } from 'history';
 
-var history = enableQueries(createHistory());
+var history = enableQueries(createHistory)();
 
 history.listen(function (location) {
   console.log(location.query);
