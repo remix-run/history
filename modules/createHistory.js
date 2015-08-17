@@ -29,13 +29,25 @@ function createHistory(options={}) {
 
   var allKeys = [];
 
+  function getCurrent() {
+    if (pendingLocation && pendingLocation.action === POP) {
+      return allKeys.indexOf(pendingLocation.key);
+    } else if (location) {
+      return allKeys.indexOf(location.key);
+    } else {
+      return -1;
+    }
+  }
+
   function updateLocation(newLocation) {
+    var current = getCurrent();
+
     location = newLocation;
 
     if (location.action === PUSH) {
-      allKeys.push(location.key);
+      allKeys = [...allKeys.slice(0, current + 1), location.key];
     } else if (location.action === REPLACE) {
-      allKeys[allKeys.length - 1] = location.key;
+      allKeys[current] = location.key;
     }
 
     changeListeners.forEach(function (listener) {
@@ -57,7 +69,9 @@ function createHistory(options={}) {
     if (location) {
       listener(location);
     } else {
-      updateLocation(getCurrentLocation());
+      var location = getCurrentLocation();
+      allKeys = [location.key];
+      updateLocation(location);
     }
 
     return function () {
