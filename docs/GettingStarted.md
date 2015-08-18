@@ -49,6 +49,8 @@ history.go(-1);
 history.goBack();
 ```
 
+To prevent the user from navigating away from a page, or to prompt them before they do, see the documentation on [confirming navigation](ConfirmingNavigation.md).
+
 ### Creating URLs
 
 Additionally, `history` objects can be used to create `href`s for `<a>` tags that link to various places in your app. This is only really useful when using hash history to prefix URLs with a `#` or when using [query support](QuerySupport.md) to automatically build query strings.
