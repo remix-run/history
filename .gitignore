@@ -1,2 +1,3 @@
 lib/*
 !lib/umd
+_book
