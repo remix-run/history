@@ -1,6 +1,6 @@
 ## Query Support
 
-Support for parsing and serializing URL queries is provided by the `enableQueries` function. Simply wrap your `history` object and you'll have a parsed `location.query` object inside `listen`.
+Support for parsing and serializing URL queries is provided by the `enableQueries` function. Simply use a wrapped version of your `createHistory` function to create your `history` object and you'll have a parsed `location.query` object inside `listen`.
 
 ```js
 import { createHistory, enableQueries } from 'history';
