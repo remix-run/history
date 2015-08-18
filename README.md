@@ -29,7 +29,7 @@ history.pushState({ the: 'state' }, '/the/path?a=query');
 unlisten();
 ```
 
-Read more in [the documentation](/docs)!
+Read more in [the documentation](http://rackt.github.io/history)!
 
 ### Thanks
 
