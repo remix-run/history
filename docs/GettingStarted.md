@@ -6,7 +6,7 @@ The first thing you'll need to do is create a history object. The main `history`
 - `createHashHistory` is for use in legacy web browsers (see the [caveats of using hash history](#caveats-of-hash-history) and also [caniuse](http://caniuse.com/#feat=history) for compatibility)
 - `createMemoryHistory` is used mainly for testing and does not persist across sessions
 
-Once you get a `history` object, use `history.listen` to be notified when [the `location`](/docs/Location.md) changes.
+Once you get a `history` object, use `history.listen` to be notified when [the `location`](Location.md) changes.
 
 ```js
 import { createHistory } from 'history';
