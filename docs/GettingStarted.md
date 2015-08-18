@@ -51,7 +51,7 @@ history.goBack();
 
 ### Creating URLs
 
-Additionally, `history` objects can be used to create `href`s for `<a>` tags that link to various places in your app. This is only really useful when using [Hash History](/docs/History/HashHistory.md) to prefix URLs with a `#` or when using [query support](QuerySupport.md) to automatically build query strings.
+Additionally, `history` objects can be used to create `href`s for `<a>` tags that link to various places in your app. This is only really useful when using hash history to prefix URLs with a `#` or when using [query support](QuerySupport.md) to automatically build query strings.
 
 ```js
 var href = history.createHref('/the/path');
@@ -59,10 +59,10 @@ var href = history.createHref('/the/path');
 
 ### Minimizing Your Build
 
-Using the main `history` module is a great way to get up and running quickly. However, you probably don't need to include [all the various history implementations](/docs/History) in your production bundle. To keep your build as small as possible, import only the functions you need directly from `history/lib`.
+Using the main `history` module is a great way to get up and running quickly. However, you probably don't need to include all the various history implementations in your production bundle. To keep your build as small as possible, import only the functions you need directly from `history/lib`.
 
 ```js
-// HTML5 history
+// Browser history
 import createHistory from 'history/lib/createBrowserHistory';
 
 // Hash history
