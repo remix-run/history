@@ -38,7 +38,7 @@
     "eslint": "^1.0.0",
     "expect": "^1.8.0",
     "gitbook-cli": "^0.3.4",
-    "gitbook-plugin-github": "^1.0.0",
+    "gitbook-plugin-github": "^1.0.1",
     "karma": "^0.13.3",
     "karma-browserstack-launcher": "^0.1.3",
     "karma-chrome-launcher": "^0.2.0",
