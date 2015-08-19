@@ -1,5 +1,22 @@
 {
+  "gitbook": "2.x.x",
+  "title": "history",
   "structure": {
     "summary": "docs/README.md"
+  },
+  "links": {
+    "sharing": {
+      "google": false,
+      "facebook": false,
+      "twitter": false
+    }
+  },
+  "plugins": [
+    "github"
+  ],
+  "pluginsConfig": {
+    "github": {
+      "url": "https://github.com/rackt/history"
+    }
   }
 }
