@@ -31,7 +31,7 @@ history.pushState({ the: 'state' }, '/the/path?a=query');
 unlisten();
 ```
 
-Read more about getting started [in the documentation](http://rackt.github.io/history/docs/GettingStarted.html)!
+Read more about getting started [in the documentation](http://rackt.github.io/history/stable/GettingStarted.html)!
 
 ### Thanks
 
