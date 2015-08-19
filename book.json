@@ -12,11 +12,18 @@
     }
   },
   "plugins": [
-    "github"
+    "github",
+    "versions"
   ],
   "pluginsConfig": {
     "github": {
       "url": "https://github.com/rackt/history"
+    },
+    "versions": {
+      "options": [
+        { "value": "https://rackt.github.io/history/v1.3.0/", "text": "Version 1.3.0" },
+        { "value": "https://rackt.github.io/history/v1.4.0/", "text": "Version 1.4.0", "selected": true }
+      ]
     }
   }
 }
