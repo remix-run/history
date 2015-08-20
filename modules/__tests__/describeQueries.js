@@ -76,6 +76,14 @@ function describeQueries(createHistory) {
       });
     });
 
+    describe('in createPath', function () {
+      it('works', function () {
+        expect(
+          history.createPath('/the/path', { the: 'query' })
+        ).toEqual('/the/path?STRINGIFY_QUERY');
+      });
+    });
+
     describe('in createHref', function () {
       it('works', function () {
         expect(
