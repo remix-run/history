@@ -11,7 +11,14 @@ function describeQueries(createHistory) {
   describe('query serialization', function () {
     var history, unlisten;
     beforeEach(function () {
-      history = enableQueries(createHistory)();
+      history = enableQueries(createHistory)({
+        parseQueryString(queryString) {
+          return 'PARSE_QUERY_STRING';
+        },
+        stringifyQuery(query) {
+          return 'STRINGIFY_QUERY';
+        }
+      });
     });
 
     afterEach(function () {
@@ -25,7 +32,7 @@ function describeQueries(createHistory) {
           function (location) {
             expect(location.pathname).toEqual('/');
             expect(location.search).toEqual('');
-            expect(location.query).toEqual({});
+            expect(location.query).toEqual('PARSE_QUERY_STRING');
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
 
@@ -33,8 +40,8 @@ function describeQueries(createHistory) {
           },
           function (location) {
             expect(location.pathname).toEqual('/home');
-            expect(location.search).toEqual('?the=query');
-            expect(location.query).toEqual({ the: 'query' });
+            expect(location.search).toEqual('?STRINGIFY_QUERY');
+            expect(location.query).toEqual('PARSE_QUERY_STRING');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(PUSH);
           }
@@ -50,7 +57,7 @@ function describeQueries(createHistory) {
           function (location) {
             expect(location.pathname).toEqual('/');
             expect(location.search).toEqual('');
-            expect(location.query).toEqual({});
+            expect(location.query).toEqual('PARSE_QUERY_STRING');
             expect(location.state).toEqual(null);
             expect(location.action).toEqual(POP);
 
@@ -58,8 +65,8 @@ function describeQueries(createHistory) {
           },
           function (location) {
             expect(location.pathname).toEqual('/home');
-            expect(location.search).toEqual('?the=query');
-            expect(location.query).toEqual({ the: 'query' });
+            expect(location.search).toEqual('?STRINGIFY_QUERY');
+            expect(location.query).toEqual('PARSE_QUERY_STRING');
             expect(location.state).toEqual({ the: 'state' });
             expect(location.action).toEqual(REPLACE);
           }
@@ -73,7 +80,7 @@ function describeQueries(createHistory) {
       it('works', function () {
         expect(
           stripHash(history.createHref('/the/path', { the: 'query' }))
-        ).toEqual('/the/path?the=query');
+        ).toEqual('/the/path?STRINGIFY_QUERY');
       });
     });
   });

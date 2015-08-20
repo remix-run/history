@@ -8,9 +8,10 @@ function defaultParseQueryString(queryString) {
   return qs.parse(queryString);
 }
 
-function enableQueries(createHistory, options={}) {
-  return (baseOptions) => {
-    var history = createHistory(baseOptions);
+function enableQueries(createHistory) {
+  return (options) => {
+    var history = createHistory(options);
+
     var { stringifyQuery, parseQueryString } = options;
 
     if (typeof stringifyQuery !== 'function')
@@ -22,7 +23,7 @@ function enableQueries(createHistory, options={}) {
     function listen(listener) {
       return history.listen(function (location) {
         if (!location.query)
-          location.query = location.search ? parseQueryString(location.search.substring(1)) : {};
+          location.query = parseQueryString(location.search.substring(1));
 
         listener(location);
       });
