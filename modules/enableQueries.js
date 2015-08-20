@@ -34,7 +34,9 @@ function enableQueries(createHistory) {
       if (query == null || (queryString = stringifyQuery(query)) === '')
         return pathname;
 
-      return pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString;
+      return history.createPath(
+        pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString
+      );
     }
 
     function pushState(state, pathname, query) {
@@ -54,6 +56,7 @@ function enableQueries(createHistory) {
       listen,
       pushState,
       replaceState,
+      createPath,
       createHref
     };
   };

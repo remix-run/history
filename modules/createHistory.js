@@ -176,8 +176,12 @@ function createHistory(options={}) {
     return createRandomKey(keyLength);
   }
 
-  function createHref(path) {
+  function createPath(path) {
     return path;
+  }
+
+  function createHref(path) {
+    return createPath(path);
   }
 
   return {
@@ -193,6 +197,7 @@ function createHistory(options={}) {
     goBack,
     goForward,
     createKey,
+    createPath,
     createHref
   };
 }
