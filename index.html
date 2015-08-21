@@ -3,20 +3,31 @@
   <head>
     <script src="/bundle.js"></script>
     <script>
-      var page = 0;
-      var history = History.createHistory();
+      var createHistory = History.createHistory;
+      var enableBeforeUnload = History.enableBeforeUnload;
 
-      history.registerTransitionHook(function () {
+      var page = 0;
+      var myHistory = enableBeforeUnload(createHistory)();
+
+      myHistory.registerBeforeUnloadHook(function () {
+        return "Wait, don't leave yet!";
+      });
+
+      myHistory.registerTransitionHook(function () {
         return 'Are you sure?';
       });
 
-      history.listen(function (location) {
+      myHistory.listen(function (location) {
         console.log(location);
       });
     </script>
   </head>
   <body>
-    <button onclick="page++; history.pushState({ page: page }, '/' + page)">history.pushState</button>
-    <button onclick="history.goBack()">history.goBack</button>
+    <p>Use the two buttons below to test normal transitions.</p>
+    <p>
+      <button onclick="page++; myHistory.pushState({ page: page }, '/' + page)">history.pushState</button>
+      <button onclick="myHistory.goBack()">history.goBack</button>
+    </p>
+    <p>Close the tab to test <code>beforeunload</code> behavior.</p>
   </body>
 </html>

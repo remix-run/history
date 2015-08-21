@@ -1,6 +1,6 @@
 ## Confirming Navigation
 
-Sometimes you may want to prevent the user from going to a different page. For example, if they are halfway finished filling out a long form, and they click the back button (or try to close the tab), you may want to prompt them to confirm they actually want to leave the page before they lose the information they've already entered. For these cases, `history` lets you register transition hooks that return a prompt message you can show the user before the location changes. For example, you could do something like this:
+Sometimes you may want to prevent the user from going to a different page. For example, if they are halfway finished filling out a long form, and they click the back button, you may want to prompt them to confirm they actually want to leave the page before they lose the information they've already entered. For these cases, `history` lets you register transition hooks that return a prompt message you can show the user before the location changes. For example, you could do something like this:
 
 ```js
 history.registerTransitionHook(function () {
@@ -20,3 +20,19 @@ var history = createHistory({
   }
 });
 ```
+
+### The `beforeunload` Event
+
+If you need to prevent a browser window or tab from closing, `history` provides the `enableBeforeUnload` enhancer function.
+
+```js
+import { createHistory, enableBeforeUnload } from 'history';
+
+var history = enableBeforeUnload(createHistory)();
+
+history.registerBeforeUnloadHook(function () {
+  return 'Are you sure you want to leave this page?';
+});
+```
+
+Note that because of the nature of the `beforeunload` event all hooks must `return` synchronously. `history` runs all hooks in the order they were registered and displays the first message that is returned.

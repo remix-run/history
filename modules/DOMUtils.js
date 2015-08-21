@@ -35,6 +35,10 @@ export function go(n) {
     window.history.go(n);
 }
 
+export function getUserConfirmation(message, callback) {
+  callback(window.confirm(message));
+}
+
 /**
  * Returns true if the HTML5 history API is supported. Taken from modernizr.
  *
