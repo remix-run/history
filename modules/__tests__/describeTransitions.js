@@ -1,8 +1,70 @@
 import assert from 'assert';
 import expect from 'expect';
 import { PUSH } from '../Actions';
+import execSteps from './execSteps';
 
 function describeTransitions(createHistory) {
+  describe('a synchronous transition hook', function () {
+    var history, unlisten;
+    beforeEach(function () {
+      history = createHistory();
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('receives the next location', function (done) {
+      var steps = [
+        function () {
+          history.pushState({ the: 'state' }, '/home?the=query');
+        },
+        function (location) {
+          expect(nextLocation).toBe(location);
+        }
+      ];
+
+      var nextLocation;
+      history.registerTransitionHook(function (location) {
+        nextLocation = location;
+      });
+
+      unlisten = history.listen(execSteps(steps, done));
+    });
+  });
+
+  describe('an asynchronous transition hook', function () {
+    var history, unlisten;
+    beforeEach(function () {
+      history = createHistory();
+    });
+
+    afterEach(function () {
+      if (unlisten)
+        unlisten();
+    });
+
+    it('receives the next location', function (done) {
+      var steps = [
+        function () {
+          history.pushState({ the: 'state' }, '/home?the=query');
+        },
+        function (location) {
+          expect(nextLocation).toBe(location);
+        }
+      ];
+
+      var nextLocation;
+      history.registerTransitionHook(function (location, callback) {
+        nextLocation = location;
+        setTimeout(callback);
+      });
+
+      unlisten = history.listen(execSteps(steps, done));
+    });
+  });
+
   describe('when the user confirms a transition', function () {
     var confirmationMessage, location, history, unlisten;
     beforeEach(function () {

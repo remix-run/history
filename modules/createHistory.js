@@ -1,5 +1,7 @@
+import warning from 'warning';
 import invariant from 'invariant';
 import deepEqual from 'deep-equal';
+import { loopAsync } from './AsyncUtils';
 import { PUSH, REPLACE, POP } from './Actions';
 import createLocation from './createLocation';
 
@@ -88,25 +90,39 @@ function createHistory(options={}) {
     transitionHooks = transitionHooks.filter(item => item !== hook);
   }
 
-  function getTransitionConfirmationMessage() {
-    var message = null;
+  function runTransitionHook(hook, location, callback) {
+    var result = hook(location, callback);
 
-    for (var i = 0, len = transitionHooks.length; i < len && message == null; ++i)
-      message = transitionHooks[i].call(this);
-
-    return message;
+    if (hook.length < 2) {
+      // Assume the hook runs synchronously and automatically
+      // call the callback with the return value.
+      callback(result);
+    } else {
+      warning(
+        result === undefined,
+        'You may not use `return` in a transition hook with a callback argument; call the callback instead'
+      );
+    }
   }
 
-  function confirmTransition(callback) {
-    var message = getTransitionConfirmationMessage();
-
-    if (getUserConfirmation && typeof message === 'string') {
-      getUserConfirmation(message, function (ok) {
-        callback(ok !== false);
+  function confirmTransitionTo(location, callback) {
+    loopAsync(transitionHooks.length, function (index, next, done) {
+      runTransitionHook(transitionHooks[index], location, function (result) {
+        if (result != null) {
+          done(result);
+        } else {
+          next();
+        }
       });
-    } else {
-      callback(message !== false);
-    }
+    }, function (message) {
+      if (getUserConfirmation && typeof message === 'string') {
+        getUserConfirmation(message, function (ok) {
+          callback(ok !== false);
+        });
+      } else {
+        callback(message !== false);
+      }
+    });
   }
 
   var pendingLocation;
@@ -122,7 +138,7 @@ function createHistory(options={}) {
 
     pendingLocation = nextLocation;
 
-    confirmTransition(function (ok) {
+    confirmTransitionTo(nextLocation, function (ok) {
       pendingLocation = null;
 
       if (ok) {
@@ -188,7 +204,6 @@ function createHistory(options={}) {
     listen,
     registerTransitionHook,
     unregisterTransitionHook,
-    getTransitionConfirmationMessage,
     transitionTo,
     pushState,
     replaceState,
