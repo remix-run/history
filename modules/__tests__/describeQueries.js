@@ -1,6 +1,6 @@
 import expect from 'expect';
 import { PUSH, REPLACE, POP } from '../Actions';
-import enableQueries from '../enableQueries';
+import useQueries from '../useQueries';
 import execSteps from './execSteps';
 
 function stripHash(path) {
@@ -11,7 +11,7 @@ function describeQueries(createHistory) {
   describe('query serialization', function () {
     var history, unlisten;
     beforeEach(function () {
-      history = enableQueries(createHistory)({
+      history = useQueries(createHistory)({
         parseQueryString(queryString) {
           return 'PARSE_QUERY_STRING';
         },

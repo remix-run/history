@@ -4,10 +4,10 @@
     <script src="/bundle.js"></script>
     <script>
       var createHistory = History.createHistory;
-      var enableBeforeUnload = History.enableBeforeUnload;
+      var useBeforeUnload = History.useBeforeUnload;
 
       var page = 0;
-      var h = enableBeforeUnload(createHistory)();
+      var h = useBeforeUnload(createHistory)();
 
       h.registerTransitionHook(function (location, callback) {
         var promptMessage = 'Are you sure you want to go to ' + location.pathname + '?';

@@ -10,7 +10,7 @@ action        One of PUSH, REPLACE, or POP
 key           A unique identifier for this location
 ```
 
-Support for query string parsing is provided using the [`enableQueries` module](QuerySupport.md).
+Support for query string parsing is provided using the [`useQueries` module](QuerySupport.md).
 
 ### Programmatic Creation
 

@@ -33,12 +33,12 @@ var history = createHistory({
 
 ### The `beforeunload` Event
 
-If you need to prevent a browser window or tab from closing, `history` provides the `enableBeforeUnload` enhancer function.
+If you need to prevent a browser window or tab from closing, `history` provides the `useBeforeUnload` enhancer function.
 
 ```js
-import { createHistory, enableBeforeUnload } from 'history';
+import { createHistory, useBeforeUnload } from 'history';
 
-var history = enableBeforeUnload(createHistory)();
+var history = useBeforeUnload(createHistory)();
 
 history.registerBeforeUnloadHook(function () {
   return 'Are you sure you want to leave this page?';
