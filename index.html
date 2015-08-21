@@ -7,17 +7,25 @@
       var enableBeforeUnload = History.enableBeforeUnload;
 
       var page = 0;
-      var myHistory = enableBeforeUnload(createHistory)();
+      var h = enableBeforeUnload(createHistory)();
 
-      myHistory.registerBeforeUnloadHook(function () {
+      h.registerTransitionHook(function (location, callback) {
+        var promptMessage = 'Are you sure you want to go to ' + location.pathname + '?';
+
+        if (Math.random() > 0.5) {
+          callback(promptMessage); // sync
+        } else {
+          setTimeout(function () {
+            callback(promptMessage); // async
+          }, 500);
+        }
+      });
+
+      h.registerBeforeUnloadHook(function () {
         return "Wait, don't leave yet!";
       });
 
-      myHistory.registerTransitionHook(function () {
-        return 'Are you sure?';
-      });
-
-      myHistory.listen(function (location) {
+      h.listen(function (location) {
         console.log(location);
       });
     </script>
@@ -25,8 +33,8 @@
   <body>
     <p>Use the two buttons below to test normal transitions.</p>
     <p>
-      <button onclick="page++; myHistory.pushState({ page: page }, '/' + page)">history.pushState</button>
-      <button onclick="myHistory.goBack()">history.goBack</button>
+      <button onclick="page++; h.pushState({ page: page }, '/' + page)">history.pushState</button>
+      <button onclick="h.goBack()">history.goBack</button>
     </p>
     <p>Close the tab to test <code>beforeunload</code> behavior.</p>
   </body>
