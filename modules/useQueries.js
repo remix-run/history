@@ -12,7 +12,7 @@ function useQueries(createHistory) {
   return (options) => {
     var history = createHistory(options);
 
-    var { stringifyQuery, parseQueryString } = options;
+    var { stringifyQuery, parseQueryString } = options || {};
 
     if (typeof stringifyQuery !== 'function')
       stringifyQuery = defaultStringifyQuery;
