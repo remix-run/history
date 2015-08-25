@@ -9,10 +9,9 @@ function defaultParseQueryString(queryString) {
 }
 
 function useQueries(createHistory) {
-  return (options) => {
-    var history = createHistory(options);
-
-    var { stringifyQuery, parseQueryString } = options;
+  return function (options={}) {
+    var { stringifyQuery, parseQueryString, ...historyOptions } = options;
+    var history = createHistory(historyOptions);
 
     if (typeof stringifyQuery !== 'function')
       stringifyQuery = defaultStringifyQuery;
