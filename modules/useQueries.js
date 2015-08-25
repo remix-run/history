@@ -28,6 +28,14 @@ function useQueries(createHistory) {
       });
     }
 
+    function pushState(state, pathname, query) {
+      return history.pushState(state, createPath(pathname, query));
+    }
+
+    function replaceState(state, pathname, query) {
+      return history.replaceState(state, createPath(pathname, query));
+    }
+
     function createPath(pathname, query) {
       var queryString;
       if (query == null || (queryString = stringifyQuery(query)) === '')
@@ -36,14 +44,6 @@ function useQueries(createHistory) {
       return history.createPath(
         pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString
       );
-    }
-
-    function pushState(state, pathname, query) {
-      return history.pushState(state, createPath(pathname, query));
-    }
-
-    function replaceState(state, pathname, query) {
-      return history.replaceState(state, createPath(pathname, query));
     }
 
     function createHref(pathname, query) {
