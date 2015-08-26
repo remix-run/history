@@ -47,7 +47,7 @@ function createHistory(options={}) {
     location = newLocation;
 
     if (location.action === PUSH) {
-      allKeys = [...allKeys.slice(0, current + 1), location.key];
+      allKeys = [ ...allKeys.slice(0, current + 1), location.key ];
     } else if (location.action === REPLACE) {
       allKeys[current] = location.key;
     }
