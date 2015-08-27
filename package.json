@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "A minimal, functional history implementation for JavaScript",
   "main": "lib/index",
   "repository": {
@@ -24,6 +24,7 @@
     "deep-equal": "^1.0.0",
     "invariant": "^2.0.0",
     "qs": "^4.0.0",
+    "tough-cookie": "^2.0.0",
     "warning": "^2.0.0"
   },
   "devDependencies": {
