@@ -1,4 +1,4 @@
-## Glossary
+## Terms
 
 This is a glossary of common terms used in the history codebase and documentation listed in alphabetical order, along with their [type signatures](http://flowtype.org/docs/quick-reference.html).
 

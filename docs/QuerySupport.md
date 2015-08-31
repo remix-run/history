@@ -1,6 +1,6 @@
 ## Query Support
 
-Support for parsing and serializing [URL queries](Glossary.md#query) is provided by the `useQueries` [enhancer](Glossary.md#createhistoryenhancer) function. Simply use a wrapped version of your `createHistory` function to create your `history` object and you'll have a parsed `location.query` object inside `listen`.
+Support for parsing and serializing [URL queries](Terms.md#query) is provided by the `useQueries` [enhancer](Terms.md#createhistoryenhancer) function. Simply use a wrapped version of your `createHistory` function to create your `history` object and you'll have a parsed `location.query` object inside `listen`.
 
 ```js
 import { createHistory, useQueries } from 'history';
