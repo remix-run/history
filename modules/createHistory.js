@@ -100,7 +100,7 @@ function createHistory(options={}) {
     } else {
       warning(
         result === undefined,
-        'You may not use `return` in a transition hook with a callback argument; call the callback instead'
+        'You should not "return" in a transition hook with a callback argument; call the callback instead'
       );
     }
   }
