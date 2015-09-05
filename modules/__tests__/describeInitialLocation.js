@@ -4,7 +4,7 @@ import createMemoryHistory from '../createMemoryHistory';
 
 function describeInitialLocation(createHistory) {
   describe('location has key on initial pop', function () {
-    var unlisten, history;
+    let unlisten, history;
     beforeEach(function () {
       history = createHistory();
     });

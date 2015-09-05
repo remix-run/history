@@ -10,8 +10,8 @@ function defaultParseQueryString(queryString) {
 
 function useQueries(createHistory) {
   return function (options={}) {
-    var { stringifyQuery, parseQueryString, ...historyOptions } = options;
-    var history = createHistory(historyOptions);
+    let { stringifyQuery, parseQueryString, ...historyOptions } = options;
+    let history = createHistory(historyOptions);
 
     if (typeof stringifyQuery !== 'function')
       stringifyQuery = defaultStringifyQuery;
@@ -37,7 +37,7 @@ function useQueries(createHistory) {
     }
 
     function createPath(pathname, query) {
-      var queryString;
+      let queryString;
       if (query == null || (queryString = stringifyQuery(query)) === '')
         return pathname;
 

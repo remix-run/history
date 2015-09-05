@@ -4,7 +4,7 @@ import { getUserConfirmation, go } from './DOMUtils';
 import createHistory from './createHistory';
 
 function createDOMHistory(options) {
-  var history = createHistory({
+  let history = createHistory({
     getUserConfirmation,
     ...options,
     go

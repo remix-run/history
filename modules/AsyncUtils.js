@@ -1,6 +1,6 @@
 export function loopAsync(turns, work, callback) {
-  var currentTurn = 0;
-  var isDone = false;
+  let currentTurn = 0;
+  let isDone = false;
 
   function done() {
     isDone = true;

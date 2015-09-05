@@ -2,7 +2,7 @@ import warning from 'warning';
 import { POP } from './Actions';
 
 function extractPath(string) {
-  var match = string.match(/https?:\/\/[^\/]*/);
+  let match = string.match(/https?:\/\/[^\/]*/);
 
   if (match == null)
     return string;
@@ -19,9 +19,9 @@ function extractPath(string) {
 function createLocation(path='/', state=null, action=POP, key=null) {
   path = extractPath(path);
 
-  var index = path.indexOf('?');
+  let index = path.indexOf('?');
 
-  var pathname, search;
+  let pathname, search;
   if (index !== -1) {
     pathname = path.substring(0, index);
     search = path.substring(index);

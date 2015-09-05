@@ -4,7 +4,7 @@ import execSteps from './execSteps';
 
 function describeGo(createHistory) {
   describe('go', function () {
-    var history, unlisten;
+    let history, unlisten;
     beforeEach(function () {
       history = createHistory();
     });
@@ -16,7 +16,7 @@ function describeGo(createHistory) {
 
     describe('back', function () {
       it('calls change listeners with the previous location', function (done) {
-        var steps = [
+        let steps = [
           function (location) {
             expect(location.pathname).toEqual('/');
             expect(location.search).toEqual('');
@@ -47,7 +47,7 @@ function describeGo(createHistory) {
 
     describe('forward', function () {
       it('calls change listeners with the next location', function (done) {
-        var steps = [
+        let steps = [
           function (location) {
             expect(location.pathname).toEqual('/');
             expect(location.search).toEqual('');

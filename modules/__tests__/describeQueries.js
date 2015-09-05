@@ -9,7 +9,7 @@ function stripHash(path) {
 
 function describeQueries(createHistory) {
   describe('query serialization', function () {
-    var history, unlisten;
+    let history, unlisten;
     beforeEach(function () {
       history = useQueries(createHistory)({
         parseQueryString(queryString) {
@@ -28,7 +28,7 @@ function describeQueries(createHistory) {
 
     describe('in pushState', function () {
       it('works', function (done) {
-        var steps = [
+        let steps = [
           function (location) {
             expect(location.pathname).toEqual('/');
             expect(location.search).toEqual('');
@@ -53,7 +53,7 @@ function describeQueries(createHistory) {
 
     describe('in replaceState', function () {
       it('works', function (done) {
-        var steps = [
+        let steps = [
           function (location) {
             expect(location.pathname).toEqual('/');
             expect(location.search).toEqual('');

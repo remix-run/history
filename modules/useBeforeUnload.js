@@ -3,7 +3,7 @@ import { addEventListener, removeEventListener } from './DOMUtils';
 
 function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
   function listener(event) {
-    var message = getBeforeUnloadPromptMessage();
+    let message = getBeforeUnloadPromptMessage();
 
     if (typeof message === 'string') {
       (event || window.event).returnValue = message;
@@ -20,15 +20,15 @@ function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
 
 function useBeforeUnload(createHistory) {
   return function (options) {
-    var history = createHistory(options);
+    let history = createHistory(options);
 
-    var stopBeforeUnloadListener;
-    var beforeUnloadHooks = [];
+    let stopBeforeUnloadListener;
+    let beforeUnloadHooks = [];
 
     function getBeforeUnloadPromptMessage() {
-      var message;
+      let message;
 
-      for (var i = 0, len = beforeUnloadHooks.length; message == null && i < len; ++i)
+      for (let i = 0, len = beforeUnloadHooks.length; message == null && i < len; ++i)
         message = beforeUnloadHooks[i].call();
 
       return message;

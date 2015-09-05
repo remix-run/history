@@ -21,15 +21,15 @@ function createBrowserHistory(options) {
     'Browser history needs a DOM'
   );
 
-  var isSupported = supportsHistory();
+  let isSupported = supportsHistory();
 
   function getCurrentLocation(historyState) {
     historyState = historyState || window.history.state || {};
 
-    var path = getWindowPath();
-    var { key } = historyState;
+    let path = getWindowPath();
+    let { key } = historyState;
 
-    var state;
+    let state;
     if (key) {
       state = readState(key);
     } else {
@@ -59,15 +59,15 @@ function createBrowserHistory(options) {
   }
 
   function finishTransition(location) {
-    var { pathname, search, state, action, key } = location;
+    let { pathname, search, state, action, key } = location;
 
     if (action === POP)
       return; // Nothing to do.
 
     saveState(key, state);
 
-    var path = pathname + search;
-    var historyState = {
+    let path = pathname + search;
+    let historyState = {
       key
     };
 
@@ -86,20 +86,20 @@ function createBrowserHistory(options) {
     }
   }
 
-  var history = createDOMHistory({
+  let history = createDOMHistory({
     ...options,
     getCurrentLocation,
     finishTransition,
     saveState
   });
 
-  var listenerCount = 0, stopPopStateListener;
+  let listenerCount = 0, stopPopStateListener;
 
   function listen(listener) {
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history);
 
-    var unlisten = history.listen(listener);
+    let unlisten = history.listen(listener);
 
     return function () {
       unlisten();

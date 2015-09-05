@@ -47,7 +47,7 @@ export function getUserConfirmation(message, callback) {
  * changed to avoid false negatives for Windows Phones: https://github.com/rackt/react-router/issues/586
  */
 export function supportsHistory() {
-  var ua = navigator.userAgent;
+  let ua = navigator.userAgent;
   if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) && ua.indexOf('Mobile Safari') !== -1 && ua.indexOf('Chrome') === -1 && ua.indexOf('Windows Phone') === -1) {
     return false;
   }
@@ -58,6 +58,6 @@ export function supportsHistory() {
  * Returns false if using go(n) with hash history causes a full page reload.
  */
 export function supportsGoWithoutReloadUsingHash() {
-  var ua = navigator.userAgent;
+  let ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }

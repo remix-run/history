@@ -1,12 +1,12 @@
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
-export var PUSH = 'PUSH';
+export const PUSH = 'PUSH';
 
 /**
  * Indicates that navigation was caused by a call to history.replace.
  */
-export var REPLACE = 'REPLACE';
+export const REPLACE = 'REPLACE';
 
 /**
  * Indicates that navigation was caused by some other action such
@@ -16,7 +16,7 @@ export var REPLACE = 'REPLACE';
  * See https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
  * for more information.
  */
-export var POP = 'POP';
+export const POP = 'POP';
 
 export default {
   PUSH,

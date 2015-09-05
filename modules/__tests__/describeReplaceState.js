@@ -4,7 +4,7 @@ import execSteps from './execSteps';
 
 function describeReplaceState(createHistory) {
   describe('replaceState', function () {
-    var history, unlisten;
+    let history, unlisten;
     beforeEach(function () {
       history = createHistory();
     });
@@ -15,7 +15,7 @@ function describeReplaceState(createHistory) {
     });
 
     it('calls change listeners with the new location', function (done) {
-      var steps = [
+      let steps = [
         function (location) {
           expect(location.pathname).toEqual('/');
           expect(location.search).toEqual('');

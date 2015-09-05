@@ -1,4 +1,4 @@
-var KeyPrefix = '@@History/';
+const KeyPrefix = '@@History/';
 
 function createKey(key) {
   return KeyPrefix + key;
@@ -9,7 +9,7 @@ export function saveState(key, state) {
 }
 
 export function readState(key) {
-  var json = window.sessionStorage.getItem(createKey(key));
+  let json = window.sessionStorage.getItem(createKey(key));
 
   if (json) {
     try {

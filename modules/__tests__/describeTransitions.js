@@ -5,7 +5,7 @@ import execSteps from './execSteps';
 
 function describeTransitions(createHistory) {
   describe('a synchronous transition hook', function () {
-    var history, unlisten;
+    let history, unlisten;
     beforeEach(function () {
       history = createHistory();
     });
@@ -16,7 +16,7 @@ function describeTransitions(createHistory) {
     });
 
     it('receives the next location', function (done) {
-      var steps = [
+      let steps = [
         function () {
           history.pushState({ the: 'state' }, '/home?the=query');
         },
@@ -25,7 +25,7 @@ function describeTransitions(createHistory) {
         }
       ];
 
-      var nextLocation;
+      let nextLocation;
       history.registerTransitionHook(function (location) {
         nextLocation = location;
       });
@@ -35,7 +35,7 @@ function describeTransitions(createHistory) {
   });
 
   describe('an asynchronous transition hook', function () {
-    var history, unlisten;
+    let history, unlisten;
     beforeEach(function () {
       history = createHistory();
     });
@@ -46,7 +46,7 @@ function describeTransitions(createHistory) {
     });
 
     it('receives the next location', function (done) {
-      var steps = [
+      let steps = [
         function () {
           history.pushState({ the: 'state' }, '/home?the=query');
         },
@@ -55,7 +55,7 @@ function describeTransitions(createHistory) {
         }
       ];
 
-      var nextLocation;
+      let nextLocation;
       history.registerTransitionHook(function (location, callback) {
         nextLocation = location;
         setTimeout(callback);
@@ -66,7 +66,7 @@ function describeTransitions(createHistory) {
   });
 
   describe('when the user confirms a transition', function () {
-    var confirmationMessage, location, history, unlisten;
+    let confirmationMessage, location, history, unlisten;
     beforeEach(function () {
       location = null;
       confirmationMessage = 'Are you sure?';
@@ -93,7 +93,7 @@ function describeTransitions(createHistory) {
     });
 
     it('updates the location', function () {
-      var prevLocation = location;
+      let prevLocation = location;
       history.pushState({ the: 'state' }, '/home?the=query');
       expect(prevLocation).toNotBe(location);
 
@@ -107,7 +107,7 @@ function describeTransitions(createHistory) {
   });
 
   describe('when the user cancels a transition', function () {
-    var confirmationMessage, location, history, unlisten;
+    let confirmationMessage, location, history, unlisten;
     beforeEach(function () {
       location = null;
       confirmationMessage = 'Are you sure?';
@@ -134,14 +134,14 @@ function describeTransitions(createHistory) {
     });
 
     it('does not update the location', function () {
-      var prevLocation = location;
+      let prevLocation = location;
       history.pushState(null, '/home');
       expect(prevLocation).toBe(location);
     });
   });
 
   describe('when the transition hook cancels a transition', function () {
-    var location, history, unlisten;
+    let location, history, unlisten;
     beforeEach(function () {
       location = null;
 
@@ -162,7 +162,7 @@ function describeTransitions(createHistory) {
     });
 
     it('does not update the location', function () {
-      var prevLocation = location;
+      let prevLocation = location;
       history.pushState(null, '/home');
       expect(prevLocation).toBe(location);
     });

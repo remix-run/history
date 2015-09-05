@@ -19,7 +19,7 @@ describe('memory history', function () {
 
   describe('when using pushState in the middle of the stack', function() {
     it('clears rest of stack so the user cannot go forward', function() {
-      var history = createMemoryHistory(), location;
+      let history = createMemoryHistory(), location;
 
       history.listen(function(loc) {
         location = loc;

@@ -14,7 +14,7 @@ import execSteps from './execSteps';
 
 function describeStatePersistence(createHistory) {
   describe('when the user does not want to persist a state', function () {
-    var history, unlisten;
+    let history, unlisten;
     beforeEach(function () {
       history = createHistory({ queryKey: false });
     });
@@ -25,7 +25,7 @@ function describeStatePersistence(createHistory) {
     });
 
     it('forgets state across transitions', function (done) {
-      var steps = [
+      let steps = [
         function (location) {
           expect(location.pathname).toEqual('/');
           expect(location.search).toEqual('');
@@ -63,7 +63,7 @@ function describeStatePersistence(createHistory) {
   });
 
   describe('when the user wants to persist state', function () {
-    var history, unlisten;
+    let history, unlisten;
     beforeEach(function () {
       history = createHistory({ queryKey: 'a' });
     });
@@ -74,7 +74,7 @@ function describeStatePersistence(createHistory) {
     });
 
     it('remembers state across transitions', function (done) {
-      var steps = [
+      let steps = [
         function (location) {
           expect(location.pathname).toEqual('/');
           expect(location.search).toEqual('');
@@ -136,7 +136,7 @@ describe('hash history', function () {
   }
 
   it('knows how to make hrefs', function () {
-    var history = createHashHistory();
+    let history = createHashHistory();
     expect(history.createHref('/a/path')).toEqual('#/a/path');
   });
 });

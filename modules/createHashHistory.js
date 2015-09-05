@@ -12,7 +12,7 @@ function isAbsolutePath(path) {
 }
 
 function ensureSlash() {
-  var path = getHashPath();
+  let path = getHashPath();
 
   if (isAbsolutePath(path))
     return true;
@@ -31,11 +31,11 @@ function stripQueryStringValueFromPath(path, key) {
 }
 
 function getQueryStringValueFromPath(path, key) {
-  var match = path.match(new RegExp(`\\?.*?\\b${key}=(.+?)\\b`));
+  let match = path.match(new RegExp(`\\?.*?\\b${key}=(.+?)\\b`));
   return match && match[1];
 }
 
-var DefaultQueryKey = '_k';
+const DefaultQueryKey = '_k';
 
 function createHashHistory(options={}) {
   invariant(
@@ -43,15 +43,15 @@ function createHashHistory(options={}) {
     'Hash history needs a DOM'
   );
 
-  var { queryKey } = options;
+  let { queryKey } = options;
 
   if (queryKey === undefined || !!queryKey)
     queryKey = typeof queryKey === 'string' ? queryKey : DefaultQueryKey;
 
   function getCurrentLocation() {
-    var path = getHashPath();
+    let path = getHashPath();
     
-    var key, state;
+    let key, state;
     if (queryKey) {
       key = getQueryStringValueFromPath(path, queryKey);
       path = stripQueryStringValueFromPath(path, queryKey);
@@ -87,12 +87,12 @@ function createHashHistory(options={}) {
   }
 
   function finishTransition(location) {
-    var { pathname, search, state, action, key } = location;
+    let { pathname, search, state, action, key } = location;
 
     if (action === POP)
       return; // Nothing to do.
 
-    var path = pathname + search;
+    let path = pathname + search;
 
     if (queryKey)
       path = addQueryStringValueToPath(path, queryKey, key);
@@ -119,20 +119,20 @@ function createHashHistory(options={}) {
     }
   }
 
-  var history = createDOMHistory({
+  let history = createDOMHistory({
     ...options,
     getCurrentLocation,
     finishTransition,
     saveState
   });
 
-  var listenerCount = 0, stopHashChangeListener;
+  let listenerCount = 0, stopHashChangeListener;
 
   function listen(listener) {
     if (++listenerCount === 1)
       stopHashChangeListener = startHashChangeListener(history);
 
-    var unlisten = history.listen(listener);
+    let unlisten = history.listen(listener);
 
     return function () {
       unlisten();
@@ -160,7 +160,7 @@ function createHashHistory(options={}) {
     history.replaceState(state, path);
   }
 
-  var goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash();
+  let goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash();
 
   function go(n) {
     warning(
