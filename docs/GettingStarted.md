@@ -11,11 +11,11 @@ Once you get a `history` object, use `history.listen` to be notified when [the `
 ```js
 import { createHistory } from 'history'
 
-var history = createHistory()
+let history = createHistory()
 
 // Listen for changes to the current location. The
 // listener is called once immediately.
-var unlisten = history.listen(function (location) {
+let unlisten = history.listen(function (location) {
   console.log(location.pathname)
 })
 
@@ -56,7 +56,7 @@ To prevent the user from navigating away from a page, or to prompt them before t
 Additionally, `history` objects can be used to create URL paths and/or `href`s for `<a>` tags that link to various places in your app. This is useful when using hash history to prefix URLs with a `#` or when using [query support](QuerySupport.md) to automatically build query strings.
 
 ```js
-var href = history.createHref('/the/path')
+let href = history.createHref('/the/path')
 ```
 
 ### Minimizing Your Build

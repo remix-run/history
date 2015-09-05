@@ -6,10 +6,10 @@ Support for parsing and serializing [URL queries](Terms.md#query) is provided by
 import { createHistory, useQueries } from 'history'
 
 // Use the built-in query parsing/serialization.
-var history = useQueries(createHistory)()
+let history = useQueries(createHistory)()
 
 // Use custom query parsing/serialization.
-var history = useQueries(createHistory)({
+let history = useQueries(createHistory)({
   parseQueryString: function (queryString) {
     return qs.parse(queryString)
   },

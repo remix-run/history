@@ -8,12 +8,12 @@ HTML5 gives us the `pushState` method and the `popstate` event, but in older bro
 import createHistory from 'history/lib/createHashHistory'
 
 // Use _key instead of _k.
-var history = createHistory({
+let history = createHistory({
   queryKey: '_key'
 })
 
 // Opt-out of persistent state, not recommended.
-var history = createHistory({
+let history = createHistory({
   queryKey: false
 })
 ```

@@ -19,5 +19,5 @@ You may occasionally need to create a `location` object, either for testing or w
 ```js
 import createLocation from 'history/lib/createLocation'
 
-var location = createLocation('/a/path?a=query', { the: 'state' })
+let location = createLocation('/a/path?a=query', { the: 'state' })
 ```

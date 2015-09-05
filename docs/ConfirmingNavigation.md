@@ -24,7 +24,7 @@ Note: **If you do provide a `callback` argument, the transition will not proceed
 In browsers, `history` uses [`window.confirm`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm) by default to display confirmation messages to users. However, you can provide your own custom confirmation dialog box using the `getUserConfirmation` hook when you create your `history` object.
 
 ```js
-var history = createHistory({
+let history = createHistory({
   getUserConfirmation: function (message, callback) {
     callback(window.confirm(message)) // The default behavior
   }
@@ -38,7 +38,7 @@ If you need to prevent a browser window or tab from closing, `history` provides 
 ```js
 import { createHistory, useBeforeUnload } from 'history'
 
-var history = useBeforeUnload(createHistory)()
+let history = useBeforeUnload(createHistory)()
 
 history.registerBeforeUnloadHook(function () {
   return 'Are you sure you want to leave this page?'
