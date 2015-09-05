@@ -1,54 +1,54 @@
-import { canUseDOM } from './ExecutionEnvironment';
-import { addEventListener, removeEventListener } from './DOMUtils';
+import { canUseDOM } from './ExecutionEnvironment'
+import { addEventListener, removeEventListener } from './DOMUtils'
 
 function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
   function listener(event) {
-    let message = getBeforeUnloadPromptMessage();
+    let message = getBeforeUnloadPromptMessage()
 
     if (typeof message === 'string') {
-      (event || window.event).returnValue = message;
-      return message;
+      (event || window.event).returnValue = message
+      return message
     }
   }
 
-  addEventListener(window, 'beforeunload', listener);
+  addEventListener(window, 'beforeunload', listener)
 
   return function () {
-    removeEventListener(window, 'beforeunload', listener);
-  };
+    removeEventListener(window, 'beforeunload', listener)
+  }
 }
 
 function useBeforeUnload(createHistory) {
   return function (options) {
-    let history = createHistory(options);
+    let history = createHistory(options)
 
-    let stopBeforeUnloadListener;
-    let beforeUnloadHooks = [];
+    let stopBeforeUnloadListener
+    let beforeUnloadHooks = []
 
     function getBeforeUnloadPromptMessage() {
-      let message;
+      let message
 
       for (let i = 0, len = beforeUnloadHooks.length; message == null && i < len; ++i)
-        message = beforeUnloadHooks[i].call();
+        message = beforeUnloadHooks[i].call()
 
-      return message;
+      return message
     }
 
     function registerBeforeUnloadHook(hook) {
       if (canUseDOM && beforeUnloadHooks.indexOf(hook) === -1) {
-        beforeUnloadHooks.push(hook);
+        beforeUnloadHooks.push(hook)
         
         if (beforeUnloadHooks.length === 1)
-          stopBeforeUnloadListener = startBeforeUnloadListener(getBeforeUnloadPromptMessage);
+          stopBeforeUnloadListener = startBeforeUnloadListener(getBeforeUnloadPromptMessage)
       }
     }
 
     function unregisterBeforeUnloadHook(hook) {
       if (beforeUnloadHooks.length > 0) {
-        beforeUnloadHooks = beforeUnloadHooks.filter(item => item !== hook);
+        beforeUnloadHooks = beforeUnloadHooks.filter(item => item !== hook)
 
         if (beforeUnloadHooks.length === 0)
-          stopBeforeUnloadListener();
+          stopBeforeUnloadListener()
       }
     }
 
@@ -56,8 +56,8 @@ function useBeforeUnload(createHistory) {
       ...history,
       registerBeforeUnloadHook,
       unregisterBeforeUnloadHook
-    };
-  };
+    }
+  }
 }
 
-export default useBeforeUnload;
+export default useBeforeUnload

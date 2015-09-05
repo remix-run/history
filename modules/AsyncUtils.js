@@ -1,22 +1,22 @@
 export function loopAsync(turns, work, callback) {
-  let currentTurn = 0;
-  let isDone = false;
+  let currentTurn = 0
+  let isDone = false
 
   function done() {
-    isDone = true;
-    callback.apply(this, arguments);
+    isDone = true
+    callback.apply(this, arguments)
   }
 
   function next() {
     if (isDone)
-      return;
+      return
 
     if (currentTurn < turns) {
-      work.call(this, currentTurn++, next, done);
+      work.call(this, currentTurn++, next, done)
     } else {
-      done.apply(this, arguments);
+      done.apply(this, arguments)
     }
   }
 
-  next();
+  next()
 }

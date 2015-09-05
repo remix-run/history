@@ -17,7 +17,7 @@ Support for query string parsing is provided using the [`useQueries` module](Que
 You may occasionally need to create a `location` object, either for testing or when using `history` in a stateless environment (like a server). `history` exposes the `createLocation` API for this purpose.
 
 ```js
-import createLocation from 'history/lib/createLocation';
+import createLocation from 'history/lib/createLocation'
 
-var location = createLocation('/a/path?a=query', { the: 'state' });
+var location = createLocation('/a/path?a=query', { the: 'state' })
 ```

@@ -1,97 +1,97 @@
-import expect from 'expect';
-import { PUSH, REPLACE, POP } from '../Actions';
-import useQueries from '../useQueries';
-import execSteps from './execSteps';
+import expect from 'expect'
+import { PUSH, REPLACE, POP } from '../Actions'
+import useQueries from '../useQueries'
+import execSteps from './execSteps'
 
 function stripHash(path) {
-  return path.replace(/^#/, '');
+  return path.replace(/^#/, '')
 }
 
 function describeQueries(createHistory) {
   describe('query serialization', function () {
-    let history, unlisten;
+    let history, unlisten
     beforeEach(function () {
       history = useQueries(createHistory)({
         parseQueryString(queryString) {
-          return 'PARSE_QUERY_STRING';
+          return 'PARSE_QUERY_STRING'
         },
         stringifyQuery(query) {
-          return 'STRINGIFY_QUERY';
+          return 'STRINGIFY_QUERY'
         }
-      });
-    });
+      })
+    })
 
     afterEach(function () {
       if (unlisten)
-        unlisten();
-    });
+        unlisten()
+    })
 
     describe('in pushState', function () {
       it('works', function (done) {
         let steps = [
           function (location) {
-            expect(location.pathname).toEqual('/');
-            expect(location.search).toEqual('');
-            expect(location.query).toEqual('PARSE_QUERY_STRING');
-            expect(location.state).toEqual(null);
-            expect(location.action).toEqual(POP);
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
 
-            history.pushState({ the: 'state' }, '/home', { the: 'query' });
+            history.pushState({ the: 'state' }, '/home', { the: 'query' })
           },
           function (location) {
-            expect(location.pathname).toEqual('/home');
-            expect(location.search).toEqual('?STRINGIFY_QUERY');
-            expect(location.query).toEqual('PARSE_QUERY_STRING');
-            expect(location.state).toEqual({ the: 'state' });
-            expect(location.action).toEqual(PUSH);
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?STRINGIFY_QUERY')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
           }
-        ];
+        ]
 
-        unlisten = history.listen(execSteps(steps, done));
-      });
-    });
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
 
     describe('in replaceState', function () {
       it('works', function (done) {
         let steps = [
           function (location) {
-            expect(location.pathname).toEqual('/');
-            expect(location.search).toEqual('');
-            expect(location.query).toEqual('PARSE_QUERY_STRING');
-            expect(location.state).toEqual(null);
-            expect(location.action).toEqual(POP);
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
 
-            history.replaceState({ the: 'state' }, '/home', { the: 'query' });
+            history.replaceState({ the: 'state' }, '/home', { the: 'query' })
           },
           function (location) {
-            expect(location.pathname).toEqual('/home');
-            expect(location.search).toEqual('?STRINGIFY_QUERY');
-            expect(location.query).toEqual('PARSE_QUERY_STRING');
-            expect(location.state).toEqual({ the: 'state' });
-            expect(location.action).toEqual(REPLACE);
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?STRINGIFY_QUERY')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(REPLACE)
           }
-        ];
+        ]
 
-        unlisten = history.listen(execSteps(steps, done));
-      });
-    });
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
 
     describe('in createPath', function () {
       it('works', function () {
         expect(
           history.createPath('/the/path', { the: 'query' })
-        ).toEqual('/the/path?STRINGIFY_QUERY');
-      });
-    });
+        ).toEqual('/the/path?STRINGIFY_QUERY')
+      })
+    })
 
     describe('in createHref', function () {
       it('works', function () {
         expect(
           stripHash(history.createHref('/the/path', { the: 'query' }))
-        ).toEqual('/the/path?STRINGIFY_QUERY');
-      });
-    });
-  });
+        ).toEqual('/the/path?STRINGIFY_QUERY')
+      })
+    })
+  })
 }
 
-export default describeQueries;
+export default describeQueries

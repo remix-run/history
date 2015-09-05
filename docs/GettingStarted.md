@@ -9,18 +9,18 @@ The first thing you'll need to do is create a [history object](Terms.md#history)
 Once you get a `history` object, use `history.listen` to be notified when [the `location`](Location.md) changes.
 
 ```js
-import { createHistory } from 'history';
+import { createHistory } from 'history'
 
-var history = createHistory();
+var history = createHistory()
 
 // Listen for changes to the current location. The
 // listener is called once immediately.
 var unlisten = history.listen(function (location) {
-  console.log(location.pathname);
-});
+  console.log(location.pathname)
+})
 
 // When you're finished, stop the listener.
-unlisten();
+unlisten()
 ```
 
 ### Navigation
@@ -38,15 +38,15 @@ The [`path`](Terms.md#path) argument to `pushState` and `replaceState` represent
 
 ```js
 // Push a new entry onto the history stack.
-history.pushState({ some: 'state' }, '/home');
+history.pushState({ some: 'state' }, '/home')
 
 // Replace the current entry on the history stack.
-history.replaceState({ some: 'other state' }, '/profile');
+history.replaceState({ some: 'other state' }, '/profile')
 
 // Go back to the previous history entry. The following
 // two lines are synonymous.
-history.go(-1);
-history.goBack();
+history.go(-1)
+history.goBack()
 ```
 
 To prevent the user from navigating away from a page, or to prompt them before they do, see the documentation on [confirming navigation](ConfirmingNavigation.md).
@@ -56,7 +56,7 @@ To prevent the user from navigating away from a page, or to prompt them before t
 Additionally, `history` objects can be used to create URL paths and/or `href`s for `<a>` tags that link to various places in your app. This is useful when using hash history to prefix URLs with a `#` or when using [query support](QuerySupport.md) to automatically build query strings.
 
 ```js
-var href = history.createHref('/the/path');
+var href = history.createHref('/the/path')
 ```
 
 ### Minimizing Your Build
@@ -65,11 +65,11 @@ Using the main `history` module is a great way to get up and running quickly. Ho
 
 ```js
 // Browser history
-import createHistory from 'history/lib/createBrowserHistory';
+import createHistory from 'history/lib/createBrowserHistory'
 
 // Hash history
-import createHistory from 'history/lib/createHashHistory';
+import createHistory from 'history/lib/createHashHistory'
 
 // Memory history
-import createHistory from 'history/lib/createMemoryHistory';
+import createHistory from 'history/lib/createMemoryHistory'
 ```

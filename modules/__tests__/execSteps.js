@@ -1,20 +1,20 @@
 function execSteps(steps, done) {
-  let index = 0;
+  let index = 0
 
   return function () {
     if (steps.length === 0) {
-      done();
+      done()
     } else {
       try {
-        steps[index++].apply(this, arguments);
+        steps[index++].apply(this, arguments)
 
         if (index === steps.length)
-          done();
+          done()
       } catch (error) {
-        done(error);
+        done(error)
       }
     }
-  };
+  }
 }
 
-export default execSteps;
+export default execSteps

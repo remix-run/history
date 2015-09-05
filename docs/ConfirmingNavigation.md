@@ -5,8 +5,8 @@ Sometimes you may want to prevent the user from going to a different page. For e
 ```js
 history.registerTransitionHook(function (location) {
   if (input.value !== '')
-    return 'Are you sure you want to leave this page?';
-});
+    return 'Are you sure you want to leave this page?'
+})
 ```
 
 You can also simply `return false` to prevent a [transition](Terms.md#transition).
@@ -15,8 +15,8 @@ If your transition hook needs to execute asynchronously, you can provide a secon
 
 ```js
 history.registerTransitionHook(function (location, callback) {
-  doSomethingAsync().then(callback);
-});
+  doSomethingAsync().then(callback)
+})
 ```
 
 Note: **If you do provide a `callback` argument, the transition will not proceed until you call it (i.e. listeners will not be notified of the new `location`)! If your app is slow for some reason, this could lead to a non-responsive UI.**
@@ -26,9 +26,9 @@ In browsers, `history` uses [`window.confirm`](https://developer.mozilla.org/en-
 ```js
 var history = createHistory({
   getUserConfirmation: function (message, callback) {
-    callback(window.confirm(message)); // The default behavior
+    callback(window.confirm(message)) // The default behavior
   }
-});
+})
 ```
 
 ### The `beforeunload` Event
@@ -36,13 +36,13 @@ var history = createHistory({
 If you need to prevent a browser window or tab from closing, `history` provides the `useBeforeUnload` enhancer function.
 
 ```js
-import { createHistory, useBeforeUnload } from 'history';
+import { createHistory, useBeforeUnload } from 'history'
 
-var history = useBeforeUnload(createHistory)();
+var history = useBeforeUnload(createHistory)()
 
 history.registerBeforeUnloadHook(function () {
-  return 'Are you sure you want to leave this page?';
-});
+  return 'Are you sure you want to leave this page?'
+})
 ```
 
 Note that because of the nature of the `beforeunload` event all hooks must `return` synchronously. `history` runs all hooks in the order they were registered and displays the first message that is returned.

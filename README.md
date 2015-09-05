@@ -15,20 +15,20 @@
 A "history" encapsulates navigation between different screens in your app, and notifies listeners when the current screen changes.
 
 ```js
-import { createHistory } from 'history';
+import { createHistory } from 'history'
 
-var history = createHistory();
+let history = createHistory()
 
 // Listen for changes to the current location. The
 // listener is called once immediately.
-var unlisten = history.listen(function (location) {
-  console.log(location.pathname);
-});
+let unlisten = history.listen(function (location) {
+  console.log(location.pathname)
+})
 
-history.pushState({ the: 'state' }, '/the/path?a=query');
+history.pushState({ the: 'state' }, '/the/path?a=query')
 
 // When you're finished, stop the listener.
-unlisten();
+unlisten()
 ```
 
 Read more about getting started [in the documentation](http://rackt.github.io/history/stable/GettingStarted.html)!

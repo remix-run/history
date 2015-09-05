@@ -1,142 +1,142 @@
-import assert from 'assert';
-import expect from 'expect';
-import { PUSH, POP } from '../Actions';
-import { supportsGoWithoutReloadUsingHash } from '../DOMUtils';
-import createHashHistory from '../createHashHistory';
-import describeInitialLocation from './describeInitialLocation';
-import describeTransitions from './describeTransitions';
-import describePushState from './describePushState';
-import describeReplaceState from './describeReplaceState';
-import describeQueries from './describeQueries';
-import describeSetState from './describeSetState';
-import describeGo from './describeGo';
-import execSteps from './execSteps';
+import assert from 'assert'
+import expect from 'expect'
+import { PUSH, POP } from '../Actions'
+import { supportsGoWithoutReloadUsingHash } from '../DOMUtils'
+import createHashHistory from '../createHashHistory'
+import describeInitialLocation from './describeInitialLocation'
+import describeTransitions from './describeTransitions'
+import describePushState from './describePushState'
+import describeReplaceState from './describeReplaceState'
+import describeQueries from './describeQueries'
+import describeSetState from './describeSetState'
+import describeGo from './describeGo'
+import execSteps from './execSteps'
 
 function describeStatePersistence(createHistory) {
   describe('when the user does not want to persist a state', function () {
-    let history, unlisten;
+    let history, unlisten
     beforeEach(function () {
-      history = createHistory({ queryKey: false });
-    });
+      history = createHistory({ queryKey: false })
+    })
 
     afterEach(function () {
       if (unlisten)
-        unlisten();
-    });
+        unlisten()
+    })
 
     it('forgets state across transitions', function (done) {
       let steps = [
         function (location) {
-          expect(location.pathname).toEqual('/');
-          expect(location.search).toEqual('');
-          expect(location.state).toEqual(null);
-          expect(location.action).toEqual(POP);
+          expect(location.pathname).toEqual('/')
+          expect(location.search).toEqual('')
+          expect(location.state).toEqual(null)
+          expect(location.action).toEqual(POP)
 
-          history.pushState(null, '/home?the=query');
+          history.pushState(null, '/home?the=query')
         },
         function (location) {
-          expect(location.pathname).toEqual('/home');
-          expect(location.search).toEqual('?the=query');
-          expect(location.state).toEqual(null);
-          expect(location.action).toEqual(PUSH);
+          expect(location.pathname).toEqual('/home')
+          expect(location.search).toEqual('?the=query')
+          expect(location.state).toEqual(null)
+          expect(location.action).toEqual(PUSH)
 
-          history.goBack();
+          history.goBack()
         },
         function (location) {
-          expect(location.pathname).toEqual('/');
-          expect(location.search).toEqual('');
-          expect(location.state).toEqual(null);
-          expect(location.action).toEqual(POP);
+          expect(location.pathname).toEqual('/')
+          expect(location.search).toEqual('')
+          expect(location.state).toEqual(null)
+          expect(location.action).toEqual(POP)
 
-          history.goForward();
+          history.goForward()
         },
         function (location) {
-          expect(location.pathname).toEqual('/home');
-          expect(location.search).toEqual('?the=query');
-          expect(location.state).toEqual(null); // State is missing.
-          expect(location.action).toEqual(POP);
+          expect(location.pathname).toEqual('/home')
+          expect(location.search).toEqual('?the=query')
+          expect(location.state).toEqual(null) // State is missing.
+          expect(location.action).toEqual(POP)
         }
-      ];
+      ]
 
-      unlisten = history.listen(execSteps(steps, done));
-    });
-  });
+      unlisten = history.listen(execSteps(steps, done))
+    })
+  })
 
   describe('when the user wants to persist state', function () {
-    let history, unlisten;
+    let history, unlisten
     beforeEach(function () {
-      history = createHistory({ queryKey: 'a' });
-    });
+      history = createHistory({ queryKey: 'a' })
+    })
 
     afterEach(function () {
       if (unlisten)
-        unlisten();
-    });
+        unlisten()
+    })
 
     it('remembers state across transitions', function (done) {
       let steps = [
         function (location) {
-          expect(location.pathname).toEqual('/');
-          expect(location.search).toEqual('');
-          expect(location.state).toEqual(null);
-          expect(location.action).toEqual(POP);
+          expect(location.pathname).toEqual('/')
+          expect(location.search).toEqual('')
+          expect(location.state).toEqual(null)
+          expect(location.action).toEqual(POP)
 
-          history.pushState({ the: 'state' }, '/home?the=query');
+          history.pushState({ the: 'state' }, '/home?the=query')
         },
         function (location) {
-          expect(location.pathname).toEqual('/home');
-          expect(location.search).toEqual('?the=query');
-          expect(location.state).toEqual({ the: 'state' });
-          expect(location.action).toEqual(PUSH);
+          expect(location.pathname).toEqual('/home')
+          expect(location.search).toEqual('?the=query')
+          expect(location.state).toEqual({ the: 'state' })
+          expect(location.action).toEqual(PUSH)
 
-          history.goBack();
+          history.goBack()
         },
         function (location) {
-          expect(location.pathname).toEqual('/');
-          expect(location.search).toEqual('');
-          expect(location.state).toEqual(null);
-          expect(location.action).toEqual(POP);
+          expect(location.pathname).toEqual('/')
+          expect(location.search).toEqual('')
+          expect(location.state).toEqual(null)
+          expect(location.action).toEqual(POP)
 
-          history.goForward();
+          history.goForward()
         },
         function (location) {
-          expect(location.pathname).toEqual('/home');
-          expect(location.search).toEqual('?the=query');
-          expect(location.state).toEqual({ the: 'state' }); // State is present.
-          expect(location.action).toEqual(POP);
+          expect(location.pathname).toEqual('/home')
+          expect(location.search).toEqual('?the=query')
+          expect(location.state).toEqual({ the: 'state' }) // State is present.
+          expect(location.action).toEqual(POP)
         }
-      ];
+      ]
 
-      unlisten = history.listen(execSteps(steps, done));
-    });
-  });
+      unlisten = history.listen(execSteps(steps, done))
+    })
+  })
 }
 
 describe('hash history', function () {
   beforeEach(function () {
     if (window.location.hash !== '')
-      window.location.hash = '';
-  });
+      window.location.hash = ''
+  })
 
-  describeInitialLocation(createHashHistory);
-  describeTransitions(createHashHistory);
-  describePushState(createHashHistory);
-  describeReplaceState(createHashHistory);
-  describeQueries(createHashHistory);
-  describeSetState(createHashHistory);
+  describeInitialLocation(createHashHistory)
+  describeTransitions(createHashHistory)
+  describePushState(createHashHistory)
+  describeReplaceState(createHashHistory)
+  describeQueries(createHashHistory)
+  describeSetState(createHashHistory)
 
   if (supportsGoWithoutReloadUsingHash()) {
-    describeGo(createHashHistory);
-    describeStatePersistence(createHashHistory);
+    describeGo(createHashHistory)
+    describeStatePersistence(createHashHistory)
   } else {
     describe.skip(null, function () {
-      describeGo(createHashHistory);
-      describeStatePersistence(createHashHistory);
-    });
+      describeGo(createHashHistory)
+      describeStatePersistence(createHashHistory)
+    })
   }
 
   it('knows how to make hrefs', function () {
-    let history = createHashHistory();
-    expect(history.createHref('/a/path')).toEqual('#/a/path');
-  });
-});
+    let history = createHashHistory()
+    expect(history.createHref('/a/path')).toEqual('#/a/path')
+  })
+})
