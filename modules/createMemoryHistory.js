@@ -117,7 +117,7 @@ function createMemoryHistory(options={}) {
 
         // if we are not on the top of stack
         // remove rest and push new
-        if (current < (entries.length - 1)) {
+        if (current < entries.length) {
           entries.splice(current)
         }
 
