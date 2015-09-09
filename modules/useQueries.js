@@ -8,6 +8,10 @@ function defaultParseQueryString(queryString) {
   return qs.parse(queryString)
 }
 
+/**
+ * Returns a new createHistory function that may be used to create
+ * history objects that know how to handle URL queries.
+ */
 function useQueries(createHistory) {
   return function (options={}) {
     let { stringifyQuery, parseQueryString, ...historyOptions } = options

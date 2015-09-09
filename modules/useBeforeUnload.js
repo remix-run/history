@@ -18,6 +18,11 @@ function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
   }
 }
 
+/**
+ * Returns a new createHistory function that can be used to create
+ * history objects that know how to use the beforeunload event in web
+ * browsers to cancel navigation.
+ */
 function useBeforeUnload(createHistory) {
   return function (options) {
     let history = createHistory(options)
