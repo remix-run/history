@@ -82,6 +82,12 @@ function describeQueries(createHistory) {
           history.createPath('/the/path', { the: 'query' })
         ).toEqual('/the/path?STRINGIFY_QUERY')
       })
+
+      it('does not strip trailing slash', function () {
+        expect(
+          history.createPath('/the/path/', { the: 'query' })
+        ).toEqual('/the/path/?STRINGIFY_QUERY')
+      })
     })
 
     describe('in createHref', function () {
