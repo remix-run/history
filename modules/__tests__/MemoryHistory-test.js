@@ -53,6 +53,13 @@ describe('memory history', function () {
       expect(function () {
         history.goForward()
       }).toThrow(/Cannot go\(\d+\) there is not enough history/)
+
+      history.goBack()
+      history.pushState({ id: 6 }, '/6')
+
+      expect(function () {
+        history.goForward()
+      }).toThrow(/Cannot go\(\d+\) there is not enough history/)
     })
   })
 })
