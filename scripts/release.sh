@@ -7,7 +7,7 @@ update_version() {
 
 validate_semver() {
   if ! [[ $1 =~ ^[0-9]\.[0-9]+\.[0-9](-.+)? ]]; then
-    echo "Version $1 is not valid! It must be a valid semver string like 1.0.2 or 2.3.0-beta.1"
+    echo "Version $1 is not valid! It must be a valid semver string like 1.0.2 or 2.3.0-beta1"
     exit 1
   fi
 }
@@ -31,7 +31,6 @@ npm run build-min
 
 echo "gzipped, the UMD build is `gzip -c lib/umd/History.min.js | wc -c | sed -e 's/^[[:space:]]*//'` bytes"
 
-git add -A lib
 git commit -am "Version $next_version"
 
 git tag $next_ref
