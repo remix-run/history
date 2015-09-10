@@ -10,8 +10,8 @@
   "bugs": "https://github.com/rackt/history/issues",
   "scripts": {
     "build": "babel ./modules -d lib --ignore '__tests__'",
-    "build-umd": "NODE_ENV=production webpack modules/index.js lib/umd/History.js",
-    "build-min": "NODE_ENV=production webpack -p modules/index.js lib/umd/History.min.js",
+    "build-umd": "NODE_ENV=production webpack modules/index.js umd/History.js",
+    "build-min": "NODE_ENV=production webpack -p modules/index.js umd/History.min.js",
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "test": "eslint modules && karma start",
     "prepublish": "npm run build"
