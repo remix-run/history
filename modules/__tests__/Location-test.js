@@ -8,6 +8,11 @@ describe('a location', function () {
     expect(location.pathname).toEqual('/home')
   })
 
+  it('knows its hash', function () {
+    let location = createLocation('/home#the-hash')
+    expect(location.hash).toEqual('#the-hash')
+  })
+
   it('knows its search string', function () {
     let location = createLocation('/home?the=query')
     expect(location.search).toEqual('?the=query')

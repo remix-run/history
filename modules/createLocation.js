@@ -19,15 +19,20 @@ function extractPath(string) {
 function createLocation(path='/', state=null, action=POP, key=null) {
   path = extractPath(path)
 
-  let index = path.indexOf('?')
+  let pathname = path
+  let search = ''
+  let hash = ''
 
-  let pathname, search
-  if (index !== -1) {
-    pathname = path.substring(0, index)
-    search = path.substring(index)
-  } else {
-    pathname = path
-    search = ''
+  let hashIndex = path.indexOf('#')
+  if (hashIndex !== -1) {
+    pathname = path.substring(0, hashIndex)
+    hash = path.substring(hashIndex)
+  }
+
+  let searchIndex = path.indexOf('?')
+  if (searchIndex !== -1) {
+    pathname = path.substring(0, searchIndex)
+    search = path.substring(searchIndex)
   }
 
   if (pathname === '')
@@ -36,6 +41,7 @@ function createLocation(path='/', state=null, action=POP, key=null) {
   return {
     pathname,
     search,
+    hash,
     state,
     action,
     key
