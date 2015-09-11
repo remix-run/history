@@ -13,6 +13,12 @@ describe('a location', function () {
     expect(location.hash).toEqual('#the-hash')
   })
 
+  it('knows its hash and search together', function () {
+    let location = createLocation('/home?the=query#the-hash')
+    expect(location.search).toEqual('?the=query')
+    expect(location.hash).toEqual('#the-hash')
+  })
+
   it('knows its search string', function () {
     let location = createLocation('/home?the=query')
     expect(location.search).toEqual('?the=query')

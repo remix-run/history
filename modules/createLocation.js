@@ -23,16 +23,16 @@ function createLocation(path='/', state=null, action=POP, key=null) {
   let search = ''
   let hash = ''
 
-  let hashIndex = path.indexOf('#')
+  let hashIndex = pathname.indexOf('#')
   if (hashIndex !== -1) {
-    pathname = path.substring(0, hashIndex)
-    hash = path.substring(hashIndex)
+    hash = pathname.substring(hashIndex)
+    pathname = pathname.substring(0, hashIndex)
   }
 
-  let searchIndex = path.indexOf('?')
+  let searchIndex = pathname.indexOf('?')
   if (searchIndex !== -1) {
-    pathname = path.substring(0, searchIndex)
-    search = path.substring(searchIndex)
+    search = pathname.substring(searchIndex)
+    pathname = pathname.substring(0, searchIndex)
   }
 
   if (pathname === '')
