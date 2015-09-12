@@ -1,3 +1,4 @@
+/*eslint-env mocha */
 import expect from 'expect'
 import createMemoryHistory from '../createMemoryHistory'
 import describeInitialLocation from './describeInitialLocation'

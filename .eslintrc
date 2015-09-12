@@ -1,13 +1,23 @@
 {
+  "extends": "eslint:recommended",
   "ecmaFeatures": {
+    "jsx": true,
     "modules": true
   },
   "env": {
+    "browser": true,
+    "node": true,
     "es6": true
   },
   "parser": "babel-eslint",
   "rules": {
     "indent": [2, 2, {"SwitchCase": 1}],
+    "react/prop-types": 2,
+    "react/jsx-uses-react": 1,
+    "no-empty": 0,
     "strict": 0
-  }
+  },
+  "plugins": [
+    "react"
+  ]
 }

@@ -1,4 +1,4 @@
-import assert from 'assert'
+/*eslint-env mocha */
 import expect from 'expect'
 import { PUSH, POP } from '../Actions'
 import { supportsGoWithoutReloadUsingHash } from '../DOMUtils'

@@ -1,3 +1,4 @@
+/*eslint-env mocha */
 import { supportsHistory } from '../DOMUtils'
 import createBrowserHistory from '../createBrowserHistory'
 import describeInitialLocation from './describeInitialLocation'

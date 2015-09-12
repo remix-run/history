@@ -14,6 +14,7 @@
     "build-min": "NODE_ENV=production webpack -p modules/index.js umd/History.min.js",
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "test": "eslint modules && karma start",
+    "lint": "eslint modules",
     "prepublish": "npm run build"
   },
   "authors": [
@@ -31,7 +32,8 @@
     "babel-core": "^5.4.7",
     "babel-eslint": "^3.1.23",
     "babel-loader": "^5.0.0",
-    "eslint": "^1.0.0",
+    "eslint": "1.4.1",
+    "eslint-plugin-react": "3.3.2",
     "expect": "^1.8.0",
     "karma": "^0.13.3",
     "karma-browserstack-launcher": "^0.1.3",

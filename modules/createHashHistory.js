@@ -1,6 +1,6 @@
 import warning from 'warning'
 import invariant from 'invariant'
-import { PUSH, REPLACE, POP } from './Actions'
+import { PUSH, POP } from './Actions'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener, getHashPath, replaceHashPath, supportsGoWithoutReloadUsingHash } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'

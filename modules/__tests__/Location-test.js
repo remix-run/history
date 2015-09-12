@@ -1,3 +1,4 @@
+/*eslint-env mocha */
 import expect from 'expect'
 import createLocation from '../createLocation'
 import { POP } from '../Actions'

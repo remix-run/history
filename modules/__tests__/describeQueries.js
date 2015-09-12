@@ -1,3 +1,4 @@
+/*eslint-env mocha */
 import expect from 'expect'
 import { PUSH, REPLACE, POP } from '../Actions'
 import useQueries from '../useQueries'
@@ -12,10 +13,10 @@ function describeQueries(createHistory) {
     let history, unlisten
     beforeEach(function () {
       history = useQueries(createHistory)({
-        parseQueryString(queryString) {
+        parseQueryString() {
           return 'PARSE_QUERY_STRING'
         },
-        stringifyQuery(query) {
+        stringifyQuery() {
           return 'STRINGIFY_QUERY'
         }
       })
