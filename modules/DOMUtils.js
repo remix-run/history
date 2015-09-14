@@ -27,7 +27,7 @@ export function replaceHashPath(path) {
 }
 
 export function getWindowPath() {
-  return window.location.pathname + window.location.search
+  return window.location.pathname + window.location.search + window.location.hash
 }
 
 export function go(n) {
