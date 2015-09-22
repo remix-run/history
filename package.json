@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "A minimal, functional history implementation for JavaScript",
   "main": "lib/index",
   "repository": {
@@ -13,8 +13,9 @@
     "build-umd": "NODE_ENV=production webpack modules/index.js umd/History.js",
     "build-min": "NODE_ENV=production webpack -p modules/index.js umd/History.min.js",
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
-    "test": "eslint modules && karma start",
+    "test": "npm run lint && karma start",
     "lint": "eslint modules",
+    "postinstall": "node -e \"require('fs').stat('lib', function (e, s) { process.exit(e || !s.isDirectory() ? 1 : 0) })\" || npm run build",
     "prepublish": "npm run build"
   },
   "authors": [
