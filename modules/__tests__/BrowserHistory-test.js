@@ -5,6 +5,7 @@ import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
 import describePushState from './describePushState'
 import describeReplaceState from './describeReplaceState'
+import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
 import describeSetState from './describeSetState'
 import describeGo from './describeGo'
@@ -19,6 +20,7 @@ describe('browser history', function () {
     describeTransitions(createBrowserHistory)
     describePushState(createBrowserHistory)
     describeReplaceState(createBrowserHistory)
+    describeBasename(createBrowserHistory)
     describeQueries(createBrowserHistory)
     describeSetState(createBrowserHistory)
     describeGo(createBrowserHistory)
@@ -28,6 +30,7 @@ describe('browser history', function () {
       describeTransitions(createBrowserHistory)
       describePushState(createBrowserHistory)
       describeReplaceState(createBrowserHistory)
+      describeBasename(createBrowserHistory)
       describeQueries(createBrowserHistory)
       describeSetState(createBrowserHistory)
       describeGo(createBrowserHistory)
