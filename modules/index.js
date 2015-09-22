@@ -3,6 +3,7 @@ export createHashHistory from './createHashHistory'
 export createMemoryHistory from './createMemoryHistory'
 export createLocation from './createLocation'
 
+export useBasename from './useBasename'
 export useBeforeUnload from './useBeforeUnload'
 export useQueries from './useQueries'
 
