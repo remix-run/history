@@ -25,7 +25,7 @@ function useQueries(createHistory) {
 
     function listen(listener) {
       return history.listen(function (location) {
-        if (!location.query)
+        if (location.query == null)
           location.query = parseQueryString(location.search.substring(1))
 
         listener(location)

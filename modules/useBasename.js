@@ -5,10 +5,14 @@ function useBasename(createHistory) {
 
     function listen(listener) {
       return history.listen(function (location) {
-        // When new locations are emitted, remove the
-        // basename from the beginning of the pathname.
-        if (location.pathname.indexOf(basename) === 0)
-          location.pathname = location.pathname.replace(basename, '')
+        if (basename && location.basename == null) {
+          if (location.pathname.indexOf(basename) === 0) {
+            location.pathname = location.pathname.replace(basename, '')
+            location.basename = basename
+          } else {
+            location.basename = ''
+          }
+        }
 
         listener(location)
       })
@@ -24,7 +28,7 @@ function useBasename(createHistory) {
     }
 
     function createPath(path) {
-      return basename + path
+      return basename ? basename + path : path
     }
 
     function createHref(path) {
