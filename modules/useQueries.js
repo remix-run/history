@@ -43,7 +43,7 @@ function useQueries(createHistory) {
     function createPath(pathname, query) {
       let queryString
       if (query == null || (queryString = stringifyQuery(query)) === '')
-        return pathname
+        return history.createPath(pathname)
 
       return history.createPath(
         pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString
