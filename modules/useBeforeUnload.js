@@ -1,5 +1,7 @@
+import warning from 'warning'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener } from './DOMUtils'
+import deprecate from './deprecate'
 
 function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
   function listener(event) {
@@ -39,6 +41,31 @@ function useBeforeUnload(createHistory) {
       return message
     }
 
+    function listenBeforeUnload(hook) {
+      beforeUnloadHooks.push(hook)
+
+      if (beforeUnloadHooks.length === 1) {
+        if (canUseDOM) {
+          stopBeforeUnloadListener = startBeforeUnloadListener(getBeforeUnloadPromptMessage)
+        } else {
+          warning(
+            false,
+            'listenBeforeUnload only works in DOM environments'
+          )
+        }
+      }
+
+      return function () {
+        beforeUnloadHooks = beforeUnloadHooks.filter(item => item !== hook)
+
+        if (beforeUnloadHooks.length === 0 && stopBeforeUnloadListener) {
+          stopBeforeUnloadListener()
+          stopBeforeUnloadListener = null
+        }
+      }
+    }
+
+    // deprecated
     function registerBeforeUnloadHook(hook) {
       if (canUseDOM && beforeUnloadHooks.indexOf(hook) === -1) {
         beforeUnloadHooks.push(hook)
@@ -48,6 +75,7 @@ function useBeforeUnload(createHistory) {
       }
     }
 
+    // deprecated
     function unregisterBeforeUnloadHook(hook) {
       if (beforeUnloadHooks.length > 0) {
         beforeUnloadHooks = beforeUnloadHooks.filter(item => item !== hook)
@@ -59,8 +87,16 @@ function useBeforeUnload(createHistory) {
 
     return {
       ...history,
-      registerBeforeUnloadHook,
-      unregisterBeforeUnloadHook
+      listenBeforeUnload,
+
+      registerBeforeUnloadHook: deprecate(
+        registerBeforeUnloadHook,
+        'registerBeforeUnloadHook is deprecated; use listenBeforeUnload instead'
+      ),
+      unregisterBeforeUnloadHook: deprecate(
+        unregisterBeforeUnloadHook,
+        'unregisterBeforeUnloadHook is deprecated; use the callback returned from listenBeforeUnload instead'
+      )
     }
   }
 }
