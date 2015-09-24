@@ -1,4 +1,5 @@
 import qs from 'qs'
+import runTransitionHook from './runTransitionHook'
 
 function defaultStringifyQuery(query) {
   return qs.stringify(query, { arrayFormat: 'brackets' })
@@ -23,16 +24,14 @@ function useQueries(createHistory) {
     if (typeof parseQueryString !== 'function')
       parseQueryString = defaultParseQueryString
 
-    function listen(listener) {
-      return history.listen(function (location) {
-        if (location.query == null)
-          location.query = parseQueryString(location.search.substring(1))
+    function addQuery(location) {
+      if (location.query == null)
+        location.query = parseQueryString(location.search.substring(1))
 
-        listener(location)
-      })
+      return location
     }
 
-    function addQuery(pathname, query) {
+    function appendQuery(pathname, query) {
       let queryString
       if (query && (queryString = stringifyQuery(query)) !== '')
         return pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString
@@ -40,24 +39,39 @@ function useQueries(createHistory) {
       return pathname
     }
 
+    // Override all read methods with query-aware versions.
+    function listenBefore(hook) {
+      return history.listenBefore(function (location, callback) {
+        runTransitionHook(hook, addQuery(location), callback)
+      })
+    }
+
+    function listen(listener) {
+      return history.listen(function (location) {
+        listener(addQuery(location))
+      })
+    }
+
+    // Override all write methods with query-aware versions.
     function pushState(state, pathname, query) {
-      return history.pushState(state, addQuery(pathname, query))
+      return history.pushState(state, appendQuery(pathname, query))
     }
 
     function replaceState(state, pathname, query) {
-      return history.replaceState(state, addQuery(pathname, query))
+      return history.replaceState(state, appendQuery(pathname, query))
     }
 
     function createPath(pathname, query) {
-      return history.createPath(addQuery(pathname, query))
+      return history.createPath(appendQuery(pathname, query))
     }
 
     function createHref(pathname, query) {
-      return history.createHref(addQuery(pathname, query))
+      return history.createHref(appendQuery(pathname, query))
     }
 
     return {
       ...history,
+      listenBefore,
       listen,
       pushState,
       replaceState,
