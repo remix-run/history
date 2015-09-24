@@ -197,7 +197,7 @@ function createHistory(options={}) {
   }
 
   function createHref(path) {
-    return createPath(path)
+    return path
   }
 
   return {

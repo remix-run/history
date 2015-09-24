@@ -18,21 +18,25 @@ function useBasename(createHistory) {
       })
     }
 
-    // Override all navigation functions with basename-aware versions.
-    function pushState(state, path) {
-      history.pushState(state, createPath(path))
-    }
-
-    function replaceState(state, path) {
-      history.replaceState(state, createPath(path))
-    }
-
-    function createPath(path) {
+    function addBasename(path) {
       return basename ? basename + path : path
     }
 
+    // Override all navigation functions with basename-aware versions.
+    function pushState(state, path) {
+      history.pushState(state, addBasename(path))
+    }
+
+    function replaceState(state, path) {
+      history.replaceState(state, addBasename(path))
+    }
+
+    function createPath(path) {
+      return history.createPath(addBasename(path))
+    }
+
     function createHref(path) {
-      return history.createHref(createPath(path))
+      return history.createHref(addBasename(path))
     }
 
     return {

@@ -32,26 +32,28 @@ function useQueries(createHistory) {
       })
     }
 
+    function addQuery(pathname, query) {
+      let queryString
+      if (query && (queryString = stringifyQuery(query)) !== '')
+        return pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString
+
+      return pathname
+    }
+
     function pushState(state, pathname, query) {
-      return history.pushState(state, createPath(pathname, query))
+      return history.pushState(state, addQuery(pathname, query))
     }
 
     function replaceState(state, pathname, query) {
-      return history.replaceState(state, createPath(pathname, query))
+      return history.replaceState(state, addQuery(pathname, query))
     }
 
     function createPath(pathname, query) {
-      let queryString
-      if (query == null || (queryString = stringifyQuery(query)) === '')
-        return history.createPath(pathname)
-
-      return history.createPath(
-        pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString
-      )
+      return history.createPath(addQuery(pathname, query))
     }
 
     function createHref(pathname, query) {
-      return history.createHref(createPath(pathname, query))
+      return history.createHref(addQuery(pathname, query))
     }
 
     return {
