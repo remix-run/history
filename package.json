@@ -9,7 +9,7 @@
   },
   "bugs": "https://github.com/rackt/history/issues",
   "scripts": {
-    "build": "babel ./modules -d lib --ignore '__tests__'",
+    "build": "babel ./modules --stage 0 --loose all -d lib --ignore '__tests__'",
     "build-umd": "NODE_ENV=production webpack modules/index.js umd/History.js",
     "build-min": "NODE_ENV=production webpack -p modules/index.js umd/History.min.js",
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
