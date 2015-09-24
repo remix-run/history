@@ -35,9 +35,8 @@ A *createHistory enhancer* (or simply a "history enhancer") is a function that a
 ### History
 
     type History = {
+      listenBefore: (hook: TransitionHook) => Function;
       listen: (listener: LocationListener) => Function;
-      registerTransitionHook: (hook: TransitionHook) => void;
-      unregisterTransitionHook: (hook: TransitionHook) => void;
       transitionTo(location: Location) => void;
       pushState(state: LocationState, path: Path) => void;
       replaceState(state: LocationState, path: Path) => void;

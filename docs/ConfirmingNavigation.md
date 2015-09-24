@@ -3,7 +3,7 @@
 Sometimes you may want to prevent the user from going to a different page. For example, if they are halfway finished filling out a long form, and they click the back button, you may want to prompt them to confirm they actually want to leave the page before they lose the information they've already entered. For these cases, `history` lets you register [transition hooks](Terms.md#transitionhook) that return a prompt message you can show the user before the [location](Terms.md#location) changes. For example, you could do something like this:
 
 ```js
-history.registerTransitionHook(function (location) {
+history.listenBefore(function (location) {
   if (input.value !== '')
     return 'Are you sure you want to leave this page?'
 })
@@ -14,7 +14,7 @@ You can also simply `return false` to prevent a [transition](Terms.md#transition
 If your transition hook needs to execute asynchronously, you can provide a second `callback` argument to your transition hook function that you must call when you're done with async work.
 
 ```js
-history.registerTransitionHook(function (location, callback) {
+history.listenBefore(function (location, callback) {
   doSomethingAsync().then(callback)
 })
 ```
@@ -25,7 +25,7 @@ In browsers, `history` uses [`window.confirm`](https://developer.mozilla.org/en-
 
 ```js
 let history = createHistory({
-  getUserConfirmation: function (message, callback) {
+  getUserConfirmation(message, callback) {
     callback(window.confirm(message)) // The default behavior
   }
 })
@@ -40,7 +40,7 @@ import { createHistory, useBeforeUnload } from 'history'
 
 let history = useBeforeUnload(createHistory)()
 
-history.registerBeforeUnloadHook(function () {
+history.listenBeforeUnload(function () {
   return 'Are you sure you want to leave this page?'
 })
 ```
