@@ -73,8 +73,8 @@ function createMemoryHistory(options={}) {
 
   function getCurrentLocation() {
     let entry = entries[current]
-    let { key, pathname, search } = entry
-    let path = pathname + (search || '')
+    let { key, basename, pathname, search } = entry
+    let path = (basename || '') + pathname + (search || '')
 
     let state
     if (key) {
@@ -117,9 +117,8 @@ function createMemoryHistory(options={}) {
 
         // if we are not on the top of stack
         // remove rest and push new
-        if (current < entries.length) {
+        if (current < entries.length)
           entries.splice(current)
-        }
 
         entries.push(location)
         saveState(location.key, location.state)

@@ -59,14 +59,14 @@ function createBrowserHistory(options) {
   }
 
   function finishTransition(location) {
-    let { pathname, search, state, action, key } = location
+    let { basename, pathname, search, state, action, key } = location
 
     if (action === POP)
       return // Nothing to do.
 
     saveState(key, state)
 
-    let path = pathname + search
+    let path = (basename || '') + pathname + search
     let historyState = {
       key
     }
