@@ -1,9 +1,10 @@
-import warning from 'warning'
 import invariant from 'invariant'
 import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import createLocation from './createLocation'
+import runTransitionHook from './runTransitionHook'
+import deprecate from './deprecate'
 
 function createRandomKey(length) {
   return Math.random().toString(36).substr(2, length)
@@ -26,10 +27,18 @@ function createHistory(options={}) {
     keyLength = DefaultKeyLength
 
   let transitionHooks = []
-  let changeListeners = []
-  let location
+
+  function listenBefore(hook) {
+    transitionHooks.push(hook)
+
+    return function () {
+      transitionHooks = transitionHooks.filter(item => item !== hook)
+    }
+  }
 
   let allKeys = []
+  let changeListeners = []
+  let location
 
   function getCurrent() {
     if (pendingLocation && pendingLocation.action === POP) {
@@ -57,16 +66,8 @@ function createHistory(options={}) {
     })
   }
 
-  function addChangeListener(listener) {
-    changeListeners.push(listener)
-  }
-
-  function removeChangeListener(listener) {
-    changeListeners = changeListeners.filter(item => item !== listener)
-  }
-
   function listen(listener) {
-    addChangeListener(listener)
+    changeListeners.push(listener)
 
     if (location) {
       listener(location)
@@ -77,31 +78,7 @@ function createHistory(options={}) {
     }
 
     return function () {
-      removeChangeListener(listener)
-    }
-  }
-
-  function registerTransitionHook(hook) {
-    if (transitionHooks.indexOf(hook) === -1)
-      transitionHooks.push(hook)
-  }
-
-  function unregisterTransitionHook(hook) {
-    transitionHooks = transitionHooks.filter(item => item !== hook)
-  }
-
-  function runTransitionHook(hook, location, callback) {
-    let result = hook(location, callback)
-
-    if (hook.length < 2) {
-      // Assume the hook runs synchronously and automatically
-      // call the callback with the return value.
-      callback(result)
-    } else {
-      warning(
-        result === undefined,
-        'You should not "return" in a transition hook with a callback argument call the callback instead'
-      )
+      changeListeners = changeListeners.filter(item => item !== listener)
     }
   }
 
@@ -200,10 +177,20 @@ function createHistory(options={}) {
     return path
   }
 
+  // deprecated
+  function registerTransitionHook(hook) {
+    if (transitionHooks.indexOf(hook) === -1)
+      transitionHooks.push(hook)
+  }
+
+  // deprecated
+  function unregisterTransitionHook(hook) {
+    transitionHooks = transitionHooks.filter(item => item !== hook)
+  }
+
   return {
+    listenBefore,
     listen,
-    registerTransitionHook,
-    unregisterTransitionHook,
     transitionTo,
     pushState,
     replaceState,
@@ -213,7 +200,16 @@ function createHistory(options={}) {
     goForward,
     createKey,
     createPath,
-    createHref
+    createHref,
+
+    registerTransitionHook: deprecate(
+      registerTransitionHook,
+      'registerTransitionHook is deprecated; use listenBefore instead'
+    ),
+    unregisterTransitionHook: deprecate(
+      unregisterTransitionHook,
+      'unregisterTransitionHook is deprecated; use the callback returned from listenBefore instead'
+    )
   }
 }
 

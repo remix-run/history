@@ -27,7 +27,7 @@ function describeTransitions(createHistory) {
       ]
 
       let nextLocation
-      history.registerTransitionHook(function (location) {
+      history.listenBefore(function (location) {
         nextLocation = location
       })
 
@@ -57,7 +57,7 @@ function describeTransitions(createHistory) {
       ]
 
       let nextLocation
-      history.registerTransitionHook(function (location, callback) {
+      history.listenBefore(function (location, callback) {
         nextLocation = location
         setTimeout(callback)
       })
@@ -79,7 +79,7 @@ function describeTransitions(createHistory) {
         }
       })
 
-      history.registerTransitionHook(function () {
+      history.listenBefore(function () {
         return confirmationMessage
       })
 
@@ -120,7 +120,7 @@ function describeTransitions(createHistory) {
         }
       })
 
-      history.registerTransitionHook(function () {
+      history.listenBefore(function () {
         return confirmationMessage
       })
 
@@ -148,7 +148,7 @@ function describeTransitions(createHistory) {
 
       history = createHistory()
 
-      history.registerTransitionHook(function () {
+      history.listenBefore(function () {
         return false
       })
 
