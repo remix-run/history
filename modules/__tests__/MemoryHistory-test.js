@@ -20,11 +20,11 @@ describe('memory history', function () {
   describeSetState(createMemoryHistory)
   describeGo(createMemoryHistory)
 
-  describe('when using pushState in the middle of the stack', function() {
-    it('clears rest of stack so the user cannot go forward', function() {
+  describe('when using pushState in the middle of the stack', function () {
+    it('clears rest of stack so the user cannot go forward', function () {
       let history = createMemoryHistory(), location
 
-      history.listen(function(loc) {
+      history.listen(function (loc) {
         location = loc
       })
 

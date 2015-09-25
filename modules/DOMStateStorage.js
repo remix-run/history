@@ -1,3 +1,4 @@
+/*eslint-disable no-empty */
 const KeyPrefix = '@@History/'
 
 function createKey(key) {
