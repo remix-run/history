@@ -10,6 +10,9 @@ function useBasename(createHistory) {
         if (location.pathname.indexOf(basename) === 0) {
           location.pathname = location.pathname.substring(basename.length)
           location.basename = basename
+          if (location.pathname === '') {
+            location.pathname = '/';
+          }
         } else {
           location.basename = ''
         }
