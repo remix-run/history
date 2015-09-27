@@ -1,4 +1,3 @@
-import invariant from 'invariant'
 import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
@@ -108,15 +107,11 @@ function createHistory(options={}) {
     if (location && locationsAreEqual(location, nextLocation))
       return // Nothing to do.
 
-    invariant(
-      pendingLocation == null,
-      'transitionTo: Another transition is already in progress'
-    )
-
     pendingLocation = nextLocation
 
     confirmTransitionTo(nextLocation, function (ok) {
-      pendingLocation = null
+      if (pendingLocation !== nextLocation)
+        return // Transition was interrupted.
 
       if (ok) {
         finishTransition(nextLocation)
