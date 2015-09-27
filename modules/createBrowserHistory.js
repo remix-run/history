@@ -35,9 +35,9 @@ function createBrowserHistory(options) {
     } else {
       state = null
       key = history.createKey()
-      if (isSupported) {
+
+      if (isSupported)
         window.history.replaceState({ ...historyState, key }, null, path)
-      }
     }
 
     return createLocation(path, state, undefined, key)
