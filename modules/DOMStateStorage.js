@@ -1,3 +1,5 @@
+import warning from 'warning'
+
 /*eslint-disable no-empty */
 const KeyPrefix = '@@History/'
 
@@ -6,7 +8,14 @@ function createKey(key) {
 }
 
 export function saveState(key, state) {
-  window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+  try {
+    window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+  } catch (error) {
+    if (error.name === 'QuotaExceededError')
+      return warning(null, 'sessionStore is not accessible in incognito mode')
+
+    throw error
+  }
 }
 
 export function readState(key) {
