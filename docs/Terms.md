@@ -110,13 +110,13 @@ A *path* represents a URL path.
 
     type Pathname = string;
 
-A *pathname* is the portion of a URL that describes a hierarchical path, including the preceeding `/`. For example, in `http://example.com/the/path?the=query`, `/the/path` is the pathname. It is synonymous with `window.location.pathname` in web browsers.
+A *pathname* is the portion of a URL that describes a hierarchical path, including the preceding `/`. For example, in `http://example.com/the/path?the=query`, `/the/path` is the pathname. It is synonymous with `window.location.pathname` in web browsers.
 
 ### QueryString
 
     type QueryString = string;
 
-A *query string* is the portion of the URL that follows the [pathname](#pathname), including any preceeding `?`. For example, in `http://example.com/the/path?the=query`, `?the=query` is the query string. It is synonymous with `window.location.search` in web browsers.
+A *query string* is the portion of the URL that follows the [pathname](#pathname), including any preceding `?`. For example, in `http://example.com/the/path?the=query`, `?the=query` is the query string. It is synonymous with `window.location.search` in web browsers.
 
 ### Query
 
