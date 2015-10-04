@@ -3,7 +3,7 @@ import { PUSH, REPLACE, POP } from './Actions'
 import createLocation from './createLocation'
 import createHistory from './createHistory'
 
-function createStorage(entries) {
+function createStateStorage(entries) {
   return entries
     .filter(entry => entry.state)
     .reduce((memo, entry) => {
@@ -61,7 +61,7 @@ function createMemoryHistory(options={}) {
     )
   }
 
-  let storage = createStorage(entries)
+  let storage = createStateStorage(entries)
 
   function saveState(key, state) {
     storage[key] = state
