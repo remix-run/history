@@ -69,6 +69,10 @@ function useQueries(createHistory) {
       return history.createHref(appendQuery(pathname, query))
     }
 
+    function createLocation() {
+      return addQuery(history.createLocation.apply(history, arguments))
+    }
+
     return {
       ...history,
       listenBefore,
@@ -76,7 +80,8 @@ function useQueries(createHistory) {
       pushState,
       replaceState,
       createPath,
-      createHref
+      createHref,
+      createLocation
     }
   }
 }

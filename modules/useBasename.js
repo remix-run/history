@@ -5,7 +5,7 @@ function useBasename(createHistory) {
     let { basename, ...historyOptions } = options
     let history = createHistory(historyOptions)
 
-    function stripBasename(location) {
+    function addBasename(location) {
       if (basename && location.basename == null) {
         if (location.pathname.indexOf(basename) === 0) {
           location.pathname = location.pathname.substring(basename.length)
@@ -21,38 +21,42 @@ function useBasename(createHistory) {
       return location
     }
 
-    function addBasename(path) {
+    function prependBasename(path) {
       return basename ? basename + path : path
     }
 
     // Override all read methods with basename-aware versions.
     function listenBefore(hook) {
       return history.listenBefore(function (location, callback) {
-        runTransitionHook(hook, stripBasename(location), callback)
+        runTransitionHook(hook, addBasename(location), callback)
       })
     }
 
     function listen(listener) {
       return history.listen(function (location) {
-        listener(stripBasename(location))
+        listener(addBasename(location))
       })
     }
 
     // Override all write methods with basename-aware versions.
     function pushState(state, path) {
-      history.pushState(state, addBasename(path))
+      history.pushState(state, prependBasename(path))
     }
 
     function replaceState(state, path) {
-      history.replaceState(state, addBasename(path))
+      history.replaceState(state, prependBasename(path))
     }
 
     function createPath(path) {
-      return history.createPath(addBasename(path))
+      return history.createPath(prependBasename(path))
     }
 
     function createHref(path) {
-      return history.createHref(addBasename(path))
+      return history.createHref(prependBasename(path))
+    }
+
+    function createLocation() {
+      return addBasename(history.createLocation.apply(history, arguments))
     }
 
     return {
@@ -62,7 +66,8 @@ function useBasename(createHistory) {
       pushState,
       replaceState,
       createPath,
-      createHref
+      createHref,
+      createLocation
     }
   }
 }

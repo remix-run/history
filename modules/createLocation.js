@@ -1,4 +1,5 @@
 import warning from 'warning'
+import deprecate from './deprecate'
 import { POP } from './Actions'
 
 function extractPath(string) {
@@ -48,4 +49,7 @@ function createLocation(path='/', state=null, action=POP, key=null) {
   }
 }
 
-export default createLocation
+export default deprecate(
+  createLocation,
+  'createLocation is deprecated; use history.createLocation instead'
+)
