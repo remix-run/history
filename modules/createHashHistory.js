@@ -62,6 +62,8 @@ function createHashHistory(options={}) {
         key = history.createKey()
         replaceHashPath(addQueryStringValueToPath(path, queryKey, key))
       }
+    } else {
+      key = state = null
     }
 
     return history.createLocation(path, state, undefined, key)

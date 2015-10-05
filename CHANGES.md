@@ -1,5 +1,6 @@
 ## HEAD
 
+- Give `location` objects a `key` by default
 - Deprecate `history.setState`
 
 ## [v1.12.0]

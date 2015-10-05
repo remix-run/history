@@ -24,36 +24,6 @@ function extractPath(string) {
   return string.substring(match[0].length)
 }
 
-function createLocation(path='/', state=null, action=POP, key=null) {
-  let pathname = extractPath(path)
-  let search = ''
-  let hash = ''
-
-  let hashIndex = pathname.indexOf('#')
-  if (hashIndex !== -1) {
-    hash = pathname.substring(hashIndex)
-    pathname = pathname.substring(0, hashIndex)
-  }
-
-  let searchIndex = pathname.indexOf('?')
-  if (searchIndex !== -1) {
-    search = pathname.substring(searchIndex)
-    pathname = pathname.substring(0, searchIndex)
-  }
-
-  if (pathname === '')
-    pathname = '/'
-
-  return {
-    pathname,
-    search,
-    hash,
-    state,
-    action,
-    key
-  }
-}
-
 function locationsAreEqual(a, b) {
   return a.pathname === b.pathname &&
     a.search === b.search &&
@@ -201,6 +171,36 @@ function createHistory(options={}) {
 
   function createHref(path) {
     return path
+  }
+
+  function createLocation(path='/', state=null, action=POP, key=createKey()) {
+    let pathname = extractPath(path)
+    let search = ''
+    let hash = ''
+
+    let hashIndex = pathname.indexOf('#')
+    if (hashIndex !== -1) {
+      hash = pathname.substring(hashIndex)
+      pathname = pathname.substring(0, hashIndex)
+    }
+
+    let searchIndex = pathname.indexOf('?')
+    if (searchIndex !== -1) {
+      search = pathname.substring(searchIndex)
+      pathname = pathname.substring(0, searchIndex)
+    }
+
+    if (pathname === '')
+      pathname = '/'
+
+    return {
+      pathname,
+      search,
+      hash,
+      state,
+      action,
+      key
+    }
   }
 
   // deprecated

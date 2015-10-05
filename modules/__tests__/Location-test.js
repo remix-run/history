@@ -10,23 +10,17 @@ describe('a location', function () {
   })
 
   it('knows its pathname', function () {
-    let location = createLocation('/home?the=query')
+    let location = createLocation('/home?the=query#the-hash')
     expect(location.pathname).toEqual('/home')
   })
 
   it('knows its hash', function () {
-    let location = createLocation('/home#the-hash')
-    expect(location.hash).toEqual('#the-hash')
-  })
-
-  it('knows its hash and search together', function () {
     let location = createLocation('/home?the=query#the-hash')
-    expect(location.search).toEqual('?the=query')
     expect(location.hash).toEqual('#the-hash')
   })
 
   it('knows its search string', function () {
-    let location = createLocation('/home?the=query')
+    let location = createLocation('/home?the=query#the-hash')
     expect(location.search).toEqual('?the=query')
   })
 
@@ -40,8 +34,8 @@ describe('a location', function () {
     expect(location.action).toBe(POP)
   })
 
-  it('has null key by default', function () {
+  it('has a key by default', function () {
     let location = createLocation()
-    expect(location.key).toBe(null)
+    expect(location.key).toExist()
   })
 })
