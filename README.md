@@ -8,7 +8,19 @@
 
 ## Installation
 
+Using [npm](https://www.npmjs.org/):
+
     $ npm install history
+
+Then with a module bundler like [webpack](https://webpack.github.io/), use as you would anything else:
+
+```js
+// using an ES6 transpiler, like babel
+import { createHistory } from 'history'
+
+// not using an ES6 transpiler
+var createHistory = require('history').createHistory
+```
 
 ## Basic Usage
 
@@ -21,7 +33,7 @@ let history = createHistory()
 
 // Listen for changes to the current location. The
 // listener is called once immediately.
-let unlisten = history.listen(function (location) {
+let unlisten = history.listen(location => {
   console.log(location.pathname)
 })
 
