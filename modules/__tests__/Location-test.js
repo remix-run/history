@@ -1,9 +1,14 @@
 /*eslint-env mocha */
 import expect from 'expect'
-import createLocation from '../createLocation'
+import createHistory from '../createHistory'
 import { POP } from '../Actions'
 
 describe('a location', function () {
+  let createLocation
+  beforeEach(function () {
+    createLocation = createHistory().createLocation
+  })
+
   it('knows its pathname', function () {
     let location = createLocation('/home?the=query')
     expect(location.pathname).toEqual('/home')

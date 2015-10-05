@@ -1,12 +1,59 @@
+import warning from 'warning'
 import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
-import createLocation from './createLocation'
 import runTransitionHook from './runTransitionHook'
 import deprecate from './deprecate'
 
 function createRandomKey(length) {
   return Math.random().toString(36).substr(2, length)
+}
+
+function extractPath(string) {
+  let match = string.match(/https?:\/\/[^\/]*/)
+
+  if (match == null)
+    return string
+
+  warning(
+    false,
+    'Location path must be pathname + query string only, not a fully qualified URL like "%s"',
+    string
+  )
+
+  return string.substring(match[0].length)
+}
+
+function createLocation(path='/', state=null, action=POP, key=null) {
+  path = extractPath(path)
+
+  let pathname = path
+  let search = ''
+  let hash = ''
+
+  let hashIndex = pathname.indexOf('#')
+  if (hashIndex !== -1) {
+    hash = pathname.substring(hashIndex)
+    pathname = pathname.substring(0, hashIndex)
+  }
+
+  let searchIndex = pathname.indexOf('?')
+  if (searchIndex !== -1) {
+    search = pathname.substring(searchIndex)
+    pathname = pathname.substring(0, searchIndex)
+  }
+
+  if (pathname === '')
+    pathname = '/'
+
+  return {
+    pathname,
+    search,
+    hash,
+    state,
+    action,
+    key
+  }
 }
 
 function locationsAreEqual(a, b) {
@@ -196,6 +243,7 @@ function createHistory(options={}) {
     createKey,
     createPath,
     createHref,
+    createLocation,
 
     registerTransitionHook: deprecate(
       registerTransitionHook,

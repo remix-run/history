@@ -4,7 +4,6 @@ import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener, getWindowPath, supportsHistory } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import createDOMHistory from './createDOMHistory'
-import createLocation from './createLocation'
 
 /**
  * Creates and returns a history object that uses HTML5's history API
@@ -40,7 +39,7 @@ function createBrowserHistory(options) {
         window.history.replaceState({ ...historyState, key }, null, path)
     }
 
-    return createLocation(path, state, undefined, key)
+    return history.createLocation(path, state, undefined, key)
   }
 
   function startPopStateListener({ transitionTo }) {
