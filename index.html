@@ -3,31 +3,31 @@
   <head>
     <script src="/bundle.js"></script>
     <script>
-      var createHistory = History.createHistory;
-      var useBeforeUnload = History.useBeforeUnload;
+      var createHistory = History.createHistory
+      var useBeforeUnload = History.useBeforeUnload
 
-      var page = 0;
-      var h = useBeforeUnload(createHistory)();
+      var page = 0
+      var h = useBeforeUnload(createHistory)()
 
-      h.registerTransitionHook(function (location, callback) {
-        var promptMessage = 'Are you sure you want to go to ' + location.pathname + '?';
+      h.listenBeforeUnload(function () {
+        return "Wait, don't leave yet!"
+      })
+
+      h.listenBefore(function (location, callback) {
+        var promptMessage = 'Are you sure you want to go to ' + location.pathname + '?'
 
         if (Math.random() > 0.5) {
-          callback(promptMessage); // sync
+          callback(promptMessage) // sync
         } else {
           setTimeout(function () {
-            callback(promptMessage); // async
-          }, 500);
+            callback(promptMessage) // async
+          }, 500)
         }
-      });
-
-      h.registerBeforeUnloadHook(function () {
-        return "Wait, don't leave yet!";
-      });
+      })
 
       h.listen(function (location) {
-        console.log(location);
-      });
+        console.log(location)
+      })
     </script>
   </head>
   <body>
