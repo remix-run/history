@@ -10,7 +10,7 @@ function createRandomKey(length) {
 }
 
 function extractPath(string) {
-  let match = string.match(/https?:\/\/[^\/]*/)
+  let match = string.match(/^https?:\/\/[^\/]*/)
 
   if (match == null)
     return string
@@ -25,9 +25,7 @@ function extractPath(string) {
 }
 
 function createLocation(path='/', state=null, action=POP, key=null) {
-  path = extractPath(path)
-
-  let pathname = path
+  let pathname = extractPath(path)
   let search = ''
   let hash = ''
 
