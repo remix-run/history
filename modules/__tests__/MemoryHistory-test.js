@@ -7,7 +7,6 @@ import describePushState from './describePushState'
 import describeReplaceState from './describeReplaceState'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
-import describeSetState from './describeSetState'
 import describeGo from './describeGo'
 
 describe('memory history', function () {
@@ -17,7 +16,6 @@ describe('memory history', function () {
   describeReplaceState(createMemoryHistory)
   describeBasename(createMemoryHistory)
   describeQueries(createMemoryHistory)
-  describeSetState(createMemoryHistory)
   describeGo(createMemoryHistory)
 
   describe('when using pushState in the middle of the stack', function () {

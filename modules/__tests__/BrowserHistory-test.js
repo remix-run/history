@@ -7,7 +7,6 @@ import describePushState from './describePushState'
 import describeReplaceState from './describeReplaceState'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
-import describeSetState from './describeSetState'
 import describeGo from './describeGo'
 
 describe('browser history', function () {
@@ -22,7 +21,6 @@ describe('browser history', function () {
     describeReplaceState(createBrowserHistory)
     describeBasename(createBrowserHistory)
     describeQueries(createBrowserHistory)
-    describeSetState(createBrowserHistory)
     describeGo(createBrowserHistory)
   } else {
     describe.skip(null, function () {
@@ -32,7 +30,6 @@ describe('browser history', function () {
       describeReplaceState(createBrowserHistory)
       describeBasename(createBrowserHistory)
       describeQueries(createBrowserHistory)
-      describeSetState(createBrowserHistory)
       describeGo(createBrowserHistory)
     })
   }

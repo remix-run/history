@@ -9,7 +9,6 @@ import describePushState from './describePushState'
 import describeReplaceState from './describeReplaceState'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
-import describeSetState from './describeSetState'
 import describeGo from './describeGo'
 import execSteps from './execSteps'
 
@@ -125,7 +124,6 @@ describe('hash history', function () {
   describeReplaceState(createHashHistory)
   describeBasename(createHashHistory)
   describeQueries(createHashHistory)
-  describeSetState(createHashHistory)
 
   if (supportsGoWithoutReloadUsingHash()) {
     describeGo(createHashHistory)
