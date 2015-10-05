@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "description": "A minimal, functional history implementation for JavaScript",
   "main": "lib/index",
   "repository": {
