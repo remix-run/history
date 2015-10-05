@@ -185,20 +185,6 @@ function createHistory(options={}) {
     )
   }
 
-  function setState(state) {
-    if (location) {
-      updateLocationState(location, state)
-      updateLocation(location)
-    } else {
-      updateLocationState(getCurrentLocation(), state)
-    }
-  }
-
-  function updateLocationState(location, state) {
-    location.state = { ...location.state, ...state }
-    saveState(location.key, location.state)
-  }
-
   function goBack() {
     go(-1)
   }
@@ -220,6 +206,21 @@ function createHistory(options={}) {
   }
 
   // deprecated
+  function setState(state) {
+    if (location) {
+      updateLocationState(location, state)
+      updateLocation(location)
+    } else {
+      updateLocationState(getCurrentLocation(), state)
+    }
+  }
+
+  function updateLocationState(location, state) {
+    location.state = { ...location.state, ...state }
+    saveState(location.key, location.state)
+  }
+
+  // deprecated
   function registerTransitionHook(hook) {
     if (transitionHooks.indexOf(hook) === -1)
       transitionHooks.push(hook)
@@ -236,7 +237,6 @@ function createHistory(options={}) {
     transitionTo,
     pushState,
     replaceState,
-    setState,
     go,
     goBack,
     goForward,
@@ -245,6 +245,10 @@ function createHistory(options={}) {
     createHref,
     createLocation,
 
+    setState: deprecate(
+      setState,
+      'setState is deprecated; use location.key to save state instead'
+    ),
     registerTransitionHook: deprecate(
       registerTransitionHook,
       'registerTransitionHook is deprecated; use listenBefore instead'

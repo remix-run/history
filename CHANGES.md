@@ -1,3 +1,7 @@
+## HEAD
+
+- Deprecate `history.setState`
+
 ## [v1.12.0]
 > Oct 4, 2015
 
