@@ -1,3 +1,9 @@
+## HEAD
+
+- Fix hash support (see [comments in #51][#51-comments])
+
+[#51-comments]: https://github.com/rackt/history/pull/51#issuecomment-143189672
+
 ## [v1.12.1]
 > Oct 5, 2015
 
