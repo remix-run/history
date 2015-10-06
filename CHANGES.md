@@ -1,7 +1,10 @@
-## HEAD
+## [v1.12.1]
+> Oct 5, 2015
 
 - Give `location` objects a `key` by default
 - Deprecate `history.setState`
+
+[v1.12.1]: https://github.com/rackt/history/compare/v1.12.0...v1.12.1
 
 ## [v1.12.0]
 > Oct 4, 2015
