@@ -25,7 +25,7 @@ function describeStatePersistence(createHistory) {
     })
 
     it('forgets state across transitions', function (done) {
-      let steps = [
+      const steps = [
         function (location) {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
@@ -74,7 +74,7 @@ function describeStatePersistence(createHistory) {
     })
 
     it('remembers state across transitions', function (done) {
-      let steps = [
+      const steps = [
         function (location) {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
