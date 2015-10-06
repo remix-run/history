@@ -51,5 +51,5 @@ function createLocation(path='/', state=null, action=POP, key=null) {
 
 export default deprecate(
   createLocation,
-  'createLocation is deprecated; use history.createLocation instead'
+  'Calling createLocation statically is deprecated; instead call the history.createLocation method - see docs/Location.md'
 )
