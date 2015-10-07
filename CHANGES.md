@@ -1,8 +1,10 @@
-## HEAD
+## [v1.12.3]
+> Oct 7, 2015
 
 - Fix listenBefore hooks not being called unless a listen hook was also registered (see [#71])
 - Add a warning when we cannot save state in Safari private mode (see [#42])
 
+[v1.12.3]: https://github.com/rackt/history/compare/v1.12.2...v1.12.3
 [#71]: https://github.com/rackt/history/issues/71
 [#42]: https://github.com/rackt/history/issues/42
 
@@ -11,8 +13,8 @@
 
 - Fix hash support (see [comments in #51][#51-comments])
 
-[#51-comments]: https://github.com/rackt/history/pull/51#issuecomment-143189672
 [v1.12.2]: https://github.com/rackt/history/compare/v1.12.1...v1.12.2
+[#51-comments]: https://github.com/rackt/history/pull/51#issuecomment-143189672
 
 ## [v1.12.1]
 > Oct 5, 2015
