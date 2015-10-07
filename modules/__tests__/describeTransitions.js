@@ -6,12 +6,15 @@ import execSteps from './execSteps'
 
 function describeTransitions(createHistory) {
   describe('a synchronous transition hook', function () {
-    let history, unlisten
+    let history, unlisten, unlistenBefore
     beforeEach(function () {
       history = createHistory()
     })
 
     afterEach(function () {
+      if (unlistenBefore)
+        unlistenBefore()
+
       if (unlisten)
         unlisten()
     })
@@ -27,7 +30,7 @@ function describeTransitions(createHistory) {
       ]
 
       let nextLocation
-      history.listenBefore(function (location) {
+      unlistenBefore = history.listenBefore(function (location) {
         nextLocation = location
       })
 
@@ -36,12 +39,15 @@ function describeTransitions(createHistory) {
   })
 
   describe('an asynchronous transition hook', function () {
-    let history, unlisten
+    let history, unlisten, unlistenBefore
     beforeEach(function () {
       history = createHistory()
     })
 
     afterEach(function () {
+      if (unlistenBefore)
+        unlistenBefore()
+
       if (unlisten)
         unlisten()
     })
@@ -57,7 +63,7 @@ function describeTransitions(createHistory) {
       ]
 
       let nextLocation
-      history.listenBefore(function (location, callback) {
+      unlistenBefore = history.listenBefore(function (location, callback) {
         nextLocation = location
         setTimeout(callback)
       })
@@ -67,7 +73,7 @@ function describeTransitions(createHistory) {
   })
 
   describe('when the user confirms a transition', function () {
-    let confirmationMessage, location, history, unlisten
+    let confirmationMessage, location, history, unlisten, unlistenBefore
     beforeEach(function () {
       location = null
       confirmationMessage = 'Are you sure?'
@@ -79,7 +85,7 @@ function describeTransitions(createHistory) {
         }
       })
 
-      history.listenBefore(function () {
+      unlistenBefore = history.listenBefore(function () {
         return confirmationMessage
       })
 
@@ -89,6 +95,9 @@ function describeTransitions(createHistory) {
     })
 
     afterEach(function () {
+      if (unlistenBefore)
+        unlistenBefore()
+
       if (unlisten)
         unlisten()
     })
@@ -108,7 +117,7 @@ function describeTransitions(createHistory) {
   })
 
   describe('when the user cancels a transition', function () {
-    let confirmationMessage, location, history, unlisten
+    let confirmationMessage, location, history, unlisten, unlistenBefore
     beforeEach(function () {
       location = null
       confirmationMessage = 'Are you sure?'
@@ -120,7 +129,7 @@ function describeTransitions(createHistory) {
         }
       })
 
-      history.listenBefore(function () {
+      unlistenBefore = history.listenBefore(function () {
         return confirmationMessage
       })
 
@@ -130,6 +139,9 @@ function describeTransitions(createHistory) {
     })
 
     afterEach(function () {
+      if (unlistenBefore)
+        unlistenBefore()
+
       if (unlisten)
         unlisten()
     })
@@ -142,13 +154,13 @@ function describeTransitions(createHistory) {
   })
 
   describe('when the transition hook cancels a transition', function () {
-    let location, history, unlisten
+    let location, history, unlisten, unlistenBefore
     beforeEach(function () {
       location = null
 
       history = createHistory()
 
-      history.listenBefore(function () {
+      unlistenBefore = history.listenBefore(function () {
         return false
       })
 
@@ -158,6 +170,9 @@ function describeTransitions(createHistory) {
     })
 
     afterEach(function () {
+      if (unlistenBefore)
+        unlistenBefore()
+
       if (unlisten)
         unlisten()
     })

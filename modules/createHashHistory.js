@@ -49,7 +49,7 @@ function createHashHistory(options={}) {
 
   function getCurrentLocation() {
     let path = getHashPath()
-    
+
     let key, state
     if (queryKey) {
       key = getQueryStringValueFromPath(path, queryKey)
@@ -129,6 +129,20 @@ function createHashHistory(options={}) {
 
   let listenerCount = 0, stopHashChangeListener
 
+  function listenBefore(listener) {
+    if (++listenerCount === 1)
+      stopHashChangeListener = startHashChangeListener(history)
+
+    let unlisten = history.listenBefore(listener)
+
+    return function () {
+      unlisten()
+
+      if (--listenerCount === 0)
+        stopHashChangeListener()
+    }
+  }
+
   function listen(listener) {
     if (++listenerCount === 1)
       stopHashChangeListener = startHashChangeListener(history)
@@ -176,13 +190,32 @@ function createHashHistory(options={}) {
     return '#' + history.createHref(path)
   }
 
+  // deprecated
+  function registerTransitionHook(hook) {
+    if (++listenerCount === 1)
+      stopHashChangeListener = startHashChangeListener(history)
+
+    history.registerTransitionHook(hook)
+  }
+
+  // deprecated
+  function unregisterTransitionHook(hook) {
+    history.unregisterTransitionHook(hook)
+
+    if (--listenerCount === 0)
+      stopHashChangeListener()
+  }
+
   return {
     ...history,
+    listenBefore,
     listen,
     pushState,
     replaceState,
     go,
-    createHref
+    createHref,
+    registerTransitionHook,
+    unregisterTransitionHook
   }
 }
 
