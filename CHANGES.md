@@ -1,3 +1,11 @@
+## HEAD
+
+- Fix listenBefore hooks not being called unless a listen hook was also registered (see [#71])
+- Add a warning when we cannot save state in Safari private mode (see [#42])
+
+[#71]: https://github.com/rackt/history/issues/71
+[#42]: https://github.com/rackt/history/issues/42
+
 ## [v1.12.2]
 > Oct 6, 2015
 
