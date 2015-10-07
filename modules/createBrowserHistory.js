@@ -98,6 +98,20 @@ function createBrowserHistory(options) {
 
   let listenerCount = 0, stopPopStateListener
 
+  function listenBefore(listener) {
+    if (++listenerCount === 1)
+      stopPopStateListener = startPopStateListener(history)
+
+    let unlisten = history.listenBefore(listener)
+
+    return function () {
+      unlisten()
+
+      if (--listenerCount === 0)
+        stopPopStateListener()
+    }
+  }
+
   function listen(listener) {
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history)
@@ -112,9 +126,28 @@ function createBrowserHistory(options) {
     }
   }
 
+  // deprecated
+  function registerTransitionHook(hook) {
+    if (++listenerCount === 1)
+      stopPopStateListener = startPopStateListener(history)
+
+    history.registerTransitionHook(hook)
+  }
+
+  // deprecated
+  function unregisterTransitionHook(hook) {
+    history.unregisterTransitionHook(hook)
+
+    if (--listenerCount === 0)
+      stopPopStateListener()
+  }
+
   return {
     ...history,
-    listen
+    listenBefore,
+    listen,
+    registerTransitionHook,
+    unregisterTransitionHook
   }
 }
 
