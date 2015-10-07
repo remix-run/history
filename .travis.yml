@@ -1,7 +1,5 @@
 language: node_js
 node_js:
-- "0.10"
-- "0.12"
 - "4"
 before_script:
 - wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
