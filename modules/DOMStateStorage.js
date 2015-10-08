@@ -1,6 +1,6 @@
+/*eslint-disable no-empty */
 import warning from 'warning'
 
-/*eslint-disable no-empty */
 const KeyPrefix = '@@History/'
 const QuotaExceededError = 'QuotaExceededError'
 
