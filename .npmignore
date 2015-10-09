@@ -4,6 +4,5 @@
 __tests__
 index.html
 karma.conf.js
-scripts
 tests.webpack.js
 webpack.config.js
