@@ -1,7 +1,9 @@
-## HEAD
+## [v1.12.4]
+> Oct 9, 2015
 
 - Fix npm postinstall hook on Windows (see [#62])
 
+[v1.12.4]: https://github.com/rackt/history/compare/v1.12.3...v1.12.4
 [#62]: https://github.com/rackt/history/issues/62
 
 ## [v1.12.3]
