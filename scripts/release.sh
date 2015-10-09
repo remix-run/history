@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-if ! [ -e scripts/build.sh ]; then
+if ! [ -e scripts/build.js ]; then
   echo >&2 "Please run scripts/release.sh from the repo root"
   exit 1
 fi
@@ -30,7 +30,7 @@ npm test -- --single-run
 
 update_version 'package.json' $next_version
 
-./scripts/build.sh
+node scripts/build.js
 
 git commit -am "Version $next_version"
 
