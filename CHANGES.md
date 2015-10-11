@@ -1,9 +1,13 @@
-## HEAD
+## [v1.12.5]
+> Oct 11, 2015
 
 - Un-deprecate top-level createLocation method
 - Add ability to use `{ pathname, search, hash }` object anywhere
   a path can be used
-- Fix `useQueries` handling of hashes
+- Fix `useQueries` handling of hashes (see [#93])
+
+[v1.12.5]: https://github.com/rackt/history/compare/v1.12.4...v1.12.5
+[#93]: https://github.com/rackt/history/issues/93
 
 ## [v1.12.4]
 > Oct 9, 2015
