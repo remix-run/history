@@ -1,9 +1,9 @@
 ## HEAD
 
 - Un-deprecate top-level createLocation method
-- Add ability to use { pathname, search, hash } object anywhere
+- Add ability to use `{ pathname, search, hash }` object anywhere
   a path can be used
-- Fix useQueries handling of hashes
+- Fix `useQueries` handling of hashes
 
 ## [v1.12.4]
 > Oct 9, 2015
