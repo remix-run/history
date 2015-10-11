@@ -97,6 +97,14 @@ function describeQueries(createHistory) {
           ).toEqual('/the/path?STRINGIFY_QUERY#the-hash')
         })
       })
+
+      describe('when there is already an existing search', function () {
+        it('preserves the existing search', function () {
+          expect(
+            history.createPath('/the/path?a=one', { the: 'query' })
+          ).toEqual('/the/path?a=one&STRINGIFY_QUERY')
+        })
+      })
     })
 
     describe('in createHref', function () {
