@@ -1,9 +1,8 @@
 import warning from 'warning'
-import deprecate from './deprecate'
 import { POP } from './Actions'
 
 function extractPath(string) {
-  let match = string.match(/https?:\/\/[^\/]*/)
+  const match = string.match(/https?:\/\/[^\/]*/)
 
   if (match == null)
     return string
@@ -18,26 +17,31 @@ function extractPath(string) {
 }
 
 function createLocation(path='/', state=null, action=POP, key=null) {
-  path = extractPath(path)
+  let pathname, search, hash
+  if (typeof path === 'string') {
+    pathname = extractPath(path)
+    search = ''
+    hash = ''
 
-  let pathname = path
-  let search = ''
-  let hash = ''
+    let hashIndex = pathname.indexOf('#')
+    if (hashIndex !== -1) {
+      hash = pathname.substring(hashIndex)
+      pathname = pathname.substring(0, hashIndex)
+    }
 
-  let hashIndex = pathname.indexOf('#')
-  if (hashIndex !== -1) {
-    hash = pathname.substring(hashIndex)
-    pathname = pathname.substring(0, hashIndex)
+    let searchIndex = pathname.indexOf('?')
+    if (searchIndex !== -1) {
+      search = pathname.substring(searchIndex)
+      pathname = pathname.substring(0, searchIndex)
+    }
+
+    if (pathname === '')
+      pathname = '/'
+  } else {
+    pathname = path.pathname || '/'
+    search = path.search || ''
+    hash = path.hash || ''
   }
-
-  let searchIndex = pathname.indexOf('?')
-  if (searchIndex !== -1) {
-    search = pathname.substring(searchIndex)
-    pathname = pathname.substring(0, searchIndex)
-  }
-
-  if (pathname === '')
-    pathname = '/'
 
   return {
     pathname,
@@ -49,7 +53,4 @@ function createLocation(path='/', state=null, action=POP, key=null) {
   }
 }
 
-export default deprecate(
-  createLocation,
-  'Calling createLocation statically is deprecated; instead call the history.createLocation method - see docs/Location.md'
-)
+export default createLocation

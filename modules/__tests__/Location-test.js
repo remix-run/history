@@ -1,27 +1,23 @@
 /*eslint-env mocha */
 import expect from 'expect'
 import createHistory from '../createHistory'
+import createLocation from '../createLocation'
 import { POP } from '../Actions'
 
 describe('a location', function () {
-  let createLocation
-  beforeEach(function () {
-    createLocation = createHistory().createLocation
-  })
-
   it('knows its pathname', function () {
     let location = createLocation('/home?the=query#the-hash')
     expect(location.pathname).toEqual('/home')
   })
 
-  it('knows its hash', function () {
-    let location = createLocation('/home?the=query#the-hash')
-    expect(location.hash).toEqual('#the-hash')
-  })
-
   it('knows its search string', function () {
     let location = createLocation('/home?the=query#the-hash')
     expect(location.search).toEqual('?the=query')
+  })
+
+  it('knows its hash', function () {
+    let location = createLocation('/home?the=query#the-hash')
+    expect(location.hash).toEqual('#the-hash')
   })
 
   it('has null state by default', function () {
@@ -34,8 +30,34 @@ describe('a location', function () {
     expect(location.action).toBe(POP)
   })
 
-  it('has a key by default', function () {
+  it('has a null key by default', function () {
     let location = createLocation()
-    expect(location.key).toExist()
+    expect(location.key).toBe(null)
+  })
+
+  describe('created by a history object', function () {
+    let history
+    beforeEach(function () {
+      history = createHistory()
+    })
+
+    it('has a key by default', function () {
+      let location = history.createLocation()
+      expect(location.key).toExist()
+    })
+  })
+})
+
+describe('creating a location with an object', function () {
+  it('puts the pathname, search, and hash in the proper order', function () {
+    let location = createLocation({
+      pathname: '/the/path',
+      search: '?the=query',
+      hash: '#the-hash'
+    })
+
+    expect(location.pathname).toEqual('/the/path')
+    expect(location.search).toEqual('?the=query')
+    expect(location.hash).toEqual('#the-hash')
   })
 })
