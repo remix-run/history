@@ -1,5 +1,6 @@
 import qs from 'qs'
 import runTransitionHook from './runTransitionHook'
+import parsePath from './parsePath'
 
 function defaultStringifyQuery(query) {
   return qs.stringify(query, { arrayFormat: 'brackets' })
@@ -31,12 +32,20 @@ function useQueries(createHistory) {
       return location
     }
 
-    function appendQuery(pathname, query) {
+    function appendQuery(path, query) {
       let queryString
-      if (query && (queryString = stringifyQuery(query)) !== '')
-        return pathname + (pathname.indexOf('?') === -1 ? '?' : '&') + queryString
+      if (!query || (queryString = stringifyQuery(query)) === '')
+        return path
 
-      return pathname
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      const search = path.search + (path.search ? '&' : '?') + queryString
+
+      return {
+        ...path,
+        search
+      }
     }
 
     // Override all read methods with query-aware versions.
@@ -53,20 +62,20 @@ function useQueries(createHistory) {
     }
 
     // Override all write methods with query-aware versions.
-    function pushState(state, pathname, query) {
-      return history.pushState(state, appendQuery(pathname, query))
+    function pushState(state, path, query) {
+      return history.pushState(state, appendQuery(path, query))
     }
 
-    function replaceState(state, pathname, query) {
-      return history.replaceState(state, appendQuery(pathname, query))
+    function replaceState(state, path, query) {
+      return history.replaceState(state, appendQuery(path, query))
     }
 
-    function createPath(pathname, query) {
-      return history.createPath(appendQuery(pathname, query))
+    function createPath(path, query) {
+      return history.createPath(appendQuery(path, query))
     }
 
-    function createHref(pathname, query) {
-      return history.createHref(appendQuery(pathname, query))
+    function createHref(path, query) {
+      return history.createHref(appendQuery(path, query))
     }
 
     function createLocation() {

@@ -89,6 +89,14 @@ function describeQueries(createHistory) {
           history.createPath('/the/path/', { the: 'query' })
         ).toEqual('/the/path/?STRINGIFY_QUERY')
       })
+
+      describe('when the path contains a hash', function () {
+        it('puts the query before the hash', function () {
+          expect(
+            history.createPath('/the/path#the-hash', { the: 'query' })
+          ).toEqual('/the/path?STRINGIFY_QUERY#the-hash')
+        })
+      })
     })
 
     describe('in createHref', function () {

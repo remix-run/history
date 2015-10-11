@@ -1,4 +1,5 @@
 import runTransitionHook from './runTransitionHook'
+import parsePath from './parsePath'
 
 function useBasename(createHistory) {
   return function (options={}) {
@@ -22,7 +23,18 @@ function useBasename(createHistory) {
     }
 
     function prependBasename(path) {
-      return basename ? basename + path : path
+      if (!basename)
+        return path
+
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      const pathname = basename + path.pathname
+
+      return {
+        ...path,
+        pathname
+      }
     }
 
     // Override all read methods with basename-aware versions.

@@ -151,11 +151,24 @@ function createHistory(options={}) {
   }
 
   function createPath(path) {
-    return path
+    if (path == null || typeof path === 'string')
+      return path
+
+    const { pathname, search, hash } = path
+
+    let result = pathname
+
+    if (search)
+      result += search
+
+    if (hash)
+      result += hash
+
+    return result
   }
 
   function createHref(path) {
-    return path
+    return createPath(path)
   }
 
   function createLocation(path, state, action, key=createKey()) {
