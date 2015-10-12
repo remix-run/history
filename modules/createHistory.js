@@ -65,10 +65,10 @@ function createHistory(options={}) {
     })
   }
 
-  function listen(listener) {
+  function listen(listener, callImmediate = true) {
     changeListeners.push(listener)
 
-    if (location) {
+    if (location && callImmediate) {
       listener(location)
     } else {
       let location = getCurrentLocation()
