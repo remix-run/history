@@ -6,4 +6,4 @@
 - [Query Support](QuerySupport.md)
 - [Basename Support](BasenameSupport.md)
 - [Caveats of Using Hash History](HashHistoryCaveats.md)
-- [Glossary](Terms.md)
+- [Glossary](Glossary.md)

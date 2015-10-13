@@ -1,6 +1,6 @@
 ## Getting Started
 
-The first thing you'll need to do is create a [history object](Terms.md#history). The main `history` module exports several different [`create*` methods](Terms.md#createhistory) that you can use depending on your environment.
+The first thing you'll need to do is create a [history object](Glossary.md#history). The main `history` module exports several different [`create*` methods](Glossary.md#createhistory) that you can use depending on your environment.
 
 - `createHistory` is for use in modern web browsers that support the [HTML5 history API](http://diveintohtml5.info/history.html) (see [cross-browser compatibility](http://caniuse.com/#feat=history))
 - `createHashHistory` is for use in legacy web browsers (see [caveats of using hash history](HashHistoryCaveats.md))
@@ -33,7 +33,7 @@ You can also use a `history` object to programmatically change the current `loca
 - `goBack()`
 - `goForward()`
 
-The [`path`](Terms.md#path) argument to `pushState` and `replaceState` represents a complete URL path, including the [query string](Terms.md#querystring). The [`state`](Terms.md#locationstate) argument should be a JSON-serializable object.
+The [`path`](Glossary.md#path) argument to `pushState` and `replaceState` represents a complete URL path, including the [query string](Glossary.md#querystring). The [`state`](Glossary.md#locationstate) argument should be a JSON-serializable object.
 
 ```js
 // Push a new entry onto the history stack.

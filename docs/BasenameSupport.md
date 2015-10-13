@@ -1,6 +1,6 @@
 ## Basename Support
 
-Support for running an app under a "base" URL is provided by the `useBasename` [enhancer](Terms.md#createhistoryenhancer) function. Simply use a wrapped version of your `createHistory` function to create your `history` object and you'll have the correct `location.pathname` inside `listen` and `listenBefore` hooks.
+Support for running an app under a "base" URL is provided by the `useBasename` [enhancer](Glossary.md#createhistoryenhancer) function. Simply use a wrapped version of your `createHistory` function to create your `history` object and you'll have the correct `location.pathname` inside `listen` and `listenBefore` hooks.
 
 ```js
 import { createHistory, useBasename } from 'history'
