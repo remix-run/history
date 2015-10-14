@@ -22,6 +22,8 @@ import { createHistory } from 'history'
 var createHistory = require('history').createHistory
 ```
 
+Please use with Node.js v4
+
 ## Basic Usage
 
 A "history" encapsulates navigation between different screens in your app, and notifies listeners when the current screen changes.
