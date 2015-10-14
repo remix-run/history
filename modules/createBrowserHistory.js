@@ -77,12 +77,14 @@ function createBrowserHistory(options={}) {
     if (action === PUSH) {
       if (useRefresh) {
         window.location.href = path
+        return false // Prevent location update.
       } else {
         window.history.pushState(historyState, null, path)
       }
     } else { // REPLACE
       if (useRefresh) {
         window.location.replace(path)
+        return false // Prevent location update.
       } else {
         window.history.replaceState(historyState, null, path)
       }
