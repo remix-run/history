@@ -76,15 +76,19 @@ function createBrowserHistory(options) {
       if (isSupported) {
         window.history.pushState(historyState, null, path)
       } else {
-        // Use a full-page reload to preserve the URL.
+        // Use a full-page reload to preserve the URL, and return
+        // false to stop any location updates.
         window.location.href = path
+        return false
       }
     } else { // REPLACE
       if (isSupported) {
         window.history.replaceState(historyState, null, path)
       } else {
-        // Use a full-page reload to preserve the URL.
+        // Use a full-page reload to preserve the URL, and return
+        // false to stop any location updates.
         window.location.replace(path)
+        return false
       }
     }
   }
