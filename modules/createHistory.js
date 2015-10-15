@@ -114,9 +114,8 @@ function createHistory(options={}) {
         return // Transition was interrupted.
 
       if (ok) {
-        if(finishTransition(nextLocation) !== false) {
+        if (finishTransition(nextLocation) !== false)
           updateLocation(nextLocation)
-        }
       } else if (location && nextLocation.action === POP) {
         let prevIndex = allKeys.indexOf(location.key)
         let nextIndex = allKeys.indexOf(nextLocation.key)
