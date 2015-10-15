@@ -21,8 +21,8 @@ function createBrowserHistory(options={}) {
   )
 
   let { forceRefresh } = options
-
-  let isSupported = supportsHistory() && !forceRefresh
+  let isSupported = supportsHistory()
+  let useRefresh = !isSupported || forceRefresh
 
   function getCurrentLocation(historyState) {
     historyState = historyState || window.history.state || {}
@@ -75,18 +75,16 @@ function createBrowserHistory(options={}) {
     }
 
     if (action === PUSH) {
-      if (isSupported) {
-        window.history.pushState(historyState, null, path)
-      } else {
-        // Use a full-page reload to preserve the URL.
+      if (useRefresh) {
         window.location.href = path
+      } else {
+        window.history.pushState(historyState, null, path)
       }
     } else { // REPLACE
-      if (isSupported) {
-        window.history.replaceState(historyState, null, path)
-      } else {
-        // Use a full-page reload to preserve the URL.
+      if (useRefresh) {
         window.location.replace(path)
+      } else {
+        window.history.replaceState(historyState, null, path)
       }
     }
   }
