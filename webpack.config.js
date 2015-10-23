@@ -4,7 +4,7 @@ module.exports = {
 
   output: {
     library: 'History',
-    libraryTarget: 'umd'
+    libraryTarget: 'commonjs2'
   },
 
   module: {
