@@ -20,6 +20,17 @@ describe('a location', function () {
     expect(location.hash).toEqual('#the-hash')
   })
 
+  it('compensates if the location is fully qualified', function () {
+    let location = createLocation('https://example.com/home')
+    expect(location.pathname).toEqual('/home')
+  })
+
+  it('does not strip URL-like strings in the query', function () {
+    let location = createLocation('/home?redirect=https://example.com/')
+    expect(location.pathname).toEqual('/home')
+    expect(location.search).toEqual('?redirect=https://example.com/')
+  })
+
   it('has null state by default', function () {
     let location = createLocation()
     expect(location.state).toBe(null)
