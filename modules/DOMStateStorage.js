@@ -12,22 +12,25 @@ export function saveState(key, state) {
   try {
     window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
   } catch (error) {
-    if (error.name === QuotaExceededError || window.sessionStorage.length === 0) {
-      // Probably in Safari "private mode" where sessionStorage quota is 0. #42
-      warning(
-        false,
-        '[history] Unable to save state; sessionStorage is not available in Safari private mode'
-      )
+    try {
+      if (error.name === QuotaExceededError || window.sessionStorage.length === 0) {
+        // Probably in Safari "private mode" where sessionStorage quota is 0. #42
+        warning(
+          false,
+          '[history] Unable to save state; sessionStorage is not available in Safari private mode'
+        )
 
-      return
-    }
-
-    throw error
+        return
+      }
+    } catch (error) {}
   }
 }
 
 export function readState(key) {
-  const json = window.sessionStorage.getItem(createKey(key))
+  let json
+  try {
+    json = window.sessionStorage.getItem(createKey(key))
+  } catch (error) {}
 
   if (json) {
     try {

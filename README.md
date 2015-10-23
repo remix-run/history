@@ -6,6 +6,17 @@
 
 [`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history in browsers, testing environments, and (soon, via [React Native](https://facebook.github.io/react-native/)) native devices. `history` abstracts away the differences in these different platforms and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions. `history` is library-agnostic and may easily be included in any JavaScript project.
 
+## Digon Games
+Our app is a facebook canvas app and when users have third party cookies turned off we don't have access to sessionStorage and we'll get a security error.
+This fork is just a quick and dirty fix that adds a try catch where it's trying to access sessionStorage.
+
+Run:
+
+  $ npm run build
+
+and copy `umd/History.js` to your project.
+
+
 ## Installation
 
 Using [npm](https://www.npmjs.org/):
