@@ -1,7 +1,7 @@
 import warning from 'warning'
 
 function extractPath(string) {
-  const match = string.match(/https?:\/\/[^\/]*/)
+  const match = string.match(/^https?:\/\/[^\/]*/)
 
   if (match == null)
     return string
