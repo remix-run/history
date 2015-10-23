@@ -29,7 +29,10 @@ function useBasename(createHistory) {
       if (typeof path === 'string')
         path = parsePath(path)
 
-      const pathname = basename + path.pathname
+      const pname = path.pathname
+      const normalizedBasename = basename.slice(-1) === '/' ? basename : basename + '/'
+      const normalizedPathname = pname.charAt(0) === '/' ? pname.slice(1) : pname
+      const pathname = normalizedBasename + normalizedPathname
 
       return {
         ...path,
