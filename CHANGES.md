@@ -1,4 +1,5 @@
-## HEAD
+## [v1.12.6]
+> Oct 25, 2015
 
 - Add `forceRefresh` option to `createBrowserHistory` that forces
   full page refreshes even when the browser supports pushState (see [#95])
