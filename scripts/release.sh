@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-if ! [ -e scripts/build.js ]; then
+if ! [ -e scripts/release.sh ]; then
   echo >&2 "Please run scripts/release.sh from the repo root"
   exit 1
 fi
