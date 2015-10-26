@@ -63,12 +63,12 @@ let href = history.createHref('/the/path')
 Using the main `history` module is a great way to get up and running quickly. However, you probably don't need to include all the various history implementations in your production bundle. To keep your build as small as possible, import only the functions you need directly from `history/lib`.
 
 ```js
-// HTML5 history
+// HTML5 history, recommended
 import createHistory from 'history/lib/createBrowserHistory'
 
 // Hash history
-import createHashHistory from 'history/lib/createHashHistory'
+import createHistory from 'history/lib/createHashHistory'
 
 // Memory history
-import createMemoryHistory from 'history/lib/createMemoryHistory'
+import createHistory from 'history/lib/createMemoryHistory'
 ```
