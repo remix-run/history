@@ -6,6 +6,15 @@
 
 [`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history in browsers, testing environments, and (soon, via [React Native](https://facebook.github.io/react-native/)) native devices. `history` abstracts away the differences in these different platforms and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions. `history` is library-agnostic and may easily be included in any JavaScript project.
 
+## Docs & Help
+
+- [Guides and API Docs](/docs#readme)
+- [Changelog](/CHANGES.md)
+- [#react-router @ Reactiflux](https://discord.gg/0ZcbPKXt5bYaNQ46)
+- [Stack Overflow](http://stackoverflow.com/questions/tagged/react-router)
+
+For questions and support, please visit [our channel on Reactiflux](https://discord.gg/0ZcbPKXt5bYaNQ46) or [Stack Overflow](http://stackoverflow.com/questions/tagged/react-router). The issue tracker is *exclusively* for bug reports and feature requests.
+
 ## Installation
 
 Using [npm](https://www.npmjs.org/):
