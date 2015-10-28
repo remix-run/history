@@ -24,6 +24,6 @@ history.createPath('/the/path') // /base/the/path
 history.pushState(null, '/the/path') // push /base/the/path
 ```
 
-### Using <base href>
+### Using `<base href>`
 
 In HTML documents, you can use the [`<base>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)'s `href` attribute to specify a `basename` for the page. This way, you don't have to manually pass the `basename` property to your `createHistory` function.
