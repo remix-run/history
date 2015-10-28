@@ -1,3 +1,9 @@
+## HEAD
+
+- `useBasename` transparently handles trailing slashes (see [#108])
+
+[#108]: https://github.com/rackt/history/pull/108
+
 ## [v1.12.6]
 > Oct 25, 2015
 
