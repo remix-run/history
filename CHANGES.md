@@ -10,6 +10,7 @@
 - Add `forceRefresh` option to `createBrowserHistory` that forces
   full page refreshes even when the browser supports pushState (see [#95])
 
+[v1.12.6]: https://github.com/rackt/history/compare/v1.12.5...v1.12.6
 [#95]: https://github.com/rackt/history/issues/95
 
 ## [v1.12.5]
