@@ -1,4 +1,5 @@
 ## [v1.13.0]
+> Oct 28, 2015
 
 - `useBasename` transparently handles trailing slashes (see [#108])
 - `useBasename` automatically uses the value of `<base href>` when no
