@@ -1,8 +1,11 @@
 ## HEAD
 
 - `useBasename` transparently handles trailing slashes (see [#108])
+- `useBasename` automatically uses the value of <base href> when no
+  `basename` option is provided (see [#94])
 
 [#108]: https://github.com/rackt/history/pull/108
+[#94]: https://github.com/rackt/history/issues/94
 
 ## [v1.12.6]
 > Oct 25, 2015
