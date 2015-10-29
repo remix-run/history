@@ -70,14 +70,6 @@ function useQueries(createHistory) {
       return history.replaceState(state, appendQuery(path, query))
     }
 
-    function push(path, query, state) {
-      return history.push(appendQuery(path, query), state)
-    }
-
-    function replace(path, query, state) {
-      return history.replace(appendQuery(path, query), state)
-    }
-
     function createPath(path, query) {
       return history.createPath(appendQuery(path, query))
     }
@@ -96,8 +88,6 @@ function useQueries(createHistory) {
       listen,
       pushState,
       replaceState,
-      push,
-      replace,
       createPath,
       createHref,
       createLocation

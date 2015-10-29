@@ -23,33 +23,12 @@ function describeReplace(createHistory) {
           expect(location.state).toEqual(null)
           expect(location.action).toEqual(POP)
 
-          history.replace('/home?the=query', { the: 'state' })
-        },
-        function (location) {
-          expect(location.pathname).toEqual('/home')
-          expect(location.search).toEqual('?the=query')
-          expect(location.state).toEqual({ the: 'state' })
-          expect(location.action).toEqual(REPLACE)
-        }
-      ]
-
-      unlisten = history.listen(execSteps(steps, done))
-    })
-
-    it('calls change listeners with the new location without state argument', function (done) {
-      let steps = [
-        function (location) {
-          expect(location.pathname).toEqual('/')
-          expect(location.search).toEqual('')
-          expect(location.state).toEqual(null)
-          expect(location.action).toEqual(POP)
-
           history.replace('/home?the=query')
         },
         function (location) {
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
-          expect(location.state).toEqual(null)
+          expect(location.state).toEqual()
           expect(location.action).toEqual(REPLACE)
         }
       ]

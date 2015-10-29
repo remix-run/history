@@ -132,18 +132,18 @@ function createHistory(options={}) {
     )
   }
 
+  function push(path) {
+    pushState(null, path)
+  }
+
   function replaceState(state, path) {
     transitionTo(
       createLocation(path, state, REPLACE, createKey())
     )
   }
 
-  function push(path, state) {
-    pushState(state, path)
-  }
-
-  function replace(path, state) {
-    replaceState(state, path)
+  function replace(path) {
+    replaceState(null, path)
   }
 
   function goBack() {
