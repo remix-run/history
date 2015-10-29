@@ -72,6 +72,14 @@ function useBasename(createHistory) {
       history.replaceState(state, prependBasename(path))
     }
 
+    function push(path, state) {
+      pushState(state, path)
+    }
+
+    function replace(path, state) {
+      replaceState(state, path)
+    }
+
     function createPath(path) {
       return history.createPath(prependBasename(path))
     }
@@ -89,7 +97,9 @@ function useBasename(createHistory) {
       listenBefore,
       listen,
       pushState,
+      push,
       replaceState,
+      replace,
       createPath,
       createHref,
       createLocation
