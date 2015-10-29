@@ -138,6 +138,14 @@ function createHistory(options={}) {
     )
   }
 
+  function push(path, state) {
+    pushState(state, path)
+  }
+
+  function replace(path, state) {
+    replaceState(state, path)
+  }
+
   function goBack() {
     go(-1)
   }
@@ -207,6 +215,8 @@ function createHistory(options={}) {
     transitionTo,
     pushState,
     replaceState,
+    push,
+    replace,
     go,
     goBack,
     goForward,

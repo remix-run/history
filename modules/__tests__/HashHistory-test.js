@@ -5,7 +5,9 @@ import createHashHistory from '../createHashHistory'
 import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
 import describePushState from './describePushState'
+import describePush from './describePush'
 import describeReplaceState from './describeReplaceState'
+import describeReplace from './describeReplace'
 import describePopState from './describePopState'
 import describeQueryKey from './describeQueryKey'
 import describeBasename from './describeBasename'
@@ -21,7 +23,9 @@ describe('hash history', function () {
   describeInitialLocation(createHashHistory)
   describeTransitions(createHashHistory)
   describePushState(createHashHistory)
+  describePush(createHashHistory)
   describeReplaceState(createHashHistory)
+  describeReplace(createHashHistory)
   describePopState(createHashHistory)
   describeBasename(createHashHistory)
   describeQueries(createHashHistory)

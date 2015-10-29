@@ -33,6 +33,11 @@ You can also use a `history` object to programmatically change the current `loca
 - `goBack()`
 - `goForward()`
 
+There are also two handy methods that allow you not to specify `state` object during transitions:
+
+- `push(path[, state])`
+- `replace(path[, state])`
+
 The [`path`](Glossary.md#path) argument to `pushState` and `replaceState` represents a complete URL path, including the [query string](Glossary.md#querystring). The [`state`](Glossary.md#locationstate) argument should be a JSON-serializable object.
 
 ```js
@@ -41,6 +46,9 @@ history.pushState({ some: 'state' }, '/home')
 
 // Replace the current entry on the history stack.
 history.replaceState({ some: 'other state' }, '/profile')
+
+// Push a new history entry, omitting `state` object (it will be set to `null`)
+history.push('/about')
 
 // Go back to the previous history entry. The following
 // two lines are synonymous.
