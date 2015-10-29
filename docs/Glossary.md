@@ -40,6 +40,8 @@ A *createHistory enhancer* (or simply a "history enhancer") is a function that a
       transitionTo(location: Location) => void;
       pushState(state: LocationState, path: Path) => void;
       replaceState(state: LocationState, path: Path) => void;
+      push(path: Path[, state: LocationState]) => void;
+      replace(path: Path[, state: LocationState]) => void;
       go(n: number) => void;
       goBack() => void;
       goForward() => void;
@@ -125,7 +127,7 @@ A *query* is the parsed version of a [query string](#querystring).
 
 ### Transition
 
-A *transition* is the process of notifying listeners when the [location](#location) changes. It is not an API; rather, it is a concept. Transitions may be interrupted by [transition hooks](#transitionhook). 
+A *transition* is the process of notifying listeners when the [location](#location) changes. It is not an API; rather, it is a concept. Transitions may be interrupted by [transition hooks](#transitionhook).
 
 Note: A transition does not refer to the exact moment the URL actually changes. For example, in web browsers the user may click the back button or otherwise directly manipulate the URL by typing into the address bar. This is not a transition, but a [history](#history) object will start a transition as a result of the URL changing.
 
