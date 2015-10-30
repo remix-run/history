@@ -3,11 +3,11 @@ import runTransitionHook from './runTransitionHook'
 import parsePath from './parsePath'
 
 function defaultStringifyQuery(query) {
-  return qs.stringify(query, { arrayFormat: 'brackets' })
+  return qs.stringify(query, { arrayFormat: 'brackets' }).replace(/%20/g, '+')
 }
 
 function defaultParseQueryString(queryString) {
-  return qs.parse(queryString)
+  return qs.parse(queryString.replace(/\+/g, '%20'))
 }
 
 /**
