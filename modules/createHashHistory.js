@@ -95,28 +95,27 @@ function createHashHistory(options={}) {
 
     let path = (basename || '') + pathname + search
 
-    if (queryKey)
+    if (queryKey) {
       path = addQueryStringValueToPath(path, queryKey, key)
-
-    if (path === getHashPath()) {
-      warning(
-        false,
-        'You cannot %s the same path using hash history',
-        action
-      )
+      saveState(key, state)
     } else {
-      if (queryKey) {
-        saveState(key, state)
-      } else {
-        // Drop key and state.
-        location.key = location.state = null
-      }
+      // Drop key and state.
+      location.key = location.state = null
+    }
 
-      if (action === PUSH) {
+    let currentHash = getHashPath()
+
+    if (action === PUSH) {
+      if (currentHash !== path) {
         window.location.hash = path
-      } else { // REPLACE
-        replaceHashPath(path)
+      } else {
+        warning(
+          false,
+          'You cannot PUSH the same path using hash history'
+        )
       }
+    } else if (currentHash !== path) { // REPLACE
+      replaceHashPath(path)
     }
   }
 

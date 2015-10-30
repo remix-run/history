@@ -1,6 +1,9 @@
 ## HEAD
 
 - Fail gracefully when Safari security settings prevent access to window.sessionStorage
+- Pushing the currently active path will result in a replace to not create additional browser history entries (see [#43])
+
+[#43]: https://github.com/rackt/history/pull/43
 
 ## [v1.13.0]
 > Oct 28, 2015
