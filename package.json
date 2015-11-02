@@ -9,7 +9,7 @@
   },
   "bugs": "https://github.com/rackt/history/issues",
   "scripts": {
-    "build": "babel ./modules --stage 0 --loose all -d lib --ignore '__tests__'",
+    "build": "babel ./modules --stage 0 --loose all --plugins dev-expression -d lib --ignore '__tests__'",
     "build-umd": "NODE_ENV=production webpack modules/index.js umd/History.js",
     "build-min": "NODE_ENV=production webpack -p modules/index.js umd/History.min.js",
     "lint": "eslint modules",
@@ -33,6 +33,7 @@
     "babel-core": "^5.4.7",
     "babel-eslint": "^3.1.23",
     "babel-loader": "^5.0.0",
+    "babel-plugin-dev-expression": "^0.1.0",
     "eslint": "1.4.1",
     "eslint-config-rackt": "1.0.0",
     "eslint-plugin-react": "3.3.2",
