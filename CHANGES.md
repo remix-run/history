@@ -1,3 +1,7 @@
+## HEAD
+
+- Fail gracefully when Safari security settings prevent access to window.sessionStorage
+
 ## [v1.13.0]
 > Oct 28, 2015
 
