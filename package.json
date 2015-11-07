@@ -2,6 +2,13 @@
   "name": "history",
   "version": "1.13.0",
   "description": "A minimal, functional history implementation for JavaScript",
+  "files": [
+    "*.md",
+    "docs",
+    "lib",
+    "npm-scripts",
+    "umd"
+  ],
   "main": "lib/index",
   "repository": {
     "type": "git",
