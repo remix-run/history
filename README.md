@@ -29,6 +29,14 @@ import { createHistory } from 'history'
 var createHistory = require('history').createHistory
 ```
 
+The UMD build is also available on [npmcdn](https://npmcdn.com):
+
+```html
+<script src="https://npmcdn.com/history/umd/History.min.js"></script>
+```
+
+You can find the library on `window.History`.
+
 ## Basic Usage
 
 A "history" encapsulates navigation between different screens in your app, and notifies listeners when the current screen changes.
