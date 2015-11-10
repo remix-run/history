@@ -15,7 +15,7 @@ For questions and support, please visit [our channel on Reactiflux](https://disc
 
 ## Installation
 
-Using [npm](https://www.npmjs.org/):
+Using [npm](https://www.npmjs.com/):
 
     $ npm install history
 
