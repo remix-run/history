@@ -2,13 +2,6 @@
   "name": "history",
   "version": "1.13.0",
   "description": "A minimal, functional history implementation for JavaScript",
-  "files": [
-    "*.md",
-    "docs",
-    "lib",
-    "npm-scripts",
-    "umd"
-  ],
   "main": "lib/index",
   "repository": {
     "type": "git",
@@ -19,7 +12,7 @@
     "build": "babel ./modules --stage 0 --loose all --plugins dev-expression -d lib --ignore '__tests__'",
     "build-umd": "NODE_ENV=production webpack modules/index.js umd/History.js",
     "build-min": "NODE_ENV=production webpack -p modules/index.js umd/History.min.js",
-    "lint": "eslint modules *.js",
+    "lint": "eslint modules",
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "test": "npm run lint && karma start",
     "postinstall": "node ./npm-scripts/postinstall.js"
@@ -46,12 +39,10 @@
     "eslint-plugin-react": "3.3.2",
     "expect": "^1.12.0",
     "gzip-size": "^3.0.0",
-    "isparta-loader": "^1.0.0",
     "karma": "^0.13.3",
     "karma-browserstack-launcher": "^0.1.3",
     "karma-chrome-launcher": "^0.2.0",
-    "karma-coverage": "^0.5.3",
-    "karma-coveralls": "^1.1.2",
+    "karma-firefox-launcher": "^0.1.6",
     "karma-mocha": "^0.2.0",
     "karma-mocha-reporter": "^1.0.4",
     "karma-sourcemap-loader": "^0.3.5",

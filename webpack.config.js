@@ -1,6 +1,6 @@
-import webpack from 'webpack'
+var webpack = require('webpack')
 
-export default {
+module.exports = {
 
   output: {
     library: 'History',
@@ -9,11 +9,7 @@ export default {
 
   module: {
     loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel?stage=0&loose=all&plugins[]=dev-expression'
-      }
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel?stage=0&loose=all&plugins[]=dev-expression' }
     ]
   },
 
