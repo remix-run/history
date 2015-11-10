@@ -114,6 +114,16 @@ function createHistory(options={}) {
         return // Transition was interrupted.
 
       if (ok) {
+        // treat PUSH to current path like REPLACE to be consistent with browsers
+        if (nextLocation.action === PUSH) {
+          let { pathname, search } = getCurrentLocation()
+          let currentPath = pathname + search
+          let path = nextLocation.pathname + nextLocation.search
+
+          if (currentPath === path)
+            nextLocation.action = REPLACE
+        }
+
         if (finishTransition(nextLocation) !== false)
           updateLocation(nextLocation)
       } else if (location && nextLocation.action === POP) {
