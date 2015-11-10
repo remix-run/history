@@ -11,6 +11,8 @@
 ## [v2.0.0-rc3]
 > Feb 3, 2016
 
+- `createHashHistory` does not enforce a '/' at the beginning of the hash anymore
+
 - **Bugfix:** Don't convert same-path `PUSH` to `REPLACE` when `location.state` changes ([#179])
 - **Bugfix:** Re-enable browser history on Chrome iOS ([#208])
 - **Bugfix:** Properly support location descriptors in `history.createLocation` ([#200])

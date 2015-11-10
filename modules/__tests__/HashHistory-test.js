@@ -15,8 +15,8 @@ import describeGo from './describeGo'
 
 describe('hash history', function () {
   beforeEach(function () {
-    if (window.location.hash !== '')
-      window.location.hash = ''
+    if (window.location.hash !== '/')
+      window.location.hash = '/'
   })
 
   describeInitialLocation(createHashHistory)
