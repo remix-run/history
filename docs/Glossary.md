@@ -2,6 +2,24 @@
 
 This is a glossary of common terms used in the history codebase and documentation listed in alphabetical order, along with their [type signatures](http://flowtype.org/docs/quick-reference.html).
 
+* [Action](#action)
+* [BeforeUnloadHook](#beforeunloadhook)
+* [CreateHistory](#createhistory)
+* [CreateHistoryEnhancer](#createhistoryenhancer)
+* [History](#history)
+* [HistoryOptions](#historyoptions)
+* [Href](#href)
+* [Location](#location)
+* [LocationKey](#locationkey)
+* [LocationListener](#locationlistener)
+* [LocationState](#locationstate)
+* [Path](#path)
+* [Pathname](#pathname)
+* [Query](#query)
+* [QueryString](#querystring)
+* [Transition](#transition)
+* [TransitionHook](#transitionhook)
+
 ### Action
 
     type Action = 'PUSH' | 'REPLACE' | 'POP';
@@ -113,17 +131,17 @@ A *path* represents a URL path.
 
 A *pathname* is the portion of a URL that describes a hierarchical path, including the preceding `/`. For example, in `http://example.com/the/path?the=query`, `/the/path` is the pathname. It is synonymous with `window.location.pathname` in web browsers.
 
-### QueryString
-
-    type QueryString = string;
-
-A *query string* is the portion of the URL that follows the [pathname](#pathname), including any preceding `?`. For example, in `http://example.com/the/path?the=query`, `?the=query` is the query string. It is synonymous with `window.location.search` in web browsers.
-
 ### Query
 
     type Query = Object;
 
 A *query* is the parsed version of a [query string](#querystring).
+
+### QueryString
+
+    type QueryString = string;
+
+A *query string* is the portion of the URL that follows the [pathname](#pathname), including any preceding `?`. For example, in `http://example.com/the/path?the=query`, `?the=query` is the query string. It is synonymous with `window.location.search` in web browsers.
 
 ### Transition
 
