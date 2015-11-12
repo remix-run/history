@@ -7,6 +7,5 @@ before_script:
 - "./BrowserStackLocal $BROWSER_STACK_ACCESS_KEY localhost,8001,0 > /dev/null &"
 - sleep 10
 branches:
-  except:
-  - latest
-  - "/^v\\d/"
+  only:
+  - master
