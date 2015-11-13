@@ -6,6 +6,7 @@ This is a glossary of common terms used in the history codebase and documentatio
 * [BeforeUnloadHook](#beforeunloadhook)
 * [CreateHistory](#createhistory)
 * [CreateHistoryEnhancer](#createhistoryenhancer)
+* [Hash](#hash)
 * [History](#history)
 * [HistoryOptions](#historyoptions)
 * [Href](#href)
@@ -16,7 +17,7 @@ This is a glossary of common terms used in the history codebase and documentatio
 * [Path](#path)
 * [Pathname](#pathname)
 * [Query](#query)
-* [QueryString](#querystring)
+* [Search](#search)
 * [Transition](#transition)
 * [TransitionHook](#transitionhook)
 
@@ -50,6 +51,12 @@ A *createHistory enhancer* (or simply a "history enhancer") is a function that a
   - Supplying default `options`
   - Augmenting the returned [`history`](#history) object
 
+### Hash
+
+    type Hash = string;
+
+A *hash* is a string that represents the hash portion of the URL. It is synonymous with `window.location.hash` in web browsers.
+
 ### History
 
     type History = {
@@ -57,9 +64,9 @@ A *createHistory enhancer* (or simply a "history enhancer") is a function that a
       listen: (listener: LocationListener) => Function;
       transitionTo(location: Location) => void;
       pushState(state: LocationState, path: Path) => void;
+      push(path: Path) => void;
       replaceState(state: LocationState, path: Path) => void;
-      push(path: Path[, state: LocationState]) => void;
-      replace(path: Path[, state: LocationState]) => void;
+      replace(path: Path) => void;
       go(n: number) => void;
       goBack() => void;
       goForward() => void;
@@ -84,7 +91,7 @@ An *href* is a URL string that may be used as the value of `<a href>`. The main 
 
     type Location = {
       pathname: Pathname;
-      search: QueryString;
+      search: Search;
       query: Query;
       state: LocationState;
       action: Action;
@@ -121,9 +128,9 @@ This type gets its name from the first argument to HTML5's [`pushState`][pushSta
 
 ### Path
 
-    type Path = Pathname + QueryString;
+    type Path = Pathname + Search + Hash;
 
-A *path* represents a URL path.
+A *path* represents a URL path as a string.
 
 ### Pathname
 
@@ -135,13 +142,13 @@ A *pathname* is the portion of a URL that describes a hierarchical path, includi
 
     type Query = Object;
 
-A *query* is the parsed version of a [query string](#querystring).
+A *query* is the parsed version of a [search string](#search).
 
-### QueryString
+### Search
 
-    type QueryString = string;
+    type Search = string;
 
-A *query string* is the portion of the URL that follows the [pathname](#pathname), including any preceding `?`. For example, in `http://example.com/the/path?the=query`, `?the=query` is the query string. It is synonymous with `window.location.search` in web browsers.
+A *search* is the portion of the URL that follows the [pathname](#pathname), including any preceding `?`. For example, in `http://example.com/the/path?the=query`, `?the=query` is the search. It is synonymous with `window.location.search` in web browsers.
 
 ### Transition
 

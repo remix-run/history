@@ -38,7 +38,7 @@ There are also two handy methods that allow you not to specify `state` object du
 - `push(path[, state])`
 - `replace(path[, state])`
 
-The [`path`](Glossary.md#path) argument to `pushState`, `push`, `replaceState` and `replace` represents a complete URL path, including the [query string](Glossary.md#querystring). The [`state`](Glossary.md#locationstate) argument should be a JSON-serializable object.
+The [`path`](Glossary.md#path) argument to `pushState`, `push`, `replaceState` and `replace` represents a complete URL path, including the [search string](Glossary.md#search) and [hash](Glossary.md#hash). The [`state`](Glossary.md#locationstate) argument should be a JSON-serializable object.
 
 ```js
 // Push a new entry onto the history stack.
