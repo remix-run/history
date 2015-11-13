@@ -1,6 +1,7 @@
 import { canUseDOM } from './ExecutionEnvironment'
 import runTransitionHook from './runTransitionHook'
-import parsePath, { extractPath } from './parsePath'
+import parsePath from './parsePath'
+import extractPath from './extractPath'
 
 function useBasename(createHistory) {
   return function (options={}) {
