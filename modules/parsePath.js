@@ -1,13 +1,13 @@
 import warning from 'warning'
 
-function extractPath(string) {
+export function extractPath(string, fullUrl = false) {
   const match = string.match(/^https?:\/\/[^\/]*/)
 
   if (match == null)
     return string
 
   warning(
-    false,
+    fullUrl,
     'A path must be pathname + search + hash only, not a fully qualified URL like "%s"',
     string
   )
