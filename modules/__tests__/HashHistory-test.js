@@ -1,6 +1,6 @@
 /*eslint-env mocha */
 import expect from 'expect'
-import { supportsGoWithoutReloadUsingHash } from '../DOMUtils'
+import { supportsGoWithoutReloadUsingHash, supportsHistory } from '../DOMUtils'
 import createHashHistory from '../createHashHistory'
 import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
@@ -26,11 +26,18 @@ describe('hash history', function () {
   describePush(createHashHistory)
   describeReplaceState(createHashHistory)
   describeReplace(createHashHistory)
-  describePopState(createHashHistory)
   describeBasename(createHashHistory)
   describeQueries(createHashHistory)
 
-  if (supportsGoWithoutReloadUsingHash()) {
+  if (supportsHistory()) {
+    describePopState(createHashHistory)
+  } else {
+    describe.skip(null, function () {
+      describePopState(createHashHistory)
+    })
+  }
+
+  if (supportsHistory() && supportsGoWithoutReloadUsingHash()) {
     describeGo(createHashHistory)
     describeQueryKey(createHashHistory)
   } else {
