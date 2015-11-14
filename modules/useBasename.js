@@ -1,7 +1,7 @@
 import { canUseDOM } from './ExecutionEnvironment'
 import runTransitionHook from './runTransitionHook'
-import parsePath from './parsePath'
 import extractPath from './extractPath'
+import parsePath from './parsePath'
 
 function useBasename(createHistory) {
   return function (options={}) {
@@ -13,10 +13,8 @@ function useBasename(createHistory) {
     if (basename == null && canUseDOM) {
       let base = document.getElementsByTagName('base')[0]
 
-      if (base) {
-        // base.href always returns a full URL, thus we strip it
-        basename = extractPath(base.href, true)
-      }
+      if (base)
+        basename = extractPath(base.href)
     }
 
     function addBasename(location) {

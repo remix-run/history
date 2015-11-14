@@ -1,9 +1,16 @@
+import warning from 'warning'
 import extractPath from './extractPath'
 
 function parsePath(path) {
   let pathname = extractPath(path)
   let search = ''
   let hash = ''
+
+  warning(
+    path === pathname,
+    'A path must be pathname + search + hash only, not a fully qualified URL like "%s"',
+    path
+  )
 
   let hashIndex = pathname.indexOf('#')
   if (hashIndex !== -1) {
