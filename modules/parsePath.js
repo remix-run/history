@@ -1,19 +1,4 @@
-import warning from 'warning'
-
-function extractPath(string) {
-  const match = string.match(/^https?:\/\/[^\/]*/)
-
-  if (match == null)
-    return string
-
-  warning(
-    false,
-    'A path must be pathname + search + hash only, not a fully qualified URL like "%s"',
-    string
-  )
-
-  return string.substring(match[0].length)
-}
+import extractPath from './extractPath'
 
 function parsePath(path) {
   let pathname = extractPath(path)
