@@ -1,9 +1,10 @@
-## HEAD
+## [v1.13.1]
 
 - Fail gracefully when Safari security settings prevent access to window.sessionStorage
 - Pushing the currently active path will result in a replace to not create additional browser history entries (see [#43])
 - Strip the protocol and domain from `<base href>` (see [#139])
 
+[v1.13.1]: https://github.com/rackt/history/compare/v1.13.0...v1.13.1
 [#43]: https://github.com/rackt/history/pull/43
 [#139]: https://github.com/rackt/history/pull/139 
 
