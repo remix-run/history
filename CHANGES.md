@@ -1,3 +1,9 @@
+## HEAD
+
+- Disable browser history on Chrome iOS ([#146])
+
+[#146]: https://github.com/rackt/history/pull/146
+
 ## [v1.13.1]
 > Nov 13, 2015
 
