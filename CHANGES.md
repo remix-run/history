@@ -8,8 +8,8 @@
 > Nov 13, 2015
 
 - Fail gracefully when Safari security settings prevent access to window.sessionStorage
-- Pushing the currently active path will result in a replace to not create additional browser history entries (see [#43])
-- Strip the protocol and domain from `<base href>` (see [#139])
+- Pushing the currently active path will result in a replace to not create additional browser history entries ([#43])
+- Strip the protocol and domain from `<base href>` ([#139])
 
 [v1.13.1]: https://github.com/rackt/history/compare/v1.13.0...v1.13.1
 [#43]: https://github.com/rackt/history/pull/43
@@ -18,9 +18,9 @@
 ## [v1.13.0]
 > Oct 28, 2015
 
-- `useBasename` transparently handles trailing slashes (see [#108])
+- `useBasename` transparently handles trailing slashes ([#108])
 - `useBasename` automatically uses the value of `<base href>` when no
-  `basename` option is provided (see [#94])
+  `basename` option is provided ([#94])
 
 [v1.13.0]: https://github.com/rackt/history/compare/v1.12.6...v1.13.0
 [#108]: https://github.com/rackt/history/pull/108
@@ -30,7 +30,7 @@
 > Oct 25, 2015
 
 - Add `forceRefresh` option to `createBrowserHistory` that forces
-  full page refreshes even when the browser supports pushState (see [#95])
+  full page refreshes even when the browser supports pushState ([#95])
 
 [v1.12.6]: https://github.com/rackt/history/compare/v1.12.5...v1.12.6
 [#95]: https://github.com/rackt/history/issues/95
@@ -41,7 +41,7 @@
 - Un-deprecate top-level createLocation method
 - Add ability to use `{ pathname, search, hash }` object anywhere
   a path can be used
-- Fix `useQueries` handling of hashes (see [#93])
+- Fix `useQueries` handling of hashes ([#93])
 
 [v1.12.5]: https://github.com/rackt/history/compare/v1.12.4...v1.12.5
 [#93]: https://github.com/rackt/history/issues/93
@@ -49,7 +49,7 @@
 ## [v1.12.4]
 > Oct 9, 2015
 
-- Fix npm postinstall hook on Windows (see [#62])
+- Fix npm postinstall hook on Windows ([#62])
 
 [v1.12.4]: https://github.com/rackt/history/compare/v1.12.3...v1.12.4
 [#62]: https://github.com/rackt/history/issues/62
@@ -57,8 +57,8 @@
 ## [v1.12.3]
 > Oct 7, 2015
 
-- Fix listenBefore hooks not being called unless a listen hook was also registered (see [#71])
-- Add a warning when we cannot save state in Safari private mode (see [#42])
+- Fix listenBefore hooks not being called unless a listen hook was also registered ([#71])
+- Add a warning when we cannot save state in Safari private mode ([#42])
 
 [v1.12.3]: https://github.com/rackt/history/compare/v1.12.2...v1.12.3
 [#71]: https://github.com/rackt/history/issues/71
@@ -91,10 +91,11 @@
 ## [v1.11.1]
 > Sep 26, 2015
 
-- Fix `location.basename` when location matches exactly (see #68)
+- Fix `location.basename` when location matches exactly ([#68])
 - Allow transitions to be interrupted by another
 
 [v1.11.1]: https://github.com/rackt/history/compare/v1.11.0...v1.11.1
+[#68]: https://github.com/rackt/history/issues/68
 
 ## [v1.11.0]
 > Sep 24, 2015
