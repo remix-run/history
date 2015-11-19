@@ -66,19 +66,25 @@ function useBasename(createHistory) {
 
     // Override all write methods with basename-aware versions.
     function pushState(state, path) {
-      history.pushState(state, prependBasename(path))
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      push({ state, ...path })
     }
 
-    function push(path) {
-      pushState(null, path)
+    function push(location) {
+      history.push(prependBasename(location))
     }
 
     function replaceState(state, path) {
-      history.replaceState(state, prependBasename(path))
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      replace({ state, ...path })
     }
 
-    function replace(path) {
-      replaceState(null, path)
+    function replace(location) {
+      history.replace(prependBasename(location))
     }
 
     function createPath(path) {

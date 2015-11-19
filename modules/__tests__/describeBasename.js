@@ -48,7 +48,7 @@ function describeBasename(createHistory) {
     })
 
     describe('in push', function () {
-      it('works', function (done) {
+      it('works with string', function (done) {
         let steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
@@ -63,6 +63,32 @@ function describeBasename(createHistory) {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
+            expect(location.action).toEqual(PUSH)
+            expect(location.basename).toEqual('/base/url')
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+
+      it('works with object', function (done) {
+        let steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+            expect(location.basename).toEqual('')
+
+            history.push({
+              pathname: '/home',
+              state: { the: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
             expect(location.basename).toEqual('/base/url')
           }
@@ -98,7 +124,7 @@ function describeBasename(createHistory) {
     })
 
     describe('in replace', function () {
-      it('works', function (done) {
+      it('works with string', function (done) {
         let steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
@@ -113,6 +139,32 @@ function describeBasename(createHistory) {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
+            expect(location.action).toEqual(REPLACE)
+            expect(location.basename).toEqual('/base/url')
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+
+      it('works with object', function (done) {
+        let steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+            expect(location.basename).toEqual('')
+
+            history.replace({
+              pathname: '/home',
+              state: { the: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(REPLACE)
             expect(location.basename).toEqual('/base/url')
           }

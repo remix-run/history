@@ -40,7 +40,8 @@ function useQueries(createHistory) {
       if (typeof path === 'string')
         path = parsePath(path)
 
-      const search = path.search + (path.search ? '&' : '?') + queryString
+      const searchBase = path.search ? path.search + '&' : '?'
+      const search = searchBase + queryString
 
       return {
         ...path,
@@ -63,11 +64,25 @@ function useQueries(createHistory) {
 
     // Override all write methods with query-aware versions.
     function pushState(state, path, query) {
-      return history.pushState(state, appendQuery(path, query))
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      push({ state, ...path, query })
+    }
+
+    function push(location) {
+      history.push(appendQuery(location, location.query))
     }
 
     function replaceState(state, path, query) {
-      return history.replaceState(state, appendQuery(path, query))
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      replace({ state, ...path, query })
+    }
+
+    function replace(location) {
+      history.replace(appendQuery(location, location.query))
     }
 
     function createPath(path, query) {
@@ -87,7 +102,9 @@ function useQueries(createHistory) {
       listenBefore,
       listen,
       pushState,
+      push,
       replaceState,
+      replace,
       createPath,
       createHref,
       createLocation

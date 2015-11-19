@@ -45,6 +45,35 @@ function describeQueries(createHistory) {
       })
     })
 
+    describe('in push', function () {
+      it('works', function (done) {
+        let steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual({})
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+
+            history.push({
+              pathname: '/home',
+              query: { the: 'query value' },
+              state: { the: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?the=query+value')
+            expect(location.query).toEqual({ the: 'query value' })
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
+
     describe('in replaceState', function () {
       it('works', function (done) {
         let steps = [
@@ -56,6 +85,35 @@ function describeQueries(createHistory) {
             expect(location.action).toEqual(POP)
 
             history.replaceState({ the: 'state' }, '/home', { the: 'query value' })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?the=query+value')
+            expect(location.query).toEqual({ the: 'query value' })
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(REPLACE)
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
+
+    describe('in replace', function () {
+      it('works', function (done) {
+        let steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual({})
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+
+            history.replace({
+              pathname: '/home',
+              query: { the: 'query value' },
+              state: { the: 'state' }
+            })
           },
           function (location) {
             expect(location.pathname).toEqual('/home')
@@ -152,6 +210,35 @@ function describeQueries(createHistory) {
       })
     })
 
+    describe('in push', function () {
+      it('works', function (done) {
+        let steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+
+            history.push({
+              pathname: '/home',
+              query: { the: 'query' },
+              state: { the: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?STRINGIFY_QUERY')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
+
     describe('in replaceState', function () {
       it('works', function (done) {
         let steps = [
@@ -163,6 +250,35 @@ function describeQueries(createHistory) {
             expect(location.action).toEqual(POP)
 
             history.replaceState({ the: 'state' }, '/home', { the: 'query' })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?STRINGIFY_QUERY')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(REPLACE)
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
+
+    describe('in replace', function () {
+      it('works', function (done) {
+        let steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+
+            history.replace({
+              pathname: '/home',
+              query: { the: 'query' },
+              state: { the: 'state' }
+            })
           },
           function (location) {
             expect(location.pathname).toEqual('/home')
