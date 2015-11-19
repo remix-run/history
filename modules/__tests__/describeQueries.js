@@ -67,6 +67,19 @@ function describeQueries(createHistory) {
             expect(location.query).toEqual({ the: 'query value' })
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
+
+            history.push({
+              ...location,
+              query: { other: 'query value' },
+              state: { other: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?other=query+value')
+            expect(location.query).toEqual({ other: 'query value' })
+            expect(location.state).toEqual({ other: 'state' })
+            expect(location.action).toEqual(PUSH)
           }
         ]
 
@@ -120,6 +133,19 @@ function describeQueries(createHistory) {
             expect(location.search).toEqual('?the=query+value')
             expect(location.query).toEqual({ the: 'query value' })
             expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(REPLACE)
+
+            history.replace({
+              ...location,
+              query: { other: 'query value' },
+              state: { other: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?other=query+value')
+            expect(location.query).toEqual({ other: 'query value' })
+            expect(location.state).toEqual({ other: 'state' })
             expect(location.action).toEqual(REPLACE)
           }
         ]

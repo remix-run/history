@@ -91,6 +91,18 @@ function describeBasename(createHistory) {
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
             expect(location.basename).toEqual('/base/url')
+
+            history.push({
+              ...location,
+              pathname: '/foo'
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/foo')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
+            expect(location.basename).toEqual('/base/url')
           }
         ]
 
@@ -163,6 +175,18 @@ function describeBasename(createHistory) {
           },
           function (location) {
             expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(REPLACE)
+            expect(location.basename).toEqual('/base/url')
+
+            history.replace({
+              ...location,
+              pathname: '/foo'
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/foo')
             expect(location.search).toEqual('')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(REPLACE)
