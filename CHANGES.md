@@ -1,4 +1,5 @@
 ## [v1.13.1]
+> Nov 13, 2015
 
 - Fail gracefully when Safari security settings prevent access to window.sessionStorage
 - Pushing the currently active path will result in a replace to not create additional browser history entries (see [#43])
