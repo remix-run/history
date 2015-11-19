@@ -33,20 +33,20 @@ function useBasename(createHistory) {
       return location
     }
 
-    function prependBasename(path) {
+    function prependBasename(location) {
       if (!basename)
-        return path
+        return location
 
-      if (typeof path === 'string')
-        path = parsePath(path)
+      if (typeof location === 'string')
+        location = parsePath(location)
 
-      const pname = path.pathname
+      const pname = location.pathname
       const normalizedBasename = basename.slice(-1) === '/' ? basename : basename + '/'
       const normalizedPathname = pname.charAt(0) === '/' ? pname.slice(1) : pname
       const pathname = normalizedBasename + normalizedPathname
 
       return {
-        ...path,
+        ...location,
         pathname
       }
     }

@@ -2,6 +2,8 @@ import qs from 'qs'
 import runTransitionHook from './runTransitionHook'
 import parsePath from './parsePath'
 
+const SEARCH_BASE_KEY = '$searchBase'
+
 function defaultStringifyQuery(query) {
   return qs.stringify(query, { arrayFormat: 'brackets' }).replace(/%20/g, '+')
 }
@@ -26,26 +28,40 @@ function useQueries(createHistory) {
       parseQueryString = defaultParseQueryString
 
     function addQuery(location) {
-      if (location.query == null)
-        location.query = parseQueryString(location.search.substring(1))
+      if (location.query == null) {
+        const { search } = location
+        location.query = parseQueryString(search.substring(1))
+        location[SEARCH_BASE_KEY] = { search, searchBase: '' }
+      }
+
+      // TODO: Instead of all the book-keeping here, this should just strip the
+      // stringified query from the search.
 
       return location
     }
 
-    function appendQuery(path, query) {
+    function appendQuery(location, query) {
       let queryString
       if (!query || (queryString = stringifyQuery(query)) === '')
-        return path
+        return location
 
-      if (typeof path === 'string')
-        path = parsePath(path)
+      if (typeof location === 'string')
+        location = parsePath(location)
 
-      const searchBase = path.search ? path.search + '&' : '?'
-      const search = searchBase + queryString
+      const searchBaseSpec = location[SEARCH_BASE_KEY]
+      let searchBase
+      if (searchBaseSpec && location.search === searchBaseSpec.search) {
+        searchBase = searchBaseSpec.searchBase
+      } else {
+        searchBase = location.search || ''
+      }
+
+      const search = searchBase + (searchBase ? '&' : '?') + queryString
 
       return {
-        ...path,
-        search
+        ...location,
+        search,
+        [SEARCH_BASE_KEY]: { search, searchBase }
       }
     }
 
