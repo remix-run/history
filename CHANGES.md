@@ -1,7 +1,8 @@
-## HEAD
+## [HEAD]
 
 - Disable browser history on Chrome iOS ([#146])
 
+[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
 [#146]: https://github.com/rackt/history/pull/146
 
 ## [v1.13.1]
