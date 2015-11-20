@@ -1,4 +1,3 @@
-/*eslint-env mocha */
 import expect from 'expect'
 import { supportsGoWithoutReloadUsingHash, supportsHistory } from '../DOMUtils'
 import createHashHistory from '../createHashHistory'

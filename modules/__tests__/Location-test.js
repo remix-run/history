@@ -1,4 +1,3 @@
-/*eslint-env mocha */
 import expect from 'expect'
 import createHistory from '../createHistory'
 import createLocation from '../createLocation'

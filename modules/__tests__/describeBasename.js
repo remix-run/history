@@ -1,4 +1,3 @@
-/*eslint-env mocha */
 import expect from 'expect'
 import { PUSH, REPLACE, POP } from '../Actions'
 import useBasename from '../useBasename'
