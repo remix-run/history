@@ -40,7 +40,7 @@ export function getUserConfirmation(message, callback) {
 }
 
 /**
- * Returns true if the HTML5 history API is supported. Taken from modernizr.
+ * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
  * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
  * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
@@ -54,7 +54,8 @@ export function supportsHistory() {
       ua.indexOf('Windows Phone') === -1) {
     return false
   }
-  // Chrome iOS has a buggy History implementation: https://github.com/rackt/react-router/issues/2565
+  // FIXME: Work around our browser history not working correctly on Chrome
+  // iOS: https://github.com/rackt/react-router/issues/2565
   if (ua.indexOf('CriOS') !== -1) {
     return false
   }
