@@ -1,4 +1,3 @@
-/*eslint-env mocha */
 import assert from 'assert'
 import expect from 'expect'
 import { PUSH } from '../Actions'

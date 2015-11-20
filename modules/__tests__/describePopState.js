@@ -1,5 +1,3 @@
-/*eslint-env mocha */
-
 function describePopState(createHistory) {
   describe('when a listenBefore hook is added', function () {
     let history, unlisten
