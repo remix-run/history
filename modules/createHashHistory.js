@@ -88,12 +88,12 @@ function createHashHistory(options={}) {
   }
 
   function finishTransition(location) {
-    let { basename, pathname, search, state, action, key } = location
+    let { basename, pathname, search, hash, state, action, key } = location
 
     if (action === POP)
       return // Nothing to do.
 
-    let path = (basename || '') + pathname + search
+    let path = (basename || '') + pathname + search + hash
 
     if (queryKey) {
       path = addQueryStringValueToPath(path, queryKey, key)
