@@ -23,11 +23,9 @@ history.listen(function (location) {
 })
 ```
 
-Query-enhanced histories also accept URL queries as trailing arguments to `pushState`, `replaceState`, `createPath`, `createHref` and as second arguments to `push` and `replace`.
+Query-enhanced histories also accept URL queries as trailing arguments to `pushState`, `replaceState`, `createPath`, and `createHref`.
 
 ```js
 history.createPath('/the/path', { the: 'query' })
 history.pushState(null, '/the/path', { the: 'query' })
-history.push('/the/path', { the: 'query' })
-history.replace('/the/path', { the: 'query' }, { the: 'state' })
 ```
