@@ -5,7 +5,7 @@ Sometimes you may want to prevent the user from going to a different page. For e
 ```js
 history.listenBefore(function (location) {
   if (input.value !== '')
-    return 'Are you sure you want to leave this page?'
+    return confirm('Are you sure you want to leave this page?');
 })
 ```
 
