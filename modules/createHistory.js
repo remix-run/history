@@ -117,11 +117,10 @@ function createHistory(options={}) {
       if (ok) {
         // treat PUSH to current path like REPLACE to be consistent with browsers
         if (nextLocation.action === PUSH) {
-          let { pathname, search } = getCurrentLocation()
-          let currentPath = pathname + search
-          let path = nextLocation.pathname + nextLocation.search
+          const prevPath = createPath(location)
+          const nextPath = createPath(nextLocation)
 
-          if (currentPath === path)
+          if (nextPath === prevPath)
             nextLocation.action = REPLACE
         }
 
