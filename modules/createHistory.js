@@ -2,6 +2,7 @@ import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import _createLocation from './createLocation'
+import parsePath from './parsePath'
 import runTransitionHook from './runTransitionHook'
 import deprecate from './deprecate'
 
@@ -137,23 +138,29 @@ function createHistory(options={}) {
   }
 
   function pushState(state, path) {
-    transitionTo(
-      createLocation(path, state, PUSH, createKey())
-    )
+    if (typeof path === 'string')
+      path = parsePath(path)
+
+    push({ state, ...path })
   }
 
-  function push(path) {
-    pushState(null, path)
+  function push(location) {
+    transitionTo(
+      createLocation(location, null, PUSH, createKey())
+    )
   }
 
   function replaceState(state, path) {
-    transitionTo(
-      createLocation(path, state, REPLACE, createKey())
-    )
+    if (typeof path === 'string')
+      path = parsePath(path)
+
+    replace({ state, ...path })
   }
 
-  function replace(path) {
-    replaceState(null, path)
+  function replace(location) {
+    transitionTo(
+      createLocation(location, null, REPLACE, createKey())
+    )
   }
 
   function goBack() {

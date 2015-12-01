@@ -1,13 +1,16 @@
 import { POP } from './Actions'
 import parsePath from './parsePath'
 
-function createLocation(path='/', state=null, action=POP, key=null) {
-  if (typeof path === 'string')
-    path = parsePath(path)
+function createLocation(location='/', state=null, action=POP, key=null) {
+  if (typeof location === 'string')
+    location = parsePath(location)
 
-  const pathname = path.pathname || '/'
-  const search = path.search || ''
-  const hash = path.hash || ''
+  const pathname = location.pathname || '/'
+  const search = location.search || ''
+  const hash = location.hash || ''
+
+  // TODO: Deprecate passing state directly into createLocation.
+  state = location.state || state
 
   return {
     pathname,

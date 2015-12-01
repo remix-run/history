@@ -33,20 +33,20 @@ function useBasename(createHistory) {
       return location
     }
 
-    function prependBasename(path) {
+    function prependBasename(location) {
       if (!basename)
-        return path
+        return location
 
-      if (typeof path === 'string')
-        path = parsePath(path)
+      if (typeof location === 'string')
+        location = parsePath(location)
 
-      const pname = path.pathname
+      const pname = location.pathname
       const normalizedBasename = basename.slice(-1) === '/' ? basename : basename + '/'
       const normalizedPathname = pname.charAt(0) === '/' ? pname.slice(1) : pname
       const pathname = normalizedBasename + normalizedPathname
 
       return {
-        ...path,
+        ...location,
         pathname
       }
     }
@@ -66,19 +66,25 @@ function useBasename(createHistory) {
 
     // Override all write methods with basename-aware versions.
     function pushState(state, path) {
-      history.pushState(state, prependBasename(path))
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      push({ state, ...path })
     }
 
-    function push(path) {
-      pushState(null, path)
+    function push(location) {
+      history.push(prependBasename(location))
     }
 
     function replaceState(state, path) {
-      history.replaceState(state, prependBasename(path))
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      replace({ state, ...path })
     }
 
-    function replace(path) {
-      replaceState(null, path)
+    function replace(location) {
+      history.replace(prependBasename(location))
     }
 
     function createPath(path) {
