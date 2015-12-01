@@ -1,11 +1,16 @@
 ## [HEAD]
 
+#### Bug fixes
 - Disable browser history on Chrome iOS ([#146])
+- Do not convert same-path PUSH to REPLACE if the hash has changed ([#167]) 
+
+#### Other
 - Add ES2015 module build ([#152])
 
 [HEAD]: https://github.com/rackt/history/compare/latest...HEAD
 [#146]: https://github.com/rackt/history/pull/146
 [#152]: https://github.com/rackt/history/pull/152
+[#167]: https://github.com/rackt/history/pull/167
 
 ## [v1.13.1]
 > Nov 13, 2015
