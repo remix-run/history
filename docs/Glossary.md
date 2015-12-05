@@ -11,6 +11,7 @@ This is a glossary of common terms used in the history codebase and documentatio
 * [HistoryOptions](#historyoptions)
 * [Href](#href)
 * [Location](#location)
+* [LocationDescriptor](#locationdescriptor)
 * [LocationKey](#locationkey)
 * [LocationListener](#locationlistener)
 * [LocationState](#locationstate)
@@ -64,9 +65,9 @@ A *hash* is a string that represents the hash portion of the URL. It is synonymo
       listen: (listener: LocationListener) => Function;
       transitionTo(location: Location) => void;
       pushState(state: LocationState, path: Path) => void;
-      push(path: Path) => void;
+      push(location: LocationDescriptor) => void;
       replaceState(state: LocationState, path: Path) => void;
-      replace(path: Path) => void;
+      replace(location: LocationDescriptor) => void;
       go(n: number) => void;
       goBack() => void;
       goForward() => void;
@@ -104,6 +105,23 @@ A *location* answers two important (philosophical) questions:
   - How did I get here?
 
 New locations are typically created each time the URL changes. You can read more about locations in [the `history` docs](https://github.com/rackt/history/blob/master/docs/Location.md).
+
+### LocationDescriptor
+
+    type LocationDescriptorObject = {
+      pathname: Pathname;
+      search: Search;
+      query: Query;
+      state: LocationState;
+    };
+
+    type LocationDescriptor = LocationDescriptorObject | Path;
+
+A *location descriptor* is the pushable analogue of a location. The `history` object uses `location`s to tell its listeners where they _are_, while history users use location descriptors to tell the `history` object where to _go_.
+
+The object signature is compatible with that of `location`, differing only in ignoring the internally-generated `action` and `key` fields. This allows you to build a location descriptor from an existing `location`, which can be used to change only specific fields on the `location`.
+
+For convenience, you can always use path strings instead of objects wherever a location descriptor is expected.
 
 ### LocationKey
 

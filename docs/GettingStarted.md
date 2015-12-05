@@ -28,17 +28,16 @@ unlisten()
 You can also use a `history` object to programmatically change the current `location` using the following methods:
 
 - `pushState(state, path)`
+- `push(location)`
 - `replaceState(state, path)`
+- `replace(location)`
 - `go(n)`
 - `goBack()`
 - `goForward()`
 
-There are also two handy methods that allow you not to specify `state` object during transitions:
+The [`path`](Glossary.md#path) argument to `pushState` and `replaceState` represents a complete URL path, including the [search string](Glossary.md#search) and [hash](Glossary.md#hash). The [`state`](Glossary.md#locationstate) argument should be a JSON-serializable object.
 
-- `push(path[, state])`
-- `replace(path[, state])`
-
-The [`path`](Glossary.md#path) argument to `pushState`, `push`, `replaceState` and `replace` represents a complete URL path, including the [search string](Glossary.md#search) and [hash](Glossary.md#hash). The [`state`](Glossary.md#locationstate) argument should be a JSON-serializable object.
+The location argument to `push` and `replace` can be either a path string as above or a [location descriptor](Glossary.md#locationdescriptor) object representing the next history entry, including the state.
 
 ```js
 // Push a new entry onto the history stack.
@@ -47,8 +46,14 @@ history.pushState({ some: 'state' }, '/home')
 // Replace the current entry on the history stack.
 history.replaceState({ some: 'other state' }, '/profile')
 
-// Push a new history entry, omitting `state` object (it will be set to `null`)
+// Push a path with null state.
 history.push('/about')
+
+// Push a new history location object with state.
+history.push({ pathname: '/contact', state: { some: 'state' } })
+
+// Change just the search on an existing location.
+history.push({ ...location, search: '?the=search' })
 
 // Go back to the previous history entry. The following
 // two lines are synonymous.

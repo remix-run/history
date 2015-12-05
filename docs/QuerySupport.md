@@ -25,9 +25,10 @@ const history = useQueries(createHistory)({
 })
 ```
 
-Query-enhanced histories also accept URL queries as trailing arguments to `pushState`, `replaceState`, `createPath`, and `createHref`.
+Query-enhanced histories accept URL queries as trailing arguments to `pushState`, `replaceState`, `createPath`, and `createHref`, and accept `query` as a key for `push` and `replace`.
 
 ```js
 history.createPath('/the/path', { the: 'query' })
 history.pushState(null, '/the/path', { the: 'query' })
+history.push({ pathname: '/the/path', query: { the: 'query' } })
 ```
