@@ -5,21 +5,23 @@ Support for parsing and serializing [URL queries](Glossary.md#query) is provided
 ```js
 import { createHistory, useQueries } from 'history'
 
-// Use the built-in query parsing/serialization.
-let history = useQueries(createHistory)()
-
-// Use custom query parsing/serialization.
-let history = useQueries(createHistory)({
-  parseQueryString: function (queryString) {
-    return qs.parse(queryString)
-  },
-  stringifyQuery: function (query) {
-    return qs.stringify(query, { arrayFormat: 'brackets' })
-  }
-})
+const history = useQueries(createHistory)()
 
 history.listen(function (location) {
   console.log(location.query)
+})
+```
+
+If you need custom query parsing and/or serialization, you can override either using the `parseQueryString` and `stringifyQuery` options, respectively.
+
+```js
+const history = useQueries(createHistory)({
+  parseQueryString: function (queryString) {
+    // TODO: return a parsed version of queryString
+  },
+  stringifyQuery: function (query) {
+    // TODO: return a query string created from query
+  }
 })
 ```
 
