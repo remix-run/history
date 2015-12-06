@@ -1,4 +1,5 @@
 ## [v1.14.0]
+> Dec 6, 2015
 
 - **Feature:** Accept objects in `history.push` and `history.replace` ([#141])
 - **Deprecation:** Deprecate `history.pushState` and `history.replaceState` in favor of passing objects to `history.push` and `history.replace` ([#168])
