@@ -4,7 +4,7 @@ function describePopState(createHistory) {
 
     beforeEach(function () {
       history = createHistory()
-      history.pushState(null, '/home')
+      history.push('/home')
     })
 
     afterEach(function () {
@@ -26,7 +26,7 @@ function describePopState(createHistory) {
 
     beforeEach(function () {
       history = createHistory()
-      history.pushState(null, '/home')
+      history.push('/home')
     })
 
     afterEach(function () {

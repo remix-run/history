@@ -22,7 +22,7 @@ function describeQueryKey(createHistory) {
           expect(location.state).toEqual(null)
           expect(location.action).toEqual(POP)
 
-          history.pushState(null, '/home?the=query')
+          history.push('/home?the=query')
         },
         function (location) {
           expect(location.pathname).toEqual('/home')
@@ -71,7 +71,11 @@ function describeQueryKey(createHistory) {
           expect(location.state).toEqual(null)
           expect(location.action).toEqual(POP)
 
-          history.pushState({ the: 'state' }, '/home?the=query')
+          history.push({
+            pathname: '/home',
+            search: '?the=query',
+            state: { the: 'state' }
+          })
         },
         function (location) {
           expect(location.pathname).toEqual('/home')

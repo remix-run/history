@@ -156,24 +156,6 @@ function createHashHistory(options={}) {
     }
   }
 
-  function pushState(state, path) {
-    warning(
-      queryKey || state == null,
-      'You cannot use state without a queryKey it will be dropped'
-    )
-
-    history.pushState(state, path)
-  }
-
-  function replaceState(state, path) {
-    warning(
-      queryKey || state == null,
-      'You cannot use state without a queryKey it will be dropped'
-    )
-
-    history.replaceState(state, path)
-  }
-
   let goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash()
 
   function go(n) {
@@ -203,6 +185,26 @@ function createHashHistory(options={}) {
 
     if (--listenerCount === 0)
       stopHashChangeListener()
+  }
+
+  // deprecated - warning is in createHistory
+  function pushState(state, path) {
+    warning(
+      queryKey || state == null,
+      'You cannot use state without a queryKey it will be dropped'
+    )
+
+    history.pushState(state, path)
+  }
+
+  // deprecated - warning is in createHistory
+  function replaceState(state, path) {
+    warning(
+      queryKey || state == null,
+      'You cannot use state without a queryKey it will be dropped'
+    )
+
+    history.replaceState(state, path)
   }
 
   return {

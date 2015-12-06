@@ -2,6 +2,7 @@ import { canUseDOM } from './ExecutionEnvironment'
 import runTransitionHook from './runTransitionHook'
 import extractPath from './extractPath'
 import parsePath from './parsePath'
+import deprecate from './deprecate'
 
 function useBasename(createHistory) {
   return function (options={}) {
@@ -65,22 +66,8 @@ function useBasename(createHistory) {
     }
 
     // Override all write methods with basename-aware versions.
-    function pushState(state, path) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      push({ state, ...path })
-    }
-
     function push(location) {
       history.push(prependBasename(location))
-    }
-
-    function replaceState(state, path) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      replace({ state, ...path })
     }
 
     function replace(location) {
@@ -99,17 +86,40 @@ function useBasename(createHistory) {
       return addBasename(history.createLocation.apply(history, arguments))
     }
 
+    // deprecated
+    function pushState(state, path) {
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      push({ state, ...path })
+    }
+
+    // deprecated
+    function replaceState(state, path) {
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      replace({ state, ...path })
+    }
+
     return {
       ...history,
       listenBefore,
       listen,
-      pushState,
       push,
-      replaceState,
       replace,
       createPath,
       createHref,
-      createLocation
+      createLocation,
+
+      pushState: deprecate(
+        pushState,
+        'pushState is deprecated; use push instead'
+      ),
+      replaceState: deprecate(
+        replaceState,
+        'replaceState is deprecated; use replace instead'
+      )
     }
   }
 }

@@ -243,7 +243,7 @@ function describeBasename(createHistory) {
       })
     })
 
-    describe('in pushState', () => {
+    describe('in push', () => {
       it('works', function (done) {
         let steps = [
           function (location) {
@@ -253,7 +253,10 @@ function describeBasename(createHistory) {
             expect(location.action).toEqual(POP)
             expect(location.basename).toEqual('')
 
-            history.pushState({ the: 'state' }, '/home')
+            history.push({
+              pathname: '/home',
+              state: { the: 'state' }
+            })
           },
           function (location) {
             expect(location.pathname).toEqual('/home')

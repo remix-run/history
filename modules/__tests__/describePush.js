@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { PUSH, POP } from '../Actions'
+import { PUSH, POP, REPLACE } from '../Actions'
 import execSteps from './execSteps'
 
 function describePush(createHistory) {
@@ -87,6 +87,43 @@ function describePush(createHistory) {
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
             expect(location.key).toNotEqual(oldLocation.key)
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+
+      it('becomes a REPLACE if path is unchanged', function (done) {
+        let steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+
+            history.push({
+              pathname: '/home',
+              search: '?the=query',
+              state: { the: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?the=query')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
+
+            history.push({
+              pathname: '/home',
+              search: '?the=query',
+              state: { different: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?the=query')
+            expect(location.state).toEqual({ different: 'state' })
+            expect(location.action).toEqual(REPLACE)
           }
         ]
 

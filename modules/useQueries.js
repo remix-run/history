@@ -2,6 +2,7 @@ import warning from 'warning'
 import { parse, stringify } from 'query-string'
 import runTransitionHook from './runTransitionHook'
 import parsePath from './parsePath'
+import deprecate from './deprecate'
 
 const SEARCH_BASE_KEY = '$searchBase'
 
@@ -95,22 +96,8 @@ function useQueries(createHistory) {
     }
 
     // Override all write methods with query-aware versions.
-    function pushState(state, path, query) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      push({ state, ...path, query })
-    }
-
     function push(location) {
       history.push(appendQuery(location, location.query))
-    }
-
-    function replaceState(state, path, query) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      replace({ state, ...path, query })
     }
 
     function replace(location) {
@@ -129,17 +116,40 @@ function useQueries(createHistory) {
       return addQuery(history.createLocation.apply(history, arguments))
     }
 
+    // deprecated
+    function pushState(state, path, query) {
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      push({ state, ...path, query })
+    }
+
+    // deprecated
+    function replaceState(state, path, query) {
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      replace({ state, ...path, query })
+    }
+
     return {
       ...history,
       listenBefore,
       listen,
-      pushState,
       push,
-      replaceState,
       replace,
       createPath,
       createHref,
-      createLocation
+      createLocation,
+
+      pushState: deprecate(
+        pushState,
+        'pushState is deprecated; use push instead'
+      ),
+      replaceState: deprecate(
+        replaceState,
+        'replaceState is deprecated; use replace instead'
+      )
     }
   }
 }
