@@ -156,20 +156,36 @@ function describeQueries(createHistory) {
     describe('in createPath', function () {
       it('works', function () {
         expect(
-          history.createPath('/the/path', { the: 'query value' })
+          history.createPath({
+            pathname: '/the/path',
+            query: { the: 'query value' }
+          })
         ).toEqual('/the/path?the=query+value')
       })
 
       it('does not strip trailing slash', function () {
         expect(
-          history.createPath('/the/path/', { the: 'query value' })
+          history.createPath({
+            pathname: '/the/path/',
+            query: { the: 'query value' }
+          })
         ).toEqual('/the/path/?the=query+value')
+      })
+
+      it('works with deprecated query arg', function () {
+        expect(
+          history.createPath('/the/path', { the: 'query value' })
+        ).toEqual('/the/path?the=query+value')
       })
 
       describe('when the path contains a hash', function () {
         it('puts the query before the hash', function () {
           expect(
-            history.createPath('/the/path#the-hash', { the: 'query value' })
+            history.createPath({
+              pathname: '/the/path',
+              hash: '#the-hash',
+              query: { the: 'query value' }
+            })
           ).toEqual('/the/path?the=query+value#the-hash')
         })
       })
@@ -177,7 +193,11 @@ function describeQueries(createHistory) {
       describe('when there is already an existing search', function () {
         it('preserves the existing search', function () {
           expect(
-            history.createPath('/the/path?a=one', { the: 'query value' })
+            history.createPath({
+              pathname: '/the/path',
+              search: '?a=one',
+              query: { the: 'query value' }
+            })
           ).toEqual('/the/path?a=one&the=query+value')
         })
       })
@@ -185,6 +205,15 @@ function describeQueries(createHistory) {
 
     describe('in createHref', function () {
       it('works', function () {
+        expect(
+          stripHash(history.createHref({
+            pathname: '/the/path',
+            query: { the: 'query value' }
+          }))
+        ).toEqual('/the/path?the=query+value')
+      })
+
+      it('works with deprecated query arg', function () {
         expect(
           stripHash(history.createHref('/the/path', { the: 'query value' }))
         ).toEqual('/the/path?the=query+value')
@@ -321,20 +350,30 @@ function describeQueries(createHistory) {
     describe('in createPath', function () {
       it('works', function () {
         expect(
-          history.createPath('/the/path', { the: 'query' })
+          history.createPath({
+            pathname: '/the/path',
+            query: { the: 'query' }
+          })
         ).toEqual('/the/path?STRINGIFY_QUERY')
       })
 
       it('does not strip trailing slash', function () {
         expect(
-          history.createPath('/the/path/', { the: 'query' })
+          history.createPath({
+            pathname: '/the/path/',
+            query: { the: 'query' }
+          })
         ).toEqual('/the/path/?STRINGIFY_QUERY')
       })
 
       describe('when the path contains a hash', function () {
         it('puts the query before the hash', function () {
           expect(
-            history.createPath('/the/path#the-hash', { the: 'query' })
+            history.createPath({
+              pathname: '/the/path',
+              hash: '#the-hash',
+              query: { the: 'query' }
+            })
           ).toEqual('/the/path?STRINGIFY_QUERY#the-hash')
         })
       })
@@ -342,7 +381,11 @@ function describeQueries(createHistory) {
       describe('when there is already an existing search', function () {
         it('preserves the existing search', function () {
           expect(
-            history.createPath('/the/path?a=one', { the: 'query' })
+            history.createPath({
+              pathname: '/the/path',
+              search: '?a=one',
+              query: { the: 'query' }
+            })
           ).toEqual('/the/path?a=one&STRINGIFY_QUERY')
         })
       })
@@ -351,7 +394,10 @@ function describeQueries(createHistory) {
     describe('in createHref', function () {
       it('works', function () {
         expect(
-          stripHash(history.createHref('/the/path', { the: 'query' }))
+          stripHash(history.createHref({
+            pathname: '/the/path',
+            query: { the: 'query' }
+          }))
         ).toEqual('/the/path?STRINGIFY_QUERY')
       })
     })

@@ -160,11 +160,11 @@ function createHistory(options={}) {
     return createRandomKey(keyLength)
   }
 
-  function createPath(path) {
-    if (path == null || typeof path === 'string')
-      return path
+  function createPath(location) {
+    if (location == null || typeof location === 'string')
+      return location
 
-    const { pathname, search, hash } = path
+    const { pathname, search, hash } = location
 
     let result = pathname
 
@@ -177,8 +177,8 @@ function createHistory(options={}) {
     return result
   }
 
-  function createHref(path) {
-    return createPath(path)
+  function createHref(location) {
+    return createPath(location)
   }
 
   function createLocation(path, state, action, key=createKey()) {

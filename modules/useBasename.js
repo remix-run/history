@@ -74,12 +74,12 @@ function useBasename(createHistory) {
       history.replace(prependBasename(location))
     }
 
-    function createPath(path) {
-      return history.createPath(prependBasename(path))
+    function createPath(location) {
+      return history.createPath(prependBasename(location))
     }
 
-    function createHref(path) {
-      return history.createHref(prependBasename(path))
+    function createHref(location) {
+      return history.createHref(prependBasename(location))
     }
 
     function createLocation() {
