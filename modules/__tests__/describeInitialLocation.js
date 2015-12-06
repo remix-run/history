@@ -29,7 +29,10 @@ function describeInitialLocation(createHistory) {
 
     it('emits POP with current location key', function (done) {
       // set initial state, this is needed because all implementations gets state from different places
-      history.pushState({ initial: 'state' }, '/')
+      history.push({
+        pathname: '/',
+        state: { initial: 'state' }
+      })
 
       // now create history for testing if initial POP event has location.key
       history = createHistory()

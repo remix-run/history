@@ -64,9 +64,7 @@ A *hash* is a string that represents the hash portion of the URL. It is synonymo
       listenBefore: (hook: TransitionHook) => Function;
       listen: (listener: LocationListener) => Function;
       transitionTo(location: Location) => void;
-      pushState(state: LocationState, path: Path) => void;
       push(location: LocationDescriptor) => void;
-      replaceState(state: LocationState, path: Path) => void;
       replace(location: LocationDescriptor) => void;
       go(n: number) => void;
       goBack() => void;

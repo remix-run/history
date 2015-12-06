@@ -136,24 +136,10 @@ function createHistory(options={}) {
     })
   }
 
-  function pushState(state, path) {
-    if (typeof path === 'string')
-      path = parsePath(path)
-
-    push({ state, ...path })
-  }
-
   function push(location) {
     transitionTo(
       createLocation(location, null, PUSH, createKey())
     )
-  }
-
-  function replaceState(state, path) {
-    if (typeof path === 'string')
-      path = parsePath(path)
-
-    replace({ state, ...path })
   }
 
   function replace(location) {
@@ -225,12 +211,26 @@ function createHistory(options={}) {
     transitionHooks = transitionHooks.filter(item => item !== hook)
   }
 
+  // deprecated
+  function pushState(state, path) {
+    if (typeof path === 'string')
+      path = parsePath(path)
+
+    push({ state, ...path })
+  }
+
+  // deprecated
+  function replaceState(state, path) {
+    if (typeof path === 'string')
+      path = parsePath(path)
+
+    replace({ state, ...path })
+  }
+
   return {
     listenBefore,
     listen,
     transitionTo,
-    pushState,
-    replaceState,
     push,
     replace,
     go,
@@ -252,6 +252,14 @@ function createHistory(options={}) {
     unregisterTransitionHook: deprecate(
       unregisterTransitionHook,
       'unregisterTransitionHook is deprecated; use the callback returned from listenBefore instead'
+    ),
+    pushState: deprecate(
+      pushState,
+      'pushState is deprecated; use push instead'
+    ),
+    replaceState: deprecate(
+      replaceState,
+      'replaceState is deprecated; use replace instead'
     )
   }
 }

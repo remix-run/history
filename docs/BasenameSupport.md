@@ -17,11 +17,10 @@ history.listen(function (location) {
 })
 ```
 
-Basename-enhanced histories also automatically prepend the basename to paths used in `pushState`, `push`, `replaceState`, `replace`, `createPath`, and `createHref`.
+Basename-enhanced histories also automatically prepend the basename to paths used in `push`, `replace`, `createPath`, and `createHref`.
 
 ```js
 history.createPath('/the/path') // /base/the/path
-history.pushState(null, '/the/path') // push /base/the/path
 history.push('/the/path') // push /base/the/path
 ```
 

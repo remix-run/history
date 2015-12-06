@@ -1,22 +1,19 @@
 ## [HEAD]
 
-#### New features
-- Accept objects in `history.push` and `history.replace` ([#141])
-
-#### Bug fixes
-- Disable browser history on Chrome iOS ([#146])
-- Do not convert same-path PUSH to REPLACE if the hash has changed ([#167]) 
-
-#### Other
-- Add ES2015 module build ([#152])
-- Use query-string module instead of qs to save on bytes ([#121])
+- **Feature:** Accept objects in `history.push` and `history.replace` ([#141])
+- **Deprecation:** Deprecate `history.pushState` and `history.replaceState` in favor of passing objects to `history.push` and `history.replace` ([#168])
+- **Bugfix:** Disable browser history on Chrome iOS ([#146])
+- **Bugfix:** Do not convert same-path PUSH to REPLACE if the hash has changed ([#167]) 
+- **Other:** Add ES2015 module build ([#152])
+- **Other:** Use query-string module instead of qs to save on bytes ([#121])
 
 [HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[#121]: https://github.com/rackt/history/issues/121
 [#141]: https://github.com/rackt/history/pull/141
 [#146]: https://github.com/rackt/history/pull/146
 [#152]: https://github.com/rackt/history/pull/152
 [#167]: https://github.com/rackt/history/pull/167
-[#121]: https://github.com/rackt/history/issues/121
+[#168]: https://github.com/rackt/history/pull/168
 
 ## [v1.13.1]
 > Nov 13, 2015

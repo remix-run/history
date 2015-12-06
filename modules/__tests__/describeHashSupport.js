@@ -23,7 +23,12 @@ function describeHashSupport(createHistory) {
           expect(location.state).toEqual(null)
           expect(location.action).toEqual(POP)
 
-          history.pushState({ the: 'state' }, '/home?the=query#the-hash')
+          history.push({
+            pathname: '/home',
+            search: '?the=query',
+            hash: '#the-hash',
+            state: { the: 'state' }
+          })
         },
         function (location) {
           expect(location.pathname).toEqual('/home')
@@ -46,7 +51,7 @@ function describeHashSupport(createHistory) {
           expect(location.state).toEqual(null)
           expect(location.action).toEqual(POP)
 
-          history.pushState(null, '/#the-hash')
+          history.push('/#the-hash')
         },
         function (location) {
           expect(location.pathname).toEqual('/')

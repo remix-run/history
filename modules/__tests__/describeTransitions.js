@@ -21,7 +21,11 @@ function describeTransitions(createHistory) {
     it('receives the next location', function (done) {
       let steps = [
         function () {
-          history.pushState({ the: 'state' }, '/home?the=query')
+          history.push({
+            pathname: '/home',
+            search: '?the=query',
+            state: { the: 'state' }
+          })
         },
         function (location) {
           expect(nextLocation).toBe(location)
@@ -54,7 +58,11 @@ function describeTransitions(createHistory) {
     it('receives the next location', function (done) {
       let steps = [
         function () {
-          history.pushState({ the: 'state' }, '/home?the=query')
+          history.push({
+            pathname: '/home',
+            search: '?the=query',
+            state: { the: 'state' }
+          })
         },
         function (location) {
           expect(nextLocation).toBe(location)
@@ -103,7 +111,11 @@ function describeTransitions(createHistory) {
 
     it('updates the location', function () {
       let prevLocation = location
-      history.pushState({ the: 'state' }, '/home?the=query')
+      history.push({
+        pathname: '/home',
+        search: '?the=query',
+        state: { the: 'state' }
+      })
       expect(prevLocation).toNotBe(location)
 
       assert(location)
@@ -147,7 +159,7 @@ function describeTransitions(createHistory) {
 
     it('does not update the location', function () {
       let prevLocation = location
-      history.pushState(null, '/home')
+      history.push('/home')
       expect(prevLocation).toBe(location)
     })
   })
@@ -178,7 +190,7 @@ function describeTransitions(createHistory) {
 
     it('does not update the location', function () {
       let prevLocation = location
-      history.pushState(null, '/home')
+      history.push('/home')
       expect(prevLocation).toBe(location)
     })
   })

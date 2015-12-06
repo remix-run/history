@@ -21,7 +21,7 @@ describe('memory history', function () {
   describeQueries(createMemoryHistory)
   describeGo(createMemoryHistory)
 
-  describe('when using pushState in the middle of the stack', function () {
+  describe('when using push in the middle of the stack', function () {
     it('clears rest of stack so the user cannot go forward', function () {
       let history = createMemoryHistory(), location
 
@@ -29,10 +29,22 @@ describe('memory history', function () {
         location = loc
       })
 
-      history.pushState({ id: 1 }, '/1')
-      history.pushState({ id: 2 }, '/2')
-      history.pushState({ id: 3 }, '/3')
-      history.pushState({ id: 4 }, '/4')
+      history.push({
+        pathname: '/1',
+        state: { id: 1 }
+      })
+      history.push({
+        pathname: '/2',
+        state: { id: 2 }
+      })
+      history.push({
+        pathname: '/3',
+        state: { id: 3 }
+      })
+      history.push({
+        pathname: '/4',
+        state: { id: 4 }
+      })
 
       expect(location.state).toEqual({ id: 4 })
 
@@ -40,7 +52,10 @@ describe('memory history', function () {
 
       expect(location.state).toEqual({ id: 2 })
 
-      history.pushState({ id: 5 }, '/5')
+      history.push({
+        pathname: '/5',
+        state: { id: 5 }
+      })
 
       expect(location.state).toEqual({ id: 5 })
       expect(location.pathname).toEqual('/5')
@@ -59,7 +74,10 @@ describe('memory history', function () {
       }).toThrow(/Cannot go\(\d+\) there is not enough history/)
 
       history.goBack()
-      history.pushState({ id: 6 }, '/6')
+      history.push({
+        pathname: '/6',
+        state: { id: 6 }
+      })
 
       expect(function () {
         history.goForward()
