@@ -1,15 +1,25 @@
-import qs from 'qs'
+import warning from 'warning'
+import { parse, stringify } from 'query-string'
 import runTransitionHook from './runTransitionHook'
 import parsePath from './parsePath'
 
 const SEARCH_BASE_KEY = '$searchBase'
 
 function defaultStringifyQuery(query) {
-  return qs.stringify(query, { arrayFormat: 'brackets' }).replace(/%20/g, '+')
+  return stringify(query).replace(/%20/g, '+')
 }
 
-function defaultParseQueryString(queryString) {
-  return qs.parse(queryString.replace(/\+/g, '%20'))
+const defaultParseQueryString = parse
+
+function isNestedObject(object) {
+  for (const p in object)
+    if (object.hasOwnProperty(p) &&
+        typeof object[p] === 'object' &&
+        !Array.isArray(object[p]) &&
+        object[p] !== null)
+      return true
+
+  return false
 }
 
 /**
@@ -44,6 +54,12 @@ function useQueries(createHistory) {
       let queryString
       if (!query || (queryString = stringifyQuery(query)) === '')
         return location
+
+      warning(
+        stringifyQuery !== defaultStringifyQuery || !isNestedObject(query),
+        'useQueries does not stringify nested query objects by default; ' +
+        'use a custom stringifyQuery function'
+      )
 
       if (typeof location === 'string')
         location = parsePath(location)

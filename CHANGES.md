@@ -6,11 +6,13 @@
 
 #### Other
 - Add ES2015 module build ([#152])
+- Use query-string module instead of qs to save on bytes ([#121])
 
 [HEAD]: https://github.com/rackt/history/compare/latest...HEAD
 [#146]: https://github.com/rackt/history/pull/146
 [#152]: https://github.com/rackt/history/pull/152
 [#167]: https://github.com/rackt/history/pull/167
+[#121]: https://github.com/rackt/history/issues/121
 
 ## [v1.13.1]
 > Nov 13, 2015
