@@ -1,11 +1,11 @@
-## [HEAD]
-> Unreleased
+## [v1.15.0]
+> Dec 7, 2015
 
 - **Feature** Accept location descriptors in `createPath` and `createHref` ([#173])
 - **Deprecation** Deprecate the `query` arg to `createPath` and `createHref` in favor of using location descriptor objects ([#173])
 - **Bugfix:** Don't throw in memory history when out of history entries ([#170])
 
-[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[v1.15.0]: https://github.com/rackt/history/compare/v1.14.0...v1.15.0
 [#173]: https://github.com/rackt/history/pull/173
 [#170]: https://github.com/rackt/history/pull/170
 
