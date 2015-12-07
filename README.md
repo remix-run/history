@@ -55,7 +55,7 @@ let unlisten = history.listen(location => {
 history.push({
   pathname: '/the/path',
   search: '?a=query',
-  state: { some: 'state' }
+  state: { the: 'state' }
 })
 
 // When you're finished, stop the listener.
