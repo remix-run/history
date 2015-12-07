@@ -11,7 +11,11 @@ function createKey(key) {
 
 export function saveState(key, state) {
   try {
-    window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+    if (state == null) {
+      window.sessionStorage.removeItem(createKey(key))
+    } else {
+      window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+    }
   } catch (error) {
     if (error.name === SecurityError) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
