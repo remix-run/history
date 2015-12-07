@@ -156,6 +156,24 @@ function createHashHistory(options={}) {
     }
   }
 
+  function push(location) {
+    warning(
+      queryKey || location.state == null,
+      'You cannot use state without a queryKey it will be dropped'
+    )
+
+    history.push(location)
+  }
+
+  function replace(location) {
+    warning(
+      queryKey || location.state == null,
+      'You cannot use state without a queryKey it will be dropped'
+    )
+
+    history.replace(location)
+  }
+
   let goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash()
 
   function go(n) {
@@ -187,7 +205,7 @@ function createHashHistory(options={}) {
       stopHashChangeListener()
   }
 
-  // deprecated - warning is in createHistory
+  // deprecated
   function pushState(state, path) {
     warning(
       queryKey || state == null,
@@ -197,7 +215,7 @@ function createHashHistory(options={}) {
     history.pushState(state, path)
   }
 
-  // deprecated - warning is in createHistory
+  // deprecated
   function replaceState(state, path) {
     warning(
       queryKey || state == null,
@@ -211,12 +229,15 @@ function createHashHistory(options={}) {
     ...history,
     listenBefore,
     listen,
-    pushState,
-    replaceState,
+    push,
+    replace,
     go,
     createHref,
-    registerTransitionHook,
-    unregisterTransitionHook
+
+    registerTransitionHook, // deprecated - warning is in createHistory
+    unregisterTransitionHook, // deprecated - warning is in createHistory
+    pushState, // deprecated - warning is in createHistory
+    replaceState // deprecated - warning is in createHistory
   }
 }
 
