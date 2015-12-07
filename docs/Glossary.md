@@ -70,8 +70,8 @@ A *hash* is a string that represents the hash portion of the URL. It is synonymo
       goBack() => void;
       goForward() => void;
       createKey() => LocationKey;
-      createPath(path: Path) => Path;
-      createHref(path: Path) => Href;
+      createPath(location: LocationDescriptor) => Path;
+      createHref(location: LocationDescriptor) => Href;
     };
 
 ### HistoryOptions

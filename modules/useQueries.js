@@ -104,12 +104,20 @@ function useQueries(createHistory) {
       history.replace(appendQuery(location, location.query))
     }
 
-    function createPath(path, query) {
-      return history.createPath(appendQuery(path, query))
+    function createPath(location, query) {
+      warning(
+        query,
+        'the query argument to createPath is deprecated; use a location descriptor instead'
+      )
+      return history.createPath(appendQuery(location, query || location.query))
     }
 
-    function createHref(path, query) {
-      return history.createHref(appendQuery(path, query))
+    function createHref(location, query) {
+      warning(
+        query,
+        'the query argument to createHref is deprecated; use a location descriptor instead'
+      )
+      return history.createHref(appendQuery(location, query || location.query))
     }
 
     function createLocation() {
