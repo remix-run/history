@@ -43,7 +43,7 @@ function createHashHistory(options={}) {
     'Hash history needs a DOM'
   )
 
-  let { queryKey } = options
+  let { queryKey, ...historyOptions } = options
 
   if (queryKey === undefined || !!queryKey)
     queryKey = typeof queryKey === 'string' ? queryKey : DefaultQueryKey
@@ -122,11 +122,10 @@ function createHashHistory(options={}) {
     }
   }
 
-  let history = createDOMHistory({
-    ...options,
+  const history = createDOMHistory({
+    ...historyOptions,
     getCurrentLocation,
-    finishTransition,
-    saveState
+    finishTransition
   })
 
   let listenerCount = 0, stopHashChangeListener
@@ -192,42 +191,6 @@ function createHashHistory(options={}) {
     return '#' + history.createHref(path)
   }
 
-  // deprecated
-  function registerTransitionHook(hook) {
-    if (++listenerCount === 1)
-      stopHashChangeListener = startHashChangeListener(history)
-
-    history.registerTransitionHook(hook)
-  }
-
-  // deprecated
-  function unregisterTransitionHook(hook) {
-    history.unregisterTransitionHook(hook)
-
-    if (--listenerCount === 0)
-      stopHashChangeListener()
-  }
-
-  // deprecated
-  function pushState(state, path) {
-    warning(
-      queryKey || state == null,
-      'You cannot use state without a queryKey it will be dropped'
-    )
-
-    history.pushState(state, path)
-  }
-
-  // deprecated
-  function replaceState(state, path) {
-    warning(
-      queryKey || state == null,
-      'You cannot use state without a queryKey it will be dropped'
-    )
-
-    history.replaceState(state, path)
-  }
-
   return {
     ...history,
     listenBefore,
@@ -235,12 +198,7 @@ function createHashHistory(options={}) {
     push,
     replace,
     go,
-    createHref,
-
-    registerTransitionHook, // deprecated - warning is in createHistory
-    unregisterTransitionHook, // deprecated - warning is in createHistory
-    pushState, // deprecated - warning is in createHistory
-    replaceState // deprecated - warning is in createHistory
+    createHref
   }
 }
 

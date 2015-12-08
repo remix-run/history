@@ -2,9 +2,7 @@ import expect from 'expect'
 import createMemoryHistory from '../createMemoryHistory'
 import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
-import describePushState from './describePushState'
 import describePush from './describePush'
-import describeReplaceState from './describeReplaceState'
 import describeReplace from './describeReplace'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
@@ -13,9 +11,7 @@ import describeGo from './describeGo'
 describe('memory history', function () {
   describeInitialLocation(createMemoryHistory)
   describeTransitions(createMemoryHistory)
-  describePushState(createMemoryHistory)
   describePush(createMemoryHistory)
-  describeReplaceState(createMemoryHistory)
   describeReplace(createMemoryHistory)
   describeBasename(createMemoryHistory)
   describeQueries(createMemoryHistory)

@@ -21,14 +21,14 @@ function createBrowserHistory(options={}) {
     'Browser history needs a DOM'
   )
 
-  let { forceRefresh } = options
-  let isSupported = supportsHistory()
-  let useRefresh = !isSupported || forceRefresh
+  const { forceRefresh, ...historyOptions } = options
+  const isSupported = supportsHistory()
+  const useRefresh = !isSupported || forceRefresh
 
   function getCurrentLocation(historyState) {
     historyState = historyState || window.history.state || {}
 
-    let path = getWindowPath()
+    const path = getWindowPath()
     let { key } = historyState
 
     let state
@@ -94,11 +94,10 @@ function createBrowserHistory(options={}) {
     }
   }
 
-  let history = createDOMHistory({
-    ...options,
+  const history = createDOMHistory({
+    ...historyOptions,
     getCurrentLocation,
-    finishTransition,
-    saveState
+    finishTransition
   })
 
   let listenerCount = 0, stopPopStateListener
@@ -131,28 +130,10 @@ function createBrowserHistory(options={}) {
     }
   }
 
-  // deprecated
-  function registerTransitionHook(hook) {
-    if (++listenerCount === 1)
-      stopPopStateListener = startPopStateListener(history)
-
-    history.registerTransitionHook(hook)
-  }
-
-  // deprecated
-  function unregisterTransitionHook(hook) {
-    history.unregisterTransitionHook(hook)
-
-    if (--listenerCount === 0)
-      stopPopStateListener()
-  }
-
   return {
     ...history,
     listenBefore,
-    listen,
-    registerTransitionHook,
-    unregisterTransitionHook
+    listen
   }
 }
 
