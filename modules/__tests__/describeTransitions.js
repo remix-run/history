@@ -19,7 +19,7 @@ function describeTransitions(createHistory) {
     })
 
     it('receives the next location', function (done) {
-      let steps = [
+      const steps = [
         function () {
           history.push({
             pathname: '/home',
@@ -56,7 +56,7 @@ function describeTransitions(createHistory) {
     })
 
     it('receives the next location', function (done) {
-      let steps = [
+      const steps = [
         function () {
           history.push({
             pathname: '/home',

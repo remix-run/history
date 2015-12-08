@@ -23,7 +23,7 @@ function describeBasename(createHistory) {
 
     describe('in push', function () {
       it('works with string', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -46,7 +46,7 @@ function describeBasename(createHistory) {
       })
 
       it('works with object', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -86,7 +86,7 @@ function describeBasename(createHistory) {
 
     describe('in replace', function () {
       it('works with string', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -109,7 +109,7 @@ function describeBasename(createHistory) {
       })
 
       it('works with object', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -195,7 +195,7 @@ function describeBasename(createHistory) {
 
     describe('in push', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
