@@ -1,9 +1,10 @@
+import warning from 'warning'
 import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import _createLocation from './createLocation'
-import parsePath from './parsePath'
 import runTransitionHook from './runTransitionHook'
+import parsePath from './parsePath'
 import deprecate from './deprecate'
 
 function createRandomKey(length) {
@@ -138,13 +139,13 @@ function createHistory(options={}) {
 
   function push(location) {
     transitionTo(
-      createLocation(location, null, PUSH, createKey())
+      createLocation(location, PUSH, createKey())
     )
   }
 
   function replace(location) {
     transitionTo(
-      createLocation(location, null, REPLACE, createKey())
+      createLocation(location, REPLACE, createKey())
     )
   }
 
@@ -181,8 +182,24 @@ function createHistory(options={}) {
     return createPath(location)
   }
 
-  function createLocation(path, state, action, key=createKey()) {
-    return _createLocation(path, state, action, key)
+  function createLocation(location, action, key=createKey()) {
+    if (typeof action === 'object') {
+      warning(
+        false,
+        'The state (2nd) argument to history.createLocation is deprecated; use a ' +
+        'location descriptor instead'
+      )
+
+      if (typeof location === 'string')
+        location = parsePath(location)
+
+      location = { ...location, state: action }
+
+      action = key
+      key = arguments[3] || createKey()
+    }
+
+    return _createLocation(location, action, key)
   }
 
   // deprecated

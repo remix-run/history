@@ -1,6 +1,7 @@
 import invariant from 'invariant'
 import { PUSH, REPLACE, POP } from './Actions'
 import createHistory from './createHistory'
+import parsePath from './parsePath'
 
 function createStateStorage(entries) {
   return entries
@@ -84,7 +85,9 @@ function createMemoryHistory(options={}) {
       entry.key = key
     }
 
-    return history.createLocation(path, state, undefined, key)
+    const location = parsePath(path)
+
+    return history.createLocation({ ...location, state }, undefined, key)
   }
 
   function canGo(n) {

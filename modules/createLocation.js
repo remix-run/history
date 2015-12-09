@@ -1,16 +1,28 @@
+import warning from 'warning'
 import { POP } from './Actions'
 import parsePath from './parsePath'
 
-function createLocation(location='/', state=null, action=POP, key=null) {
+function createLocation(location='/', action=POP, key=null, _fourthArg=null) {
   if (typeof location === 'string')
     location = parsePath(location)
+
+  if (typeof action === 'object') {
+    warning(
+      false,
+      'The state (2nd) argument to createLocation is deprecated; use a ' +
+      'location descriptor instead'
+    )
+
+    location = { ...location, state: action }
+
+    action = key || POP
+    key = _fourthArg
+  }
 
   const pathname = location.pathname || '/'
   const search = location.search || ''
   const hash = location.hash || ''
-
-  // TODO: Deprecate passing state directly into createLocation.
-  state = location.state || state
+  const state = location.state || null
 
   return {
     pathname,

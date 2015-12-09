@@ -5,6 +5,7 @@ import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener, getHashPath, replaceHashPath, supportsGoWithoutReloadUsingHash } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import createDOMHistory from './createDOMHistory'
+import parsePath from './parsePath'
 
 function isAbsolutePath(path) {
   return typeof path === 'string' && path.charAt(0) === '/'
@@ -66,7 +67,9 @@ function createHashHistory(options={}) {
       key = state = null
     }
 
-    return history.createLocation(path, state, undefined, key)
+    const location = parsePath(path)
+
+    return history.createLocation({ ...location, state }, undefined, key)
   }
 
   function startHashChangeListener({ transitionTo }) {
