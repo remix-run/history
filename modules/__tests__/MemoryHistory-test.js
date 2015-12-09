@@ -71,7 +71,7 @@ describe('memory history', function () {
 
       expect(function () {
         history.goForward()
-      }).toThrow(/Cannot go\(\d+\) there is not enough history/)
+      }).toNotThrow(/Cannot go\(\d+\) there is not enough history/)
 
       history.goBack()
       history.push({
@@ -81,7 +81,8 @@ describe('memory history', function () {
 
       expect(function () {
         history.goForward()
-      }).toThrow(/Cannot go\(\d+\) there is not enough history/)
+      }).toNotThrow(/Cannot go\(\d+\) there is not enough history/)
+
     })
   })
 })
