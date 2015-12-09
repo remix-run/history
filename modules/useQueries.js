@@ -79,7 +79,7 @@ function useQueries(createHistory) {
       })
     }
 
-    // Override all write methods with query-aware versions.
+    // Override all write/create methods with query-aware versions.
     function push(location) {
       history.push(encodeQuery(location))
     }

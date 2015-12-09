@@ -65,7 +65,7 @@ function useBasename(createHistory) {
       })
     }
 
-    // Override all write methods with basename-aware versions.
+    // Override all write/create methods with basename-aware versions.
     function push(location) {
       history.push(prependBasename(location))
     }
