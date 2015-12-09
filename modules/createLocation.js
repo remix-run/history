@@ -1,4 +1,4 @@
-import warning from 'warning'
+//import warning from 'warning'
 import { POP } from './Actions'
 import parsePath from './parsePath'
 
@@ -7,11 +7,11 @@ function createLocation(location='/', action=POP, key=null, _fourthArg=null) {
     location = parsePath(location)
 
   if (typeof action === 'object') {
-    warning(
-      false,
-      'The state (2nd) argument to createLocation is deprecated; use a ' +
-      'location descriptor instead'
-    )
+    //warning(
+    //  false,
+    //  'The state (2nd) argument to createLocation is deprecated; use a ' +
+    //  'location descriptor instead'
+    //)
 
     location = { ...location, state: action }
 
