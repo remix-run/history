@@ -1,4 +1,4 @@
-import warning from 'warning'
+//import warning from 'warning'
 import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
@@ -184,11 +184,11 @@ function createHistory(options={}) {
 
   function createLocation(location, action, key=createKey()) {
     if (typeof action === 'object') {
-      warning(
-        false,
-        'The state (2nd) argument to history.createLocation is deprecated; use a ' +
-        'location descriptor instead'
-      )
+      //warning(
+      //  false,
+      //  'The state (2nd) argument to history.createLocation is deprecated; use a ' +
+      //  'location descriptor instead'
+      //)
 
       if (typeof location === 'string')
         location = parsePath(location)
