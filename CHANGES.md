@@ -1,9 +1,11 @@
 ## [HEAD]
 
+- **Bugfix:** Silence all warnings that were introduced since 1.13 (see [rackt/react-router#2682])
 - **Deprecation:** Deprecate the `createLocation` method in the top-level exports
 - **Deprecation:** Deprecate the `state` arg to `history.createLocation`
 
 [HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[rackt/react-router#2682]: https://github.com/rackt/react-router/issues/2682
 
 ## [v1.15.0]
 > Dec 7, 2015
