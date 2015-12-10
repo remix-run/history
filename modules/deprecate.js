@@ -1,6 +1,6 @@
 //import warning from 'warning'
 
-function deprecate(fn, message) {
+function deprecate(fn) {
   return fn
   //return function () {
   //  warning(false, '[history] ' + message)
