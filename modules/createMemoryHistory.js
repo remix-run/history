@@ -1,3 +1,4 @@
+import warning from 'warning'
 import invariant from 'invariant'
 import { PUSH, REPLACE, POP } from './Actions'
 import createHistory from './createHistory'
@@ -97,11 +98,14 @@ function createMemoryHistory(options={}) {
 
   function go(n) {
     if (n) {
-      invariant(
-        canGo(n),
-        'Cannot go(%s) there is not enough history',
-        n
-      )
+      if (!canGo(n)) {
+        warning(
+          false,
+          'Cannot go(%s) there is not enough history',
+          n
+        )
+        return
+      }
 
       current += n
 

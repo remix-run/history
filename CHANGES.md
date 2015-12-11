@@ -1,3 +1,11 @@
+## [HEAD]
+> Unreleased
+
+- **Bugfix:** Don't throw in memory history when out of history entries ([#170])
+
+[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[#170]: https://github.com/rackt/history/pull/170
+
 ## [v1.16.0]
 
 - **Bugfix:** Silence all warnings that were introduced since 1.13 (see [rackt/react-router#2682])
@@ -22,7 +30,7 @@
 - **Feature:** Accept objects in `history.push` and `history.replace` ([#141])
 - **Deprecation:** Deprecate `history.pushState` and `history.replaceState` in favor of passing objects to `history.push` and `history.replace` ([#168])
 - **Bugfix:** Disable browser history on Chrome iOS ([#146])
-- **Bugfix:** Do not convert same-path PUSH to REPLACE if the hash has changed ([#167]) 
+- **Bugfix:** Do not convert same-path PUSH to REPLACE if the hash has changed ([#167])
 - Add ES2015 module build ([#152])
 - Use query-string module instead of qs to save on bytes ([#121])
 
@@ -43,7 +51,7 @@
 
 [v1.13.1]: https://github.com/rackt/history/compare/v1.13.0...v1.13.1
 [#43]: https://github.com/rackt/history/pull/43
-[#139]: https://github.com/rackt/history/pull/139 
+[#139]: https://github.com/rackt/history/pull/139
 
 ## [v1.13.0]
 > Oct 28, 2015

@@ -69,9 +69,10 @@ describe('memory history', function () {
       expect(location.state).toEqual({ id: 5 })
       expect(location.pathname).toEqual('/5')
 
-      expect(function () {
-        history.goForward()
-      }).toThrow(/Cannot go\(\d+\) there is not enough history/)
+      // Mkae sure this doesn't do anything.
+      history.goForward()
+      expect(location.state).toEqual({ id: 5 })
+      expect(location.pathname).toEqual('/5')
 
       history.goBack()
       history.push({
@@ -79,9 +80,16 @@ describe('memory history', function () {
         state: { id: 6 }
       })
 
-      expect(function () {
-        history.goForward()
-      }).toThrow(/Cannot go\(\d+\) there is not enough history/)
+      // Make sure this doesn't do anything.
+      history.goForward()
+      expect(location.state).toEqual({ id: 6 })
+      expect(location.pathname).toEqual('/6')
+
+      // Make sure this doesn't do anything.
+      history.go(-999)
+      expect(location.state).toEqual({ id: 6 })
+      expect(location.pathname).toEqual('/6')
+
     })
   })
 })
