@@ -3,12 +3,10 @@
 
 - **Bugfix:** Don't throw in memory history when out of history entries ([#170])
 - **Bugfix:** Fix the deprecation warnings on `createPath` and `createHref` ([#189])
-- **Bugfix:** Silence deprecation warnings on `createPath` and `createHref` ([#190])
 
 [HEAD]: https://github.com/rackt/history/compare/latest...HEAD
 [#170]: https://github.com/rackt/history/pull/170
 [#189]: https://github.com/rackt/history/pull/189
-[#190]: https://github.com/rackt/history/pull/190
 
 ## [v1.16.0]
 
