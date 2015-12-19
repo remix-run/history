@@ -1,14 +1,15 @@
-## [HEAD]
-> Unreleased
+## [v1.17.0]
+> Dec 19, 2015
 
 - **Bugfix:** Don't throw in memory history when out of history entries ([#170])
 - **Bugfix:** Fix the deprecation warnings on `createPath` and `createHref` ([#189])
 
-[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[v1.17.0]: https://github.com/rackt/history/compare/v1.16.0...v1.17.0
 [#170]: https://github.com/rackt/history/pull/170
 [#189]: https://github.com/rackt/history/pull/189
 
 ## [v1.16.0]
+> Dec 10, 2015
 
 - **Bugfix:** Silence all warnings that were introduced since 1.13 (see [rackt/react-router#2682])
 - **Deprecation:** Deprecate the `createLocation` method in the top-level exports
