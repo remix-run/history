@@ -1,7 +1,6 @@
 import warning from 'warning'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener } from './DOMUtils'
-import deprecate from './deprecate'
 
 function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
   function listener(event) {
@@ -27,7 +26,7 @@ function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
  */
 function useBeforeUnload(createHistory) {
   return function (options) {
-    let history = createHistory(options)
+    const history = createHistory(options)
 
     let stopBeforeUnloadListener
     let beforeUnloadHooks = []
@@ -65,38 +64,9 @@ function useBeforeUnload(createHistory) {
       }
     }
 
-    // deprecated
-    function registerBeforeUnloadHook(hook) {
-      if (canUseDOM && beforeUnloadHooks.indexOf(hook) === -1) {
-        beforeUnloadHooks.push(hook)
-        
-        if (beforeUnloadHooks.length === 1)
-          stopBeforeUnloadListener = startBeforeUnloadListener(getBeforeUnloadPromptMessage)
-      }
-    }
-
-    // deprecated
-    function unregisterBeforeUnloadHook(hook) {
-      if (beforeUnloadHooks.length > 0) {
-        beforeUnloadHooks = beforeUnloadHooks.filter(item => item !== hook)
-
-        if (beforeUnloadHooks.length === 0)
-          stopBeforeUnloadListener()
-      }
-    }
-
     return {
       ...history,
-      listenBeforeUnload,
-
-      registerBeforeUnloadHook: deprecate(
-        registerBeforeUnloadHook,
-        'registerBeforeUnloadHook is deprecated; use listenBeforeUnload instead'
-      ),
-      unregisterBeforeUnloadHook: deprecate(
-        unregisterBeforeUnloadHook,
-        'unregisterBeforeUnloadHook is deprecated; use the callback returned from listenBeforeUnload instead'
-      )
+      listenBeforeUnload
     }
   }
 }

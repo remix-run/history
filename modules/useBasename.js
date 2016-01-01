@@ -2,21 +2,21 @@ import { canUseDOM } from './ExecutionEnvironment'
 import runTransitionHook from './runTransitionHook'
 import extractPath from './extractPath'
 import parsePath from './parsePath'
-import deprecate from './deprecate'
 
 function useBasename(createHistory) {
   return function (options={}) {
     let { basename, ...historyOptions } = options
-    let history = createHistory(historyOptions)
 
     // Automatically use the value of <base href> in HTML
     // documents as basename if it's not explicitly given.
     if (basename == null && canUseDOM) {
-      let base = document.getElementsByTagName('base')[0]
+      const base = document.getElementsByTagName('base')[0]
 
       if (base)
         basename = extractPath(base.href)
     }
+
+    const history = createHistory(historyOptions)
 
     function addBasename(location) {
       if (basename && location.basename == null) {
@@ -65,7 +65,7 @@ function useBasename(createHistory) {
       })
     }
 
-    // Override all write methods with basename-aware versions.
+    // Override all write/create methods with basename-aware versions.
     function push(location) {
       history.push(prependBasename(location))
     }
@@ -86,22 +86,6 @@ function useBasename(createHistory) {
       return addBasename(history.createLocation.apply(history, arguments))
     }
 
-    // deprecated
-    function pushState(state, path) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      push({ state, ...path })
-    }
-
-    // deprecated
-    function replaceState(state, path) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      replace({ state, ...path })
-    }
-
     return {
       ...history,
       listenBefore,
@@ -110,16 +94,7 @@ function useBasename(createHistory) {
       replace,
       createPath,
       createHref,
-      createLocation,
-
-      pushState: deprecate(
-        pushState,
-        'pushState is deprecated; use push instead'
-      ),
-      replaceState: deprecate(
-        replaceState,
-        'replaceState is deprecated; use replace instead'
-      )
+      createLocation
     }
   }
 }

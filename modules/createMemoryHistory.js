@@ -4,15 +4,6 @@ import { PUSH, REPLACE, POP } from './Actions'
 import createHistory from './createHistory'
 import parsePath from './parsePath'
 
-function createStateStorage(entries) {
-  return entries
-    .filter(entry => entry.state)
-    .reduce((memo, entry) => {
-      memo[entry.key] = entry.state
-      return memo
-    }, {})
-}
-
 function createMemoryHistory(options={}) {
   if (Array.isArray(options)) {
     options = { entries: options }
@@ -20,15 +11,7 @@ function createMemoryHistory(options={}) {
     options = { entries: [ options ] }
   }
 
-  let history = createHistory({
-    ...options,
-    getCurrentLocation,
-    finishTransition,
-    saveState,
-    go
-  })
-
-  let { entries, current } = options
+  let { entries, current, ...historyOptions } = options
 
   if (typeof entries === 'string') {
     entries = [ entries ]
@@ -36,20 +19,28 @@ function createMemoryHistory(options={}) {
     entries = [ '/' ]
   }
 
+  const history = createHistory({
+    ...historyOptions,
+    getCurrentLocation,
+    finishTransition,
+    go
+  })
+
+  // Make sure entries all are valid.
   entries = entries.map(function (entry) {
-    let key = history.createKey()
-
     if (typeof entry === 'string')
-      return { pathname: entry, key }
-
-    if (typeof entry === 'object' && entry)
-      return { ...entry, key }
+      entry = parsePath(entry)
 
     invariant(
-      false,
+      entry && typeof entry === 'object',
       'Unable to create history entry from %s',
       entry
     )
+
+    return {
+      ...entry,
+      key: history.createKey()
+    }
   })
 
   if (current == null) {
@@ -62,37 +53,31 @@ function createMemoryHistory(options={}) {
     )
   }
 
-  let storage = createStateStorage(entries)
-
-  function saveState(key, state) {
-    storage[key] = state
-  }
-
-  function readState(key) {
-    return storage[key]
-  }
-
   function getCurrentLocation() {
-    let entry = entries[current]
-    let { key, basename, pathname, search } = entry
-    let path = (basename || '') + pathname + (search || '')
+    const { key, ...location } = entries[current]
+    return history.createLocation(location, undefined, key)
+  }
 
-    let state
-    if (key) {
-      state = readState(key)
-    } else {
-      state = null
-      key = history.createKey()
-      entry.key = key
+  function finishTransition(location) {
+    switch (location.action) {
+      case PUSH:
+        current += 1
+
+        // If we are not on the top of stack
+        // remove rest and push a new entry.
+        if (current < entries.length)
+          entries.splice(current)
+
+        entries.push(location)
+        break
+      case REPLACE:
+        entries[current] = location
+        break
     }
-
-    const location = parsePath(path)
-
-    return history.createLocation({ ...location, state }, undefined, key)
   }
 
   function canGo(n) {
-    let index = current + n
+    const index = current + n
     return index >= 0 && index < entries.length
   }
 
@@ -109,30 +94,10 @@ function createMemoryHistory(options={}) {
 
       current += n
 
-      let currentLocation = getCurrentLocation()
+      const currentLocation = getCurrentLocation()
 
       // change action to POP
       history.transitionTo({ ...currentLocation, action: POP })
-    }
-  }
-
-  function finishTransition(location) {
-    switch (location.action) {
-      case PUSH:
-        current += 1
-
-        // if we are not on the top of stack
-        // remove rest and push new
-        if (current < entries.length)
-          entries.splice(current)
-
-        entries.push(location)
-        saveState(location.key, location.state)
-        break
-      case REPLACE:
-        entries[current] = location
-        saveState(location.key, location.state)
-        break
     }
   }
 

@@ -16,7 +16,7 @@ function describeGo(createHistory) {
 
     describe('back', function () {
       it('calls change listeners with the previous location', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -51,7 +51,7 @@ function describeGo(createHistory) {
 
     describe('forward', function () {
       it('calls change listeners with the next location', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')

@@ -1,10 +1,6 @@
 import warning from 'warning'
 import { parse, stringify } from 'query-string'
 import runTransitionHook from './runTransitionHook'
-import parsePath from './parsePath'
-import deprecate from './deprecate'
-
-const SEARCH_BASE_KEY = '$searchBase'
 
 function defaultStringifyQuery(query) {
   return stringify(query).replace(/%20/g, '+')
@@ -30,7 +26,6 @@ function isNestedObject(object) {
 function useQueries(createHistory) {
   return function (options={}) {
     let { stringifyQuery, parseQueryString, ...historyOptions } = options
-    let history = createHistory(historyOptions)
 
     if (typeof stringifyQuery !== 'function')
       stringifyQuery = defaultStringifyQuery
@@ -38,23 +33,24 @@ function useQueries(createHistory) {
     if (typeof parseQueryString !== 'function')
       parseQueryString = defaultParseQueryString
 
-    function addQuery(location) {
-      if (location.query == null) {
-        const { search } = location
-        location.query = parseQueryString(search.substring(1))
-        location[SEARCH_BASE_KEY] = { search, searchBase: '' }
-      }
+    const history = createHistory(historyOptions)
 
-      // TODO: Instead of all the book-keeping here, this should just strip the
-      // stringified query from the search.
+    function decodeQuery(location) {
+      if (location.query == null)
+        location.query = parseQueryString(location.search.substring(1))
 
       return location
     }
 
-    function appendQuery(location, query) {
+    function encodeQuery(location) {
+      if (typeof location === 'string')
+        return location
+
+      const { query, ...rest } = location
+
       let queryString
       if (!query || (queryString = stringifyQuery(query)) === '')
-        return location
+        return rest
 
       warning(
         stringifyQuery !== defaultStringifyQuery || !isNestedObject(query),
@@ -62,82 +58,46 @@ function useQueries(createHistory) {
         'use a custom stringifyQuery function'
       )
 
-      if (typeof location === 'string')
-        location = parsePath(location)
-
-      const searchBaseSpec = location[SEARCH_BASE_KEY]
-      let searchBase
-      if (searchBaseSpec && location.search === searchBaseSpec.search) {
-        searchBase = searchBaseSpec.searchBase
-      } else {
-        searchBase = location.search || ''
-      }
-
-      const search = searchBase + (searchBase ? '&' : '?') + queryString
+      const search = '?' + queryString
 
       return {
-        ...location,
-        search,
-        [SEARCH_BASE_KEY]: { search, searchBase }
+        ...rest,
+        search
       }
     }
 
     // Override all read methods with query-aware versions.
     function listenBefore(hook) {
       return history.listenBefore(function (location, callback) {
-        runTransitionHook(hook, addQuery(location), callback)
+        runTransitionHook(hook, decodeQuery(location), callback)
       })
     }
 
     function listen(listener) {
       return history.listen(function (location) {
-        listener(addQuery(location))
+        listener(decodeQuery(location))
       })
     }
 
-    // Override all write methods with query-aware versions.
+    // Override all write/create methods with query-aware versions.
     function push(location) {
-      history.push(appendQuery(location, location.query))
+      history.push(encodeQuery(location))
     }
 
     function replace(location) {
-      history.replace(appendQuery(location, location.query))
+      history.replace(encodeQuery(location))
     }
 
-    function createPath(location, query) {
-      //warning(
-      //  !query,
-      //  'the query argument to createPath is deprecated; use a location descriptor instead'
-      //)
-      return history.createPath(appendQuery(location, query || location.query))
+    function createPath(location) {
+      return history.createPath(encodeQuery(location))
     }
 
-    function createHref(location, query) {
-      //warning(
-      //  !query,
-      //  'the query argument to createHref is deprecated; use a location descriptor instead'
-      //)
-      return history.createHref(appendQuery(location, query || location.query))
+    function createHref(location) {
+      return history.createHref(encodeQuery(location))
     }
 
     function createLocation() {
-      return addQuery(history.createLocation.apply(history, arguments))
-    }
-
-    // deprecated
-    function pushState(state, path, query) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      push({ state, ...path, query })
-    }
-
-    // deprecated
-    function replaceState(state, path, query) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      replace({ state, ...path, query })
+      return decodeQuery(history.createLocation.apply(history, arguments))
     }
 
     return {
@@ -148,16 +108,7 @@ function useQueries(createHistory) {
       replace,
       createPath,
       createHref,
-      createLocation,
-
-      pushState: deprecate(
-        pushState,
-        'pushState is deprecated; use push instead'
-      ),
-      replaceState: deprecate(
-        replaceState,
-        'replaceState is deprecated; use replace instead'
-      )
+      createLocation
     }
   }
 }
