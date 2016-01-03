@@ -1,9 +1,9 @@
-## [HEAD]
-> Unreleased
+## [v2.0.0-rc1]
+> Jan 2, 2016
 
 - **Bugfix:** Don't create empty entries in session storage ([#177])
 
-[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[v2.0.0-rc1]: https://github.com/rackt/history/compare/v1.17.0...v2.0.0-rc1
 [#177]: https://github.com/rackt/history/pull/177
 
 ## [v1.17.0]
