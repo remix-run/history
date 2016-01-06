@@ -212,6 +212,24 @@ function describeBasename(createHistory) {
         ).toEqual('/base/url/the/path')
       })
     })
+
+    describe('in createLocation', function () {
+      it('works with string', function () {
+        const location = history.createLocation('/the/path')
+
+        expect(location.pathname).toEqual('/the/path')
+        expect(location.basename).toEqual('/base/url')
+      })
+
+      it('works with object without query', function () {
+        const location = history.createLocation({
+          pathname: '/the/path'
+        })
+
+        expect(location.pathname).toEqual('/the/path')
+        expect(location.basename).toEqual('/base/url')
+      })
+    })
   })
 
   describe('basename through <base href>', () => {

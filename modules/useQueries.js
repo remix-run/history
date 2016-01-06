@@ -122,8 +122,10 @@ function useQueries(createHistory) {
       return history.createHref(appendQuery(location, query || location.query))
     }
 
-    function createLocation() {
-      return addQuery(history.createLocation.apply(history, arguments))
+    function createLocation(location, ...args) {
+      return addQuery(
+        history.createLocation(appendQuery(location, location.query), ...args)
+      )
     }
 
     // deprecated
