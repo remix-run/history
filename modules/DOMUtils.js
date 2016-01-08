@@ -39,6 +39,10 @@ export function getUserConfirmation(message, callback) {
   callback(window.confirm(message))
 }
 
+export function getHistoryLength() {
+  return window.history.length
+}
+
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
