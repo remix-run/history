@@ -1,13 +1,14 @@
 import invariant from 'invariant'
 import { canUseDOM } from './ExecutionEnvironment'
-import { getUserConfirmation, go } from './DOMUtils'
+import { getUserConfirmation, go, getHistoryLength } from './DOMUtils'
 import createHistory from './createHistory'
 
 function createDOMHistory(options) {
   let history = createHistory({
     getUserConfirmation,
     ...options,
-    go
+    go,
+    getHistoryLength
   })
 
   function listen(listener) {

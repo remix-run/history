@@ -22,7 +22,7 @@ function locationsAreEqual(a, b) {
 const DefaultKeyLength = 6
 
 function createHistory(options={}) {
-  let { getCurrentLocation, finishTransition, saveState, go, keyLength, getUserConfirmation } = options
+  let { getCurrentLocation, finishTransition, saveState, go, keyLength, getUserConfirmation, getHistoryLength } = options
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength
@@ -161,6 +161,15 @@ function createHistory(options={}) {
     return createRandomKey(keyLength)
   }
 
+  function resetHistory() {
+    const historyLength = getHistoryLength()
+    if (!location || historyLength)
+      return // Nothing to do.
+
+    go(-historyLength)
+    replace(location)
+  }
+
   function createPath(location) {
     if (location == null || typeof location === 'string')
       return location
@@ -257,6 +266,8 @@ function createHistory(options={}) {
     createPath,
     createHref,
     createLocation,
+    getHistoryLength,
+    resetHistory,
 
     setState: deprecate(
       setState,

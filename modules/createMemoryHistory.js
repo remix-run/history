@@ -25,7 +25,8 @@ function createMemoryHistory(options={}) {
     getCurrentLocation,
     finishTransition,
     saveState,
-    go
+    go,
+    getHistoryLength
   })
 
   let { entries, current } = options
@@ -114,6 +115,10 @@ function createMemoryHistory(options={}) {
       // change action to POP
       history.transitionTo({ ...currentLocation, action: POP })
     }
+  }
+
+  function getHistoryLength() {
+    return entries.length
   }
 
   function finishTransition(location) {
