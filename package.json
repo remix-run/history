@@ -25,7 +25,7 @@
     "lint": "eslint modules",
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "test": "npm run lint && karma start",
-    "postinstall": "node ./npm-scripts/postinstall.js"
+    "prepublish": "node ./npm-scripts/prepublish.js"
   },
   "authors": [
     "Michael Jackson"
