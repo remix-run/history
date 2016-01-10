@@ -1,3 +1,9 @@
+## [HEAD]
+
+- Add back deprecation warnings
+
+[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+
 ## [v2.0.0-rc1]
 > Jan 2, 2016
 
