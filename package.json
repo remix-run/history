@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "2.0.0-rc1",
+  "version": "2.0.0-rc2",
   "description": "A minimal, functional history implementation for JavaScript",
   "files": [
     "*.md",
