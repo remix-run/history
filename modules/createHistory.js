@@ -121,7 +121,7 @@ function createHistory(options={}) {
           const prevPath = createPath(location)
           const nextPath = createPath(nextLocation)
 
-          if (nextPath === prevPath)
+          if (nextPath === prevPath && deepEqual(location.state, nextLocation.state))
             nextLocation.action = REPLACE
         }
 
