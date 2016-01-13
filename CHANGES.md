@@ -1,4 +1,13 @@
+## [HEAD]
+> Unreleased
+
+- **Bugfix:** Don't convert same-path `PUSH` to `REPLACE` when `location.state` changes ([#179])
+
+[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[#179]: https://github.com/rackt/history/pull/179
+
 ## [v2.0.0-rc2]
+> Jan 9, 2016
 
 - Add back deprecation warnings
 
