@@ -231,6 +231,17 @@ function describeQueries(createHistory) {
           expect(location.query).toEqual({})
           expect(location.search).toEqual('')
         })
+
+        it('works with explicit undefined values in query', function () {
+          const location = history.createLocation({
+            pathname: '/the/path',
+            query: { the: undefined }
+          })
+
+          expect(location.pathname).toEqual('/the/path')
+          expect(location.query).toEqual({ the: undefined })
+          expect(location.search).toEqual('')
+        })
       })
     })
 

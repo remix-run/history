@@ -123,9 +123,12 @@ function useQueries(createHistory) {
     }
 
     function createLocation(location, ...args) {
-      return addQuery(
+      const fullLocation =
         history.createLocation(appendQuery(location, location.query), ...args)
-      )
+      if (location.query) {
+        fullLocation.query = location.query
+      }
+      return addQuery(fullLocation)
     }
 
     // deprecated
