@@ -54,11 +54,6 @@ export function supportsHistory() {
       ua.indexOf('Windows Phone') === -1) {
     return false
   }
-  // FIXME: Work around our browser history not working correctly on Chrome
-  // iOS: https://github.com/rackt/react-router/issues/2565
-  if (ua.indexOf('CriOS') !== -1) {
-    return false
-  }
   return window.history && 'pushState' in window.history
 }
 
