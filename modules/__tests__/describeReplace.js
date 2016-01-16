@@ -28,7 +28,7 @@ function describeReplace(createHistory) {
           function (location) {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
-            expect(location.state).toEqual()
+            expect(location.state).toEqual(null)
             expect(location.action).toEqual(REPLACE)
           }
         ]
