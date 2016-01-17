@@ -201,6 +201,48 @@ function describeQueries(createHistory) {
           ).toEqual('/the/path?a=one&the=query+value')
         })
       })
+
+      describe('in createLocation', function () {
+        it('works with string', function () {
+          const location = history.createLocation('/the/path?the=query')
+
+          expect(location.pathname).toEqual('/the/path')
+          expect(location.query).toEqual({ the: 'query' })
+          expect(location.search).toEqual('?the=query')
+        })
+
+        it('works with object with query', function () {
+          const location = history.createLocation({
+            pathname: '/the/path',
+            query: { the: 'query' }
+          })
+
+          expect(location.pathname).toEqual('/the/path')
+          expect(location.query).toEqual({ the: 'query' })
+          expect(location.search).toEqual('?the=query')
+        })
+
+        it('works with object without query', function () {
+          const location = history.createLocation({
+            pathname: '/the/path'
+          })
+
+          expect(location.pathname).toEqual('/the/path')
+          expect(location.query).toEqual({})
+          expect(location.search).toEqual('')
+        })
+
+        it('works with explicit undefined values in query', function () {
+          const location = history.createLocation({
+            pathname: '/the/path',
+            query: { the: undefined }
+          })
+
+          expect(location.pathname).toEqual('/the/path')
+          expect(location.query).toEqual({ the: undefined })
+          expect(location.search).toEqual('')
+        })
+      })
     })
 
     describe('in createHref', function () {

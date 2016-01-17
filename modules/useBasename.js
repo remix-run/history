@@ -82,8 +82,10 @@ function useBasename(createHistory) {
       return history.createHref(prependBasename(location))
     }
 
-    function createLocation() {
-      return addBasename(history.createLocation.apply(history, arguments))
+    function createLocation(location, ...args) {
+      return addBasename(
+        history.createLocation(prependBasename(location), ...args)
+      )
     }
 
     // deprecated

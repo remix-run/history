@@ -122,8 +122,13 @@ function useQueries(createHistory) {
       return history.createHref(appendQuery(location, query || location.query))
     }
 
-    function createLocation() {
-      return addQuery(history.createLocation.apply(history, arguments))
+    function createLocation(location, ...args) {
+      const fullLocation =
+        history.createLocation(appendQuery(location, location.query), ...args)
+      if (location.query) {
+        fullLocation.query = location.query
+      }
+      return addQuery(fullLocation)
     }
 
     // deprecated
