@@ -12,6 +12,7 @@
     "umd"
   ],
   "main": "lib/index",
+  "jsnext:main": "es6/index",
   "repository": {
     "type": "git",
     "url": "https://github.com/rackt/history.git"
