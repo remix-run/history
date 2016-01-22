@@ -2,42 +2,42 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = function (config) {
-  // Browsers to run on BrowserStack
   var customLaunchers = {
+    // Browsers to run on BrowserStack.
     BS_Chrome: {
       base: 'BrowserStack',
       os: 'Windows',
-      os_version: '8.1',
+      os_version: '10',
       browser: 'chrome',
-      browser_version: '39.0'
+      browser_version: '47.0'
     },
     BS_Firefox: {
       base: 'BrowserStack',
       os: 'Windows',
-      os_version: '8.1',
+      os_version: '10',
       browser: 'firefox',
-      browser_version: '32.0'
+      browser_version: '43.0'
     },
     BS_Safari: {
       base: 'BrowserStack',
       os: 'OS X',
-      os_version: 'Yosemite',
+      os_version: 'El Capitan',
       browser: 'safari',
-      browser_version: '8.0'
+      browser_version: '9.0'
     },
     BS_MobileSafari: {
       base: 'BrowserStack',
       os: 'ios',
-      os_version: '7.0',
+      os_version: '8.3',
       browser: 'iphone',
       real_mobile: false
     },
-    BS_InternetExplorer9: {
+    BS_MobileSafari: {
       base: 'BrowserStack',
-      os: 'Windows',
-      os_version: '7',
-      browser: 'ie',
-      browser_version: '9.0'
+      os: 'ios',
+      os_version: '9.1',
+      browser: 'iphone',
+      real_mobile: false
     },
     BS_InternetExplorer10: {
       base: 'BrowserStack',
@@ -49,9 +49,15 @@ module.exports = function (config) {
     BS_InternetExplorer11: {
       base: 'BrowserStack',
       os: 'Windows',
-      os_version: '8.1',
+      os_version: '10',
       browser: 'ie',
       browser_version: '11.0'
+    },
+
+    // The ancient Travis Chrome that most projects use in CI.
+    ChromeCi: {
+      base: 'Chrome',
+      flags: [ '--no-sandbox' ]
     }
   }
 
