@@ -79,6 +79,19 @@ function describeQueries(createHistory) {
             expect(location.query).toEqual({ other: 'query value' })
             expect(location.state).toEqual({ other: 'state' })
             expect(location.action).toEqual(PUSH)
+
+            history.push({
+              ...location,
+              query: {},
+              state: { other: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual({})
+            expect(location.state).toEqual({ other: 'state' })
+            expect(location.action).toEqual(PUSH)
           }
         ]
 

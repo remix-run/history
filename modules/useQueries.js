@@ -52,9 +52,11 @@ function useQueries(createHistory) {
     }
 
     function appendQuery(location, query) {
-      let queryString
-      if (!query || (queryString = stringifyQuery(query)) === '')
+      const searchBaseSpec = location[SEARCH_BASE_KEY]
+      const queryString = query ? stringifyQuery(query) : ''
+      if (!searchBaseSpec && !queryString) {
         return location
+      }
 
       warning(
         stringifyQuery !== defaultStringifyQuery || !isNestedObject(query),
@@ -65,7 +67,6 @@ function useQueries(createHistory) {
       if (typeof location === 'string')
         location = parsePath(location)
 
-      const searchBaseSpec = location[SEARCH_BASE_KEY]
       let searchBase
       if (searchBaseSpec && location.search === searchBaseSpec.search) {
         searchBase = searchBaseSpec.searchBase
@@ -73,7 +74,10 @@ function useQueries(createHistory) {
         searchBase = location.search || ''
       }
 
-      const search = searchBase + (searchBase ? '&' : '?') + queryString
+      let search = searchBase
+      if (queryString) {
+        search += (search ? '&' : '?') + queryString
+      }
 
       return {
         ...location,
