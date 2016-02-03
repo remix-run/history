@@ -1,3 +1,10 @@
+## [HEAD]
+
+- **Bugfix:** Fix search base logic with an empty query ([#221])
+
+[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[#221]: https://github.com/rackt/history/issues/221
+
 ## [v2.0.0-rc3]
 > Feb 3, 2016
 
