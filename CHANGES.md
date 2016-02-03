@@ -5,6 +5,8 @@
 [HEAD]: https://github.com/rackt/history/compare/latest...HEAD
 [#221]: https://github.com/rackt/history/issues/221
 
+- Fail gracefully when Safari 5 security settings prevent access to window.sessionStorage
+
 ## [v2.0.0-rc3]
 > Feb 3, 2016
 
