@@ -1,11 +1,11 @@
-## [HEAD]
-> Unreleased
+## [v2.0.0-rc3]
+> Feb 3, 2016
 
 - **Bugfix:** Don't convert same-path `PUSH` to `REPLACE` when `location.state` changes ([#179])
 - **Bugfix:** Re-enable browser history on Chrome iOS ([#208])
 - **Bugfix:** Properly support location descriptors in `history.createLocation` ([#200])
 
-[HEAD]: https://github.com/rackt/history/compare/latest...HEAD
+[v2.0.0-rc3]: https://github.com/rackt/history/compare/v2.0.0-rc2...v2.0.0-rc3
 [#179]: https://github.com/rackt/history/pull/179
 [#208]: https://github.com/rackt/history/pull/208
 [#200]: https://github.com/rackt/history/pull/200
