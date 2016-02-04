@@ -1,7 +1,6 @@
 import { canUseDOM } from './ExecutionEnvironment'
+import { extractPath, parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
-import extractPath from './extractPath'
-import parsePath from './parsePath'
 import deprecate from './deprecate'
 
 function useBasename(createHistory) {

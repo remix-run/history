@@ -1,10 +1,10 @@
 import warning from 'warning'
 import deepEqual from 'deep-equal'
+import { parsePath } from './PathUtils'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import _createLocation from './createLocation'
 import runTransitionHook from './runTransitionHook'
-import parsePath from './parsePath'
 import deprecate from './deprecate'
 
 function createRandomKey(length) {

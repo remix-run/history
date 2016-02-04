@@ -1,6 +1,6 @@
 import warning from 'warning'
 import { POP } from './Actions'
-import parsePath from './parsePath'
+import { parsePath } from './PathUtils'
 
 function createLocation(location='/', action=POP, key=null, _fourthArg=null) {
   if (typeof location === 'string')

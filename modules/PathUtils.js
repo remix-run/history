@@ -1,7 +1,15 @@
 import warning from 'warning'
-import extractPath from './extractPath'
 
-function parsePath(path) {
+export function extractPath(string) {
+  const match = string.match(/^https?:\/\/[^\/]*/)
+
+  if (match == null)
+    return string
+
+  return string.substring(match[0].length)
+}
+
+export function parsePath(path) {
   let pathname = extractPath(path)
   let search = ''
   let hash = ''
@@ -33,5 +41,3 @@ function parsePath(path) {
     hash
   }
 }
-
-export default parsePath

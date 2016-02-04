@@ -1,10 +1,10 @@
 import invariant from 'invariant'
 import { PUSH, POP } from './Actions'
+import { parsePath } from './PathUtils'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener, getWindowPath, supportsHistory } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import createDOMHistory from './createDOMHistory'
-import parsePath from './parsePath'
 
 /**
  * Creates and returns a history object that uses HTML5's history API

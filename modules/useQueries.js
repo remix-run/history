@@ -1,7 +1,7 @@
 import warning from 'warning'
 import { parse, stringify } from 'query-string'
 import runTransitionHook from './runTransitionHook'
-import parsePath from './parsePath'
+import { parsePath } from './PathUtils'
 import deprecate from './deprecate'
 
 const SEARCH_BASE_KEY = '$searchBase'

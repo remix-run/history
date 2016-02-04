@@ -1,8 +1,8 @@
 import warning from 'warning'
 import invariant from 'invariant'
+import { parsePath } from './PathUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import createHistory from './createHistory'
-import parsePath from './parsePath'
 
 function createStateStorage(entries) {
   return entries
