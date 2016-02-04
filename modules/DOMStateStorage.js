@@ -2,7 +2,11 @@
 import warning from 'warning'
 
 const KeyPrefix = '@@History/'
-const QuotaExceededError = 'QuotaExceededError'
+const QuotaExceededErrors = [
+  'QuotaExceededError',
+  'QUOTA_EXCEEDED_ERR'
+]
+
 const SecurityError = 'SecurityError'
 
 function createKey(key) {
@@ -28,7 +32,7 @@ export function saveState(key, state) {
       return
     }
 
-    if (error.name === QuotaExceededError && window.sessionStorage.length === 0) {
+    if (QuotaExceededErrors.indexOf(error.name) >= 0 && window.sessionStorage.length === 0) {
       // Safari "private mode" throws QuotaExceededError.
       warning(
         false,
