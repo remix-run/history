@@ -1,11 +1,11 @@
 ## [HEAD]
 
 - **Bugfix:** Fix search base logic with an empty query ([#221])
+- **Bugfix:** Fail gracefully when Safari 5 security settings prevent access to window.sessionStorage ([#223])
 
 [HEAD]: https://github.com/rackt/history/compare/latest...HEAD
 [#221]: https://github.com/rackt/history/issues/221
-
-- Fail gracefully when Safari 5 security settings prevent access to window.sessionStorage
+[#223]: https://github.com/rackt/history/pull/223
 
 ## [v2.0.0-rc3]
 > Feb 3, 2016
