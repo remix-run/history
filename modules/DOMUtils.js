@@ -17,7 +17,8 @@ export function removeEventListener(node, event, listener) {
 export function getHashPath() {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
-  return window.location.href.split('#')[1] || ''
+  let href = window.location.href
+  return href.indexOf('#') > -1 ? href.substring(href.indexOf('#') + 1) : ''
 }
 
 export function replaceHashPath(path) {
