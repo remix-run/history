@@ -23,7 +23,7 @@ function describeBasename(createHistory) {
 
     describe('in pushState', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -48,7 +48,7 @@ function describeBasename(createHistory) {
 
     describe('in push', function () {
       it('works with string', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -71,7 +71,7 @@ function describeBasename(createHistory) {
       })
 
       it('works with object', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -111,7 +111,7 @@ function describeBasename(createHistory) {
 
     describe('in replaceState', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -136,7 +136,7 @@ function describeBasename(createHistory) {
 
     describe('in replace', function () {
       it('works with string', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -159,7 +159,7 @@ function describeBasename(createHistory) {
       })
 
       it('works with object', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -263,7 +263,7 @@ function describeBasename(createHistory) {
 
     describe('in push', () => {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -297,7 +297,6 @@ function describeBasename(createHistory) {
     after(() => {
       document.head.removeChild(base)
     })
-
   })
 }
 

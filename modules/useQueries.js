@@ -29,8 +29,9 @@ function isNestedObject(object) {
  */
 function useQueries(createHistory) {
   return function (options={}) {
-    let { stringifyQuery, parseQueryString, ...historyOptions } = options
-    let history = createHistory(historyOptions)
+    const history = createHistory(options)
+
+    let { stringifyQuery, parseQueryString } = options
 
     if (typeof stringifyQuery !== 'function')
       stringifyQuery = defaultStringifyQuery

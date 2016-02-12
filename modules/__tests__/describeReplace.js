@@ -16,7 +16,7 @@ function describeReplace(createHistory) {
 
     describe('with a path string', function () {
       it('calls change listeners with the new location', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -39,7 +39,7 @@ function describeReplace(createHistory) {
 
     describe('with a path object', function () {
       it('calls change listeners with the new location', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -66,7 +66,7 @@ function describeReplace(createHistory) {
       it('correctly merges with old location', function (done) {
         let oldLocation
 
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')

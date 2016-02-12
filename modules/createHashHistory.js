@@ -12,7 +12,7 @@ function isAbsolutePath(path) {
 }
 
 function ensureSlash() {
-  let path = getHashPath()
+  const path = getHashPath()
 
   if (isAbsolutePath(path))
     return true
@@ -31,7 +31,7 @@ function stripQueryStringValueFromPath(path, key) {
 }
 
 function getQueryStringValueFromPath(path, key) {
-  let match = path.match(new RegExp(`\\?.*?\\b${key}=(.+?)\\b`))
+  const match = path.match(new RegExp(`\\?.*?\\b${key}=(.+?)\\b`))
   return match && match[1]
 }
 
@@ -91,7 +91,7 @@ function createHashHistory(options={}) {
   }
 
   function finishTransition(location) {
-    let { basename, pathname, search, state, action, key } = location
+    const { basename, pathname, search, state, action, key } = location
 
     if (action === POP)
       return // Nothing to do.
@@ -106,7 +106,7 @@ function createHashHistory(options={}) {
       location.key = location.state = null
     }
 
-    let currentHash = getHashPath()
+    const currentHash = getHashPath()
 
     if (action === PUSH) {
       if (currentHash !== path) {
@@ -122,7 +122,7 @@ function createHashHistory(options={}) {
     }
   }
 
-  let history = createDOMHistory({
+  const history = createDOMHistory({
     ...options,
     getCurrentLocation,
     finishTransition,
@@ -135,7 +135,7 @@ function createHashHistory(options={}) {
     if (++listenerCount === 1)
       stopHashChangeListener = startHashChangeListener(history)
 
-    let unlisten = history.listenBefore(listener)
+    const unlisten = history.listenBefore(listener)
 
     return function () {
       unlisten()
@@ -149,7 +149,7 @@ function createHashHistory(options={}) {
     if (++listenerCount === 1)
       stopHashChangeListener = startHashChangeListener(history)
 
-    let unlisten = history.listen(listener)
+    const unlisten = history.listen(listener)
 
     return function () {
       unlisten()
@@ -177,7 +177,7 @@ function createHashHistory(options={}) {
     history.replace(location)
   }
 
-  let goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash()
+  const goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash()
 
   function go(n) {
     warning(

@@ -47,7 +47,7 @@ describe('hash history', function () {
   }
 
   it('knows how to make hrefs', function () {
-    let history = createHashHistory()
+    const history = createHashHistory()
     expect(history.createHref('/a/path')).toEqual('#/a/path')
   })
 })

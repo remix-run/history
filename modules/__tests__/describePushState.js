@@ -15,7 +15,7 @@ function describePushState(createHistory) {
     })
 
     it('calls change listeners with the new location', function (done) {
-      let steps = [
+      const steps = [
         function (location) {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
@@ -36,7 +36,7 @@ function describePushState(createHistory) {
     })
 
     it('becomes a REPLACE if path is unchanged', function (done) {
-      let steps = [
+      const steps = [
         function (location) {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
@@ -65,7 +65,7 @@ function describePushState(createHistory) {
     })
 
     it('stays PUSH if state is changed', function (done) {
-      let steps = [
+      const steps = [
         function (location) {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')

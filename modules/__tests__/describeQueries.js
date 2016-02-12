@@ -21,7 +21,7 @@ function describeQueries(createHistory) {
 
     describe('in pushState', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -46,7 +46,7 @@ function describeQueries(createHistory) {
 
     describe('in push', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -101,7 +101,7 @@ function describeQueries(createHistory) {
 
     describe('in replaceState', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -126,7 +126,7 @@ function describeQueries(createHistory) {
 
     describe('in replace', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -296,7 +296,7 @@ function describeQueries(createHistory) {
 
     describe('in pushState', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -321,7 +321,7 @@ function describeQueries(createHistory) {
 
     describe('in push', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -350,7 +350,7 @@ function describeQueries(createHistory) {
 
     describe('in replaceState', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
@@ -375,7 +375,7 @@ function describeQueries(createHistory) {
 
     describe('in replace', function () {
       it('works', function (done) {
-        let steps = [
+        const steps = [
           function (location) {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')

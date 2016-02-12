@@ -23,8 +23,9 @@ describe('memory history', function () {
 
   describe('when using push in the middle of the stack', function () {
     it('clears rest of stack so the user cannot go forward', function () {
-      let history = createMemoryHistory(), location
+      const history = createMemoryHistory()
 
+      let location
       history.listen(function (loc) {
         location = loc
       })
@@ -89,7 +90,6 @@ describe('memory history', function () {
       history.go(-999)
       expect(location.state).toEqual({ id: 6 })
       expect(location.pathname).toEqual('/6')
-
     })
   })
 })

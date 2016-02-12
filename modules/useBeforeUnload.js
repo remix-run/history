@@ -5,7 +5,7 @@ import deprecate from './deprecate'
 
 function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
   function listener(event) {
-    let message = getBeforeUnloadPromptMessage()
+    const message = getBeforeUnloadPromptMessage()
 
     if (typeof message === 'string') {
       (event || window.event).returnValue = message
@@ -27,7 +27,7 @@ function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
  */
 function useBeforeUnload(createHistory) {
   return function (options) {
-    let history = createHistory(options)
+    const history = createHistory(options)
 
     let stopBeforeUnloadListener
     let beforeUnloadHooks = []
@@ -69,7 +69,7 @@ function useBeforeUnload(createHistory) {
     function registerBeforeUnloadHook(hook) {
       if (canUseDOM && beforeUnloadHooks.indexOf(hook) === -1) {
         beforeUnloadHooks.push(hook)
-        
+
         if (beforeUnloadHooks.length === 1)
           stopBeforeUnloadListener = startBeforeUnloadListener(getBeforeUnloadPromptMessage)
       }

@@ -20,7 +20,7 @@ function createMemoryHistory(options={}) {
     options = { entries: [ options ] }
   }
 
-  let history = createHistory({
+  const history = createHistory({
     ...options,
     getCurrentLocation,
     finishTransition,
@@ -37,7 +37,7 @@ function createMemoryHistory(options={}) {
   }
 
   entries = entries.map(function (entry) {
-    let key = history.createKey()
+    const key = history.createKey()
 
     if (typeof entry === 'string')
       return { pathname: entry, key }
@@ -62,7 +62,7 @@ function createMemoryHistory(options={}) {
     )
   }
 
-  let storage = createStateStorage(entries)
+  const storage = createStateStorage(entries)
 
   function saveState(key, state) {
     storage[key] = state
@@ -73,16 +73,17 @@ function createMemoryHistory(options={}) {
   }
 
   function getCurrentLocation() {
-    let entry = entries[current]
-    let { key, basename, pathname, search } = entry
-    let path = (basename || '') + pathname + (search || '')
+    const entry = entries[current]
+    const { basename, pathname, search } = entry
+    const path = (basename || '') + pathname + (search || '')
 
-    let state
-    if (key) {
+    let key, state
+    if (entry.key) {
+      key = entry.key
       state = readState(key)
     } else {
-      state = null
       key = history.createKey()
+      state = null
       entry.key = key
     }
 
@@ -92,7 +93,7 @@ function createMemoryHistory(options={}) {
   }
 
   function canGo(n) {
-    let index = current + n
+    const index = current + n
     return index >= 0 && index < entries.length
   }
 
@@ -109,7 +110,7 @@ function createMemoryHistory(options={}) {
 
       current += n
 
-      let currentLocation = getCurrentLocation()
+      const currentLocation = getCurrentLocation()
 
       // change action to POP
       history.transitionTo({ ...currentLocation, action: POP })

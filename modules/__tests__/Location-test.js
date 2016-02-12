@@ -5,43 +5,43 @@ import { POP } from '../Actions'
 
 describe('a location', function () {
   it('knows its pathname', function () {
-    let location = createLocation('/home?the=query#the-hash')
+    const location = createLocation('/home?the=query#the-hash')
     expect(location.pathname).toEqual('/home')
   })
 
   it('knows its search string', function () {
-    let location = createLocation('/home?the=query#the-hash')
+    const location = createLocation('/home?the=query#the-hash')
     expect(location.search).toEqual('?the=query')
   })
 
   it('knows its hash', function () {
-    let location = createLocation('/home?the=query#the-hash')
+    const location = createLocation('/home?the=query#the-hash')
     expect(location.hash).toEqual('#the-hash')
   })
 
   it('compensates if the location is fully qualified', function () {
-    let location = createLocation('https://example.com/home')
+    const location = createLocation('https://example.com/home')
     expect(location.pathname).toEqual('/home')
   })
 
   it('does not strip URL-like strings in the query', function () {
-    let location = createLocation('/home?redirect=https://example.com/')
+    const location = createLocation('/home?redirect=https://example.com/')
     expect(location.pathname).toEqual('/home')
     expect(location.search).toEqual('?redirect=https://example.com/')
   })
 
   it('has null state by default', function () {
-    let location = createLocation()
+    const location = createLocation()
     expect(location.state).toBe(null)
   })
 
   it('uses pop navigation by default', function () {
-    let location = createLocation()
+    const location = createLocation()
     expect(location.action).toBe(POP)
   })
 
   it('has a null key by default', function () {
-    let location = createLocation()
+    const location = createLocation()
     expect(location.key).toBe(null)
   })
 
@@ -52,7 +52,7 @@ describe('a location', function () {
     })
 
     it('has a key by default', function () {
-      let location = history.createLocation()
+      const location = history.createLocation()
       expect(location.key).toExist()
     })
   })
@@ -60,7 +60,7 @@ describe('a location', function () {
 
 describe('creating a location with an object', function () {
   it('puts the pathname, search, and hash in the proper order', function () {
-    let location = createLocation({
+    const location = createLocation({
       pathname: '/the/path',
       search: '?the=query',
       hash: '#the-hash'

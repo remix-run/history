@@ -22,7 +22,8 @@ function locationsAreEqual(a, b) {
 const DefaultKeyLength = 6
 
 function createHistory(options={}) {
-  let { getCurrentLocation, finishTransition, saveState, go, keyLength, getUserConfirmation } = options
+  const { getCurrentLocation, finishTransition, saveState, go, getUserConfirmation } = options
+  let { keyLength } = options
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength
@@ -52,7 +53,7 @@ function createHistory(options={}) {
   }
 
   function updateLocation(newLocation) {
-    let current = getCurrent()
+    const current = getCurrent()
 
     location = newLocation
 
@@ -73,7 +74,7 @@ function createHistory(options={}) {
     if (location) {
       listener(location)
     } else {
-      let location = getCurrentLocation()
+      const location = getCurrentLocation()
       allKeys = [ location.key ]
       updateLocation(location)
     }
@@ -128,8 +129,8 @@ function createHistory(options={}) {
         if (finishTransition(nextLocation) !== false)
           updateLocation(nextLocation)
       } else if (location && nextLocation.action === POP) {
-        let prevIndex = allKeys.indexOf(location.key)
-        let nextIndex = allKeys.indexOf(nextLocation.key)
+        const prevIndex = allKeys.indexOf(location.key)
+        const nextIndex = allKeys.indexOf(nextLocation.key)
 
         if (prevIndex !== -1 && nextIndex !== -1)
           go(prevIndex - nextIndex) // Restore the URL.

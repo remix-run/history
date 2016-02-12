@@ -21,14 +21,14 @@ function createBrowserHistory(options={}) {
     'Browser history needs a DOM'
   )
 
-  let { forceRefresh } = options
-  let isSupported = supportsHistory()
-  let useRefresh = !isSupported || forceRefresh
+  const { forceRefresh } = options
+  const isSupported = supportsHistory()
+  const useRefresh = !isSupported || forceRefresh
 
   function getCurrentLocation(historyState) {
     historyState = historyState || window.history.state || {}
 
-    let path = getWindowPath()
+    const path = getWindowPath()
     let { key } = historyState
 
     let state
@@ -65,15 +65,15 @@ function createBrowserHistory(options={}) {
   }
 
   function finishTransition(location) {
-    let { basename, pathname, search, hash, state, action, key } = location
+    const { basename, pathname, search, hash, state, action, key } = location
 
     if (action === POP)
       return // Nothing to do.
 
     saveState(key, state)
 
-    let path = (basename || '') + pathname + search + hash
-    let historyState = {
+    const path = (basename || '') + pathname + search + hash
+    const historyState = {
       key
     }
 
@@ -94,7 +94,7 @@ function createBrowserHistory(options={}) {
     }
   }
 
-  let history = createDOMHistory({
+  const history = createDOMHistory({
     ...options,
     getCurrentLocation,
     finishTransition,
@@ -107,7 +107,7 @@ function createBrowserHistory(options={}) {
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history)
 
-    let unlisten = history.listenBefore(listener)
+    const unlisten = history.listenBefore(listener)
 
     return function () {
       unlisten()
@@ -121,7 +121,7 @@ function createBrowserHistory(options={}) {
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history)
 
-    let unlisten = history.listen(listener)
+    const unlisten = history.listen(listener)
 
     return function () {
       unlisten()
