@@ -62,7 +62,7 @@ history.push({
 unlisten()
 ```
 
-You can find many more examples [in the documentation](https://github.com/rackt/history/tree/master/docs)!
+You can find many more examples [in the documentation](https://github.com/reactjs/history/tree/master/docs)!
 
 ## Thanks
 
@@ -70,14 +70,14 @@ A big thank-you to [Dan Shaw](https://www.npmjs.com/~dshaw) for letting us use t
 
 Also, thanks to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to run our build in real browsers.
 
-[build-badge]: https://img.shields.io/travis/rackt/history/master.svg?style=flat-square
-[build]: https://travis-ci.org/rackt/history
+[build-badge]: https://img.shields.io/travis/reactjs/history/master.svg?style=flat-square
+[build]: https://travis-ci.org/reactjs/history
 
 [npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/history
 
-[coveralls-badge]: https://img.shields.io/coveralls/rackt/history/master.svg?style=flat-square
-[coveralls]: https://coveralls.io/github/rackt/history
+[coveralls-badge]: https://img.shields.io/coveralls/reactjs/history/master.svg?style=flat-square
+[coveralls]: https://coveralls.io/github/reactjs/history
 
 [discord-badge]: https://img.shields.io/badge/Discord-join%20chat%20%E2%86%92-738bd7.svg?style=flat-square
 [discord]: https://discord.gg/0ZcbPKXt5bYaNQ46
