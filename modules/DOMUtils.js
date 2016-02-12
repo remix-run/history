@@ -1,3 +1,4 @@
+/*eslint-disable no-alert */
 export function addEventListener(node, event, listener) {
   if (node.addEventListener) {
     node.addEventListener(event, listener, false)

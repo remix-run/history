@@ -1,3 +1,24 @@
 {
-  "extends": "rackt"
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "rules": {
+    "array-bracket-spacing": [ 2, "always" ],
+    "comma-dangle": [ 2, "never" ],
+    "consistent-return": 0,
+    "curly": 0,
+    "default-case": 0,
+    "eqeqeq": [ 2, "smart" ],
+    "func-names": 0,
+    "max-len": 0,
+    "no-else-return": 0,
+    "no-param-reassign": 0,
+    "no-shadow": 0,
+    "no-use-before-define": 0,
+    "one-var": 0,
+    "prefer-arrow-callback": 0,
+    "prefer-template": 0,
+    "semi": [ 2, "never" ],
+    "space-infix-ops": 0,
+    "spaced-comment": 0
+  }
 }
