@@ -28,7 +28,7 @@ function createBrowserHistory(options={}) {
   function getCurrentLocation(historyState) {
     try {
       historyState = historyState || window.history.state || {}
-    } catch {
+    } catch (e) {
       historyState = {}
     }
 
