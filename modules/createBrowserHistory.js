@@ -131,28 +131,10 @@ function createBrowserHistory(options={}) {
     }
   }
 
-  // deprecated
-  function registerTransitionHook(hook) {
-    if (++listenerCount === 1)
-      stopPopStateListener = startPopStateListener(history)
-
-    history.registerTransitionHook(hook)
-  }
-
-  // deprecated
-  function unregisterTransitionHook(hook) {
-    history.unregisterTransitionHook(hook)
-
-    if (--listenerCount === 0)
-      stopPopStateListener()
-  }
-
   return {
     ...history,
     listenBefore,
-    listen,
-    registerTransitionHook,
-    unregisterTransitionHook
+    listen
   }
 }
 

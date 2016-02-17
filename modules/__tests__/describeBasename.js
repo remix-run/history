@@ -21,31 +21,6 @@ function describeBasename(createHistory) {
         unlisten()
     })
 
-    describe('in pushState', function () {
-      it('works', function (done) {
-        const steps = [
-          function (location) {
-            expect(location.pathname).toEqual('/')
-            expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
-            expect(location.action).toEqual(POP)
-            expect(location.basename).toEqual('')
-
-            history.pushState({ the: 'state' }, '/home')
-          },
-          function (location) {
-            expect(location.pathname).toEqual('/home')
-            expect(location.search).toEqual('')
-            expect(location.state).toEqual({ the: 'state' })
-            expect(location.action).toEqual(PUSH)
-            expect(location.basename).toEqual('/base/url')
-          }
-        ]
-
-        unlisten = history.listen(execSteps(steps, done))
-      })
-    })
-
     describe('in push', function () {
       it('works with string', function (done) {
         const steps = [
@@ -101,31 +76,6 @@ function describeBasename(createHistory) {
             expect(location.search).toEqual('')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
-            expect(location.basename).toEqual('/base/url')
-          }
-        ]
-
-        unlisten = history.listen(execSteps(steps, done))
-      })
-    })
-
-    describe('in replaceState', function () {
-      it('works', function (done) {
-        const steps = [
-          function (location) {
-            expect(location.pathname).toEqual('/')
-            expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
-            expect(location.action).toEqual(POP)
-            expect(location.basename).toEqual('')
-
-            history.replaceState({ the: 'state' }, '/home')
-          },
-          function (location) {
-            expect(location.pathname).toEqual('/home')
-            expect(location.search).toEqual('')
-            expect(location.state).toEqual({ the: 'state' })
-            expect(location.action).toEqual(REPLACE)
             expect(location.basename).toEqual('/base/url')
           }
         ]

@@ -19,31 +19,6 @@ function describeQueries(createHistory) {
         unlisten()
     })
 
-    describe('in pushState', function () {
-      it('works', function (done) {
-        const steps = [
-          function (location) {
-            expect(location.pathname).toEqual('/')
-            expect(location.search).toEqual('')
-            expect(location.query).toEqual({})
-            expect(location.state).toEqual(null)
-            expect(location.action).toEqual(POP)
-
-            history.pushState({ the: 'state' }, '/home', { the: 'query value' })
-          },
-          function (location) {
-            expect(location.pathname).toEqual('/home')
-            expect(location.search).toEqual('?the=query+value')
-            expect(location.query).toEqual({ the: 'query value' })
-            expect(location.state).toEqual({ the: 'state' })
-            expect(location.action).toEqual(PUSH)
-          }
-        ]
-
-        unlisten = history.listen(execSteps(steps, done))
-      })
-    })
-
     describe('in push', function () {
       it('works', function (done) {
         const steps = [
@@ -83,40 +58,15 @@ function describeQueries(createHistory) {
             history.push({
               ...location,
               query: {},
-              state: { other: 'state' }
+              state: null
             })
           },
           function (location) {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
             expect(location.query).toEqual({})
-            expect(location.state).toEqual({ other: 'state' })
-            expect(location.action).toEqual(PUSH)
-          }
-        ]
-
-        unlisten = history.listen(execSteps(steps, done))
-      })
-    })
-
-    describe('in replaceState', function () {
-      it('works', function (done) {
-        const steps = [
-          function (location) {
-            expect(location.pathname).toEqual('/')
-            expect(location.search).toEqual('')
-            expect(location.query).toEqual({})
             expect(location.state).toEqual(null)
-            expect(location.action).toEqual(POP)
-
-            history.replaceState({ the: 'state' }, '/home', { the: 'query value' })
-          },
-          function (location) {
-            expect(location.pathname).toEqual('/home')
-            expect(location.search).toEqual('?the=query+value')
-            expect(location.query).toEqual({ the: 'query value' })
-            expect(location.state).toEqual({ the: 'state' })
-            expect(location.action).toEqual(REPLACE)
+            expect(location.action).toEqual(PUSH)
           }
         ]
 
@@ -185,12 +135,6 @@ function describeQueries(createHistory) {
         ).toEqual('/the/path/?the=query+value')
       })
 
-      it('works with deprecated query arg', function () {
-        expect(
-          history.createPath('/the/path', { the: 'query value' })
-        ).toEqual('/the/path?the=query+value')
-      })
-
       describe('when the path contains a hash', function () {
         it('puts the query before the hash', function () {
           expect(
@@ -204,14 +148,14 @@ function describeQueries(createHistory) {
       })
 
       describe('when there is already an existing search', function () {
-        it('preserves the existing search', function () {
+        it('overwrites the existing search', function () {
           expect(
             history.createPath({
               pathname: '/the/path',
               search: '?a=one',
               query: { the: 'query value' }
             })
-          ).toEqual('/the/path?a=one&the=query+value')
+          ).toEqual('/the/path?the=query+value')
         })
       })
 
@@ -267,12 +211,6 @@ function describeQueries(createHistory) {
           }))
         ).toEqual('/the/path?the=query+value')
       })
-
-      it('works with deprecated query arg', function () {
-        expect(
-          stripHash(history.createHref('/the/path', { the: 'query value' }))
-        ).toEqual('/the/path?the=query+value')
-      })
     })
   })
 
@@ -292,31 +230,6 @@ function describeQueries(createHistory) {
     afterEach(function () {
       if (unlisten)
         unlisten()
-    })
-
-    describe('in pushState', function () {
-      it('works', function (done) {
-        const steps = [
-          function (location) {
-            expect(location.pathname).toEqual('/')
-            expect(location.search).toEqual('')
-            expect(location.query).toEqual('PARSE_QUERY_STRING')
-            expect(location.state).toEqual(null)
-            expect(location.action).toEqual(POP)
-
-            history.pushState({ the: 'state' }, '/home', { the: 'query' })
-          },
-          function (location) {
-            expect(location.pathname).toEqual('/home')
-            expect(location.search).toEqual('?STRINGIFY_QUERY')
-            expect(location.query).toEqual('PARSE_QUERY_STRING')
-            expect(location.state).toEqual({ the: 'state' })
-            expect(location.action).toEqual(PUSH)
-          }
-        ]
-
-        unlisten = history.listen(execSteps(steps, done))
-      })
     })
 
     describe('in push', function () {
@@ -341,31 +254,6 @@ function describeQueries(createHistory) {
             expect(location.query).toEqual('PARSE_QUERY_STRING')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
-          }
-        ]
-
-        unlisten = history.listen(execSteps(steps, done))
-      })
-    })
-
-    describe('in replaceState', function () {
-      it('works', function (done) {
-        const steps = [
-          function (location) {
-            expect(location.pathname).toEqual('/')
-            expect(location.search).toEqual('')
-            expect(location.query).toEqual('PARSE_QUERY_STRING')
-            expect(location.state).toEqual(null)
-            expect(location.action).toEqual(POP)
-
-            history.replaceState({ the: 'state' }, '/home', { the: 'query' })
-          },
-          function (location) {
-            expect(location.pathname).toEqual('/home')
-            expect(location.search).toEqual('?STRINGIFY_QUERY')
-            expect(location.query).toEqual('PARSE_QUERY_STRING')
-            expect(location.state).toEqual({ the: 'state' })
-            expect(location.action).toEqual(REPLACE)
           }
         ]
 
@@ -434,14 +322,14 @@ function describeQueries(createHistory) {
       })
 
       describe('when there is already an existing search', function () {
-        it('preserves the existing search', function () {
+        it('overwrites the existing search', function () {
           expect(
             history.createPath({
               pathname: '/the/path',
               search: '?a=one',
               query: { the: 'query' }
             })
-          ).toEqual('/the/path?a=one&STRINGIFY_QUERY')
+          ).toEqual('/the/path?STRINGIFY_QUERY')
         })
       })
     })

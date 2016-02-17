@@ -41,3 +41,19 @@ export function parsePath(path) {
     hash
   }
 }
+
+export function createPath(location) {
+  if (location == null || typeof location === 'string')
+    return location
+
+  const { pathname, search, hash } = location
+  let path = pathname
+
+  if (search)
+    path += search
+
+  if (hash)
+    path += hash
+
+  return path
+}

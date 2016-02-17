@@ -1,7 +1,6 @@
 import { canUseDOM } from './ExecutionEnvironment'
 import { extractPath, parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
-import deprecate from './deprecate'
 
 function useBasename(createHistory) {
   return function (options={}) {
@@ -88,22 +87,6 @@ function useBasename(createHistory) {
       )
     }
 
-    // deprecated
-    function pushState(state, path) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      push({ state, ...path })
-    }
-
-    // deprecated
-    function replaceState(state, path) {
-      if (typeof path === 'string')
-        path = parsePath(path)
-
-      replace({ state, ...path })
-    }
-
     return {
       ...history,
       listenBefore,
@@ -112,16 +95,7 @@ function useBasename(createHistory) {
       replace,
       createPath,
       createHref,
-      createLocation,
-
-      pushState: deprecate(
-        pushState,
-        'pushState is deprecated; use push instead'
-      ),
-      replaceState: deprecate(
-        replaceState,
-        'replaceState is deprecated; use replace instead'
-      )
+      createLocation
     }
   }
 }

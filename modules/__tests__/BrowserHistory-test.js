@@ -2,9 +2,7 @@ import { supportsHistory } from '../DOMUtils'
 import createBrowserHistory from '../createBrowserHistory'
 import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
-import describePushState from './describePushState'
 import describePush from './describePush'
-import describeReplaceState from './describeReplaceState'
 import describeReplace from './describeReplace'
 import describePopState from './describePopState'
 import describeHashSupport from './describeHashSupport'
@@ -20,9 +18,7 @@ describe('browser history', function () {
   if (supportsHistory()) {
     describeInitialLocation(createBrowserHistory)
     describeTransitions(createBrowserHistory)
-    describePushState(createBrowserHistory)
     describePush(createBrowserHistory)
-    describeReplaceState(createBrowserHistory)
     describeReplace(createBrowserHistory)
     describePopState(createBrowserHistory)
     describeHashSupport(createBrowserHistory)
@@ -33,9 +29,7 @@ describe('browser history', function () {
     describe.skip(null, function () {
       describeInitialLocation(createBrowserHistory)
       describeTransitions(createBrowserHistory)
-      describePushState(createBrowserHistory)
       describePush(createBrowserHistory)
-      describeReplaceState(createBrowserHistory)
       describeReplace(createBrowserHistory)
       describePopState(createBrowserHistory)
       describeHashSupport(createBrowserHistory)
