@@ -20,29 +20,6 @@ function describePopState(createHistory) {
       window.history.back()
     })
   })
-
-  describe('when a deprecated transition hook is added', function () {
-    let history, listener
-
-    beforeEach(function () {
-      history = createHistory()
-      history.push('/home')
-    })
-
-    afterEach(function () {
-      history.unregisterTransitionHook(listener)
-    })
-
-    it('is called when browser navigation is used', function (done) {
-      listener = function () {
-        done()
-      }
-
-      history.registerTransitionHook(listener)
-
-      window.history.back()
-    })
-  })
 }
 
 export default describePopState
