@@ -2,10 +2,9 @@ import { canUseDOM } from './ExecutionEnvironment'
 import { extractPath, parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
 
-function useBasename(createHistory) {
+function useBasename(createHistoryOrLocationProvider) {
   return function (options={}) {
-    const history = createHistory(options)
-
+    let history, locationProvider
     let { basename } = options
 
     // Automatically use the value of <base href> in HTML
@@ -74,28 +73,42 @@ function useBasename(createHistory) {
     }
 
     function createPath(location) {
-      return history.createPath(prependBasename(location))
+      return locationProvider.createPath(prependBasename(location))
     }
 
     function createHref(location) {
-      return history.createHref(prependBasename(location))
+      return locationProvider.createHref(prependBasename(location))
     }
 
     function createLocation(location, ...args) {
       return addBasename(
-        history.createLocation(prependBasename(location), ...args)
+        locationProvider.createLocation(prependBasename(location), ...args)
       )
     }
 
-    return {
-      ...history,
-      listenBefore,
-      listen,
-      push,
-      replace,
-      createPath,
-      createHref,
-      createLocation
+    if (typeof createHistoryOrLocationProvider === 'function') {
+      history = createHistoryOrLocationProvider(options)
+      locationProvider = history.locationProvider
+
+      return {
+        ...history,
+        listenBefore,
+        listen,
+        push,
+        replace,
+        createPath,
+        createHref,
+        createLocation
+      }
+    } else if (typeof createHistoryOrLocationProvider === 'object') {
+      locationProvider = createHistoryOrLocationProvider
+
+      return {
+        ...locationProvider,
+        createPath,
+        createHref,
+        createLocation
+      }
     }
   }
 }

@@ -24,9 +24,9 @@ function isNestedObject(object) {
  * Returns a new createHistory function that may be used to create
  * history objects that know how to handle URL queries.
  */
-function useQueries(createHistory) {
+function useQueries(createHistoryOrLocationProvider) {
   return function (options={}) {
-    const history = createHistory(options)
+    let history, locationProvider
 
     let { stringifyQuery, parseQueryString } = options
 
@@ -88,16 +88,16 @@ function useQueries(createHistory) {
     }
 
     function createPath(location) {
-      return history.createPath(encodeQuery(location, location.query))
+      return locationProvider.createPath(encodeQuery(location, location.query))
     }
 
     function createHref(location) {
-      return history.createHref(encodeQuery(location, location.query))
+      return locationProvider.createHref(encodeQuery(location, location.query))
     }
 
     function createLocation(location, ...args) {
       const newLocation =
-        history.createLocation(encodeQuery(location, location.query), ...args)
+        locationProvider.createLocation(encodeQuery(location, location.query), ...args)
 
       if (location.query)
         newLocation.query = location.query
@@ -105,15 +105,29 @@ function useQueries(createHistory) {
       return decodeQuery(newLocation)
     }
 
-    return {
-      ...history,
-      listenBefore,
-      listen,
-      push,
-      replace,
-      createPath,
-      createHref,
-      createLocation
+    if (typeof createHistoryOrLocationProvider === 'function') {
+      history = createHistoryOrLocationProvider(options)
+      locationProvider = history.locationProvider
+
+      return {
+        ...history,
+        listenBefore,
+        listen,
+        push,
+        replace,
+        createPath,
+        createHref,
+        createLocation
+      }
+    } else if (typeof createHistoryOrLocationProvider === 'object') {
+      locationProvider = createHistoryOrLocationProvider
+
+      return {
+        ...locationProvider,
+        createPath,
+        createHref,
+        createLocation
+      }
     }
   }
 }

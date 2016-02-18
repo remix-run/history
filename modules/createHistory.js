@@ -1,9 +1,8 @@
 import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
-import { createPath } from './PathUtils'
 import { PUSH, REPLACE, POP } from './Actions'
+import createLocationProvider from './createLocationProvider'
 import runTransitionHook from './runTransitionHook'
-import _createLocation from './createLocation'
 
 function createRandomKey(length) {
   return Math.random().toString(36).substr(2, length)
@@ -22,7 +21,10 @@ const DefaultKeyLength = 6
 
 function createHistory(options={}) {
   const { getCurrentLocation, finishTransition, go, getUserConfirmation } = options
-  let { keyLength } = options
+  let { locationProvider, keyLength } = options
+
+  if (!locationProvider)
+    locationProvider = createLocationProvider()
 
   if (typeof keyLength !== 'number')
     keyLength = DefaultKeyLength
@@ -139,13 +141,13 @@ function createHistory(options={}) {
 
   function push(location) {
     transitionTo(
-      createLocation(location, PUSH, createKey())
+      locationProvider.createLocation(location, PUSH, createKey())
     )
   }
 
   function replace(location) {
     transitionTo(
-      createLocation(location, REPLACE, createKey())
+      locationProvider.createLocation(location, REPLACE, createKey())
     )
   }
 
@@ -161,12 +163,17 @@ function createHistory(options={}) {
     return createRandomKey(keyLength)
   }
 
+  // Pass through to locationProvider
+  function createPath(location) {
+    return locationProvider.createPath(location)
+  }
+
   function createHref(location) {
-    return createPath(location)
+    return locationProvider.createHref(location)
   }
 
   function createLocation(location, action, key=createKey()) {
-    return _createLocation(location, action, key)
+    return locationProvider.createLocation(location, action, key)
   }
 
   return {
@@ -179,6 +186,7 @@ function createHistory(options={}) {
     goBack,
     goForward,
     createKey,
+    locationProvider,
     createPath,
     createHref,
     createLocation
