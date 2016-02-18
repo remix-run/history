@@ -1,3 +1,5 @@
+export createLocationProvider from './createLocationProvider'
+
 export createHistory from './createBrowserHistory'
 export createHashHistory from './createHashHistory'
 export createMemoryHistory from './createMemoryHistory'
