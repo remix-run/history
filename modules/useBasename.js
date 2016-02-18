@@ -24,7 +24,7 @@ function useBasename(createHistory) {
           location.pathname = location.pathname.substring(basename.length)
           location.basename = basename
 
-          if (location.pathname === '')
+          if (basename !== '/' && location.pathname === '')
             location.pathname = '/'
         } else {
           location.basename = ''
