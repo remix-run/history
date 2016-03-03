@@ -5,9 +5,8 @@ import deprecate from './deprecate'
 
 function useBasename(createHistory) {
   return function (options={}) {
-    const history = createHistory(options)
-
-    let { basename } = options
+    let { basename, ...historyOptions } = options
+    const history = createHistory(historyOptions)
 
     // Automatically use the value of <base href> in HTML
     // documents as basename if it's not explicitly given.

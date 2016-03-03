@@ -1,3 +1,8 @@
+## HEAD
+> Mar 3, 2016
+
+- **Bugfix:** Fix history listener being called twice in Safari, basename being prepended twice ([#238])
+
 ## [v2.0.0]
 > Feb 4, 2016
 

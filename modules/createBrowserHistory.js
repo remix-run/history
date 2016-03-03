@@ -49,7 +49,7 @@ function createBrowserHistory(options={}) {
 
   function startPopStateListener({ transitionTo }) {
     function popStateListener(event) {
-      if (event.state === undefined)
+      if (event.state === undefined || event.state === null)
         return // Ignore extraneous popstate events in WebKit.
 
       transitionTo(
