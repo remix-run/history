@@ -15,13 +15,15 @@
     "url": "https://github.com/mjackson/history.git"
   },
   "scripts": {
-    "build": "npm run build-cjs && npm run build-es6",
+    "lint": "eslint modules",
+    "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "build-cjs": "rimraf lib && babel ./modules --stage 0 --loose all --plugins dev-expression -d lib --ignore '__tests__'",
     "build-es6": "rimraf es6 && babel ./modules --stage 0 --loose all --plugins dev-expression -d es6 --blacklist=es6.modules --ignore '__tests__'",
     "build-umd": "NODE_ENV=production webpack modules/index.js umd/History.js",
     "build-min": "NODE_ENV=production webpack -p modules/index.js umd/History.min.js",
-    "lint": "eslint modules",
-    "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
+    "build": "node ./scripts/build.js",
+    "release": "node ./scripts/release.js",
+    "prepublish": "npm run build",
     "test": "npm run lint && karma start"
   },
   "authors": [
@@ -55,6 +57,7 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.0.1",
     "pretty-bytes": "^3.0.1",
+    "readline-sync": "^1.4.1",
     "rimraf": "^2.4.2",
     "webpack": "^1.4.13",
     "webpack-dev-server": "^1.10.1"
