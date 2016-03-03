@@ -1,9 +1,12 @@
 # history [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
 
-[`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history in browsers, testing environments, and (soon, via [React Native](https://facebook.github.io/react-native/)) native devices. `history` abstracts away the differences in these different platforms and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions. `history` is library-agnostic and may easily be included in any JavaScript project.
+[build-badge]: https://img.shields.io/travis/mjackson/history/master.svg?style=flat-square
+[build]: https://travis-ci.org/mjackson/history
 
-[![Coveralls][coveralls-badge]][coveralls]
-[![Discord][discord-badge]][discord]
+[npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
+[npm]: https://www.npmjs.org/package/history
+
+[`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history in browsers, testing environments, and (soon, via [React Native](https://facebook.github.io/react-native/)) native devices. `history` abstracts away the differences in these different platforms and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions. `history` is library-agnostic and may easily be included in any JavaScript project.
 
 ## Docs & Help
 
@@ -62,22 +65,10 @@ history.push({
 unlisten()
 ```
 
-You can find many more examples [in the documentation](https://github.com/reactjs/history/tree/master/docs)!
+You can find many more examples [in the documentation](https://github.com/mjackson/history/tree/master/docs)!
 
 ## Thanks
 
 A big thank-you to [Dan Shaw](https://www.npmjs.com/~dshaw) for letting us use the `history` npm package name! Thanks Dan!
 
 Also, thanks to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to run our build in real browsers.
-
-[build-badge]: https://img.shields.io/travis/reactjs/history/master.svg?style=flat-square
-[build]: https://travis-ci.org/reactjs/history
-
-[npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
-[npm]: https://www.npmjs.org/package/history
-
-[coveralls-badge]: https://img.shields.io/coveralls/reactjs/history/master.svg?style=flat-square
-[coveralls]: https://coveralls.io/github/reactjs/history
-
-[discord-badge]: https://img.shields.io/badge/Discord-join%20chat%20%E2%86%92-738bd7.svg?style=flat-square
-[discord]: https://discord.gg/0ZcbPKXt5bYaNQ46
