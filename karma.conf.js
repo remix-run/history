@@ -61,33 +61,12 @@ module.exports = function (config) {
     }
   }
 
-  var isCi = process.env.CONTINUOUS_INTEGRATION === 'true'
-  var runCoverage = process.env.COVERAGE === 'true' || isCi
-
-  var coverageLoaders = []
-  var coverageReporters = []
-
-  if (runCoverage) {
-    coverageLoaders.push({
-      test: /\.js$/,
-      include: path.resolve('modules/'),
-      exclude: /__tests__/,
-      loader: 'isparta'
-    })
-
-    coverageReporters.push('coverage')
-
-    if (isCi) {
-      coverageReporters.push('coveralls')
-    }
-  }
-
   config.set({
     customLaunchers: customLaunchers,
 
     browsers: [ 'Chrome' ],
     frameworks: [ 'mocha' ],
-    reporters: [ 'mocha' ].concat(coverageReporters),
+    reporters: [ 'mocha' ],
 
     files: [
       'tests.webpack.js'
@@ -102,7 +81,7 @@ module.exports = function (config) {
       module: {
         loaders: [
           { test: /\.js$/, exclude: /node_modules/, loader: 'babel' }
-        ].concat(coverageLoaders)
+        ]
       },
       plugins: [
         new webpack.DefinePlugin({
@@ -113,10 +92,6 @@ module.exports = function (config) {
 
     webpackServer: {
       noInfo: true
-    },
-
-    coverageReporter: {
-      type: 'lcov'
     }
   })
 
