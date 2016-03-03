@@ -20,7 +20,7 @@ For questions and support, please visit [our channel on Reactiflux](https://disc
 
 Using [npm](https://www.npmjs.com/):
 
-    $ npm install history
+    $ npm install --save history
 
 Then with a module bundler like [webpack](https://webpack.github.io/), use as you would anything else:
 
@@ -47,11 +47,11 @@ A "history" encapsulates navigation between different screens in your app, and n
 ```js
 import { createHistory } from 'history'
 
-let history = createHistory()
+const history = createHistory()
 
 // Listen for changes to the current location. The
 // listener is called once immediately.
-let unlisten = history.listen(location => {
+const unlisten = history.listen(location => {
   console.log(location.pathname)
 })
 
