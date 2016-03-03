@@ -12,9 +12,8 @@
   "jsnext:main": "es6/index",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rackt/history.git"
+    "url": "https://github.com/mjackson/history.git"
   },
-  "bugs": "https://github.com/rackt/history/issues",
   "scripts": {
     "build": "npm run build-cjs && npm run build-es6",
     "build-cjs": "rimraf lib && babel ./modules --stage 0 --loose all --plugins dev-expression -d lib --ignore '__tests__'",
