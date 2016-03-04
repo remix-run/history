@@ -1,4 +1,3 @@
-import assert from 'assert'
 import expect from 'expect'
 import { PUSH } from '../Actions'
 import execSteps from './execSteps'
@@ -111,19 +110,19 @@ const describeTransitions = (createHistory) => {
 
     it('updates the location', () => {
       const prevLocation = location
+
       history.push({
         pathname: '/home',
         search: '?the=query',
         state: { the: 'state' }
       })
+
       expect(prevLocation).toNotBe(location)
 
-      assert(location)
       expect(location.pathname).toEqual('/home')
       expect(location.search).toEqual('?the=query')
       expect(location.state).toEqual({ the: 'state' })
       expect(location.action).toEqual(PUSH)
-      assert(location.key)
     })
   })
 
