@@ -7,21 +7,6 @@ import { addEventListener, removeEventListener, getHashPath, replaceHashPath, su
 import { saveState, readState } from './DOMStateStorage'
 import createDOMHistory from './createDOMHistory'
 
-function isAbsolutePath(path) {
-  return typeof path === 'string' && path.charAt(0) === '/'
-}
-
-function ensureSlash() {
-  const path = getHashPath()
-
-  if (isAbsolutePath(path))
-    return true
-
-  replaceHashPath('/' + path)
-
-  return false
-}
-
 function addQueryStringValueToPath(path, key, value) {
   return path + (path.indexOf('?') === -1 ? '?' : '&') + `${key}=${value}`
 }
@@ -74,15 +59,11 @@ function createHashHistory(options={}) {
 
   function startHashChangeListener({ transitionTo }) {
     function hashChangeListener() {
-      if (!ensureSlash())
-        return // Always make sure hashes are preceeded with a /.
-
       transitionTo(
         getCurrentLocation()
       )
     }
 
-    ensureSlash()
     addEventListener(window, 'hashchange', hashChangeListener)
 
     return function () {
