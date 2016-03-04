@@ -2,8 +2,8 @@ import warning from 'warning'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener } from './DOMUtils'
 
-function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
-  function listener(event) {
+const startBeforeUnloadListener = (getBeforeUnloadPromptMessage) => {
+  const listener = (event) => {
     const message = getBeforeUnloadPromptMessage()
 
     if (typeof message === 'string') {
@@ -14,9 +14,8 @@ function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
 
   addEventListener(window, 'beforeunload', listener)
 
-  return function () {
+  return () =>
     removeEventListener(window, 'beforeunload', listener)
-  }
 }
 
 /**
@@ -24,14 +23,12 @@ function startBeforeUnloadListener(getBeforeUnloadPromptMessage) {
  * history objects that know how to use the beforeunload event in web
  * browsers to cancel navigation.
  */
-function useBeforeUnload(createHistory) {
-  return function (options) {
+const useBeforeUnload = (createHistory) =>
+  (options) => {
     const history = createHistory(options)
+    let stopBeforeUnloadListener, beforeUnloadHooks = []
 
-    let stopBeforeUnloadListener
-    let beforeUnloadHooks = []
-
-    function getBeforeUnloadPromptMessage() {
+    const getBeforeUnloadPromptMessage = () => {
       let message
 
       for (let i = 0, len = beforeUnloadHooks.length; message == null && i < len; ++i)
@@ -40,7 +37,7 @@ function useBeforeUnload(createHistory) {
       return message
     }
 
-    function listenBeforeUnload(hook) {
+    const listenBeforeUnload = (hook) => {
       beforeUnloadHooks.push(hook)
 
       if (beforeUnloadHooks.length === 1) {
@@ -54,7 +51,7 @@ function useBeforeUnload(createHistory) {
         }
       }
 
-      return function () {
+      return () => {
         beforeUnloadHooks = beforeUnloadHooks.filter(item => item !== hook)
 
         if (beforeUnloadHooks.length === 0 && stopBeforeUnloadListener) {
@@ -69,6 +66,5 @@ function useBeforeUnload(createHistory) {
       listenBeforeUnload
     }
   }
-}
 
 export default useBeforeUnload

@@ -15,7 +15,7 @@ import createDOMHistory from './createDOMHistory'
  * Note: In browsers that do not support the HTML5 history API full
  * page reloads will be used to preserve URLs.
  */
-function createBrowserHistory(options={}) {
+const createBrowserHistory = (options = {}) => {
   invariant(
     canUseDOM,
     'Browser history needs a DOM'
@@ -25,7 +25,7 @@ function createBrowserHistory(options={}) {
   const isSupported = supportsHistory()
   const useRefresh = !isSupported || forceRefresh
 
-  function getCurrentLocation(historyState) {
+  const getCurrentLocation = (historyState) => {
     historyState = historyState || window.history.state || {}
 
     const path = getWindowPath()
@@ -47,8 +47,8 @@ function createBrowserHistory(options={}) {
     return history.createLocation({ ...location, state }, undefined, key)
   }
 
-  function startPopStateListener({ transitionTo }) {
-    function popStateListener(event) {
+  const startPopStateListener = ({ transitionTo }) => {
+    const popStateListener = (event) => {
       if (event.state === undefined)
         return // Ignore extraneous popstate events in WebKit.
 
@@ -59,12 +59,11 @@ function createBrowserHistory(options={}) {
 
     addEventListener(window, 'popstate', popStateListener)
 
-    return function () {
+    return () =>
       removeEventListener(window, 'popstate', popStateListener)
-    }
   }
 
-  function finishTransition(location) {
+  const finishTransition = (location) => {
     const { basename, pathname, search, hash, state, action, key } = location
 
     if (action === POP)
@@ -103,13 +102,13 @@ function createBrowserHistory(options={}) {
 
   let listenerCount = 0, stopPopStateListener
 
-  function listenBefore(listener) {
+  const listenBefore = (listener) => {
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history)
 
     const unlisten = history.listenBefore(listener)
 
-    return function () {
+    return () => {
       unlisten()
 
       if (--listenerCount === 0)
@@ -117,13 +116,13 @@ function createBrowserHistory(options={}) {
     }
   }
 
-  function listen(listener) {
+  const listen = (listener) => {
     if (++listenerCount === 1)
       stopPopStateListener = startPopStateListener(history)
 
     const unlisten = history.listen(listener)
 
-    return function () {
+    return () => {
       unlisten()
 
       if (--listenerCount === 0)

@@ -10,8 +10,8 @@ import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
 import describeGo from './describeGo'
 
-describe('browser history', function () {
-  beforeEach(function () {
+describe('browser history', () => {
+  beforeEach(() => {
     window.history.replaceState(null, null, '/')
   })
 
@@ -26,7 +26,7 @@ describe('browser history', function () {
     describeQueries(createBrowserHistory)
     describeGo(createBrowserHistory)
   } else {
-    describe.skip(null, function () {
+    describe.skip(null, () => {
       describeInitialLocation(createBrowserHistory)
       describeTransitions(createBrowserHistory)
       describePush(createBrowserHistory)

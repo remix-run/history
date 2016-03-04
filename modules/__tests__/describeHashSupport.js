@@ -2,21 +2,21 @@ import expect from 'expect'
 import { PUSH, POP } from '../Actions'
 import execSteps from './execSteps'
 
-function describeHashSupport(createHistory) {
-  describe('when a URL with a hash is pushed', function () {
+const describeHashSupport = (createHistory) => {
+  describe('when a URL with a hash is pushed', () => {
     let history, unlisten
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory()
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    it('preserves the hash', function (done) {
+    it('preserves the hash', (done) => {
       const steps = [
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.hash).toEqual('')
@@ -30,7 +30,7 @@ function describeHashSupport(createHistory) {
             state: { the: 'state' }
           })
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
           expect(location.hash).toEqual('#the-hash')
@@ -42,9 +42,9 @@ function describeHashSupport(createHistory) {
       unlisten = history.listen(execSteps(steps, done))
     })
 
-    it('does not convert PUSH to REPLACE if path does not change', function (done) {
+    it('does not convert PUSH to REPLACE if path does not change', (done) => {
       const steps = [
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.hash).toEqual('')
@@ -53,7 +53,7 @@ function describeHashSupport(createHistory) {
 
           history.push('/#the-hash')
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.hash).toEqual('#the-hash')

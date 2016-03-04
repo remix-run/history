@@ -11,8 +11,8 @@ import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
 import describeGo from './describeGo'
 
-describe('hash history', function () {
-  beforeEach(function () {
+describe('hash history', () => {
+  beforeEach(() => {
     if (window.location.hash !== '')
       window.location.hash = ''
   })
@@ -27,7 +27,7 @@ describe('hash history', function () {
   if (supportsHistory()) {
     describePopState(createHashHistory)
   } else {
-    describe.skip(null, function () {
+    describe.skip(null, () => {
       describePopState(createHashHistory)
     })
   }
@@ -36,13 +36,13 @@ describe('hash history', function () {
     describeGo(createHashHistory)
     describeQueryKey(createHashHistory)
   } else {
-    describe.skip(null, function () {
+    describe.skip(null, () => {
       describeGo(createHashHistory)
       describeQueryKey(createHashHistory)
     })
   }
 
-  it('knows how to make hrefs', function () {
+  it('knows how to make hrefs', () => {
     const history = createHashHistory()
     expect(history.createHref('/a/path')).toEqual('#/a/path')
   })

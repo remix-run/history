@@ -8,7 +8,7 @@ import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
 import describeGo from './describeGo'
 
-describe('memory history', function () {
+describe('memory history', () => {
   describeInitialLocation(createMemoryHistory)
   describeTransitions(createMemoryHistory)
   describePush(createMemoryHistory)
@@ -17,12 +17,12 @@ describe('memory history', function () {
   describeQueries(createMemoryHistory)
   describeGo(createMemoryHistory)
 
-  describe('when using push in the middle of the stack', function () {
-    it('clears rest of stack so the user cannot go forward', function () {
+  describe('when using push in the middle of the stack', () => {
+    it('clears rest of stack so the user cannot go forward', () => {
       const history = createMemoryHistory()
 
       let location
-      history.listen(function (loc) {
+      history.listen((loc) => {
         location = loc
       })
 

@@ -9,11 +9,10 @@ const QuotaExceededErrors = [
 
 const SecurityError = 'SecurityError'
 
-function createKey(key) {
-  return KeyPrefix + key
-}
+const createKey = (key) =>
+  KeyPrefix + key
 
-export function saveState(key, state) {
+export const saveState = (key, state) => {
   try {
     if (state == null) {
       window.sessionStorage.removeItem(createKey(key))
@@ -46,7 +45,7 @@ export function saveState(key, state) {
   }
 }
 
-export function readState(key) {
+export const readState = (key) => {
   let json
   try {
     json = window.sessionStorage.getItem(createKey(key))

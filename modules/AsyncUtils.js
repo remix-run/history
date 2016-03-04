@@ -1,28 +1,27 @@
-export function loopAsync(turns, work, callback) {
+export const loopAsync = (turns, work, callback) => {
   let currentTurn = 0, isDone = false
   let sync = false, hasNext = false, doneArgs
 
-  function done() {
+  const done = (...args) => {
     isDone = true
+
     if (sync) {
       // Iterate instead of recursing if possible.
-      doneArgs = [ ...arguments ]
+      doneArgs = args
       return
     }
 
-    callback.apply(this, arguments)
+    callback(...args)
   }
 
-  function next() {
-    if (isDone) {
+  const next = () => {
+    if (isDone)
       return
-    }
 
     hasNext = true
-    if (sync) {
-      // Iterate instead of recursing if possible.
-      return
-    }
+
+    if (sync)
+      return // Iterate instead of recursing if possible.
 
     sync = true
 
@@ -35,7 +34,7 @@ export function loopAsync(turns, work, callback) {
 
     if (isDone) {
       // This means the loop finished synchronously.
-      callback.apply(this, doneArgs)
+      callback(...doneArgs)
       return
     }
 

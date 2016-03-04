@@ -1,6 +1,6 @@
 import describeHistory from './describeHistory'
 
-function describeDOMHistory(createHistory, goCausesReload) {
+const describeDOMHistory = (createHistory, goCausesReload) => {
   describeHistory(createHistory, goCausesReload)
 }
 

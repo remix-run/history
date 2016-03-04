@@ -1,12 +1,12 @@
-function execSteps(steps, done) {
+const execSteps = (steps, done) => {
   let index = 0
 
-  return function () {
+  return (...args) => {
     if (steps.length === 0) {
       done()
     } else {
       try {
-        steps[index++].apply(this, arguments)
+        steps[index++](...args)
 
         if (index === steps.length)
           done()

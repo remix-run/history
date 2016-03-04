@@ -3,14 +3,14 @@ import expect from 'expect'
 import { PUSH } from '../Actions'
 import execSteps from './execSteps'
 
-function describeTransitions(createHistory) {
-  describe('a synchronous transition hook', function () {
+const describeTransitions = (createHistory) => {
+  describe('a synchronous transition hook', () => {
     let history, unlisten, unlistenBefore
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory()
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlistenBefore)
         unlistenBefore()
 
@@ -18,22 +18,22 @@ function describeTransitions(createHistory) {
         unlisten()
     })
 
-    it('receives the next location', function (done) {
+    it('receives the next location', (done) => {
       const steps = [
-        function () {
+        () => {
           history.push({
             pathname: '/home',
             search: '?the=query',
             state: { the: 'state' }
           })
         },
-        function (location) {
+        (location) => {
           expect(nextLocation).toBe(location)
         }
       ]
 
       let nextLocation
-      unlistenBefore = history.listenBefore(function (location) {
+      unlistenBefore = history.listenBefore((location) => {
         nextLocation = location
       })
 
@@ -41,13 +41,13 @@ function describeTransitions(createHistory) {
     })
   })
 
-  describe('an asynchronous transition hook', function () {
+  describe('an asynchronous transition hook', () => {
     let history, unlisten, unlistenBefore
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory()
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlistenBefore)
         unlistenBefore()
 
@@ -55,22 +55,22 @@ function describeTransitions(createHistory) {
         unlisten()
     })
 
-    it('receives the next location', function (done) {
+    it('receives the next location', (done) => {
       const steps = [
-        function () {
+        () => {
           history.push({
             pathname: '/home',
             search: '?the=query',
             state: { the: 'state' }
           })
         },
-        function (location) {
+        (location) => {
           expect(nextLocation).toBe(location)
         }
       ]
 
       let nextLocation
-      unlistenBefore = history.listenBefore(function (location, callback) {
+      unlistenBefore = history.listenBefore((location, callback) => {
         nextLocation = location
         setTimeout(callback)
       })
@@ -79,9 +79,9 @@ function describeTransitions(createHistory) {
     })
   })
 
-  describe('when the user confirms a transition', function () {
+  describe('when the user confirms a transition', () => {
     let confirmationMessage, location, history, unlisten, unlistenBefore
-    beforeEach(function () {
+    beforeEach(() => {
       location = null
       confirmationMessage = 'Are you sure?'
 
@@ -92,16 +92,16 @@ function describeTransitions(createHistory) {
         }
       })
 
-      unlistenBefore = history.listenBefore(function () {
+      unlistenBefore = history.listenBefore(() => {
         return confirmationMessage
       })
 
-      unlisten = history.listen(function (loc) {
+      unlisten = history.listen((loc) => {
         location = loc
       })
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlistenBefore)
         unlistenBefore()
 
@@ -109,7 +109,7 @@ function describeTransitions(createHistory) {
         unlisten()
     })
 
-    it('updates the location', function () {
+    it('updates the location', () => {
       const prevLocation = location
       history.push({
         pathname: '/home',
@@ -127,9 +127,9 @@ function describeTransitions(createHistory) {
     })
   })
 
-  describe('when the user cancels a transition', function () {
+  describe('when the user cancels a transition', () => {
     let confirmationMessage, location, history, unlisten, unlistenBefore
-    beforeEach(function () {
+    beforeEach(() => {
       location = null
       confirmationMessage = 'Are you sure?'
 
@@ -140,16 +140,16 @@ function describeTransitions(createHistory) {
         }
       })
 
-      unlistenBefore = history.listenBefore(function () {
+      unlistenBefore = history.listenBefore(() => {
         return confirmationMessage
       })
 
-      unlisten = history.listen(function (loc) {
+      unlisten = history.listen((loc) => {
         location = loc
       })
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlistenBefore)
         unlistenBefore()
 
@@ -157,30 +157,30 @@ function describeTransitions(createHistory) {
         unlisten()
     })
 
-    it('does not update the location', function () {
+    it('does not update the location', () => {
       const prevLocation = location
       history.push('/home')
       expect(prevLocation).toBe(location)
     })
   })
 
-  describe('when the transition hook cancels a transition', function () {
+  describe('when the transition hook cancels a transition', () => {
     let location, history, unlisten, unlistenBefore
-    beforeEach(function () {
+    beforeEach(() => {
       location = null
 
       history = createHistory()
 
-      unlistenBefore = history.listenBefore(function () {
+      unlistenBefore = history.listenBefore(() => {
         return false
       })
 
-      unlisten = history.listen(function (loc) {
+      unlisten = history.listen((loc) => {
         location = loc
       })
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlistenBefore)
         unlistenBefore()
 
@@ -188,7 +188,7 @@ function describeTransitions(createHistory) {
         unlisten()
     })
 
-    it('does not update the location', function () {
+    it('does not update the location', () => {
       const prevLocation = location
       history.push('/home')
       expect(prevLocation).toBe(location)

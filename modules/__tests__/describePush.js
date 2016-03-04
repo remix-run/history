@@ -2,22 +2,22 @@ import expect from 'expect'
 import { PUSH, POP, REPLACE } from '../Actions'
 import execSteps from './execSteps'
 
-function describePush(createHistory) {
-  describe('push', function () {
+const describePush = (createHistory) => {
+  describe('push', () => {
     let history, unlisten
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory()
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    describe('with a path string', function () {
-      it('calls change listeners with the new location', function (done) {
+    describe('with a path string', () => {
+      it('calls change listeners with the new location', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -25,7 +25,7 @@ function describePush(createHistory) {
 
             history.push('/home?the=query')
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual(null)
@@ -37,10 +37,10 @@ function describePush(createHistory) {
       })
     })
 
-    describe('with a path object', function () {
-      it('calls change listeners with the new location', function (done) {
+    describe('with a path object', () => {
+      it('calls change listeners with the new location', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -52,7 +52,7 @@ function describePush(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ the: 'state' })
@@ -63,11 +63,11 @@ function describePush(createHistory) {
         unlisten = history.listen(execSteps(steps, done))
       })
 
-      it('correctly merges with old location', function (done) {
+      it('correctly merges with old location', (done) => {
         let oldLocation
 
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -81,7 +81,7 @@ function describePush(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual(oldLocation.pathname)
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ the: 'state' })
@@ -93,9 +93,9 @@ function describePush(createHistory) {
         unlisten = history.listen(execSteps(steps, done))
       })
 
-      it('becomes a REPLACE if path is unchanged', function (done) {
+      it('becomes a REPLACE if path is unchanged', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -107,7 +107,7 @@ function describePush(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ the: 'state' })
@@ -119,7 +119,7 @@ function describePush(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ the: 'state' })
@@ -130,9 +130,9 @@ function describePush(createHistory) {
         unlisten = history.listen(execSteps(steps, done))
       })
 
-      it('stays PUSH if state is changed', function (done) {
+      it('stays PUSH if state is changed', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -144,7 +144,7 @@ function describePush(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ the: 'state' })
@@ -156,7 +156,7 @@ function describePush(createHistory) {
               state: { different: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ different: 'state' })

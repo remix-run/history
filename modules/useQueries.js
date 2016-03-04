@@ -3,13 +3,12 @@ import { parse, stringify } from 'query-string'
 import runTransitionHook from './runTransitionHook'
 import { parsePath } from './PathUtils'
 
-function defaultStringifyQuery(query) {
-  return stringify(query).replace(/%20/g, '+')
-}
+const defaultStringifyQuery = (query) =>
+  stringify(query).replace(/%20/g, '+')
 
 const defaultParseQueryString = parse
 
-function isNestedObject(object) {
+const isNestedObject = (object) => {
   for (const p in object)
     if (object.hasOwnProperty(p) &&
         typeof object[p] === 'object' &&
@@ -24,10 +23,9 @@ function isNestedObject(object) {
  * Returns a new createHistory function that may be used to create
  * history objects that know how to handle URL queries.
  */
-function useQueries(createHistory) {
-  return function (options={}) {
+const useQueries = (createHistory) =>
+  (options = {}) => {
     const history = createHistory(options)
-
     let { stringifyQuery, parseQueryString } = options
 
     if (typeof stringifyQuery !== 'function')
@@ -36,14 +34,14 @@ function useQueries(createHistory) {
     if (typeof parseQueryString !== 'function')
       parseQueryString = defaultParseQueryString
 
-    function decodeQuery(location) {
+    const decodeQuery = (location) => {
       if (location.query == null)
         location.query = parseQueryString(location.search.substring(1))
 
       return location
     }
 
-    function encodeQuery(location, query) {
+    const encodeQuery = (location, query) => {
       if (query == null)
         return location
 
@@ -66,36 +64,29 @@ function useQueries(createHistory) {
     }
 
     // Override all read methods with query-aware versions.
-    function listenBefore(hook) {
-      return history.listenBefore(function (location, callback) {
-        runTransitionHook(hook, decodeQuery(location), callback)
-      })
-    }
+    const listenBefore = (hook) =>
+      history.listenBefore(
+        (location, callback) =>
+          runTransitionHook(hook, decodeQuery(location), callback)
+      )
 
-    function listen(listener) {
-      return history.listen(function (location) {
-        listener(decodeQuery(location))
-      })
-    }
+    const listen = (listener) =>
+      history.listen(location => listener(decodeQuery(location)))
 
     // Override all write methods with query-aware versions.
-    function push(location) {
+    const push = (location) =>
       history.push(encodeQuery(location, location.query))
-    }
 
-    function replace(location) {
+    const replace = (location) =>
       history.replace(encodeQuery(location, location.query))
-    }
 
-    function createPath(location) {
-      return history.createPath(encodeQuery(location, location.query))
-    }
+    const createPath = (location) =>
+      history.createPath(encodeQuery(location, location.query))
 
-    function createHref(location) {
-      return history.createHref(encodeQuery(location, location.query))
-    }
+    const createHref = (location) =>
+      history.createHref(encodeQuery(location, location.query))
 
-    function createLocation(location, ...args) {
+    const createLocation = (location, ...args) => {
       const newLocation =
         history.createLocation(encodeQuery(location, location.query), ...args)
 
@@ -116,6 +107,5 @@ function useQueries(createHistory) {
       createLocation
     }
   }
-}
 
 export default useQueries

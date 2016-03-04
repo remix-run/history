@@ -3,26 +3,25 @@ import { PUSH, REPLACE, POP } from '../Actions'
 import useQueries from '../useQueries'
 import execSteps from './execSteps'
 
-function stripHash(path) {
-  return path.replace(/^#/, '')
-}
+const stripHash = (path) =>
+  path.replace(/^#/, '')
 
-function describeQueries(createHistory) {
-  describe('default query serialization', function () {
+const describeQueries = (createHistory) => {
+  describe('default query serialization', () => {
     let history, unlisten
-    beforeEach(function () {
+    beforeEach(() => {
       history = useQueries(createHistory)()
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    describe('in push', function () {
-      it('works', function (done) {
+    describe('in push', () => {
+      it('works', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual({})
@@ -35,7 +34,7 @@ function describeQueries(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query+value')
             expect(location.query).toEqual({ the: 'query value' })
@@ -48,7 +47,7 @@ function describeQueries(createHistory) {
               state: { other: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?other=query+value')
             expect(location.query).toEqual({ other: 'query value' })
@@ -61,7 +60,7 @@ function describeQueries(createHistory) {
               state: null
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
             expect(location.query).toEqual({})
@@ -74,10 +73,10 @@ function describeQueries(createHistory) {
       })
     })
 
-    describe('in replace', function () {
-      it('works', function (done) {
+    describe('in replace', () => {
+      it('works', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual({})
@@ -90,7 +89,7 @@ function describeQueries(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query+value')
             expect(location.query).toEqual({ the: 'query value' })
@@ -103,7 +102,7 @@ function describeQueries(createHistory) {
               state: { other: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?other=query+value')
             expect(location.query).toEqual({ other: 'query value' })
@@ -116,8 +115,8 @@ function describeQueries(createHistory) {
       })
     })
 
-    describe('in createPath', function () {
-      it('works', function () {
+    describe('in createPath', () => {
+      it('works', () => {
         expect(
           history.createPath({
             pathname: '/the/path',
@@ -126,7 +125,7 @@ function describeQueries(createHistory) {
         ).toEqual('/the/path?the=query+value')
       })
 
-      it('does not strip trailing slash', function () {
+      it('does not strip trailing slash', () => {
         expect(
           history.createPath({
             pathname: '/the/path/',
@@ -135,8 +134,8 @@ function describeQueries(createHistory) {
         ).toEqual('/the/path/?the=query+value')
       })
 
-      describe('when the path contains a hash', function () {
-        it('puts the query before the hash', function () {
+      describe('when the path contains a hash', () => {
+        it('puts the query before the hash', () => {
           expect(
             history.createPath({
               pathname: '/the/path',
@@ -147,8 +146,8 @@ function describeQueries(createHistory) {
         })
       })
 
-      describe('when there is already an existing search', function () {
-        it('overwrites the existing search', function () {
+      describe('when there is already an existing search', () => {
+        it('overwrites the existing search', () => {
           expect(
             history.createPath({
               pathname: '/the/path',
@@ -159,8 +158,8 @@ function describeQueries(createHistory) {
         })
       })
 
-      describe('in createLocation', function () {
-        it('works with string', function () {
+      describe('in createLocation', () => {
+        it('works with string', () => {
           const location = history.createLocation('/the/path?the=query')
 
           expect(location.pathname).toEqual('/the/path')
@@ -168,7 +167,7 @@ function describeQueries(createHistory) {
           expect(location.search).toEqual('?the=query')
         })
 
-        it('works with object with query', function () {
+        it('works with object with query', () => {
           const location = history.createLocation({
             pathname: '/the/path',
             query: { the: 'query' }
@@ -179,7 +178,7 @@ function describeQueries(createHistory) {
           expect(location.search).toEqual('?the=query')
         })
 
-        it('works with object without query', function () {
+        it('works with object without query', () => {
           const location = history.createLocation({
             pathname: '/the/path'
           })
@@ -189,7 +188,7 @@ function describeQueries(createHistory) {
           expect(location.search).toEqual('')
         })
 
-        it('works with explicit undefined values in query', function () {
+        it('works with explicit undefined values in query', () => {
           const location = history.createLocation({
             pathname: '/the/path',
             query: { the: undefined }
@@ -202,8 +201,8 @@ function describeQueries(createHistory) {
       })
     })
 
-    describe('in createHref', function () {
-      it('works', function () {
+    describe('in createHref', () => {
+      it('works', () => {
         expect(
           stripHash(history.createHref({
             pathname: '/the/path',
@@ -214,9 +213,9 @@ function describeQueries(createHistory) {
     })
   })
 
-  describe('custom query serialization', function () {
+  describe('custom query serialization', () => {
     let history, unlisten
-    beforeEach(function () {
+    beforeEach(() => {
       history = useQueries(createHistory)({
         parseQueryString() {
           return 'PARSE_QUERY_STRING'
@@ -227,15 +226,15 @@ function describeQueries(createHistory) {
       })
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    describe('in push', function () {
-      it('works', function (done) {
+    describe('in push', () => {
+      it('works', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual('PARSE_QUERY_STRING')
@@ -248,7 +247,7 @@ function describeQueries(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?STRINGIFY_QUERY')
             expect(location.query).toEqual('PARSE_QUERY_STRING')
@@ -261,10 +260,10 @@ function describeQueries(createHistory) {
       })
     })
 
-    describe('in replace', function () {
-      it('works', function (done) {
+    describe('in replace', () => {
+      it('works', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual('PARSE_QUERY_STRING')
@@ -277,7 +276,7 @@ function describeQueries(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?STRINGIFY_QUERY')
             expect(location.query).toEqual('PARSE_QUERY_STRING')
@@ -290,8 +289,8 @@ function describeQueries(createHistory) {
       })
     })
 
-    describe('in createPath', function () {
-      it('works', function () {
+    describe('in createPath', () => {
+      it('works', () => {
         expect(
           history.createPath({
             pathname: '/the/path',
@@ -300,7 +299,7 @@ function describeQueries(createHistory) {
         ).toEqual('/the/path?STRINGIFY_QUERY')
       })
 
-      it('does not strip trailing slash', function () {
+      it('does not strip trailing slash', () => {
         expect(
           history.createPath({
             pathname: '/the/path/',
@@ -309,8 +308,8 @@ function describeQueries(createHistory) {
         ).toEqual('/the/path/?STRINGIFY_QUERY')
       })
 
-      describe('when the path contains a hash', function () {
-        it('puts the query before the hash', function () {
+      describe('when the path contains a hash', () => {
+        it('puts the query before the hash', () => {
           expect(
             history.createPath({
               pathname: '/the/path',
@@ -321,8 +320,8 @@ function describeQueries(createHistory) {
         })
       })
 
-      describe('when there is already an existing search', function () {
-        it('overwrites the existing search', function () {
+      describe('when there is already an existing search', () => {
+        it('overwrites the existing search', () => {
           expect(
             history.createPath({
               pathname: '/the/path',
@@ -334,8 +333,8 @@ function describeQueries(createHistory) {
       })
     })
 
-    describe('in createHref', function () {
-      it('works', function () {
+    describe('in createHref', () => {
+      it('works', () => {
         expect(
           stripHash(history.createHref({
             pathname: '/the/path',

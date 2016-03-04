@@ -2,20 +2,20 @@ import expect from 'expect'
 import { POP } from '../Actions'
 import createMemoryHistory from '../createMemoryHistory'
 
-function describeInitialLocation(createHistory) {
-  describe('location has key on initial pop', function () {
+const describeInitialLocation = (createHistory) => {
+  describe('location has key on initial pop', () => {
     let unlisten, history
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory()
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    it('replaces state if location key is missing', function (done) {
-      unlisten = history.listen(function (location) {
+    it('replaces state if location key is missing', (done) => {
+      unlisten = history.listen((location) => {
         try {
           expect(location.action).toEqual(POP)
           expect(location.key).toNotEqual(null)
@@ -27,7 +27,7 @@ function describeInitialLocation(createHistory) {
       })
     })
 
-    it('emits POP with current location key', function (done) {
+    it('emits POP with current location key', (done) => {
       // set initial state, this is needed because all implementations gets state from different places
       history.push({
         pathname: '/',
@@ -37,7 +37,7 @@ function describeInitialLocation(createHistory) {
       // now create history for testing if initial POP event has location.key
       history = createHistory()
 
-      unlisten = history.listen(function (location) {
+      unlisten = history.listen((location) => {
         try {
           expect(location.action).toEqual(POP)
           expect(location.key).toNotEqual(null)

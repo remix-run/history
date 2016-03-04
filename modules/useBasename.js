@@ -2,10 +2,9 @@ import { canUseDOM } from './ExecutionEnvironment'
 import { extractPath, parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
 
-function useBasename(createHistory) {
-  return function (options={}) {
+const useBasename = (createHistory) =>
+  (options = {}) => {
     const history = createHistory(options)
-
     let { basename } = options
 
     // Automatically use the value of <base href> in HTML
@@ -17,7 +16,7 @@ function useBasename(createHistory) {
         basename = extractPath(base.href)
     }
 
-    function addBasename(location) {
+    const addBasename = (location) => {
       if (basename && location.basename == null) {
         if (location.pathname.indexOf(basename) === 0) {
           location.pathname = location.pathname.substring(basename.length)
@@ -33,7 +32,7 @@ function useBasename(createHistory) {
       return location
     }
 
-    function prependBasename(location) {
+    const prependBasename = (location) => {
       if (!basename)
         return location
 
@@ -52,40 +51,30 @@ function useBasename(createHistory) {
     }
 
     // Override all read methods with basename-aware versions.
-    function listenBefore(hook) {
-      return history.listenBefore(function (location, callback) {
-        runTransitionHook(hook, addBasename(location), callback)
-      })
-    }
+    const listenBefore = (hook) =>
+      history.listenBefore(
+        (location, callback) =>
+          runTransitionHook(hook, addBasename(location), callback)
+      )
 
-    function listen(listener) {
-      return history.listen(function (location) {
-        listener(addBasename(location))
-      })
-    }
+    const listen = (listener) =>
+      history.listen(location => listener(addBasename(location)))
 
     // Override all write methods with basename-aware versions.
-    function push(location) {
+    const push = (location) =>
       history.push(prependBasename(location))
-    }
 
-    function replace(location) {
+    const replace = (location) =>
       history.replace(prependBasename(location))
-    }
 
-    function createPath(location) {
-      return history.createPath(prependBasename(location))
-    }
+    const createPath = (location) =>
+      history.createPath(prependBasename(location))
 
-    function createHref(location) {
-      return history.createHref(prependBasename(location))
-    }
+    const createHref = (location) =>
+      history.createHref(prependBasename(location))
 
-    function createLocation(location, ...args) {
-      return addBasename(
-        history.createLocation(prependBasename(location), ...args)
-      )
-    }
+    const createLocation = (location, ...args) =>
+      addBasename(history.createLocation(prependBasename(location), ...args))
 
     return {
       ...history,
@@ -98,6 +87,5 @@ function useBasename(createHistory) {
       createLocation
     }
   }
-}
 
 export default useBasename

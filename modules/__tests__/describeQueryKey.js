@@ -2,21 +2,21 @@ import expect from 'expect'
 import { PUSH, POP } from '../Actions'
 import execSteps from './execSteps'
 
-function describeQueryKey(createHistory) {
-  describe('when the user does not want to persist a state', function () {
+const describeQueryKey = (createHistory) => {
+  describe('when the user does not want to persist a state', () => {
     let history, unlisten
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory({ queryKey: false })
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    it('forgets state across transitions', function (done) {
+    it('forgets state across transitions', (done) => {
       const steps = [
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.state).toEqual(null)
@@ -24,7 +24,7 @@ function describeQueryKey(createHistory) {
 
           history.push('/home?the=query')
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
           expect(location.state).toEqual(null)
@@ -32,7 +32,7 @@ function describeQueryKey(createHistory) {
 
           history.goBack()
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.state).toEqual(null)
@@ -40,7 +40,7 @@ function describeQueryKey(createHistory) {
 
           history.goForward()
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
           expect(location.state).toEqual(null) // State is missing.
@@ -52,20 +52,20 @@ function describeQueryKey(createHistory) {
     })
   })
 
-  describe('when the user wants to persist state', function () {
+  describe('when the user wants to persist state', () => {
     let history, unlisten
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory({ queryKey: 'a' })
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    it('remembers state across transitions', function (done) {
+    it('remembers state across transitions', (done) => {
       const steps = [
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.state).toEqual(null)
@@ -77,7 +77,7 @@ function describeQueryKey(createHistory) {
             state: { the: 'state' }
           })
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
           expect(location.state).toEqual({ the: 'state' })
@@ -85,7 +85,7 @@ function describeQueryKey(createHistory) {
 
           history.goBack()
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.state).toEqual(null)
@@ -93,7 +93,7 @@ function describeQueryKey(createHistory) {
 
           history.goForward()
         },
-        function (location) {
+        (location) => {
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
           expect(location.state).toEqual({ the: 'state' }) // State is present.

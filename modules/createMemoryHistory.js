@@ -4,75 +4,36 @@ import { parsePath } from './PathUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import createHistory from './createHistory'
 
-function createStateStorage(entries) {
-  return entries
+const createStateStorage = (entries) =>
+  entries
     .filter(entry => entry.state)
     .reduce((memo, entry) => {
       memo[entry.key] = entry.state
       return memo
     }, {})
-}
 
-function createMemoryHistory(options={}) {
+const createEntry = (key, entry) => {
+  if (typeof entry === 'string')
+    return { pathname: entry, key }
+
+  if (typeof entry === 'object' && entry)
+    return { ...entry, key }
+
+  invariant(
+    false,
+    'Unable to create history entry from %s',
+    entry
+  )
+}
+  
+const createMemoryHistory = (options = {}) => {
   if (Array.isArray(options)) {
     options = { entries: options }
   } else if (typeof options === 'string') {
     options = { entries: [ options ] }
   }
 
-  const history = createHistory({
-    ...options,
-    getCurrentLocation,
-    finishTransition,
-    saveState,
-    go
-  })
-
-  let { entries, current } = options
-
-  if (typeof entries === 'string') {
-    entries = [ entries ]
-  } else if (!Array.isArray(entries)) {
-    entries = [ '/' ]
-  }
-
-  entries = entries.map(function (entry) {
-    const key = history.createKey()
-
-    if (typeof entry === 'string')
-      return { pathname: entry, key }
-
-    if (typeof entry === 'object' && entry)
-      return { ...entry, key }
-
-    invariant(
-      false,
-      'Unable to create history entry from %s',
-      entry
-    )
-  })
-
-  if (current == null) {
-    current = entries.length - 1
-  } else {
-    invariant(
-      current >= 0 && current < entries.length,
-      'Current index must be >= 0 and < %s, was %s',
-      entries.length, current
-    )
-  }
-
-  const storage = createStateStorage(entries)
-
-  function saveState(key, state) {
-    storage[key] = state
-  }
-
-  function readState(key) {
-    return storage[key]
-  }
-
-  function getCurrentLocation() {
+  const getCurrentLocation = () => {
     const entry = entries[current]
     const { basename, pathname, search } = entry
     const path = (basename || '') + pathname + (search || '')
@@ -92,12 +53,12 @@ function createMemoryHistory(options={}) {
     return history.createLocation({ ...location, state }, undefined, key)
   }
 
-  function canGo(n) {
+  const canGo = (n) => {
     const index = current + n
     return index >= 0 && index < entries.length
   }
 
-  function go(n) {
+  const go = (n) => {
     if (n) {
       if (!canGo(n)) {
         warning(
@@ -117,7 +78,7 @@ function createMemoryHistory(options={}) {
     }
   }
 
-  function finishTransition(location) {
+  const finishTransition = (location) => {
     switch (location.action) {
       case PUSH:
         current += 1
@@ -136,6 +97,42 @@ function createMemoryHistory(options={}) {
         break
     }
   }
+
+  const history = createHistory({
+    ...options,
+    getCurrentLocation,
+    finishTransition,
+    saveState,
+    go
+  })
+
+  let { entries, current } = options
+
+  if (typeof entries === 'string') {
+    entries = [ entries ]
+  } else if (!Array.isArray(entries)) {
+    entries = [ '/' ]
+  }
+
+  entries = entries.map(entry => createEntry(history.createKey(), entry))
+
+  if (current == null) {
+    current = entries.length - 1
+  } else {
+    invariant(
+      current >= 0 && current < entries.length,
+      'Current index must be >= 0 and < %s, was %s',
+      entries.length, current
+    )
+  }
+
+  const storage = createStateStorage(entries)
+
+  const saveState = (key, state) =>
+    storage[key] = state
+
+  const readState = (key) =>
+    storage[key]
 
   return history
 }

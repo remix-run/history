@@ -1,6 +1,6 @@
 import warning from 'warning'
 
-function runTransitionHook(hook, location, callback) {
+const runTransitionHook = (hook, location, callback) => {
   const result = hook(location, callback)
 
   if (hook.length < 2) {

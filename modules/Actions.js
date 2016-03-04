@@ -18,6 +18,7 @@ export const REPLACE = 'REPLACE'
  */
 export const POP = 'POP'
 
+// TODO: remove
 export default {
   PUSH,
   REPLACE,

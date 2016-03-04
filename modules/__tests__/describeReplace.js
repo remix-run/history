@@ -2,22 +2,22 @@ import expect from 'expect'
 import { REPLACE, POP } from '../Actions'
 import execSteps from './execSteps'
 
-function describeReplace(createHistory) {
-  describe('replace', function () {
+const describeReplace = (createHistory) => {
+  describe('replace', () => {
     let history, unlisten
-    beforeEach(function () {
+    beforeEach(() => {
       history = createHistory()
     })
 
-    afterEach(function () {
+    afterEach(() => {
       if (unlisten)
         unlisten()
     })
 
-    describe('with a path string', function () {
-      it('calls change listeners with the new location', function (done) {
+    describe('with a path string', () => {
+      it('calls change listeners with the new location', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -25,7 +25,7 @@ function describeReplace(createHistory) {
 
             history.replace('/home?the=query')
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual(null)
@@ -37,10 +37,10 @@ function describeReplace(createHistory) {
       })
     })
 
-    describe('with a path object', function () {
-      it('calls change listeners with the new location', function (done) {
+    describe('with a path object', () => {
+      it('calls change listeners with the new location', (done) => {
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -52,7 +52,7 @@ function describeReplace(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ the: 'state' })
@@ -63,11 +63,11 @@ function describeReplace(createHistory) {
         unlisten = history.listen(execSteps(steps, done))
       })
 
-      it('correctly merges with old location', function (done) {
+      it('correctly merges with old location', (done) => {
         let oldLocation
 
         const steps = [
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.state).toEqual(null)
@@ -81,7 +81,7 @@ function describeReplace(createHistory) {
               state: { the: 'state' }
             })
           },
-          function (location) {
+          (location) => {
             expect(location.pathname).toEqual(oldLocation.pathname)
             expect(location.search).toEqual('?the=query')
             expect(location.state).toEqual({ the: 'state' })

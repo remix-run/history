@@ -1,8 +1,8 @@
 import expect from 'expect'
 import { saveState, readState } from '../DOMStateStorage'
 
-describe('dom state storage', function () {
-  it('saves and reads state data', function () {
+describe('dom state storage', () => {
+  it('saves and reads state data', () => {
     saveState('key1', { id: 1 })
     expect(readState('key1')).toEqual({ id: 1 })
 

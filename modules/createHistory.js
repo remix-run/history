@@ -5,22 +5,20 @@ import { PUSH, REPLACE, POP } from './Actions'
 import runTransitionHook from './runTransitionHook'
 import _createLocation from './createLocation'
 
-function createRandomKey(length) {
-  return Math.random().toString(36).substr(2, length)
-}
-
-function locationsAreEqual(a, b) {
-  return a.pathname === b.pathname &&
-    a.search === b.search &&
-    // TODO: Should probably compare hash here too?
-    //a.action === b.action && // Different action !== location change.
-    a.key === b.key &&
-    deepEqual(a.state, b.state)
-}
-
 const DefaultKeyLength = 6
 
-function createHistory(options={}) {
+const createRandomKey = (length) =>
+  Math.random().toString(36).substr(2, length)
+
+const locationsAreEqual = (a, b) =>
+  a.pathname === b.pathname &&
+  a.search === b.search &&
+  // TODO: Should probably compare hash here too?
+  //a.action === b.action && // Different action !== location change.
+  a.key === b.key &&
+  deepEqual(a.state, b.state)
+
+const createHistory = (options = {}) => {
   const { getCurrentLocation, finishTransition, go, getUserConfirmation } = options
   let { keyLength } = options
 
@@ -29,10 +27,10 @@ function createHistory(options={}) {
 
   let beforeHooks = []
 
-  function listenBefore(hook) {
+  const listenBefore = (hook) => {
     beforeHooks.push(hook)
 
-    return function () {
+    return () => {
       beforeHooks = beforeHooks.filter(item => item !== hook)
     }
   }
@@ -41,7 +39,7 @@ function createHistory(options={}) {
   let changeListeners = []
   let location
 
-  function getCurrent() {
+  const getCurrent = () => {
     if (pendingLocation && pendingLocation.action === POP) {
       return allKeys.indexOf(pendingLocation.key)
     } else if (location) {
@@ -51,7 +49,7 @@ function createHistory(options={}) {
     }
   }
 
-  function updateLocation(newLocation) {
+  const updateLocation = (newLocation) => {
     const current = getCurrent()
 
     location = newLocation
@@ -62,12 +60,10 @@ function createHistory(options={}) {
       allKeys[current] = location.key
     }
 
-    changeListeners.forEach(function (listener) {
-      listener(location)
-    })
+    changeListeners.forEach(listener => listener(location))
   }
 
-  function listen(listener) {
+  const listen = (listener) => {
     changeListeners.push(listener)
 
     if (location) {
@@ -78,23 +74,23 @@ function createHistory(options={}) {
       updateLocation(location)
     }
 
-    return function () {
+    return () => {
       changeListeners = changeListeners.filter(item => item !== listener)
     }
   }
 
-  function confirmTransitionTo(location, callback) {
-    loopAsync(beforeHooks.length, function (index, next, done) {
-      runTransitionHook(beforeHooks[index], location, function (result) {
+  const confirmTransitionTo = (location, callback) => {
+    loopAsync(beforeHooks.length, (index, next, done) => {
+      runTransitionHook(beforeHooks[index], location, (result) => {
         if (result != null) {
           done(result)
         } else {
           next()
         }
       })
-    }, function (message) {
+    }, (message) => {
       if (getUserConfirmation && typeof message === 'string') {
-        getUserConfirmation(message, function (ok) {
+        getUserConfirmation(message, (ok) => {
           callback(ok !== false)
         })
       } else {
@@ -105,13 +101,13 @@ function createHistory(options={}) {
 
   let pendingLocation
 
-  function transitionTo(nextLocation) {
+  const transitionTo = (nextLocation) => {
     if (location && locationsAreEqual(location, nextLocation))
       return // Nothing to do.
 
     pendingLocation = nextLocation
 
-    confirmTransitionTo(nextLocation, function (ok) {
+    confirmTransitionTo(nextLocation, (ok) => {
       if (pendingLocation !== nextLocation)
         return // Transition was interrupted.
 
@@ -137,37 +133,26 @@ function createHistory(options={}) {
     })
   }
 
-  function push(location) {
-    transitionTo(
-      createLocation(location, PUSH, createKey())
-    )
-  }
+  const push = (location) =>
+    transitionTo(createLocation(location, PUSH, createKey()))
 
-  function replace(location) {
-    transitionTo(
-      createLocation(location, REPLACE, createKey())
-    )
-  }
+  const replace = (location) =>
+    transitionTo(createLocation(location, REPLACE, createKey()))
 
-  function goBack() {
+  const goBack = () =>
     go(-1)
-  }
 
-  function goForward() {
+  const goForward = () =>
     go(1)
-  }
 
-  function createKey() {
-    return createRandomKey(keyLength)
-  }
+  const createKey = () =>
+    createRandomKey(keyLength)
 
-  function createHref(location) {
-    return createPath(location)
-  }
+  const createHref = (location) =>
+    createPath(location)
 
-  function createLocation(location, action, key=createKey()) {
-    return _createLocation(location, action, key)
-  }
+  const createLocation = (location, action, key = createKey()) =>
+    _createLocation(location, action, key)
 
   return {
     listenBefore,

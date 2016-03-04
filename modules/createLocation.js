@@ -1,14 +1,13 @@
 import { POP } from './Actions'
 import { parsePath } from './PathUtils'
 
-function createLocation(location='/', action=POP, key=null) {
-  if (typeof location === 'string')
-    location = parsePath(location)
+const createLocation = (location = '/', action = POP, key = null) => {
+  const object = typeof location === 'string' ? parsePath(location) : location
 
-  const pathname = location.pathname || '/'
-  const search = location.search || ''
-  const hash = location.hash || ''
-  const state = location.state || null
+  const pathname = object.pathname || '/'
+  const search = object.search || ''
+  const hash = object.hash || ''
+  const state = object.state || null
 
   return {
     pathname,
