@@ -9,12 +9,14 @@ const defaultStringifyQuery = (query) =>
 const defaultParseQueryString = parse
 
 const isNestedObject = (object) => {
-  for (const p in object)
+  for (const p in object) {
     if (object.hasOwnProperty(p) &&
-        typeof object[p] === 'object' &&
-        !Array.isArray(object[p]) &&
-        object[p] !== null)
+      typeof object[p] === 'object' &&
+      !Array.isArray(object[p]) &&
+      object[p] !== null
+    )
       return true
+  }
 
   return false
 }
@@ -51,14 +53,12 @@ const useQueries = (createHistory) =>
         'use a custom stringifyQuery function'
       )
 
-      if (typeof location === 'string')
-        location = parsePath(location)
-
+      const object = typeof location === 'string' ? parsePath(location) : location
       const queryString = stringifyQuery(query)
-      const search = queryString ? '?' + queryString : ''
+      const search = queryString ? `?${queryString}` : ''
 
       return {
-        ...location,
+        ...object,
         search
       }
     }

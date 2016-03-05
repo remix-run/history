@@ -18,6 +18,7 @@ const describeTransitions = (createHistory) => {
     })
 
     it('receives the next location', (done) => {
+      let nextLocation
       const steps = [
         () => {
           history.push({
@@ -31,7 +32,6 @@ const describeTransitions = (createHistory) => {
         }
       ]
 
-      let nextLocation
       unlistenBefore = history.listenBefore((location) => {
         nextLocation = location
       })
@@ -55,6 +55,7 @@ const describeTransitions = (createHistory) => {
     })
 
     it('receives the next location', (done) => {
+      let nextLocation
       const steps = [
         () => {
           history.push({
@@ -68,7 +69,6 @@ const describeTransitions = (createHistory) => {
         }
       ]
 
-      let nextLocation
       unlistenBefore = history.listenBefore((location, callback) => {
         nextLocation = location
         setTimeout(callback)
@@ -79,10 +79,11 @@ const describeTransitions = (createHistory) => {
   })
 
   describe('when the user confirms a transition', () => {
-    let confirmationMessage, location, history, unlisten, unlistenBefore
+    let location, history, unlisten, unlistenBefore
     beforeEach(() => {
       location = null
-      confirmationMessage = 'Are you sure?'
+
+      const confirmationMessage = 'Are you sure?'
 
       history = createHistory({
         getUserConfirmation(message, callback) {
@@ -91,9 +92,7 @@ const describeTransitions = (createHistory) => {
         }
       })
 
-      unlistenBefore = history.listenBefore(() => {
-        return confirmationMessage
-      })
+      unlistenBefore = history.listenBefore(() => confirmationMessage)
 
       unlisten = history.listen((loc) => {
         location = loc
@@ -127,10 +126,11 @@ const describeTransitions = (createHistory) => {
   })
 
   describe('when the user cancels a transition', () => {
-    let confirmationMessage, location, history, unlisten, unlistenBefore
+    let location, history, unlisten, unlistenBefore
     beforeEach(() => {
       location = null
-      confirmationMessage = 'Are you sure?'
+
+      const confirmationMessage = 'Are you sure?'
 
       history = createHistory({
         getUserConfirmation(message, callback) {
@@ -139,9 +139,7 @@ const describeTransitions = (createHistory) => {
         }
       })
 
-      unlistenBefore = history.listenBefore(() => {
-        return confirmationMessage
-      })
+      unlistenBefore = history.listenBefore(() => confirmationMessage)
 
       unlisten = history.listen((loc) => {
         location = loc
@@ -170,11 +168,9 @@ const describeTransitions = (createHistory) => {
 
       history = createHistory()
 
-      unlistenBefore = history.listenBefore(() => {
-        return false
-      })
+      unlistenBefore = history.listenBefore(() => false)
 
-      unlisten = history.listen((loc) => {
+      unlisten = history.listen(loc => {
         location = loc
       })
     })

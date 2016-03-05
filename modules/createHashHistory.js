@@ -3,9 +3,15 @@ import invariant from 'invariant'
 import { PUSH, POP } from './Actions'
 import { parsePath } from './PathUtils'
 import { canUseDOM } from './ExecutionEnvironment'
-import { addEventListener, removeEventListener, getHashPath, replaceHashPath, supportsGoWithoutReloadUsingHash } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import createDOMHistory from './createDOMHistory'
+import {
+  addEventListener,
+  removeEventListener,
+  getHashPath,
+  replaceHashPath,
+  supportsGoWithoutReloadUsingHash
+} from './DOMUtils'
 
 const isAbsolutePath = (path) =>
   typeof path === 'string' && path.charAt(0) === '/'
@@ -185,9 +191,8 @@ const createHashHistory = (options = {}) => {
     history.go(n)
   }
 
-  const createHref = (path) => {
-    return '#' + history.createHref(path)
-  }
+  const createHref = (path) =>
+    '#' + history.createHref(path)
 
   return {
     ...history,

@@ -10,7 +10,8 @@ const runTransitionHook = (hook, location, callback) => {
   } else {
     warning(
       result === undefined,
-      'You should not "return" in a transition hook with a callback argument; call the callback instead'
+      'You should not "return" in a transition hook with a callback argument; ' +
+      'call the callback instead'
     )
   }
 }

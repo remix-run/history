@@ -10,6 +10,8 @@ const startBeforeUnloadListener = (getBeforeUnloadPromptMessage) => {
       (event || window.event).returnValue = message
       return message
     }
+
+    return undefined
   }
 
   addEventListener(window, 'beforeunload', listener)
@@ -26,7 +28,9 @@ const startBeforeUnloadListener = (getBeforeUnloadPromptMessage) => {
 const useBeforeUnload = (createHistory) =>
   (options) => {
     const history = createHistory(options)
-    let stopBeforeUnloadListener, beforeUnloadHooks = []
+
+    let beforeUnloadHooks = []
+    let stopBeforeUnloadListener
 
     const getBeforeUnloadPromptMessage = () => {
       let message

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import warning from 'warning'
 import invariant from 'invariant'
 import { parsePath } from './PathUtils'
@@ -25,7 +26,7 @@ const createEntry = (key, entry) => {
     entry
   )
 }
-  
+
 const createMemoryHistory = (options = {}) => {
   if (Array.isArray(options)) {
     options = { entries: options }
@@ -79,22 +80,19 @@ const createMemoryHistory = (options = {}) => {
   }
 
   const finishTransition = (location) => {
-    switch (location.action) {
-      case PUSH:
-        current += 1
+    if (location.action === PUSH) {
+      current += 1
 
-        // if we are not on the top of stack
-        // remove rest and push new
-        if (current < entries.length)
-          entries.splice(current)
+      // if we are not on the top of stack
+      // remove rest and push new
+      if (current < entries.length)
+        entries.splice(current)
 
-        entries.push(location)
-        saveState(location.key, location.state)
-        break
-      case REPLACE:
-        entries[current] = location
-        saveState(location.key, location.state)
-        break
+      entries.push(location)
+      saveState(location.key, location.state)
+    } else if (location.action === REPLACE) {
+      entries[current] = location
+      saveState(location.key, location.state)
     }
   }
 

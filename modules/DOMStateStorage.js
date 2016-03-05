@@ -1,4 +1,4 @@
-/*eslint-disable no-empty */
+/* eslint-disable no-empty */
 import warning from 'warning'
 
 const KeyPrefix = '@@History/'

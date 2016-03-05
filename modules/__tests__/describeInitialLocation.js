@@ -28,7 +28,8 @@ const describeInitialLocation = (createHistory) => {
     })
 
     it('emits POP with current location key', (done) => {
-      // set initial state, this is needed because all implementations gets state from different places
+      // set initial state, this is needed because all implementations gets
+      // state from different places
       history.push({
         pathname: '/',
         state: { initial: 'state' }

@@ -14,7 +14,7 @@ const locationsAreEqual = (a, b) =>
   a.pathname === b.pathname &&
   a.search === b.search &&
   // TODO: Should probably compare hash here too?
-  //a.action === b.action && // Different action !== location change.
+  // a.action === b.action && // Different action !== location change.
   a.key === b.key &&
   deepEqual(a.state, b.state)
 
@@ -37,37 +37,38 @@ const createHistory = (options = {}) => {
 
   let allKeys = []
   let changeListeners = []
-  let location
+  let currentLocation
+  let pendingLocation
 
   const getCurrent = () => {
     if (pendingLocation && pendingLocation.action === POP) {
       return allKeys.indexOf(pendingLocation.key)
-    } else if (location) {
-      return allKeys.indexOf(location.key)
-    } else {
-      return -1
+    } else if (currentLocation) {
+      return allKeys.indexOf(currentLocation.key)
     }
+
+    return -1
   }
 
   const updateLocation = (newLocation) => {
-    const current = getCurrent()
+    const currentIndex = getCurrent()
 
-    location = newLocation
+    currentLocation = newLocation
 
-    if (location.action === PUSH) {
-      allKeys = [ ...allKeys.slice(0, current + 1), location.key ]
-    } else if (location.action === REPLACE) {
-      allKeys[current] = location.key
+    if (currentLocation.action === PUSH) {
+      allKeys = [ ...allKeys.slice(0, currentIndex + 1), currentLocation.key ]
+    } else if (currentLocation.action === REPLACE) {
+      allKeys[currentIndex] = currentLocation.key
     }
 
-    changeListeners.forEach(listener => listener(location))
+    changeListeners.forEach(listener => listener(currentLocation))
   }
 
   const listen = (listener) => {
     changeListeners.push(listener)
 
-    if (location) {
-      listener(location)
+    if (currentLocation) {
+      listener(currentLocation)
     } else {
       const location = getCurrentLocation()
       allKeys = [ location.key ]
@@ -81,28 +82,20 @@ const createHistory = (options = {}) => {
 
   const confirmTransitionTo = (location, callback) => {
     loopAsync(beforeHooks.length, (index, next, done) => {
-      runTransitionHook(beforeHooks[index], location, (result) => {
-        if (result != null) {
-          done(result)
-        } else {
-          next()
-        }
-      })
+      runTransitionHook(beforeHooks[index], location, (result) =>
+        result != null ? done(result) : next()
+      )
     }, (message) => {
       if (getUserConfirmation && typeof message === 'string') {
-        getUserConfirmation(message, (ok) => {
-          callback(ok !== false)
-        })
+        getUserConfirmation(message, (ok) => callback(ok !== false))
       } else {
         callback(message !== false)
       }
     })
   }
 
-  let pendingLocation
-
   const transitionTo = (nextLocation) => {
-    if (location && locationsAreEqual(location, nextLocation))
+    if (currentLocation && locationsAreEqual(currentLocation, nextLocation))
       return // Nothing to do.
 
     pendingLocation = nextLocation
@@ -114,17 +107,17 @@ const createHistory = (options = {}) => {
       if (ok) {
         // treat PUSH to current path like REPLACE to be consistent with browsers
         if (nextLocation.action === PUSH) {
-          const prevPath = createPath(location)
+          const prevPath = createPath(currentLocation)
           const nextPath = createPath(nextLocation)
 
-          if (nextPath === prevPath && deepEqual(location.state, nextLocation.state))
+          if (nextPath === prevPath && deepEqual(currentLocation.state, nextLocation.state))
             nextLocation.action = REPLACE
         }
 
         if (finishTransition(nextLocation) !== false)
           updateLocation(nextLocation)
-      } else if (location && nextLocation.action === POP) {
-        const prevIndex = allKeys.indexOf(location.key)
+      } else if (currentLocation && nextLocation.action === POP) {
+        const prevIndex = allKeys.indexOf(currentLocation.key)
         const nextIndex = allKeys.indexOf(nextLocation.key)
 
         if (prevIndex !== -1 && nextIndex !== -1)

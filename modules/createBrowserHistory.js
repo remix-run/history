@@ -1,5 +1,5 @@
 import invariant from 'invariant'
-import { PUSH, POP } from './Actions'
+import { PUSH, REPLACE, POP } from './Actions'
 import { parsePath } from './PathUtils'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener, getWindowPath, supportsHistory } from './DOMUtils'
@@ -25,9 +25,7 @@ const createBrowserHistory = (options = {}) => {
   const isSupported = supportsHistory()
   const useRefresh = !isSupported || forceRefresh
 
-  const getCurrentLocation = (historyState) => {
-    historyState = historyState || window.history.state || {}
-
+  const getCurrentLocation = (historyState = window.history.state || {}) => {
     const path = getWindowPath()
     let { key } = historyState
 
@@ -64,6 +62,7 @@ const createBrowserHistory = (options = {}) => {
   }
 
   const finishTransition = (location) => {
+    /* eslint-disable consistent-return, no-else-return */
     const { basename, pathname, search, hash, state, action, key } = location
 
     if (action === POP)
@@ -83,7 +82,7 @@ const createBrowserHistory = (options = {}) => {
       } else {
         window.history.pushState(historyState, null, path)
       }
-    } else { // REPLACE
+    } else if (action === REPLACE) {
       if (useRefresh) {
         window.location.replace(path)
         return false // Prevent location update.
