@@ -25,9 +25,9 @@ const createBrowserHistory = (options = {}) => {
   const isSupported = supportsHistory()
   const useRefresh = !isSupported || forceRefresh
 
-  const getCurrentLocation = (historyState = window.history.state || {}) => {
+  const getCurrentLocation = (historyState = window.history.state) => {
     const path = getWindowPath()
-    let { key } = historyState
+    let key = historyState && historyState.key
 
     let state
     if (key) {
