@@ -6,15 +6,12 @@
 [npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/history
 
-[`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history in browsers, testing environments, and (soon, via [React Native](https://facebook.github.io/react-native/)) native devices. `history` abstracts away the differences in these different platforms and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions. `history` is library-agnostic and may easily be included in any JavaScript project.
+[`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history anywhere JavaScript runs. `history` abstracts away the differences in various environments and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions.
 
 ## Docs & Help
 
 - [Guides and API Docs](/docs#readme)
 - [Changelog](/CHANGES.md)
-- [Stack Overflow](http://stackoverflow.com/questions/tagged/react-router)
-
-For questions and support, please visit [our channel on Reactiflux](https://discord.gg/0ZcbPKXt5bYaNQ46) or [Stack Overflow](http://stackoverflow.com/questions/tagged/react-router). The issue tracker is *exclusively* for bug reports and feature requests.
 
 ## Installation
 
