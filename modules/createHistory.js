@@ -110,7 +110,6 @@ const createHistory = (options = {}) => {
       if (ok) {
         // Treat PUSH to same path like REPLACE to be consistent with browsers
         if (nextLocation.action === PUSH) {
-          // TODO: Can probably just use locationsAreEqual to compare here
           const prevPath = createPath(currentLocation)
           const nextPath = createPath(nextLocation)
 
