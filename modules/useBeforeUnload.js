@@ -1,10 +1,10 @@
-import warning from 'warning'
-import { canUseDOM } from './ExecutionEnvironment'
+import invariant from 'invariant'
 import { addEventListener, removeEventListener } from './DOMUtils'
+import ExecutionEnvironment from './ExecutionEnvironment'
 
-const startBeforeUnloadListener = (getBeforeUnloadPromptMessage) => {
-  const listener = (event) => {
-    const message = getBeforeUnloadPromptMessage()
+const startListener = (getPromptMessage) => {
+  const handleBeforeUnload = (event) => {
+    const message = getPromptMessage()
 
     if (typeof message === 'string') {
       (event || window.event).returnValue = message
@@ -14,10 +14,10 @@ const startBeforeUnloadListener = (getBeforeUnloadPromptMessage) => {
     return undefined
   }
 
-  addEventListener(window, 'beforeunload', listener)
+  addEventListener(window, 'beforeunload', handleBeforeUnload)
 
   return () =>
-    removeEventListener(window, 'beforeunload', listener)
+    removeEventListener(window, 'beforeunload', handleBeforeUnload)
 }
 
 /**
@@ -25,42 +25,36 @@ const startBeforeUnloadListener = (getBeforeUnloadPromptMessage) => {
  * history objects that know how to use the beforeunload event in web
  * browsers to cancel navigation.
  */
-const useBeforeUnload = (createHistory) =>
-  (options) => {
+const useBeforeUnload = (createHistory) => {
+  invariant(
+    ExecutionEnvironment.canUseDOM,
+    'useBeforeUnload only works in DOM environments'
+  )
+
+  return (options) => {
     const history = createHistory(options)
 
-    let beforeUnloadHooks = []
-    let stopBeforeUnloadListener
+    let listeners = []
+    let stopListener
 
-    const getBeforeUnloadPromptMessage = () => {
+    const getPromptMessage = () => {
       let message
-
-      for (let i = 0, len = beforeUnloadHooks.length; message == null && i < len; ++i)
-        message = beforeUnloadHooks[i].call()
+      for (let i = 0, len = listeners.length; message == null && i < len; ++i)
+        message = listeners[i].call()
 
       return message
     }
 
-    const listenBeforeUnload = (hook) => {
-      beforeUnloadHooks.push(hook)
-
-      if (beforeUnloadHooks.length === 1) {
-        if (canUseDOM) {
-          stopBeforeUnloadListener = startBeforeUnloadListener(getBeforeUnloadPromptMessage)
-        } else {
-          warning(
-            false,
-            'listenBeforeUnload only works in DOM environments'
-          )
-        }
-      }
+    const listenBeforeUnload = (listener) => {
+      if (listeners.push(listener) === 1)
+        stopListener = startListener(getPromptMessage)
 
       return () => {
-        beforeUnloadHooks = beforeUnloadHooks.filter(item => item !== hook)
+        listeners = listeners.filter(item => item !== listener)
 
-        if (beforeUnloadHooks.length === 0 && stopBeforeUnloadListener) {
-          stopBeforeUnloadListener()
-          stopBeforeUnloadListener = null
+        if (listeners.length === 0 && stopListener) {
+          stopListener()
+          stopListener = null
         }
       }
     }
@@ -70,5 +64,6 @@ const useBeforeUnload = (createHistory) =>
       listenBeforeUnload
     }
   }
+}
 
 export default useBeforeUnload

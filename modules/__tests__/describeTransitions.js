@@ -122,6 +122,7 @@ const describeTransitions = (createHistory) => {
       expect(location.search).toEqual('?the=query')
       expect(location.state).toEqual({ the: 'state' })
       expect(location.action).toEqual(PUSH)
+      expect(location.key).toExist()
     })
   })
 

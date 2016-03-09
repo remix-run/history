@@ -17,6 +17,11 @@ describe('hash history', () => {
       window.location.hash = ''
   })
 
+  it('knows how to make hrefs', () => {
+    const history = createHashHistory()
+    expect(history.createHref('/a/path')).toEqual('#/a/path')
+  })
+
   describeInitialLocation(createHashHistory)
   describeTransitions(createHashHistory)
   describePush(createHashHistory)
@@ -41,9 +46,4 @@ describe('hash history', () => {
       describeQueryKey(createHashHistory)
     })
   }
-
-  it('knows how to make hrefs', () => {
-    const history = createHashHistory()
-    expect(history.createHref('/a/path')).toEqual('#/a/path')
-  })
 })

@@ -26,8 +26,9 @@ const describeBasename = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
             expect(location.basename).toEqual('')
 
             history.push('/home')
@@ -35,8 +36,9 @@ const describeBasename = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
           }
         ]
@@ -49,8 +51,9 @@ const describeBasename = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
             expect(location.basename).toEqual('')
 
             history.push({
@@ -63,6 +66,7 @@ const describeBasename = (createHistory) => {
             expect(location.search).toEqual('')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
 
             history.push({
@@ -75,6 +79,7 @@ const describeBasename = (createHistory) => {
             expect(location.search).toEqual('')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
           }
         ]
@@ -89,8 +94,9 @@ const describeBasename = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
             expect(location.basename).toEqual('')
 
             history.replace('/home')
@@ -98,8 +104,9 @@ const describeBasename = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(REPLACE)
+            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
           }
         ]
@@ -112,8 +119,9 @@ const describeBasename = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
             expect(location.basename).toEqual('')
 
             history.replace({
@@ -126,6 +134,7 @@ const describeBasename = (createHistory) => {
             expect(location.search).toEqual('')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(REPLACE)
+            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
 
             history.replace({
@@ -138,6 +147,7 @@ const describeBasename = (createHistory) => {
             expect(location.search).toEqual('')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(REPLACE)
+            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
           }
         ]
@@ -181,10 +191,10 @@ const describeBasename = (createHistory) => {
     })
   })
 
-  describe('basename through <base href>', () => {
+  describe('when there is a <base href="/base/url"> in <head>', () => {
     let history, unlisten, base
 
-    before('add base element', () => {
+    before(() => {
       base = document.createElement('base')
       base.href = '/base/url'
       document.head.appendChild(base)
@@ -192,6 +202,15 @@ const describeBasename = (createHistory) => {
 
     beforeEach(() => {
       history = useBasename(createHistory)()
+    })
+
+    afterEach(() => {
+      if (unlisten)
+        unlisten()
+    })
+
+    after(() => {
+      document.head.removeChild(base)
     })
 
     describe('in createPath', () => {
@@ -216,8 +235,9 @@ const describeBasename = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
             expect(location.basename).toEqual('')
 
             history.push({
@@ -230,21 +250,13 @@ const describeBasename = (createHistory) => {
             expect(location.search).toEqual('')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
           }
         ]
 
         unlisten = history.listen(execSteps(steps, done))
       })
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
-    })
-
-    after(() => {
-      document.head.removeChild(base)
     })
   })
 }

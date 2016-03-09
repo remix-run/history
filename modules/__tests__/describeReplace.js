@@ -20,7 +20,7 @@ const describeReplace = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
 
             history.replace('/home?the=query')
@@ -28,7 +28,7 @@ const describeReplace = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(REPLACE)
           }
         ]
@@ -43,7 +43,7 @@ const describeReplace = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
 
             history.replace({
@@ -70,7 +70,7 @@ const describeReplace = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
 
             oldLocation = location

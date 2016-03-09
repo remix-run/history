@@ -7,7 +7,7 @@ const createLocation = (location = '/', action = POP, key = null) => {
   const pathname = object.pathname || '/'
   const search = object.search || ''
   const hash = object.hash || ''
-  const state = object.state || null
+  const state = object.state
 
   return {
     pathname,

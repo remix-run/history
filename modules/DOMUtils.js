@@ -1,39 +1,19 @@
-/* eslint-disable no-alert */
 export const addEventListener = (node, event, listener) =>
   node.addEventListener
     ? node.addEventListener(event, listener, false)
-    : node.attachEvent(`on${event}`, listener)
+    : node.attachEvent('on' + event, listener)
 
 export const removeEventListener = (node, event, listener) =>
   node.removeEventListener
     ? node.removeEventListener(event, listener, false)
-    : node.detachEvent(`on${event}`, listener)
-
-// We can't use window.location.hash here because it's not
-// consistent across browsers - Firefox will pre-decode it!
-export const getHashPath = () =>
-  window.location.href.split('#')[1] || ''
-
-export const replaceHashPath = (path) =>
-  window.location.replace(
-    `${window.location.pathname}${window.location.search}#${path}`
-  )
-
-export const getWindowPath = () =>
-  window.location.pathname + window.location.search + window.location.hash
-
-export const go = (n) =>
-  n && window.history.go(n)
-
-export const getUserConfirmation = (message, callback) =>
-  callback(window.confirm(message))
+    : node.detachEvent('on' + event, listener)
 
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
  * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
  * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
- * changed to avoid false negatives for Windows Phones: https://github.com/rackt/react-router/issues/586
+ * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
  */
 export const supportsHistory = () => {
   const ua = navigator.userAgent

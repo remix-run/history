@@ -1,12 +1,42 @@
 import warning from 'warning'
 
-export const extractPath = (string) => {
+export const isAbsolutePath = (path) =>
+  typeof path === 'string' && path.charAt(0) === '/'
+
+export const addQueryStringValueToPath = (path, key, value) => {
+  const { pathname, search, hash } = parsePath(path)
+
+  return createPath({
+    pathname,
+    search: search + (search.indexOf('?') === -1 ? '?' : '&') + key + '=' + value,
+    hash
+  })
+}
+
+export const stripQueryStringValueFromPath = (path, key) => {
+  const { pathname, search, hash } = parsePath(path)
+
+  return createPath({
+    pathname,
+    search: search.replace(
+      new RegExp(`([?&])${key}=[a-zA-Z0-9]+(&?)`),
+      (match, prefix, suffix) => (
+        prefix === '?' ? prefix : suffix
+      )
+    ),
+    hash
+  })
+}
+
+export const getQueryStringValueFromPath = (path, key) => {
+  const { search } = parsePath(path)
+  const match = search.match(new RegExp(`[?&]${key}=([a-zA-Z0-9]+)`))
+  return match && match[1]
+}
+
+const extractPath = (string) => {
   const match = string.match(/^https?:\/\/[^\/]*/)
-
-  if (match == null)
-    return string
-
-  return string.substring(match[0].length)
+  return match == null ? string : string.substring(match[0].length)
 }
 
 export const parsePath = (path) => {
@@ -46,10 +76,10 @@ export const createPath = (location) => {
   if (location == null || typeof location === 'string')
     return location
 
-  const { pathname, search, hash } = location
-  let path = pathname
+  const { basename, pathname, search, hash } = location
+  let path = (basename || '') + pathname
 
-  if (search)
+  if (search && search !== '?')
     path += search
 
   if (hash)

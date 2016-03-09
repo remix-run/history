@@ -7,11 +7,11 @@ describe('dom state storage', () => {
     expect(readState('key1')).toEqual({ id: 1 })
 
     saveState('key1', null)
-    expect(readState('key1')).toEqual(null)
+    expect(readState('key1')).toBe(undefined)
 
     saveState('key2', { id: 2 })
     expect(readState('key2')).toEqual({ id: 2 })
 
-    expect(readState('key3')).toEqual(null)
+    expect(readState('key3')).toBe(undefined)
   })
 })

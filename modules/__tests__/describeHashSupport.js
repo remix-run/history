@@ -20,8 +20,9 @@ const describeHashSupport = (createHistory) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.hash).toEqual('')
-          expect(location.state).toEqual(null)
+          expect(location.state).toBe(undefined)
           expect(location.action).toEqual(POP)
+          expect(location.key).toBe(null)
 
           history.push({
             pathname: '/home',
@@ -36,6 +37,7 @@ const describeHashSupport = (createHistory) => {
           expect(location.hash).toEqual('#the-hash')
           expect(location.state).toEqual({ the: 'state' })
           expect(location.action).toEqual(PUSH)
+          expect(location.key).toExist()
         }
       ]
 
@@ -48,8 +50,9 @@ const describeHashSupport = (createHistory) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.hash).toEqual('')
-          expect(location.state).toEqual(null)
+          expect(location.state).toBe(undefined)
           expect(location.action).toEqual(POP)
+          expect(location.key).toBe(null)
 
           history.push('/#the-hash')
         },
@@ -57,8 +60,9 @@ const describeHashSupport = (createHistory) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.hash).toEqual('#the-hash')
-          expect(location.state).toEqual(null)
+          expect(location.state).toBe(undefined)
           expect(location.action).toEqual(PUSH)
+          expect(location.key).toExist()
         }
       ]
 

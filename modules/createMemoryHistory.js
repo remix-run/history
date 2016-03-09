@@ -1,9 +1,9 @@
-/* eslint-disable consistent-return */
 import warning from 'warning'
 import invariant from 'invariant'
-import { parsePath } from './PathUtils'
-import { PUSH, REPLACE, POP } from './Actions'
+import { createLocation } from './LocationUtils'
+import { createPath, parsePath } from './PathUtils'
 import createHistory from './createHistory'
+import { POP } from './Actions'
 
 const createStateStorage = (entries) =>
   entries
@@ -12,20 +12,6 @@ const createStateStorage = (entries) =>
       memo[entry.key] = entry.state
       return memo
     }, {})
-
-const createEntry = (key, entry) => {
-  if (typeof entry === 'string')
-    return { pathname: entry, key }
-
-  if (typeof entry === 'object' && entry)
-    return { ...entry, key }
-
-  invariant(
-    false,
-    'Unable to create history entry from %s',
-    entry
-  )
-}
 
 const createMemoryHistory = (options = {}) => {
   if (Array.isArray(options)) {
@@ -36,22 +22,17 @@ const createMemoryHistory = (options = {}) => {
 
   const getCurrentLocation = () => {
     const entry = entries[current]
-    const { basename, pathname, search } = entry
-    const path = (basename || '') + pathname + (search || '')
+    const path = createPath(entry)
 
     let key, state
     if (entry.key) {
       key = entry.key
       state = readState(key)
-    } else {
-      key = history.createKey()
-      state = null
-      entry.key = key
     }
 
-    const location = parsePath(path)
+    const init = parsePath(path)
 
-    return history.createLocation({ ...location, state }, undefined, key)
+    return createLocation({ ...init, state }, undefined, key)
   }
 
   const canGo = (n) => {
@@ -60,47 +41,47 @@ const createMemoryHistory = (options = {}) => {
   }
 
   const go = (n) => {
-    if (n) {
-      if (!canGo(n)) {
-        warning(
-          false,
-          'Cannot go(%s) there is not enough history',
-          n
-        )
-        return
-      }
+    if (!n)
+      return
 
-      current += n
+    if (!canGo(n)) {
+      warning(
+        false,
+        'Cannot go(%s) there is not enough history',
+        n
+      )
 
-      const currentLocation = getCurrentLocation()
-
-      // change action to POP
-      history.transitionTo({ ...currentLocation, action: POP })
+      return
     }
+
+    current += n
+    const currentLocation = getCurrentLocation()
+
+    // Change action to POP
+    history.transitionTo({ ...currentLocation, action: POP })
   }
 
-  const finishTransition = (location) => {
-    if (location.action === PUSH) {
-      current += 1
+  const pushLocation = (location) => {
+    current += 1
 
-      // if we are not on the top of stack
-      // remove rest and push new
-      if (current < entries.length)
-        entries.splice(current)
+    if (current < entries.length)
+      entries.splice(current)
 
-      entries.push(location)
-      saveState(location.key, location.state)
-    } else if (location.action === REPLACE) {
-      entries[current] = location
-      saveState(location.key, location.state)
-    }
+    entries.push(location)
+
+    saveState(location.key, location.state)
+  }
+
+  const replaceLocation = (location) => {
+    entries[current] = location
+    saveState(location.key, location.state)
   }
 
   const history = createHistory({
     ...options,
     getCurrentLocation,
-    finishTransition,
-    saveState,
+    pushLocation,
+    replaceLocation,
     go
   })
 
@@ -112,7 +93,7 @@ const createMemoryHistory = (options = {}) => {
     entries = [ '/' ]
   }
 
-  entries = entries.map(entry => createEntry(history.createKey(), entry))
+  entries = entries.map(entry => createLocation(entry))
 
   if (current == null) {
     current = entries.length - 1

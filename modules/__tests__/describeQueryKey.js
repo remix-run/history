@@ -3,56 +3,7 @@ import { PUSH, POP } from '../Actions'
 import execSteps from './execSteps'
 
 const describeQueryKey = (createHistory) => {
-  describe('when the user does not want to persist a state', () => {
-    let history, unlisten
-    beforeEach(() => {
-      history = createHistory({ queryKey: false })
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
-    })
-
-    it('forgets state across transitions', (done) => {
-      const steps = [
-        (location) => {
-          expect(location.pathname).toEqual('/')
-          expect(location.search).toEqual('')
-          expect(location.state).toEqual(null)
-          expect(location.action).toEqual(POP)
-
-          history.push('/home?the=query')
-        },
-        (location) => {
-          expect(location.pathname).toEqual('/home')
-          expect(location.search).toEqual('?the=query')
-          expect(location.state).toEqual(null)
-          expect(location.action).toEqual(PUSH)
-
-          history.goBack()
-        },
-        (location) => {
-          expect(location.pathname).toEqual('/')
-          expect(location.search).toEqual('')
-          expect(location.state).toEqual(null)
-          expect(location.action).toEqual(POP)
-
-          history.goForward()
-        },
-        (location) => {
-          expect(location.pathname).toEqual('/home')
-          expect(location.search).toEqual('?the=query')
-          expect(location.state).toEqual(null) // State is missing.
-          expect(location.action).toEqual(POP)
-        }
-      ]
-
-      unlisten = history.listen(execSteps(steps, done))
-    })
-  })
-
-  describe('when the user wants to persist state', () => {
+  describe('when queryKey == "a"', () => {
     let history, unlisten
     beforeEach(() => {
       history = createHistory({ queryKey: 'a' })
@@ -68,8 +19,9 @@ const describeQueryKey = (createHistory) => {
         (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
-          expect(location.state).toEqual(null)
+          expect(location.state).toBe(undefined)
           expect(location.action).toEqual(POP)
+          expect(location.key).toBe(null)
 
           history.push({
             pathname: '/home',
@@ -82,22 +34,25 @@ const describeQueryKey = (createHistory) => {
           expect(location.search).toEqual('?the=query')
           expect(location.state).toEqual({ the: 'state' })
           expect(location.action).toEqual(PUSH)
+          expect(location.key).toExist()
 
           history.goBack()
         },
         (location) => {
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
-          expect(location.state).toEqual(null)
+          expect(location.state).toBe(undefined)
           expect(location.action).toEqual(POP)
+          expect(location.key).toBe(null)
 
           history.goForward()
         },
         (location) => {
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
-          expect(location.state).toEqual({ the: 'state' }) // State is present.
+          expect(location.state).toEqual({ the: 'state' }) // State is present
           expect(location.action).toEqual(POP)
+          expect(location.key).toExist()
         }
       ]
 

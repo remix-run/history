@@ -25,8 +25,9 @@ const describeQueries = (createHistory) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual({})
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
 
             history.push({
               pathname: '/home',
@@ -40,6 +41,7 @@ const describeQueries = (createHistory) => {
             expect(location.query).toEqual({ the: 'query value' })
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
 
             history.push({
               ...location,
@@ -53,6 +55,7 @@ const describeQueries = (createHistory) => {
             expect(location.query).toEqual({ other: 'query value' })
             expect(location.state).toEqual({ other: 'state' })
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
 
             history.push({
               ...location,
@@ -64,8 +67,9 @@ const describeQueries = (createHistory) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
             expect(location.query).toEqual({})
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(null)
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
           }
         ]
 
@@ -80,8 +84,9 @@ const describeQueries = (createHistory) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual({})
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
 
             history.replace({
               pathname: '/home',
@@ -95,6 +100,7 @@ const describeQueries = (createHistory) => {
             expect(location.query).toEqual({ the: 'query value' })
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(REPLACE)
+            expect(location.key).toExist()
 
             history.replace({
               ...location,
@@ -108,6 +114,7 @@ const describeQueries = (createHistory) => {
             expect(location.query).toEqual({ other: 'query value' })
             expect(location.state).toEqual({ other: 'state' })
             expect(location.action).toEqual(REPLACE)
+            expect(location.key).toExist()
           }
         ]
 
@@ -238,8 +245,9 @@ const describeQueries = (createHistory) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual('PARSE_QUERY_STRING')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
 
             history.push({
               pathname: '/home',
@@ -253,6 +261,7 @@ const describeQueries = (createHistory) => {
             expect(location.query).toEqual('PARSE_QUERY_STRING')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
           }
         ]
 
@@ -267,8 +276,9 @@ const describeQueries = (createHistory) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
             expect(location.query).toEqual('PARSE_QUERY_STRING')
-            expect(location.state).toEqual(null)
+            expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
 
             history.replace({
               pathname: '/home',
@@ -282,6 +292,7 @@ const describeQueries = (createHistory) => {
             expect(location.query).toEqual('PARSE_QUERY_STRING')
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(REPLACE)
+            expect(location.key).toExist()
           }
         ]
 

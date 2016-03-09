@@ -1,11 +1,11 @@
 export const loopAsync = (turns, work, callback) => {
   let currentTurn = 0, isDone = false
-  let sync = false, hasNext = false, doneArgs
+  let isSync = false, hasNext = false, doneArgs
 
   const done = (...args) => {
     isDone = true
 
-    if (sync) {
+    if (isSync) {
       // Iterate instead of recursing if possible.
       doneArgs = args
       return
@@ -20,17 +20,17 @@ export const loopAsync = (turns, work, callback) => {
 
     hasNext = true
 
-    if (sync)
+    if (isSync)
       return // Iterate instead of recursing if possible.
 
-    sync = true
+    isSync = true
 
     while (!isDone && currentTurn < turns && hasNext) {
       hasNext = false
       work.call(this, currentTurn++, next, done)
     }
 
-    sync = false
+    isSync = false
 
     if (isDone) {
       // This means the loop finished synchronously.

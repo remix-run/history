@@ -1,6 +1,6 @@
 import expect from 'expect'
 import createHistory from '../createHistory'
-import createLocation from '../createLocation'
+import { createLocation } from '../LocationUtils'
 import { POP } from '../Actions'
 
 describe('a location', () => {
@@ -30,9 +30,9 @@ describe('a location', () => {
     expect(location.search).toEqual('?redirect=https://example.com/')
   })
 
-  it('has null state by default', () => {
+  it('has undefined state by default', () => {
     const location = createLocation()
-    expect(location.state).toBe(null)
+    expect(location.state).toBe(undefined)
   })
 
   it('uses pop navigation by default', () => {

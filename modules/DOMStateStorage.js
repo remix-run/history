@@ -1,13 +1,13 @@
 /* eslint-disable no-empty */
 import warning from 'warning'
 
-const KeyPrefix = '@@History/'
 const QuotaExceededErrors = [
   'QuotaExceededError',
   'QUOTA_EXCEEDED_ERR'
 ]
 
 const SecurityError = 'SecurityError'
+const KeyPrefix = '@@History/'
 
 const createKey = (key) =>
   KeyPrefix + key
@@ -58,7 +58,7 @@ export const readState = (key) => {
         '[history] Unable to read state; sessionStorage is not available due to security settings'
       )
 
-      return null
+      return undefined
     }
   }
 
@@ -70,5 +70,5 @@ export const readState = (key) => {
     }
   }
 
-  return null
+  return undefined
 }
