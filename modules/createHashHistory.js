@@ -1,6 +1,6 @@
 import warning from 'warning'
 import invariant from 'invariant'
-import ExecutionEnvironment from './ExecutionEnvironment'
+import { canUseDOM } from './ExecutionEnvironment'
 import { supportsGoWithoutReloadUsingHash } from './DOMUtils'
 import * as HashProtocol from './HashProtocol'
 import createHistory from './createHistory'
@@ -9,7 +9,7 @@ const DefaultQueryKey = '_k'
 
 const createHashHistory = (options = {}) => {
   invariant(
-    ExecutionEnvironment.canUseDOM,
+    canUseDOM,
     'Hash history needs a DOM'
   )
 

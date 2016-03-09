@@ -1,6 +1,6 @@
 import invariant from 'invariant'
 import { addEventListener, removeEventListener } from './DOMUtils'
-import ExecutionEnvironment from './ExecutionEnvironment'
+import { canUseDOM } from './ExecutionEnvironment'
 
 const startListener = (getPromptMessage) => {
   const handleBeforeUnload = (event) => {
@@ -27,7 +27,7 @@ const startListener = (getPromptMessage) => {
  */
 const useBeforeUnload = (createHistory) => {
   invariant(
-    ExecutionEnvironment.canUseDOM,
+    canUseDOM,
     'useBeforeUnload only works in DOM environments'
   )
 

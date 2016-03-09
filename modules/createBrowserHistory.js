@@ -1,5 +1,5 @@
 import invariant from 'invariant'
-import ExecutionEnvironment from './ExecutionEnvironment'
+import { canUseDOM } from './ExecutionEnvironment'
 import * as BrowserProtocol from './BrowserProtocol'
 import * as RefreshProtocol from './RefreshProtocol'
 import { supportsHistory } from './DOMUtils'
@@ -17,7 +17,7 @@ import createHistory from './createHistory'
  */
 const createBrowserHistory = (options = {}) => {
   invariant(
-    ExecutionEnvironment.canUseDOM,
+    canUseDOM,
     'Browser history needs a DOM'
   )
 

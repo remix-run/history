@@ -17,10 +17,3 @@ export const REPLACE = 'REPLACE'
  * for more information.
  */
 export const POP = 'POP'
-
-// TODO: remove
-export default {
-  PUSH,
-  REPLACE,
-  POP
-}
