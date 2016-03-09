@@ -1,4 +1,4 @@
-import createLocation from './createLocation'
+import { createLocation } from './LocationUtils'
 import { createPath } from './PathUtils'
 
 export { getUserConfirmation, go } from './BrowserProtocol'
