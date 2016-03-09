@@ -8,16 +8,11 @@ const stripHash = (path) =>
 
 const describeBasename = (createHistory) => {
   describe('basename handling', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = useBasename(createHistory)({
         basename: '/base/url'
       })
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     describe('in push', () => {
@@ -43,7 +38,7 @@ const describeBasename = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
 
       it('works with object', (done) => {
@@ -84,7 +79,7 @@ const describeBasename = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -111,7 +106,7 @@ const describeBasename = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
 
       it('works with object', (done) => {
@@ -152,7 +147,7 @@ const describeBasename = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -192,7 +187,7 @@ const describeBasename = (createHistory) => {
   })
 
   describe('when there is a <base href="/base/url"> in <head>', () => {
-    let history, unlisten, base
+    let history, base
 
     before(() => {
       base = document.createElement('base')
@@ -202,11 +197,6 @@ const describeBasename = (createHistory) => {
 
     beforeEach(() => {
       history = useBasename(createHistory)()
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     after(() => {
@@ -255,7 +245,7 @@ const describeBasename = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
   })

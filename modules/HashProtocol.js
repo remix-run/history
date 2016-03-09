@@ -57,11 +57,21 @@ export const getCurrentLocation = (queryKey) => {
 }
 
 const HashChangeEvent = 'hashchange'
+let prevLocation
 
 export const startListener = (listener, queryKey) => {
   const handleHashChange = () => {
-    if (ensureSlash())
-      listener(getCurrentLocation(queryKey))
+    if (!ensureSlash())
+      return // Hash path must always begin with a /
+
+    const currentLocation = getCurrentLocation(queryKey)
+
+    if (prevLocation && currentLocation.key && prevLocation.key === currentLocation.key)
+      return // Ignore extraneous hashchange events
+
+    prevLocation = currentLocation
+
+    listener(currentLocation)
   }
 
   ensureSlash()
@@ -79,6 +89,8 @@ const updateLocation = (location, queryKey, updateHash) => {
     path = addQueryStringValueToPath(path, queryKey, key)
     saveState(key, state)
   }
+
+  prevLocation = location
 
   updateHash(path)
 }

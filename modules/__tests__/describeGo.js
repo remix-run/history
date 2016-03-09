@@ -4,18 +4,14 @@ import execSteps from './execSteps'
 
 const describeGo = (createHistory) => {
   describe('go', () => {
-    let history, unlisten
-    beforeEach((done) => {
+    let history
+    beforeEach(() => {
       history = createHistory()
-
-      // Give browsers a little time to recognize the hashchange
-      setTimeout(done, 100)
     })
 
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
-    })
+    // Some browsers need a little time to reflect the
+    // hashchange before starting the next test
+    afterEach(done => setTimeout(done, 100))
 
     describe('back', () => {
       it('calls change listeners with the previous location', (done) => {
@@ -51,7 +47,7 @@ const describeGo = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -98,7 +94,7 @@ const describeGo = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
   })

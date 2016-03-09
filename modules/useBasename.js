@@ -17,6 +17,9 @@ const useBasename = (createHistory) =>
     }
 
     const addBasename = (location) => {
+      if (!location)
+        return location
+
       if (basename && location.basename == null) {
         if (location.pathname.indexOf(basename) === 0) {
           location.pathname = location.pathname.substring(basename.length)
@@ -49,6 +52,9 @@ const useBasename = (createHistory) =>
     }
 
     // Override all read methods with basename-aware versions.
+    const getCurrentLocation = () =>
+      addBasename(history.getCurrentLocation())
+
     const listenBefore = (hook) =>
       history.listenBefore(
         (location, callback) =>
@@ -76,6 +82,7 @@ const useBasename = (createHistory) =>
 
     return {
       ...history,
+      getCurrentLocation,
       listenBefore,
       listen,
       push,

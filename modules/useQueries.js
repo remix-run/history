@@ -37,6 +37,9 @@ const useQueries = (createHistory) =>
       parseQueryString = defaultParseQueryString
 
     const decodeQuery = (location) => {
+      if (!location)
+        return location
+
       if (location.query == null)
         location.query = parseQueryString(location.search.substring(1))
 
@@ -64,6 +67,9 @@ const useQueries = (createHistory) =>
     }
 
     // Override all read methods with query-aware versions.
+    const getCurrentLocation = () =>
+      decodeQuery(history.getCurrentLocation())
+
     const listenBefore = (hook) =>
       history.listenBefore(
         (location, callback) =>
@@ -98,6 +104,7 @@ const useQueries = (createHistory) =>
 
     return {
       ...history,
+      getCurrentLocation,
       listenBefore,
       listen,
       push,

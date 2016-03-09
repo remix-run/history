@@ -58,18 +58,6 @@ const createHistory = (options = {}) => {
   const listen = (listener) => {
     listeners.push(listener)
 
-    if (currentLocation) {
-      listener(currentLocation)
-    } else {
-      // Bootstrap using the current location
-      const location = getCurrentLocation()
-
-      if (location) {
-        allKeys = [ location.key ]
-        updateLocation(location)
-      }
-    }
-
     return () =>
       listeners = listeners.filter(item => item !== listener)
   }

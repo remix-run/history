@@ -1,6 +1,7 @@
 import expect from 'expect'
 import { supportsGoWithoutReloadUsingHash, supportsHistory } from '../DOMUtils'
 import createHashHistory from '../createHashHistory'
+import describeListen from './describeListen'
 import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
 import describePush from './describePush'
@@ -22,6 +23,7 @@ describe('hash history', () => {
     expect(history.createHref('/a/path')).toEqual('#/a/path')
   })
 
+  describeListen(createHashHistory)
   describeInitialLocation(createHashHistory)
   describeTransitions(createHashHistory)
   describePush(createHashHistory)

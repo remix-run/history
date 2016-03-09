@@ -4,14 +4,9 @@ import execSteps from './execSteps'
 
 const describeInitialLocation = (createHistory) => {
   describe('on the initial POP', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = createHistory()
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     it('location does not have a key', (done) => {
@@ -22,7 +17,7 @@ const describeInitialLocation = (createHistory) => {
         }
       ]
 
-      unlisten = history.listen(execSteps(steps, done))
+      execSteps(steps, history, done)
     })
   })
 }

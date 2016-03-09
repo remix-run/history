@@ -8,14 +8,9 @@ const stripHash = (path) =>
 
 const describeQueries = (createHistory) => {
   describe('default query serialization', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = useQueries(createHistory)()
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     describe('in push', () => {
@@ -73,7 +68,7 @@ const describeQueries = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -118,7 +113,7 @@ const describeQueries = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -221,7 +216,7 @@ const describeQueries = (createHistory) => {
   })
 
   describe('custom query serialization', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = useQueries(createHistory)({
         parseQueryString() {
@@ -231,11 +226,6 @@ const describeQueries = (createHistory) => {
           return 'STRINGIFY_QUERY'
         }
       })
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     describe('in push', () => {
@@ -265,7 +255,7 @@ const describeQueries = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -296,7 +286,7 @@ const describeQueries = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 

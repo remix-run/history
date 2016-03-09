@@ -1,6 +1,8 @@
 ## [HEAD]
 
 - **Feature:** Added `history.getCurrentLocation()` method
+- **Breakage:** `history.listen` no longer calls the callback synchronously once.
+  Use `history.getCurrentLocation` instead
 - **Breakage:** `location.key` on the initial POP is `null`. Users who relied on
   this key may immediately use `replace` to get it back
 - **Breakage:** `location.state` is `undefined` (instead of `null`) if the location

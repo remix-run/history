@@ -4,14 +4,9 @@ import execSteps from './execSteps'
 
 const describeQueryKey = (createHistory) => {
   describe('when queryKey == "a"', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = createHistory({ queryKey: 'a' })
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     it('remembers state across transitions', (done) => {
@@ -56,7 +51,7 @@ const describeQueryKey = (createHistory) => {
         }
       ]
 
-      unlisten = history.listen(execSteps(steps, done))
+      execSteps(steps, history, done)
     })
   })
 }

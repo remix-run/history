@@ -1,5 +1,6 @@
 import { supportsHistory } from '../DOMUtils'
 import createBrowserHistory from '../createBrowserHistory'
+import describeListen from './describeListen'
 import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
 import describePush from './describePush'
@@ -16,6 +17,7 @@ describe('browser history', () => {
   })
 
   if (supportsHistory()) {
+    describeListen(createBrowserHistory)
     describeInitialLocation(createBrowserHistory)
     describeTransitions(createBrowserHistory)
     describePush(createBrowserHistory)
@@ -27,6 +29,7 @@ describe('browser history', () => {
     describeGo(createBrowserHistory)
   } else {
     describe.skip(null, () => {
+      describeListen(createBrowserHistory)
       describeInitialLocation(createBrowserHistory)
       describeTransitions(createBrowserHistory)
       describePush(createBrowserHistory)

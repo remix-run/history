@@ -1,5 +1,6 @@
 import expect from 'expect'
 import createMemoryHistory from '../createMemoryHistory'
+import describeListen from './describeListen'
 import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
 import describePush from './describePush'
@@ -9,6 +10,7 @@ import describeQueries from './describeQueries'
 import describeGo from './describeGo'
 
 describe('memory history', () => {
+  describeListen(createMemoryHistory)
   describeInitialLocation(createMemoryHistory)
   describeTransitions(createMemoryHistory)
   describePush(createMemoryHistory)

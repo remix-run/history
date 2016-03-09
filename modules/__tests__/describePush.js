@@ -4,14 +4,9 @@ import execSteps from './execSteps'
 
 const describePush = (createHistory) => {
   describe('push', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = createHistory()
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     describe('with a path string', () => {
@@ -35,7 +30,7 @@ const describePush = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -64,7 +59,7 @@ const describePush = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
 
       it('correctly merges with old location', (done) => {
@@ -96,7 +91,7 @@ const describePush = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
 
       it('becomes a REPLACE if path is unchanged', (done) => {
@@ -136,7 +131,7 @@ const describePush = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
 
       it('stays PUSH if state is changed', (done) => {
@@ -176,7 +171,7 @@ const describePush = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
   })

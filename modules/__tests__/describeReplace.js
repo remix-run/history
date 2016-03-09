@@ -4,14 +4,9 @@ import execSteps from './execSteps'
 
 const describeReplace = (createHistory) => {
   describe('replace', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = createHistory()
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     describe('with a path string', () => {
@@ -33,7 +28,7 @@ const describeReplace = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
 
@@ -60,7 +55,7 @@ const describeReplace = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
 
       it('correctly merges with old location', (done) => {
@@ -90,7 +85,7 @@ const describeReplace = (createHistory) => {
           }
         ]
 
-        unlisten = history.listen(execSteps(steps, done))
+        execSteps(steps, history, done)
       })
     })
   })

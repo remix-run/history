@@ -1,7 +1,6 @@
 const describePopState = (createHistory) => {
   describe('when a listenBefore hook is added', () => {
     let history, unlisten
-
     beforeEach(() => {
       history = createHistory()
       history.push('/home')

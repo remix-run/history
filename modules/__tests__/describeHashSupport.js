@@ -4,14 +4,9 @@ import execSteps from './execSteps'
 
 const describeHashSupport = (createHistory) => {
   describe('when a URL with a hash is pushed', () => {
-    let history, unlisten
+    let history
     beforeEach(() => {
       history = createHistory()
-    })
-
-    afterEach(() => {
-      if (unlisten)
-        unlisten()
     })
 
     it('preserves the hash', (done) => {
@@ -41,7 +36,7 @@ const describeHashSupport = (createHistory) => {
         }
       ]
 
-      unlisten = history.listen(execSteps(steps, done))
+      execSteps(steps, history, done)
     })
 
     it('does not convert PUSH to REPLACE if path does not change', (done) => {
@@ -66,7 +61,7 @@ const describeHashSupport = (createHistory) => {
         }
       ]
 
-      unlisten = history.listen(execSteps(steps, done))
+      execSteps(steps, history, done)
     })
   })
 }

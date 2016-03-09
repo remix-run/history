@@ -1,19 +1,27 @@
-const execSteps = (steps, done) => {
-  let index = 0
+const execSteps = (steps, history, done) => {
+  let index = 0, unlisten
 
-  return (...args) => {
-    if (steps.length === 0) {
-      done()
-    } else {
-      try {
-        steps[index++](...args)
+  const cleanup = (...args) => {
+    unlisten()
+    done(...args)
+  }
 
-        if (index === steps.length)
-          done()
-      } catch (error) {
-        done(error)
-      }
+  const execNextStep = (...args) => {
+    try {
+      steps[index++](...args)
+
+      if (index === steps.length)
+        cleanup()
+    } catch (error) {
+      cleanup(error)
     }
+  }
+
+  if (steps.length) {
+    unlisten = history.listen(execNextStep)
+    execNextStep(history.getCurrentLocation())
+  } else {
+    done()
   }
 }
 

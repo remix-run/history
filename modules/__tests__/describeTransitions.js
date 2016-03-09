@@ -4,7 +4,7 @@ import execSteps from './execSteps'
 
 const describeTransitions = (createHistory) => {
   describe('a synchronous transition hook', () => {
-    let history, unlisten, unlistenBefore
+    let history, unlistenBefore
     beforeEach(() => {
       history = createHistory()
     })
@@ -12,9 +12,6 @@ const describeTransitions = (createHistory) => {
     afterEach(() => {
       if (unlistenBefore)
         unlistenBefore()
-
-      if (unlisten)
-        unlisten()
     })
 
     it('receives the next location', (done) => {
@@ -36,12 +33,12 @@ const describeTransitions = (createHistory) => {
         nextLocation = location
       })
 
-      unlisten = history.listen(execSteps(steps, done))
+      execSteps(steps, history, done)
     })
   })
 
   describe('an asynchronous transition hook', () => {
-    let history, unlisten, unlistenBefore
+    let history, unlistenBefore
     beforeEach(() => {
       history = createHistory()
     })
@@ -49,9 +46,6 @@ const describeTransitions = (createHistory) => {
     afterEach(() => {
       if (unlistenBefore)
         unlistenBefore()
-
-      if (unlisten)
-        unlisten()
     })
 
     it('receives the next location', (done) => {
@@ -74,7 +68,7 @@ const describeTransitions = (createHistory) => {
         setTimeout(callback)
       })
 
-      unlisten = history.listen(execSteps(steps, done))
+      execSteps(steps, history, done)
     })
   })
 
@@ -94,7 +88,7 @@ const describeTransitions = (createHistory) => {
 
       unlistenBefore = history.listenBefore(() => confirmationMessage)
 
-      unlisten = history.listen((loc) => {
+      unlisten = history.listen(loc => {
         location = loc
       })
     })
@@ -142,7 +136,7 @@ const describeTransitions = (createHistory) => {
 
       unlistenBefore = history.listenBefore(() => confirmationMessage)
 
-      unlisten = history.listen((loc) => {
+      unlisten = history.listen(loc => {
         location = loc
       })
     })
