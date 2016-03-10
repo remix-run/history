@@ -124,11 +124,11 @@ const createHistory = (options = {}) => {
     })
   }
 
-  const push = (location) =>
-    transitionTo(createLocation(location, PUSH, createKey()))
+  const push = (input) =>
+    transitionTo(createLocation(input, PUSH))
 
-  const replace = (location) =>
-    transitionTo(createLocation(location, REPLACE, createKey()))
+  const replace = (input) =>
+    transitionTo(createLocation(input, REPLACE))
 
   const goBack = () =>
     go(-1)

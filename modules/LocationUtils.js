@@ -10,8 +10,8 @@ export const locationsAreEqual = (a, b) =>
   a.key === b.key &&
   deepEqual(a.state, b.state)
 
-export const createLocation = (init = '/', action = POP, key = null) => {
-  const object = typeof init === 'string' ? parsePath(init) : init
+export const createLocation = (input = '/', action = POP, key = null) => {
+  const object = typeof input === 'string' ? parsePath(input) : input
 
   const pathname = object.pathname || '/'
   const search = object.search || ''
