@@ -11,3 +11,4 @@ before_install:
 branches:
   only:
   - master
+  - v2.x
