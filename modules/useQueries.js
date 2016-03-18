@@ -1,4 +1,3 @@
-import warning from 'warning'
 import { parse, stringify } from 'query-string'
 import runTransitionHook from './runTransitionHook'
 import { parsePath } from './PathUtils'
@@ -7,19 +6,6 @@ const defaultStringifyQuery = (query) =>
   stringify(query).replace(/%20/g, '+')
 
 const defaultParseQueryString = parse
-
-const isNestedObject = (object) => {
-  for (const p in object) {
-    if (object.hasOwnProperty(p) &&
-      typeof object[p] === 'object' &&
-      !Array.isArray(object[p]) &&
-      object[p] !== null
-    )
-      return true
-  }
-
-  return false
-}
 
 /**
  * Returns a new createHistory function that may be used to create
@@ -49,12 +35,6 @@ const useQueries = (createHistory) =>
     const encodeQuery = (location, query) => {
       if (query == null)
         return location
-
-      warning(
-        stringifyQuery !== defaultStringifyQuery || !isNestedObject(query),
-        'useQueries does not stringify nested query objects by default; ' +
-        'use a custom stringifyQuery function'
-      )
 
       const object = typeof location === 'string' ? parsePath(location) : location
       const queryString = stringifyQuery(query)
