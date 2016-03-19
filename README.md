@@ -32,7 +32,7 @@ var createHistory = require('history').createHistory
 The UMD build is also available on [npmcdn](https://npmcdn.com):
 
 ```html
-<script src="https://npmcdn.com/history/umd/History.min.js"></script>
+<script src="https://npmcdn.com/history/umd/history.min.js"></script>
 ```
 
 You can find the library on `window.History`.
