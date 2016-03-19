@@ -1,4 +1,4 @@
-var webpack = require('webpack')
+const webpack = require('webpack')
 
 module.exports = {
 
@@ -11,10 +11,6 @@ module.exports = {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel' }
     ]
-  },
-
-  node: {
-    Buffer: false
   },
 
   plugins: [
