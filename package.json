@@ -4,6 +4,10 @@
   "description": "Manage browser history with JavaScript",
   "author": "Michael Jackson",
   "license": "MIT",
+  "webpack": "lib",
+  "browser": "umd/History.min.js",
+  "main": "lib",
+  "jsnext:main": "es6/index",
   "repository": {
     "type": "git",
     "url": "https://github.com/mjackson/history.git"
@@ -14,8 +18,6 @@
     "modules/*.js",
     "umd"
   ],
-  "main": "lib/index",
-  "jsnext:main": "es6/index",
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "build-cjs": "rimraf lib && babel ./modules -d lib --ignore '__tests__'",
