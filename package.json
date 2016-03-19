@@ -13,10 +13,9 @@
     "url": "https://github.com/mjackson/history.git"
   },
   "files": [
-    "es6",
     "lib",
-    "modules/*.js",
-    "umd"
+    "umd",
+    "es6"
   ],
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
