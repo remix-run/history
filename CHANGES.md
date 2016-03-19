@@ -1,4 +1,5 @@
-## [HEAD]
+## [3.0.0-0]
+> Mar 19, 2016
 
 - **Feature:** Added `history.getCurrentLocation()` method
 - **Breakage:** `history.listen` no longer calls the callback synchronously once.
@@ -15,7 +16,7 @@
   This should minimize the # of times we access session storage and allow users to
   opt-out of using it entirely by not using location state
 
-[HEAD]: https://github.com/mjackson/history/compare/latest...HEAD
+[3.0.0-0]: https://github.com/mjackson/history/compare/v2.0.0...v3.0.0-0
 [#163]: https://github.com/mjackson/history/issues/163
 
 ## [v2.0.0]
