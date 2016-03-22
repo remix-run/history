@@ -69,5 +69,9 @@
   "keywords": [
     "history",
     "location"
-  ]
+  ],
+  "babel": {
+    "presets": [ "es2015", "stage-1" ],
+    "plugins": [ "dev-expression" ]
+  }
 }
