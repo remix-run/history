@@ -41,7 +41,6 @@ const createBrowserHistory = (options = {}) => {
     go
   })
 
-  /* eslint-ignore prefer-const */
   let listenerCount = 0, stopListener
 
   const startListener = (listener, before) => {

@@ -6,6 +6,7 @@
     "comma-dangle": 0,
     "curly": 0,
     "eqeqeq": [2, "smart"],
+    "no-confusing-arrow": 0,
     "no-param-reassign": 0,
     "no-return-assign": 0,
     "no-use-before-define": 0,
