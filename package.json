@@ -4,8 +4,6 @@
   "description": "Manage browser history with JavaScript",
   "author": "Michael Jackson",
   "license": "MIT",
-  "webpack": "lib",
-  "browser": "umd/history.min.js",
   "main": "lib",
   "jsnext:main": "es6/index",
   "repository": {
