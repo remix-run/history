@@ -1,3 +1,10 @@
+## [HEAD]
+
+- Added `locationsAreEqual` to top-level exports
+- Removed dependency on `deep-equal`
+
+[HEAD]: https://github.com/mjackson/history/compare/latest...HEAD
+
 ## [3.0.0-0]
 > Mar 19, 2016
 
