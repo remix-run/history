@@ -28,7 +28,6 @@
     "lint": "eslint modules"
   },
   "dependencies": {
-    "deep-equal": "^1.0.0",
     "invariant": "^2.0.0",
     "query-string": "^3.0.0",
     "warning": "^2.0.0"

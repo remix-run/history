@@ -1,10 +1,10 @@
-import deepEqual from 'deep-equal'
 import { loopAsync } from './AsyncUtils'
 import { createPath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
 import { PUSH, REPLACE, POP } from './Actions'
 import {
   createLocation as _createLocation,
+  statesAreEqual,
   locationsAreEqual
 } from './LocationUtils'
 
@@ -101,7 +101,7 @@ const createHistory = (options = {}) => {
           const prevPath = createPath(currentLocation)
           const nextPath = createPath(nextLocation)
 
-          if (nextPath === prevPath && deepEqual(currentLocation.state, nextLocation.state))
+          if (nextPath === prevPath && statesAreEqual(currentLocation.state, nextLocation.state))
             nextLocation.action = REPLACE
         }
 
