@@ -7,3 +7,5 @@ export useBeforeUnload from './useBeforeUnload'
 export useQueries from './useQueries'
 
 export Actions from './Actions'
+
+export { locationsAreEqual } from './LocationUtils'
