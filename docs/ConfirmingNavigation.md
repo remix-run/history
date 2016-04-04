@@ -3,7 +3,7 @@
 Sometimes you may want to prevent the user from going to a different page. For example, if they are halfway finished filling out a long form, and they click the back button, you may want to prompt them to confirm they actually want to leave the page before they lose the information they've already entered. For these cases, `history` lets you register [transition hooks](Glossary.md#transitionhook) that return a prompt message you can show the user before the [location](Glossary.md#location) changes. For example, you could do something like this:
 
 ```js
-history.listenBefore(function (location) {
+history.listenBefore(location => {
   if (input.value !== '')
     return 'Are you sure you want to leave this page?'
 })
@@ -11,10 +11,10 @@ history.listenBefore(function (location) {
 
 You can also simply `return false` to prevent a [transition](Glossary.md#transition).
 
-If your transition hook needs to execute asynchronously, you can provide a second `callback` argument to your transition hook function that you must call when you're done with async work.
+If your transition hook needs to execute asynchronously, you can provide a second `callback` argument to your transition hook function that you must call when you're done doing async work.
 
 ```js
-history.listenBefore(function (location, callback) {
+history.listenBefore((location, callback) => {
   doSomethingAsync().then(callback)
 })
 ```
@@ -24,7 +24,7 @@ Note: **If you do provide a `callback` argument, the transition will not proceed
 In browsers, `history` uses [`window.confirm`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm) by default to display confirmation messages to users. However, you can provide your own custom confirmation dialog box using the `getUserConfirmation` hook when you create your `history` object.
 
 ```js
-let history = createHistory({
+const history = createHistory({
   getUserConfirmation(message, callback) {
     callback(window.confirm(message)) // The default behavior
   }
@@ -33,14 +33,14 @@ let history = createHistory({
 
 ### The `beforeunload` Event
 
-If you need to prevent a browser window or tab from closing, `history` provides the `useBeforeUnload` enhancer function.
+If you need to prevent a browser window or tab from closing, `history` provides the `useBeforeUnload` [enhancer](Glossary.md#createhistoryenhancer) function.
 
 ```js
 import { createHistory, useBeforeUnload } from 'history'
 
-let history = useBeforeUnload(createHistory)()
+const history = useBeforeUnload(createHistory)()
 
-history.listenBeforeUnload(function () {
+history.listenBeforeUnload(() => {
   return 'Are you sure you want to leave this page?'
 })
 ```

@@ -6,12 +6,12 @@ Support for running an app under a "base" URL is provided by the `useBasename` [
 import { createHistory, useBasename } from 'history'
 
 // Run our app under the /base URL.
-let history = useBasename(createHistory)({
+const history = useBasename(createHistory)({
   basename: '/base'
 })
 
 // At the /base/hello/world URL:
-history.listen(function (location) {
+history.listen(location => {
   console.log(location.pathname) // /hello/world
   console.log(location.basename) // /base
 })

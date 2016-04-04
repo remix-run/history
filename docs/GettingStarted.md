@@ -4,18 +4,20 @@ The first thing you'll need to do is create a [history object](Glossary.md#histo
 
 - `createHistory` is for use in modern web browsers that support the [HTML5 history API](http://diveintohtml5.info/history.html) (see [cross-browser compatibility](http://caniuse.com/#feat=history))
 - `createHashHistory` is for use in legacy web browsers (see [caveats of using hash history](HashHistoryCaveats.md))
-- `createMemoryHistory` is used mainly for testing and does not persist state across sessions
+- `createMemoryHistory` is used mainly for testing and as a reference implementation
 
 Once you get a `history` object, use `history.listen` to be notified when [the `location`](Location.md) changes.
 
 ```js
 import { createHistory } from 'history'
 
-let history = createHistory()
+const history = createHistory()
 
-// Listen for changes to the current location. The
-// listener is called once immediately.
-let unlisten = history.listen(function (location) {
+// Get the current location.
+const location = history.getCurrentLocation()
+
+// Listen for changes to the current location.
+const unlisten = history.listen(location => {
   console.log(location.pathname)
 })
 
@@ -33,9 +35,10 @@ You can also use a `history` object to programmatically change the current `loca
 - `goBack()`
 - `goForward()`
 
-The `push` and `replace` methods take a [path string](Glossary.md#path) that represents a complete URL path, including the [search string](Glossary.md#search) and [hash](Glossary.md#hash).
+The `push` and `replace` methods accept a single `location` argument as either:
 
-They can also accept a [location descriptor](Glossary.md#locationdescriptor) object that defines the path as a combination of [`pathname`](Glossary.md#pathname), [`search`](Glossary.md#search), and [`hash`](Glossary.md#hash). This object can also include [`state`](Glossary.md#locationstate) as a JSON-serializable object.
+1. A [path string](Glossary.md#path) that represents a complete URL path, including the [search string](Glossary.md#search) and [hash](Glossary.md#hash) or
+2. A [location descriptor](Glossary.md#locationdescriptor) object that uses a combination of [`pathname`](Glossary.md#pathname), [`search`](Glossary.md#search), [`hash`](Glossary.md#hash), and [`state`](Glossary.md#locationstate) properties
 
 ```js
 // Push a new entry onto the history stack.
@@ -45,13 +48,16 @@ history.push('/home')
 history.replace('/profile')
 
 // Push a new entry with state onto the history stack.
+// state must be a JSON-serializable object (no Function
+// or Date values).
 history.push({
   pathname: '/about',
   search: '?the=search',
   state: { some: 'state' }
 })
 
-// Change just the search on an existing location.
+// Push a new entry onto the history stack that changes
+// only the search on an existing location.
 history.push({ ...location, search: '?the=other+search' })
 
 // Go back to the previous history entry. The following
@@ -67,7 +73,7 @@ To prevent the user from navigating away from a page, or to prompt them before t
 Additionally, `history` objects can be used to create URL paths and/or `href`s for `<a>` tags that link to various places in your app. This is useful when using hash history to prefix URLs with a `#` or when using [query support](QuerySupport.md) to automatically build query strings.
 
 ```js
-let href = history.createHref('/the/path')
+const href = history.createHref('/the/path')
 ```
 
 ### Minimizing Your Build
