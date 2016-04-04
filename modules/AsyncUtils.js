@@ -27,7 +27,7 @@ export const loopAsync = (turns, work, callback) => {
 
     while (!isDone && currentTurn < turns && hasNext) {
       hasNext = false
-      work.call(this, currentTurn++, next, done)
+      work(currentTurn++, next, done)
     }
 
     isSync = false
