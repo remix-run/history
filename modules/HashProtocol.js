@@ -11,6 +11,8 @@ import {
   createPath
 } from './PathUtils'
 
+const HashChangeEvent = 'hashchange'
+
 const getHashPath = () => {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
@@ -56,7 +58,6 @@ export const getCurrentLocation = (queryKey) => {
   return createLocation(init, undefined, key)
 }
 
-const HashChangeEvent = 'hashchange'
 let prevLocation
 
 export const startListener = (listener, queryKey) => {

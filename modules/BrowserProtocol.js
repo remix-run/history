@@ -4,6 +4,8 @@ import { addEventListener, removeEventListener } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
 
+const PopStateEvent = 'popstate'
+
 const _createLocation = (historyState) => {
   const key = historyState && historyState.key
 
@@ -20,8 +22,6 @@ export const getCurrentLocation = () =>
 
 export const getUserConfirmation = (message, callback) =>
   callback(window.confirm(message))
-
-const PopStateEvent = 'popstate'
 
 export const startListener = (listener) => {
   const handlePopState = (event) => {
