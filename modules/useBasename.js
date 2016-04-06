@@ -1,5 +1,5 @@
 import { canUseDOM } from './ExecutionEnvironment'
-import { extractPath, parsePath } from './PathUtils'
+import { parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
 import deprecate from './deprecate'
 
@@ -15,7 +15,7 @@ function useBasename(createHistory) {
       const base = document.getElementsByTagName('base')[0]
 
       if (base)
-        basename = extractPath(base.href)
+        basename = base.getAttribute('href')
     }
 
     function addBasename(location) {

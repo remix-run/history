@@ -298,6 +298,72 @@ function describeBasename(createHistory) {
       document.head.removeChild(base)
     })
   })
+
+  describe('<base> without href', () => {
+    let history, unlisten, base
+
+    before('add base element', () => {
+      base = document.createElement('base')
+      document.head.appendChild(base)
+    })
+
+    beforeEach(() => {
+      history = useBasename(createHistory)()
+    })
+
+    describe('in createPath', () => {
+      it('works', function () {
+        expect(
+          history.createPath('/the/path')
+        ).toEqual('/the/path')
+      })
+    })
+
+    describe('in createHref', () => {
+      it('works', function () {
+        expect(
+          stripHash(history.createHref('/the/path'))
+        ).toEqual('/the/path')
+      })
+    })
+
+    describe('in push', () => {
+      it('works', function (done) {
+        const steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+            expect(location.basename).toNotExist()
+
+            history.push({
+              pathname: '/home',
+              state: { the: 'state' }
+            })
+          },
+          function (location) {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
+            expect(location.basename).toNotExist()
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
+
+    afterEach(() => {
+      if (unlisten)
+        unlisten()
+    })
+
+    after(() => {
+      document.head.removeChild(base)
+    })
+  })
 }
 
 export default describeBasename
