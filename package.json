@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "invariant": "^2.0.0",
-    "query-string": "^3.0.0",
+    "query-string": "^4.1.0",
     "warning": "^2.0.0"
   },
   "devDependencies": {
@@ -67,7 +67,12 @@
     "location"
   ],
   "babel": {
-    "presets": [ "es2015", "stage-1" ],
-    "plugins": [ "dev-expression" ]
+    "presets": [
+      "es2015",
+      "stage-1"
+    ],
+    "plugins": [
+      "dev-expression"
+    ]
   }
 }
