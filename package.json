@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Manage browser history with JavaScript",
   "files": [
     "es6",
