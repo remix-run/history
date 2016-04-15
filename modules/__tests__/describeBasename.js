@@ -364,6 +364,48 @@ function describeBasename(createHistory) {
       document.head.removeChild(base)
     })
   })
+
+  describe('<base href> on different origin', () => {
+    let history, unlisten, base
+
+    // Can't use before here, as otherwise the state restoration in the browser
+    // history tests would trigger a SecurityError.
+
+    beforeEach('add base element', () => {
+      base = document.createElement('base')
+      base.href = 'http://www.example.com/page.html'
+      document.head.appendChild(base)
+    })
+
+    beforeEach(() => {
+      history = useBasename(createHistory)()
+    })
+
+    describe('in listen', () => {
+      it('works', function (done) {
+        const steps = [
+          function (location) {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.state).toEqual(null)
+            expect(location.action).toEqual(POP)
+            expect(location.basename).toEqual('')
+          }
+        ]
+
+        unlisten = history.listen(execSteps(steps, done))
+      })
+    })
+
+    afterEach(() => {
+      if (unlisten)
+        unlisten()
+    })
+
+    afterEach(() => {
+      document.head.removeChild(base)
+    })
+  })
 }
 
 export default describeBasename
