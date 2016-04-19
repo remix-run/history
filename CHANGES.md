@@ -1,9 +1,9 @@
-## [HEAD]
+## [v2.1.0]
 
 - Deprecate usage of `<base href>` as an automatic substitute for `basename`
   in `useBasename`. They have subtly different semantics ([#94])
 
-[HEAD]: https://github.com/mjackson/history/compare/latest...HEAD
+[v2.1.0]: https://github.com/mjackson/history/compare/v2.0.2...v2.1.0
 [#94]: https://github.com/mjackson/history/issues/94
 
 ## [v2.0.2]
