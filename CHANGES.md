@@ -1,3 +1,10 @@
+## [v3.0.0-2]
+> Apr 19, 2016
+
+- Lower-cased UMD build file name
+
+[v3.0.0-2]: https://github.com/mjackson/history/compare/v3.0.0-1...v3.0.0-2
+
 ## [v3.0.0-1]
 > Apr 19, 2016
 
