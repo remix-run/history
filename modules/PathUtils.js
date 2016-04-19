@@ -35,7 +35,7 @@ export const getQueryStringValueFromPath = (path, key) => {
 }
 
 const extractPath = (string) => {
-  const match = string.match(/^https?:\/\/[^\/]*/)
+  const match = string.match(/^(https?:)?\/\/[^\/]*/)
   return match == null ? string : string.substring(match[0].length)
 }
 
@@ -46,7 +46,7 @@ export const parsePath = (path) => {
 
   warning(
     path === pathname,
-    'A path must be pathname + search + hash only, not a fully qualified URL like "%s"',
+    'A path must be pathname + search + hash only, not a full URL like "%s"',
     path
   )
 

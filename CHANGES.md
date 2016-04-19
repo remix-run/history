@@ -1,3 +1,10 @@
+## [HEAD]
+
+- Warn about protocol-relative URLs ([#243])
+
+[HEAD]: https://github.com/mjackson/history/compare/v3.0.0-2...HEAD
+[#243]: https://github.com/mjackson/history/issues/243
+
 ## [v3.0.0-2]
 > Apr 19, 2016
 
