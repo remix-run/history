@@ -1,3 +1,23 @@
+## [v2.0.2]
+> Apr 14, 2016
+
+- **Bugfix:** Fix usage of `hasOwnProperty` (thanks @taion)
+- **Bugfix:** Fix handling of `<base>` without `href` ([#262] thanks @taion)
+- **Bugfix:** Fix security error when frontend URL !== backend URL ([#267] thanks @slorber)
+
+[v2.0.2]: https://github.com/mjackson/history/compare/v2.0.1...v2.0.2
+[#262]: https://github.com/reactjs/history/pull/262
+[#267]: https://github.com/reactjs/history/pull/267
+
+## [v2.0.1]
+> Mar 2, 2016
+
+- **Bugfix:** Fix stack size growth with every `listenBefore` listener ([#225] thanks @threepointone, @taion)
+- Remove docs from npm package
+
+[v2.0.1]: https://github.com/reactjs/history/compare/v2.0.0...v2.0.1
+[#225]: https://github.com/reactjs/history/issues/225
+
 ## [v2.0.0]
 > Feb 4, 2016
 
