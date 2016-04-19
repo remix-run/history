@@ -4,7 +4,7 @@ import { parsePath } from './PathUtils'
 const useBasename = (createHistory) =>
   (options = {}) => {
     const history = createHistory(options)
-    let { basename } = options
+    const { basename } = options
 
     const addBasename = (location) => {
       if (!location)
