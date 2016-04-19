@@ -1,10 +1,11 @@
-## [HEAD]
+## [v3.0.0-1]
+> Apr 19, 2016
 
 - Added `locationsAreEqual` to top-level exports
 - **Breakage:** Removed support for `<base href>` as `basename` ([#94])
 - Removed dependency on `deep-equal`
 
-[HEAD]: https://github.com/mjackson/history/compare/latest...HEAD
+[v3.0.0-1]: https://github.com/mjackson/history/compare/v3.0.0-0...v3.0.0-1
 [#94]: https://github.com/mjackson/history/issues/94
 
 ## [3.0.0-0]
