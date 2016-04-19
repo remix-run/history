@@ -1,3 +1,4 @@
+import warning from 'warning'
 import { canUseDOM } from './ExecutionEnvironment'
 import { parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
@@ -14,8 +15,17 @@ function useBasename(createHistory) {
     if (basename == null && canUseDOM) {
       const base = document.getElementsByTagName('base')[0]
 
-      if (base)
+      if (base) {
+        warning(
+          false,
+          'Automatically setting basename using <base href> is deprecated and will ' +
+          'be removed in the next major release. The semantics of <base href> are ' +
+          'subtly different from basename. Please pass the basename explicitly in ' +
+          'the options to createHistory'
+        )
+
         basename = base.getAttribute('href')
+      }
     }
 
     function addBasename(location) {
