@@ -1,14 +1,16 @@
 ## [HEAD]
 
 - Added `locationsAreEqual` to top-level exports
+- **Breakage:** Removed support for `<base href>` as `basename` ([#94])
 - Removed dependency on `deep-equal`
 
 [HEAD]: https://github.com/mjackson/history/compare/latest...HEAD
+[#94]: https://github.com/mjackson/history/issues/94
 
 ## [3.0.0-0]
 > Mar 19, 2016
 
-- **Feature:** Added `history.getCurrentLocation()` method
+- Added `history.getCurrentLocation()` method
 - **Breakage:** `history.listen` no longer calls the callback synchronously once.
   Use `history.getCurrentLocation` instead
 - **Breakage:** `location.key` on the initial POP is `null`. Users who relied on
@@ -77,8 +79,8 @@
 > Dec 10, 2015
 
 - **Bugfix:** Silence all warnings that were introduced since 1.13 (see [reactjs/react-router#2682])
-- **Deprecation:** Deprecate the `createLocation` method in the top-level exports
-- **Deprecation:** Deprecate the `state` arg to `history.createLocation`
+- Deprecate the `createLocation` method in the top-level exports
+- Deprecate the `state` arg to `history.createLocation`
 
 [v1.16.0]: https://github.com/mjackson/history/compare/v1.15.0...v1.16.0
 [reactjs/react-router#2682]: https://github.com/reactjs/react-router/issues/2682
@@ -86,8 +88,8 @@
 ## [v1.15.0]
 > Dec 7, 2015
 
-- **Feature:** Accept location descriptors in `createPath` and `createHref` ([#173])
-- **Deprecation:** Deprecate the `query` arg to `createPath` and `createHref` in favor of using location descriptor objects ([#173])
+- Accept location descriptors in `createPath` and `createHref` ([#173])
+- Deprecate the `query` arg to `createPath` and `createHref` in favor of using location descriptor objects ([#173])
 
 [v1.15.0]: https://github.com/mjackson/history/compare/v1.14.0...v1.15.0
 [#173]: https://github.com/mjackson/history/pull/173
@@ -95,8 +97,8 @@
 ## [v1.14.0]
 > Dec 6, 2015
 
-- **Feature:** Accept objects in `history.push` and `history.replace` ([#141])
-- **Deprecation:** Deprecate `history.pushState` and `history.replaceState` in favor of passing objects to `history.push` and `history.replace` ([#168])
+- Accept objects in `history.push` and `history.replace` ([#141])
+- Deprecate `history.pushState` and `history.replaceState` in favor of passing objects to `history.push` and `history.replace` ([#168])
 - **Bugfix:** Disable browser history on Chrome iOS ([#146])
 - **Bugfix:** Do not convert same-path PUSH to REPLACE if the hash has changed ([#167])
 - Add ES2015 module build ([#152])

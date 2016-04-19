@@ -1,4 +1,3 @@
-import { canUseDOM } from './ExecutionEnvironment'
 import runTransitionHook from './runTransitionHook'
 import { parsePath } from './PathUtils'
 
@@ -6,15 +5,6 @@ const useBasename = (createHistory) =>
   (options = {}) => {
     const history = createHistory(options)
     let { basename } = options
-
-    // Automatically use the value of <base href> in HTML
-    // documents as basename if it's not explicitly given.
-    if (basename == null && canUseDOM) {
-      const base = document.getElementsByTagName('base')[0]
-
-      if (base)
-        basename = base.getAttribute('href')
-    }
 
     const addBasename = (location) => {
       if (!location)
