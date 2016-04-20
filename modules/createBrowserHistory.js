@@ -43,7 +43,9 @@ function createBrowserHistory(options={}) {
       key = history.createKey()
 
       if (isSupported)
-        window.history.replaceState({ ...historyState, key }, null)
+        window.history.replaceState(
+          { ...historyState, key }, null, window.location.href
+        )
     }
 
     const location = parsePath(path)
