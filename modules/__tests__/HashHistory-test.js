@@ -6,6 +6,7 @@ import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
 import describePush from './describePush'
 import describeReplace from './describeReplace'
+import describeTransformPath from './describeTransformPath'
 import describePopState from './describePopState'
 import describeQueryKey from './describeQueryKey'
 import describeBasename from './describeBasename'
@@ -25,8 +26,14 @@ describe('hash history', () => {
 
   it('knows how to make hrefs with a custom transformPath function', () => {
     const history = createHashHistory({
-      transformPath: (path) =>
-        path.indexOf('!') !== 0 ? `!${path}` : path
+      transformPath: (path, encode) => {
+        // if encoding, add an exclamation mark for hashbang support
+        if (encode)
+          return path.indexOf('!') !== 0 ? `!${path}` : path
+
+        // when decoding, remove the exclamation mark
+        return path.substring(1)
+      }
     })
     expect(history.createHref('/a/path')).toEqual('#!/a/path')
   })
@@ -38,6 +45,7 @@ describe('hash history', () => {
   describeReplace(createHashHistory)
   describeBasename(createHashHistory)
   describeQueries(createHashHistory)
+  describeTransformPath(createHashHistory)
 
   if (supportsHistory()) {
     describePopState(createHashHistory)

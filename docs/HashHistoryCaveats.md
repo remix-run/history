@@ -19,8 +19,14 @@ let history = createHistory({
 
 // Use custom URL transformations, for example for hashbang support
 let history = createHistory({
-  transformPath: (path) =>
-    path.indexOf('!') !== 0 ? `!${path}` : path
+  transformPath: (path, encode) => {
+    // if encoding, we transform the path to our hash value
+    if (encode)
+      return path.indexOf('!') !== 0 ? `!${path}` : path
+
+    // when decoding, we transform the hash value back into the original path
+    return path.substring(1)
+  }
 })
 ```
 

@@ -30,13 +30,13 @@ const createHashHistory = (options = {}) => {
     transformPath = ensureSlash
 
   const getCurrentLocation = () =>
-    HashProtocol.getCurrentLocation(queryKey)
+    HashProtocol.getCurrentLocation(queryKey, transformPath)
 
   const pushLocation = (location) =>
-    HashProtocol.pushLocation(location, queryKey)
+    HashProtocol.pushLocation(location, queryKey, transformPath)
 
   const replaceLocation = (location) =>
-    HashProtocol.replaceLocation(location, queryKey)
+    HashProtocol.replaceLocation(location, queryKey, transformPath)
 
   const history = createHistory({
     getUserConfirmation, // User may override in options
@@ -87,7 +87,7 @@ const createHashHistory = (options = {}) => {
   }
 
   const createHref = (path) =>
-    '#' + transformPath(history.createHref(path))
+    '#' + transformPath(history.createHref(path), true)
 
   return {
     ...history,
