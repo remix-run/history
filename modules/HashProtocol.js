@@ -29,15 +29,11 @@ const replaceHashPath = (path) =>
     window.location.pathname + window.location.search + '#' + path
   )
 
-const ensureSlash = () => {
-  const path = getHashPath()
-
+export const ensureSlash = (path) => {
   if (isAbsolutePath(path))
-    return true
+    return path
 
-  replaceHashPath('/' + path)
-
-  return false
+  return '/' + path
 }
 
 export { getUserConfirmation, go } from './BrowserProtocol'
@@ -60,10 +56,14 @@ export const getCurrentLocation = (queryKey) => {
 
 let prevLocation
 
-export const startListener = (listener, queryKey) => {
+export const startListener = (listener, queryKey, transform) => {
   const handleHashChange = () => {
-    if (!ensureSlash())
-      return // Hash path must always begin with a /
+    const transformedPath = transform(getHashPath())
+
+    if (transformedPath === false)
+      return // Invalid path
+
+    replaceHashPath(transformedPath)
 
     const currentLocation = getCurrentLocation(queryKey)
 
@@ -75,7 +75,11 @@ export const startListener = (listener, queryKey) => {
     listener(currentLocation)
   }
 
-  ensureSlash()
+  const transformedPath = transform(getHashPath())
+
+  if (typeof transformedPath === 'string')
+    replaceHashPath(transformedPath)
+
   addEventListener(window, HashChangeEvent, handleHashChange)
 
   return () =>

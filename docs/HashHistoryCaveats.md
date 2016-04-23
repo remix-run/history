@@ -17,9 +17,10 @@ let history = createHistory({
   queryKey: false
 })
 
-// Enable hashbang URLs
+// Use custom URL transformations, for example for hashbang support
 let history = createHistory({
-  hashbang: true
+  transformPath: (path) =>
+    path.indexOf('!') !== 0 ? `!${path}` : path
 })
 ```
 

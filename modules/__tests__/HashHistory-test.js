@@ -23,9 +23,10 @@ describe('hash history', () => {
     expect(history.createHref('/a/path')).toEqual('#/a/path')
   })
 
-  it('knows how to make hrefs with an escaped fragment', () => {
+  it('knows how to make hrefs with a custom transformPath function', () => {
     const history = createHashHistory({
-      hashbang: true,
+      transformPath: (path) =>
+        path.indexOf('!') !== 0 ? `!${path}` : path
     })
     expect(history.createHref('/a/path')).toEqual('#!/a/path')
   })
