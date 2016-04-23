@@ -82,8 +82,10 @@ const createHashHistory = (options = {}) => {
     history.go(n)
   }
 
+  const hash = options.hashbang ? '#!' : '#'
+
   const createHref = (path) =>
-    '#' + history.createHref(path)
+    hash + history.createHref(path)
 
   return {
     ...history,

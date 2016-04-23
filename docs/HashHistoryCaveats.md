@@ -16,6 +16,11 @@ let history = createHistory({
 let history = createHistory({
   queryKey: false
 })
+
+// Enable hashbang URLs
+let history = createHistory({
+  hashbang: true
+})
 ```
 
 One other thing to keep in mind when using hash history is that you cannot also use `window.location.hash` as it was originally intended, to link an anchor point within your HTML document.
