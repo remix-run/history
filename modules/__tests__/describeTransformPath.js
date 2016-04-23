@@ -8,12 +8,10 @@ const describeTransformPath = (createHistory) => {
     beforeEach(() => {
       history = createHistory({
         transformPath: (path, encode) => {
-          // if encoding, add an exclamation mark for hashbang support
           if (encode)
-            return path.indexOf('!') !== 0 ? `!${path}` : path
+            return path.indexOf('/prefix') !== 0 ? `/prefix${path}` : path
 
-          // when decoding, remove the exclamation mark
-          return path.substring(1)
+          return path.substring(7)
         }
       })
     })
