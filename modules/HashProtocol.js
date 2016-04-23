@@ -64,9 +64,6 @@ export const startListener = (listener, queryKey, transform) => {
   const handleHashChange = () => {
     const transformedPath = transform(getHashPath(), true)
 
-    if (transformedPath === false)
-      return // Invalid path
-
     replaceHashPath(transformedPath)
 
     const currentLocation = getCurrentLocation(queryKey, transform)
@@ -79,9 +76,10 @@ export const startListener = (listener, queryKey, transform) => {
     listener(currentLocation)
   }
 
-  const transformedPath = transform(getHashPath(), true)
+  const path = getHashPath()
+  const transformedPath = transform(path, true)
 
-  if (typeof transformedPath === 'string')
+  if (path !== transformedPath)
     replaceHashPath(transformedPath)
 
   addEventListener(window, HashChangeEvent, handleHashChange)
