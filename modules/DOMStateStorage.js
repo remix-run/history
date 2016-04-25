@@ -8,16 +8,37 @@ const QuotaExceededErrors = [
 
 const SecurityError = 'SecurityError'
 const KeyPrefix = '@@History/'
+const STORAGE = window.sessionStorage || (() => {
+      let storage = {}
+
+      return {
+        removeItem(key) {
+          delete storage[key]
+          storage.length = Object.keys(storage)
+        },
+        setItem(key, item) {
+          storage[key] = item
+          storage.length = Object.keys(storage)
+        },
+        getItem(key) {
+          return storage[key]
+        },
+        clear() {
+          storage = {}
+          storage.length = 0
+        }
+      }
+    })()
 
 const createKey = (key) =>
-  KeyPrefix + key
+KeyPrefix + key
 
 export const saveState = (key, state) => {
   try {
     if (state == null) {
-      window.sessionStorage.removeItem(createKey(key))
+      STORAGE.removeItem(createKey(key))
     } else {
-      window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+      STORAGE.setItem(createKey(key), JSON.stringify(state))
     }
   } catch (error) {
     if (error.name === SecurityError) {
@@ -31,7 +52,7 @@ export const saveState = (key, state) => {
       return
     }
 
-    if (QuotaExceededErrors.indexOf(error.name) >= 0 && window.sessionStorage.length === 0) {
+    if (QuotaExceededErrors.indexOf(error.name) >= 0 && STORAGE.length === 0) {
       // Safari "private mode" throws QuotaExceededError.
       warning(
         false,
@@ -48,7 +69,7 @@ export const saveState = (key, state) => {
 export const readState = (key) => {
   let json
   try {
-    json = window.sessionStorage.getItem(createKey(key))
+    json = STORAGE.getItem(createKey(key))
   } catch (error) {
     if (error.name === SecurityError) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
