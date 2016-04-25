@@ -9,26 +9,26 @@ const QuotaExceededErrors = [
 const SecurityError = 'SecurityError'
 const KeyPrefix = '@@History/'
 const STORAGE = window.sessionStorage || (() => {
-      let storage = {}
+  let storage = {}
 
-      return {
-        removeItem(key) {
-          delete storage[key]
-          storage.length = Object.keys(storage)
-        },
-        setItem(key, item) {
-          storage[key] = item
-          storage.length = Object.keys(storage)
-        },
-        getItem(key) {
-          return storage[key]
-        },
-        clear() {
-          storage = {}
-          storage.length = 0
-        }
-      }
-    })()
+  return {
+    removeItem(key) {
+      delete storage[key]
+      storage.length = Object.keys(storage)
+    },
+    setItem(key, item) {
+      storage[key] = item
+      storage.length = Object.keys(storage)
+    },
+    getItem(key) {
+      return storage[key]
+    },
+    clear() {
+      storage = {}
+      storage.length = 0
+    }
+  }
+})()
 
 const createKey = (key) =>
 KeyPrefix + key
