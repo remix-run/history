@@ -10,25 +10,38 @@ function useBasename(createHistory) {
 
     let { basename } = options
 
-    // Automatically use the value of <base href> in HTML
-    // documents as basename if it's not explicitly given.
-    if (basename == null && canUseDOM) {
-      const base = document.getElementsByTagName('base')[0]
+    let checkedBaseHref = false
 
-      if (base) {
-        warning(
-          false,
-          'Automatically setting basename using <base href> is deprecated and will ' +
-          'be removed in the next major release. The semantics of <base href> are ' +
-          'subtly different from basename. Please pass the basename explicitly in ' +
-          'the options to createHistory'
-        )
-
-        basename = base.getAttribute('href')
+    function checkBaseHref() {
+      if (checkedBaseHref) {
+        return
       }
+
+      // Automatically use the value of <base href> in HTML
+      // documents as basename if it's not explicitly given.
+      if (basename == null && canUseDOM) {
+        const base = document.getElementsByTagName('base')[0]
+        const baseHref = base && base.getAttribute('href')
+
+        if (baseHref != null) {
+          basename = baseHref
+
+          warning(
+            false,
+            'Automatically setting basename using <base href> is deprecated and will ' +
+            'be removed in the next major release. The semantics of <base href> are ' +
+            'subtly different from basename. Please pass the basename explicitly in ' +
+            'the options to createHistory'
+          )
+        }
+      }
+
+      checkedBaseHref = true
     }
 
     function addBasename(location) {
+      checkBaseHref()
+
       if (basename && location.basename == null) {
         if (location.pathname.indexOf(basename) === 0) {
           location.pathname = location.pathname.substring(basename.length)
@@ -45,6 +58,8 @@ function useBasename(createHistory) {
     }
 
     function prependBasename(location) {
+      checkBaseHref()
+
       if (!basename)
         return location
 
