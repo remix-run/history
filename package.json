@@ -28,12 +28,12 @@
     "lint": "eslint modules"
   },
   "dependencies": {
+    "babel-cli": "^6.8.0",
     "invariant": "^2.0.0",
     "query-string": "^4.1.0",
     "warning": "^2.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.6.5",
     "babel-eslint": "^6.0.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-dev-expression": "^0.2.1",
