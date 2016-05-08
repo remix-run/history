@@ -42,7 +42,7 @@
     "eslint": "^2.5.1",
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-react": "^4.1.0",
-    "expect": "^1.20.0",
+    "expect": "^1.20.1",
     "gzip-size": "^3.0.0",
     "karma": "^0.13.3",
     "karma-browserstack-launcher": "^0.1.3",
