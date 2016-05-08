@@ -1,5 +1,6 @@
 ## [HEAD]
 
+- `location.query` has no prototype
 - Warn about protocol-relative URLs ([#243])
 
 [HEAD]: https://github.com/mjackson/history/compare/v3.0.0-2...HEAD
