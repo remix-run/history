@@ -2,6 +2,9 @@ import invariant from 'invariant'
 import { parsePath } from './PathUtils'
 import { POP } from './Actions'
 
+export const createQuery = (props) =>
+  Object.assign(Object.create(null), props)
+
 export const createLocation = (input = '/', action = POP, key = null) => {
   const object = typeof input === 'string' ? parsePath(input) : input
 

@@ -1,5 +1,6 @@
 import expect from 'expect'
 import { PUSH, REPLACE, POP } from '../Actions'
+import { createQuery } from '../LocationUtils'
 import useQueries from '../useQueries'
 import execSteps from './execSteps'
 
@@ -19,7 +20,7 @@ const describeQueries = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.query).toEqual({})
+            expect(location.query).toEqual(createQuery())
             expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
             expect(location.key).toBe(null)
@@ -33,7 +34,7 @@ const describeQueries = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query+value')
-            expect(location.query).toEqual({ the: 'query value' })
+            expect(location.query).toEqual(createQuery({ the: 'query value' }))
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(PUSH)
             expect(location.key).toExist()
@@ -47,7 +48,7 @@ const describeQueries = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?other=query+value')
-            expect(location.query).toEqual({ other: 'query value' })
+            expect(location.query).toEqual(createQuery({ other: 'query value' }))
             expect(location.state).toEqual({ other: 'state' })
             expect(location.action).toEqual(PUSH)
             expect(location.key).toExist()
@@ -61,7 +62,7 @@ const describeQueries = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('')
-            expect(location.query).toEqual({})
+            expect(location.query).toEqual(createQuery())
             expect(location.state).toBe(null)
             expect(location.action).toEqual(PUSH)
             expect(location.key).toExist()
@@ -78,7 +79,7 @@ const describeQueries = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/')
             expect(location.search).toEqual('')
-            expect(location.query).toEqual({})
+            expect(location.query).toEqual(createQuery({}))
             expect(location.state).toBe(undefined)
             expect(location.action).toEqual(POP)
             expect(location.key).toBe(null)
@@ -92,7 +93,7 @@ const describeQueries = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?the=query+value')
-            expect(location.query).toEqual({ the: 'query value' })
+            expect(location.query).toEqual(createQuery({ the: 'query value' }))
             expect(location.state).toEqual({ the: 'state' })
             expect(location.action).toEqual(REPLACE)
             expect(location.key).toExist()
@@ -106,7 +107,7 @@ const describeQueries = (createHistory) => {
           (location) => {
             expect(location.pathname).toEqual('/home')
             expect(location.search).toEqual('?other=query+value')
-            expect(location.query).toEqual({ other: 'query value' })
+            expect(location.query).toEqual(createQuery({ other: 'query value' }))
             expect(location.state).toEqual({ other: 'state' })
             expect(location.action).toEqual(REPLACE)
             expect(location.key).toExist()
@@ -159,47 +160,47 @@ const describeQueries = (createHistory) => {
           ).toEqual('/the/path?the=query+value')
         })
       })
+    })
 
-      describe('in createLocation', () => {
-        it('works with string', () => {
-          const location = history.createLocation('/the/path?the=query')
+    describe('in createLocation', () => {
+      it('works with string', () => {
+        const location = history.createLocation('/the/path?the=query')
 
-          expect(location.pathname).toEqual('/the/path')
-          expect(location.query).toEqual({ the: 'query' })
-          expect(location.search).toEqual('?the=query')
+        expect(location.pathname).toEqual('/the/path')
+        expect(location.query).toEqual(createQuery({ the: 'query' }))
+        expect(location.search).toEqual('?the=query')
+      })
+
+      it('works with object with query', () => {
+        const location = history.createLocation({
+          pathname: '/the/path',
+          query: { the: 'query' }
         })
 
-        it('works with object with query', () => {
-          const location = history.createLocation({
-            pathname: '/the/path',
-            query: { the: 'query' }
-          })
+        expect(location.pathname).toEqual('/the/path')
+        expect(location.query).toEqual(createQuery({ the: 'query' }))
+        expect(location.search).toEqual('?the=query')
+      })
 
-          expect(location.pathname).toEqual('/the/path')
-          expect(location.query).toEqual({ the: 'query' })
-          expect(location.search).toEqual('?the=query')
+      it('works with object without query', () => {
+        const location = history.createLocation({
+          pathname: '/the/path'
         })
 
-        it('works with object without query', () => {
-          const location = history.createLocation({
-            pathname: '/the/path'
-          })
+        expect(location.pathname).toEqual('/the/path')
+        expect(location.query).toEqual(createQuery({}))
+        expect(location.search).toEqual('')
+      })
 
-          expect(location.pathname).toEqual('/the/path')
-          expect(location.query).toEqual({})
-          expect(location.search).toEqual('')
+      it('works with explicit undefined values in query', () => {
+        const location = history.createLocation({
+          pathname: '/the/path',
+          query: { the: undefined }
         })
 
-        it('works with explicit undefined values in query', () => {
-          const location = history.createLocation({
-            pathname: '/the/path',
-            query: { the: undefined }
-          })
-
-          expect(location.pathname).toEqual('/the/path')
-          expect(location.query).toEqual({ the: undefined })
-          expect(location.search).toEqual('')
-        })
+        expect(location.pathname).toEqual('/the/path')
+        expect(location.query).toEqual(createQuery({ the: undefined }))
+        expect(location.search).toEqual('')
       })
     })
 
@@ -219,12 +220,8 @@ const describeQueries = (createHistory) => {
     let history
     beforeEach(() => {
       history = useQueries(createHistory)({
-        parseQueryString() {
-          return 'PARSE_QUERY_STRING'
-        },
-        stringifyQuery() {
-          return 'STRINGIFY_QUERY'
-        }
+        parseQueryString: () => 'PARSE_QUERY_STRING',
+        stringifyQuery: () => 'STRINGIFY_QUERY'
       })
     })
 

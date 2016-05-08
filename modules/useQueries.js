@@ -1,5 +1,6 @@
 import { parse, stringify } from 'query-string'
 import runTransitionHook from './runTransitionHook'
+import { createQuery } from './LocationUtils'
 import { parsePath } from './PathUtils'
 
 const defaultStringifyQuery = (query) =>
@@ -77,7 +78,7 @@ const useQueries = (createHistory) =>
         history.createLocation(encodeQuery(location, location.query), ...args)
 
       if (location.query)
-        newLocation.query = location.query
+        newLocation.query = createQuery(location.query)
 
       return decodeQuery(newLocation)
     }
