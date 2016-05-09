@@ -43,7 +43,6 @@ describe('hash history', () => {
   describeReplace(createHashHistory)
   describeBasename(createHashHistory)
   describeQueries(createHashHistory)
-  describeTransformPath(createHashHistory)
 
   if (supportsHistory()) {
     describePopState(createHashHistory)
@@ -54,10 +53,12 @@ describe('hash history', () => {
   }
 
   if (supportsHistory() && supportsGoWithoutReloadUsingHash()) {
+    describeTransformPath(createHashHistory)
     describeGo(createHashHistory)
     describeQueryKey(createHashHistory)
   } else {
     describe.skip(null, () => {
+      describeTransformPath(createHashHistory)
       describeGo(createHashHistory)
       describeQueryKey(createHashHistory)
     })
