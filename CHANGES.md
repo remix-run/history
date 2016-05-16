@@ -6,6 +6,13 @@
 [HEAD]: https://github.com/mjackson/history/compare/v3.0.0-2...HEAD
 [#243]: https://github.com/mjackson/history/issues/243
 
+## [v3.0.0-3]
+> Apr 25, 2016
+
+- Added fallback for disabled sessionStorage
+
+[v3.0.0-3]: https://github.com/mjackson/history/compare/v3.0.0-2...v3.0.0-3
+
 ## [v3.0.0-2]
 > Apr 19, 2016
 
