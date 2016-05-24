@@ -24,10 +24,13 @@ const getHashPath = () => {
 const pushHashPath = (path) =>
   window.location.hash = path
 
-const replaceHashPath = (path) =>
+const replaceHashPath = (path) => {
+  const i = window.location.href.indexOf('#')
+
   window.location.replace(
-    window.location.pathname + window.location.search + '#' + path
+    window.location.href.slice(0, i >= 0 ? i : 0) + '#' + path
   )
+}
 
 const ensureSlash = () => {
   const path = getHashPath()
