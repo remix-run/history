@@ -17,8 +17,18 @@ const _createLocation = (historyState) => {
   }, undefined, key)
 }
 
-export const getCurrentLocation = () =>
-  _createLocation(window.history.state)
+export const getCurrentLocation = () => {
+  let historyState
+  try {
+    historyState = window.history.state || {}
+  } catch (error) {
+    // IE 11 sometimes throws when accessing window.history.state
+    // See https://github.com/mjackson/history/pull/289
+    historyState = {}
+  }
+
+  return _createLocation(historyState)
+}
 
 export const getUserConfirmation = (message, callback) =>
   callback(window.confirm(message))
