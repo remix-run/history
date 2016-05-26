@@ -1,3 +1,10 @@
+## [v2.1.2]
+
+- Fixed "Fix SCRIPT16389: Unspecified error." in IE <=11 on page refresh ([#289] thanks @kirillkostko)
+
+[v2.1.2]: https://github.com/mjackson/history/compare/v2.1.0...v2.1.2
+[#289]: https://github.com/mjackson/history/pull/289
+
 ## [v2.1.0]
 
 - Deprecate usage of `<base href>` as an automatic substitute for `basename`
