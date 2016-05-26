@@ -9,6 +9,7 @@
     "no-confusing-arrow": 0,
     "no-param-reassign": 0,
     "no-return-assign": 0,
+    "no-underscore-dangle": 0,
     "no-use-before-define": 0,
     "prefer-const": 1,
     "prefer-template": 0,
