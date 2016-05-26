@@ -5,20 +5,17 @@
   "author": "Michael Jackson",
   "license": "MIT",
   "main": "lib",
-  "jsnext:main": "es6/index",
   "repository": {
     "type": "git",
     "url": "https://github.com/mjackson/history.git"
   },
   "files": [
     "lib",
-    "umd",
-    "es6"
+    "umd"
   ],
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
-    "build-cjs": "rimraf lib && babel ./modules -d lib --ignore '__tests__'",
-    "build-es6": "rimraf es6 && babel ./modules -d es6 --blacklist=es6.modules --ignore '__tests__'",
+    "build-lib": "rimraf lib && babel ./modules -d lib --ignore '__tests__'",
     "build-umd": "webpack modules/index.js umd/history.js",
     "build-min": "webpack -p modules/index.js umd/history.min.js",
     "build": "node ./scripts/build.js",
