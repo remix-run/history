@@ -4,10 +4,12 @@
 - Warn about protocol-relative URLs ([#243])
 - **Bugfix:** Ignore errors when saving hash history state if
   `window.sessionStorage` is undefined ([#295])
+- **Bugfix:** Fix replacing hash path in IE served via file protocol ([#126])
 
 [HEAD]: https://github.com/mjackson/history/compare/v3.0.0-2...HEAD
 [#243]: https://github.com/mjackson/history/issues/243
 [#295]: https://github.com/mjackson/history/issues/295
+[#126]: https://github.com/mjackson/history/issues/126
 
 ## [v3.0.0-2]
 > Apr 19, 2016
