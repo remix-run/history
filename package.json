@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "3.0.0-2",
+  "version": "3.0.0",
   "description": "Manage browser history with JavaScript",
   "author": "Michael Jackson",
   "license": "MIT",
