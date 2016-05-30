@@ -1,4 +1,5 @@
-## [HEAD]
+## [v3.0.0]
+> May 30, 2016
 
 - `location.query` has no prototype
 - Warn about protocol-relative URLs ([#243])
@@ -6,7 +7,7 @@
   `window.sessionStorage` is undefined ([#295])
 - **Bugfix:** Fix replacing hash path in IE served via file protocol ([#126])
 
-[HEAD]: https://github.com/mjackson/history/compare/v3.0.0-2...HEAD
+[v3.0.0]: https://github.com/mjackson/history/compare/v3.0.0-2...v3.0.0
 [#243]: https://github.com/mjackson/history/issues/243
 [#295]: https://github.com/mjackson/history/issues/295
 [#126]: https://github.com/mjackson/history/issues/126
