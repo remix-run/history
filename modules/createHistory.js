@@ -35,9 +35,9 @@ const createHistory = (options = {}) => {
   }
 
   const updateLocation = (nextLocation) => {
-    currentLocation = nextLocation
-
     const currentIndex = getCurrentIndex()
+
+    currentLocation = nextLocation
 
     if (currentLocation.action === PUSH) {
       allKeys = [ ...allKeys.slice(0, currentIndex + 1), currentLocation.key ]

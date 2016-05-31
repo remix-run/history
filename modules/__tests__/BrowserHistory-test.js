@@ -6,6 +6,7 @@ import describeTransitions from './describeTransitions'
 import describePush from './describePush'
 import describeReplace from './describeReplace'
 import describePopState from './describePopState'
+import describePopStateCancel from './describePopStateCancel'
 import describeHashSupport from './describeHashSupport'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
@@ -23,6 +24,7 @@ describe('browser history', () => {
     describePush(createBrowserHistory)
     describeReplace(createBrowserHistory)
     describePopState(createBrowserHistory)
+    describePopStateCancel(createBrowserHistory)
     describeHashSupport(createBrowserHistory)
     describeBasename(createBrowserHistory)
     describeQueries(createBrowserHistory)
@@ -35,6 +37,7 @@ describe('browser history', () => {
       describePush(createBrowserHistory)
       describeReplace(createBrowserHistory)
       describePopState(createBrowserHistory)
+      describePopStateCancel(createBrowserHistory)
       describeHashSupport(createBrowserHistory)
       describeBasename(createBrowserHistory)
       describeQueries(createBrowserHistory)
