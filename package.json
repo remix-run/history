@@ -27,7 +27,8 @@
   "dependencies": {
     "invariant": "^2.0.0",
     "query-string": "^4.1.0",
-    "warning": "^2.0.0"
+    "warning": "^2.0.0",
+    "loose-envify": "^1.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
@@ -58,6 +59,11 @@
     "rimraf": "^2.4.2",
     "webpack": "^1.4.13",
     "webpack-dev-server": "^1.10.1"
+  },
+  "browserify": {
+    "transform": [
+      "loose-envify"
+    ]
   },
   "tags": [
     "history",
