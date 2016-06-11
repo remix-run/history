@@ -6,6 +6,6 @@ export useBasename from './useBasename'
 export useBeforeUnload from './useBeforeUnload'
 export useQueries from './useQueries'
 
-export Actions from './Actions'
+export * as Actions from './Actions'
 
 export { locationsAreEqual } from './LocationUtils'
