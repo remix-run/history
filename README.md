@@ -68,7 +68,7 @@ history.push({
 unlisten()
 ```
 
-You can find many more examples [in the documentation](https://github.com/mjackson/history/tree/master/docs)!
+You can find many more examples [in the documentation](https://github.com/ReactJSTraining/history/tree/master/docs)!
 
 ## Thanks
 
