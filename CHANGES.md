@@ -1,3 +1,6 @@
+## [HEAD]
+- **Bugfix:** Fix url restoration on canceled popstate transitions
+
 ## [v3.0.0]
 > May 30, 2016
 
