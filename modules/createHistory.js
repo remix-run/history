@@ -70,13 +70,20 @@ function createHistory(options={}) {
 
   function listen(listener) {
     changeListeners.push(listener)
-    
-    const location = getCurrentLocation()
-    allKeys = [ location.key ]
-    updateLocation(location)
+
+    if (location) {
+      listener(location)
+    } else {
+      const location = getCurrentLocation()
+      allKeys = [ location.key ]
+      updateLocation(location)
+    }
 
     return function () {
       changeListeners = changeListeners.filter(item => item !== listener)
+      if (changeListeners.length === 0) {
+        location = undefined
+      }
     }
   }
 
