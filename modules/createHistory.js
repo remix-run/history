@@ -70,14 +70,10 @@ function createHistory(options={}) {
 
   function listen(listener) {
     changeListeners.push(listener)
-
-    if (location) {
-      listener(location)
-    } else {
-      const location = getCurrentLocation()
-      allKeys = [ location.key ]
-      updateLocation(location)
-    }
+    
+    const location = getCurrentLocation()
+    allKeys = [ location.key ]
+    updateLocation(location)
 
     return function () {
       changeListeners = changeListeners.filter(item => item !== listener)
