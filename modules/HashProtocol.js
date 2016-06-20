@@ -92,6 +92,8 @@ const updateLocation = (location, pathCoder, queryKey, updateHash) => {
   if (state !== undefined) {
     path = addQueryStringValueToPath(path, queryKey, key)
     saveState(key, state)
+  } else {
+    location.key = null
   }
 
   prevLocation = location

@@ -26,7 +26,6 @@ const describePush = (createHistory) => {
             expect(location.search).toEqual('?the=query')
             expect(location.state).toBe(undefined)
             expect(location.action).toEqual(PUSH)
-            expect(location.key).toExist()
           }
         ]
 
