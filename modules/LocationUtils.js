@@ -48,9 +48,12 @@ export const statesAreEqual = (a, b) => {
       'You must not store Date objects in location state'
     )
 
-    if (!Array.isArray(a))
-      return Object.keys(a).length === Object.keys(b).length &&
-        Object.keys(a).every(key => statesAreEqual(a[key], b[key]))
+    if (!Array.isArray(a)) {
+      const keysofA = Object.keys(a)
+      const keysofB = Object.keys(b)
+      return keysofA.length === keysofB.length &&
+        keysofA.every(key => statesAreEqual(a[key], b[key]))
+    }
 
     return Array.isArray(b) &&
       a.length === b.length &&
