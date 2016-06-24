@@ -49,7 +49,8 @@ export const statesAreEqual = (a, b) => {
     )
 
     if (!Array.isArray(a))
-      return Object.keys(a).every(key => statesAreEqual(a[key], b[key]))
+      return Object.keys(a).length === Object.keys(b).length &&
+        Object.keys(a).every(key => statesAreEqual(a[key], b[key]))
 
     return Array.isArray(b) &&
       a.length === b.length &&
