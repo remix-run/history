@@ -1,4 +1,4 @@
-import warning from 'warning'
+import warning from './historyWarning'
 
 const QuotaExceededErrors = {
   QuotaExceededError: true,
@@ -38,7 +38,7 @@ export const saveState = (key, state) => {
       // attempt to access window.sessionStorage.
       warning(
         false,
-        '[history] Unable to save state; sessionStorage is not available due to security settings'
+        'Unable to save state; sessionStorage is not available due to security settings'
       )
 
       return
@@ -48,7 +48,7 @@ export const saveState = (key, state) => {
       // Safari "private mode" throws QuotaExceededError.
       warning(
         false,
-        '[history] Unable to save state; sessionStorage is not available in Safari private mode'
+        'Unable to save state; sessionStorage is not available in Safari private mode'
       )
 
       return
@@ -68,7 +68,7 @@ export const readState = (key) => {
       // attempt to access window.sessionStorage.
       warning(
         false,
-        '[history] Unable to read state; sessionStorage is not available due to security settings'
+        'Unable to read state; sessionStorage is not available due to security settings'
       )
 
       return undefined

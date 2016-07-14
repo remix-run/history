@@ -1,4 +1,4 @@
-import warning from 'warning'
+import warning from './historyWarning'
 
 const runTransitionHook = (hook, location, callback) => {
   const result = hook(location, callback)

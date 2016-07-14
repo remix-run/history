@@ -1,5 +1,5 @@
-import warning from 'warning'
 import invariant from 'invariant'
+import warning from './historyWarning'
 import { canUseDOM } from './ExecutionEnvironment'
 import { supportsGoWithoutReloadUsingHash } from './DOMUtils'
 import * as HashProtocol from './HashProtocol'

@@ -1,4 +1,4 @@
-import warning from 'warning'
+import warning from './historyWarning'
 
 export const addQueryStringValueToPath = (path, key, value) => {
   const { pathname, search, hash } = parsePath(path)

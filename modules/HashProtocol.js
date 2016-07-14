@@ -1,4 +1,4 @@
-import warning from 'warning'
+import warning from './historyWarning'
 import { createLocation } from './LocationUtils'
 import { addEventListener, removeEventListener } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
