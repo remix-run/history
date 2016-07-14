@@ -1,7 +1,7 @@
 # history [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
 
-[build-badge]: https://img.shields.io/travis/ReactJSTraining/history/master.svg?style=flat-square
-[build]: https://travis-ci.org/ReactJSTraining/history
+[build-badge]: https://img.shields.io/travis/ReactTraining/history/master.svg?style=flat-square
+[build]: https://travis-ci.org/ReactTraining/history
 
 [npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/history
@@ -68,7 +68,7 @@ history.push({
 unlisten()
 ```
 
-You can find many more examples [in the documentation](https://github.com/ReactJSTraining/history/tree/master/docs)!
+You can find many more examples [in the documentation](https://github.com/ReactTraining/history/tree/master/docs)!
 
 ## Thanks
 
