@@ -1,6 +1,8 @@
 import invariant from 'invariant'
+import warning from './historyWarning'
 import { addEventListener, removeEventListener } from './DOMUtils'
 import { canUseDOM } from './ExecutionEnvironment'
+import EnhancerSecret from './EnhancerSecret'
 
 const startListener = (getPromptMessage) => {
   const handleBeforeUnload = (event) => {
@@ -25,7 +27,12 @@ const startListener = (getPromptMessage) => {
  * history objects that know how to use the beforeunload event in web
  * browsers to cancel navigation.
  */
-const useBeforeUnload = (createHistory) => {
+const useBeforeUnload = (createHistory, secret) => {
+  warning(
+    secret === EnhancerSecret,
+    'useBeforeUnload is deprecated. Use withBeforeUnload instead.'
+  )
+
   invariant(
     canUseDOM,
     'useBeforeUnload only works in DOM environments'
