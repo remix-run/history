@@ -2,7 +2,7 @@
   "name": "history",
   "version": "3.0.0",
   "description": "Manage browser history with JavaScript",
-  "repository": "ReactJSTraining/history",
+  "repository": "ReactTraining/history",
   "author": "Michael Jackson",
   "license": "MIT",
   "main": "lib",
