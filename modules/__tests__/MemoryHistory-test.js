@@ -8,6 +8,7 @@ import describeReplace from './describeReplace'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
 import describeGo from './describeGo'
+import shouldWarn from './shouldWarn'
 
 describe('memory history', () => {
   describeListen(createMemoryHistory)
@@ -68,7 +69,8 @@ describe('memory history', () => {
       expect(location.state).toEqual({ id: 5 })
       expect(location.pathname).toEqual('/5')
 
-      // Mkae sure this doesn't do anything.
+      // Make sure this doesn't do anything.
+      shouldWarn('Cannot go(1)')
       history.goForward()
       expect(location.state).toEqual({ id: 5 })
       expect(location.pathname).toEqual('/5')
@@ -85,6 +87,7 @@ describe('memory history', () => {
       expect(location.pathname).toEqual('/6')
 
       // Make sure this doesn't do anything.
+      shouldWarn('Cannot go(-999)')
       history.go(-999)
       expect(location.state).toEqual({ id: 6 })
       expect(location.pathname).toEqual('/6')
