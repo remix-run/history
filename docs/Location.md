@@ -31,18 +31,13 @@ history.push({ ...location, search: '?other=search' })
 
 ### Programmatic Creation
 
-You may occasionally need to create a `location` object, either for testing or when using `history` in a stateless, non-DOM environment (i.e. a server). In these cases, you can use the `createLocation` method directly:
+You may occasionally need to create a `location` object, either for testing or when using `history` in a stateless, non-DOM environment (i.e. a server). In these cases, you can use the `createLocation` method on the `history` object:
 
 ```js
-import { createLocation } from 'history'
-
-const location = createLocation('/a/path?a=query', { the: 'state' })
+const location = history.createLocation({
+  pathname: '/a/path',
+  state: { the: 'state' }
+})
 ```
 
-Alternatively, you can use a `history` object's `createLocation` method:
-
-```js
-const location = history.createLocation('/a/path?a=query', { the: 'state' })
-```
-
-`location` objects created in this way will get a default `key` property that is generated using `history.createKey()`.
+`location` objects created in this way will get a default `key` property.
