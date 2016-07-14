@@ -4,11 +4,20 @@ import { parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
 import deprecate from './deprecate'
 
+function getNormalizedBasename(basename) {
+  // Remove trailing slash from basename.
+  if (basename && basename.slice(-1) === '/')
+    return basename.slice(0, -1)
+
+  return basename
+}
+
 function useBasename(createHistory) {
   return function (options={}) {
     const history = createHistory(options)
 
     let { basename } = options
+    let normalizedBasename = getNormalizedBasename(basename)
 
     let checkedBaseHref = false
 
@@ -24,8 +33,6 @@ function useBasename(createHistory) {
         const baseHref = base && base.getAttribute('href')
 
         if (baseHref != null) {
-          basename = baseHref
-
           warning(
             false,
             'Automatically setting basename using <base href> is deprecated and will ' +
@@ -33,6 +40,9 @@ function useBasename(createHistory) {
             'subtly different from basename. Please pass the basename explicitly in ' +
             'the options to createHistory'
           )
+
+          basename = baseHref
+          normalizedBasename = getNormalizedBasename(basename)
         }
       }
 
@@ -42,19 +52,19 @@ function useBasename(createHistory) {
     function addBasename(location) {
       checkBaseHref()
 
-      if (basename && location.basename == null) {
-        if (location.pathname.indexOf(basename) === 0) {
-          location.pathname = location.pathname.substring(basename.length)
-          location.basename = basename
+      if (!basename || location.basename != null)
+        return location
 
-          if (location.pathname === '')
-            location.pathname = '/'
-        } else {
-          location.basename = ''
-        }
+      if (location.pathname.indexOf(normalizedBasename) !== 0) {
+        location.basename = ''
+        return location
       }
 
-      return location
+      return {
+        ...location,
+        basename,
+        pathname: location.pathname.substring(normalizedBasename.length) || ''
+      }
     }
 
     function prependBasename(location) {
@@ -66,14 +76,9 @@ function useBasename(createHistory) {
       if (typeof location === 'string')
         location = parsePath(location)
 
-      const pname = location.pathname
-      const normalizedBasename = basename.slice(-1) === '/' ? basename : basename + '/'
-      const normalizedPathname = pname.charAt(0) === '/' ? pname.slice(1) : pname
-      const pathname = normalizedBasename + normalizedPathname
-
       return {
         ...location,
-        pathname
+        pathname: normalizedBasename + location.pathname
       }
     }
 
