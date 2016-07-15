@@ -6,12 +6,14 @@ const describeTransformPath = (createHistory) => {
   describe('transformPath option', () => {
     let history
     beforeEach(() => {
+      const prefix = '/prefix'
+
       history = createHistory({
         transformPath: (path, encode) => {
           if (encode)
-            return path.indexOf('/prefix') !== 0 ? `/prefix${path}` : path
+            return path.indexOf(prefix) === 0 ? path : prefix + path
 
-          return path.substring(7)
+          return path.substring(prefix.length)
         }
       })
     })
