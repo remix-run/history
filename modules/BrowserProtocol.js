@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { createLocation } from './LocationUtils'
 import { addEventListener, removeEventListener } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
@@ -31,7 +30,7 @@ export const getCurrentLocation = () => {
 }
 
 export const getUserConfirmation = (message, callback) =>
-  callback(window.confirm(message))
+  callback(window.confirm(message)) // eslint-disable-line no-alert
 
 export const startListener = (listener) => {
   const handlePopState = (event) => {
