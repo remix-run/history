@@ -17,18 +17,18 @@ const getHashPath = () => {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
   const href = window.location.href
-  const index = href.indexOf('#')
-  return index === -1 ? '' : href.substring(index + 1)
+  const hashIndex = href.indexOf('#')
+  return hashIndex === -1 ? '' : href.substring(hashIndex + 1)
 }
 
 const pushHashPath = (path) =>
   window.location.hash = path
 
 const replaceHashPath = (path) => {
-  const i = window.location.href.indexOf('#')
+  const hashIndex = window.location.href.indexOf('#')
 
   window.location.replace(
-    window.location.href.slice(0, i >= 0 ? i : 0) + '#' + path
+    window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
   )
 }
 
