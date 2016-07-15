@@ -16,6 +16,18 @@ let history = createHistory({
 let history = createHistory({
   queryKey: false
 })
+
+// Use custom URL transformations, for example for hashbang support
+let history = createHistory({
+  transformPath: (path, encode) => {
+    // if encoding, we transform the path to our hash value
+    if (encode)
+      return path.indexOf('!') !== 0 ? `!${path}` : path
+
+    // when decoding, we transform the hash value back into the original path
+    return path.substring(1)
+  }
+})
 ```
 
 One other thing to keep in mind when using hash history is that you cannot also use `window.location.hash` as it was originally intended, to link an anchor point within your HTML document.

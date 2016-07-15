@@ -13,7 +13,7 @@ const createHashHistory = (options = {}) => {
     'Hash history needs a DOM'
   )
 
-  let { queryKey } = options
+  let { queryKey, transformPath } = options
 
   warning(
     queryKey !== false,
@@ -21,19 +21,22 @@ const createHashHistory = (options = {}) => {
     'use location state if you don\'t want a key in your URL query string'
   )
 
+  const { getUserConfirmation, ensureSlash } = HashProtocol
+
   if (typeof queryKey !== 'string')
     queryKey = DefaultQueryKey
 
-  const { getUserConfirmation } = HashProtocol
+  if (typeof transformPath !== 'function')
+    transformPath = ensureSlash
 
   const getCurrentLocation = () =>
-    HashProtocol.getCurrentLocation(queryKey)
+    HashProtocol.getCurrentLocation(queryKey, transformPath)
 
   const pushLocation = (location) =>
-    HashProtocol.pushLocation(location, queryKey)
+    HashProtocol.pushLocation(location, queryKey, transformPath)
 
   const replaceLocation = (location) =>
-    HashProtocol.replaceLocation(location, queryKey)
+    HashProtocol.replaceLocation(location, queryKey, transformPath)
 
   const history = createHistory({
     getUserConfirmation, // User may override in options
@@ -50,7 +53,8 @@ const createHashHistory = (options = {}) => {
     if (++listenerCount === 1)
       stopListener = HashProtocol.startListener(
         history.transitionTo,
-        queryKey
+        queryKey,
+        transformPath
       )
 
     const unlisten = before
@@ -83,7 +87,7 @@ const createHashHistory = (options = {}) => {
   }
 
   const createHref = (path) =>
-    '#' + history.createHref(path)
+    '#' + transformPath(history.createHref(path), true)
 
   return {
     ...history,
