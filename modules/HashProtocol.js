@@ -57,6 +57,7 @@ export const startListener = (listener, pathCoder, queryKey) => {
     const encodedPath = pathCoder.encodePath(path)
 
     if (path !== encodedPath) {
+      // Always be sure we have a properly-encoded hash.
       replaceHashPath(encodedPath)
     } else {
       const currentLocation = getCurrentLocation(pathCoder, queryKey)
@@ -70,6 +71,7 @@ export const startListener = (listener, pathCoder, queryKey) => {
     }
   }
 
+  // Ensure the hash is encoded properly.
   const path = getHashPath()
   const encodedPath = pathCoder.encodePath(path)
 
