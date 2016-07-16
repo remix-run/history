@@ -1,21 +1,10 @@
 import expect from 'expect'
 import {
-  isAbsolutePath,
   addQueryStringValueToPath,
   getQueryStringValueFromPath,
   stripQueryStringValueFromPath,
   createPath
 } from '../PathUtils'
-
-describe('isAbsolutePath', () => {
-  it('returns true for absolute paths', () => {
-    expect(isAbsolutePath('/a/b/c')).toBe(true)
-  })
-
-  it('returns false for relative paths', () => {
-    expect(isAbsolutePath('a/b/c')).toBe(false)
-  })
-})
 
 describe('addQueryStringValueToPath', () => {
   describe('when the path has no query string', () => {

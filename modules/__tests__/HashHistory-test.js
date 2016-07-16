@@ -6,7 +6,7 @@ import describeInitialLocation from './describeInitialLocation'
 import describeTransitions from './describeTransitions'
 import describePush from './describePush'
 import describeReplace from './describeReplace'
-import describeTransformPath from './describeTransformPath'
+import describePathCoding from './describePathCoding'
 import describePopState from './describePopState'
 import describeQueryKey from './describeQueryKey'
 import describeBasename from './describeBasename'
@@ -22,18 +22,6 @@ describe('hash history', () => {
   it('knows how to make hrefs', () => {
     const history = createHashHistory()
     expect(history.createHref('/a/path')).toEqual('#/a/path')
-  })
-
-  it('knows how to make hrefs with a custom transformPath function', () => {
-    const history = createHashHistory({
-      transformPath: (path, encode) => {
-        if (encode)
-          return path.indexOf('/prefix') !== 0 ? `/prefix${path}` : path
-
-        return path.substring(7)
-      }
-    })
-    expect(history.createHref('/a/path')).toEqual('#/prefix/a/path')
   })
 
   describeListen(createHashHistory)
@@ -53,14 +41,14 @@ describe('hash history', () => {
   }
 
   if (supportsHistory() && supportsGoWithoutReloadUsingHash()) {
-    describeTransformPath(createHashHistory)
     describeGo(createHashHistory)
     describeQueryKey(createHashHistory)
+    describePathCoding(createHashHistory)
   } else {
     describe.skip(null, () => {
-      describeTransformPath(createHashHistory)
       describeGo(createHashHistory)
       describeQueryKey(createHashHistory)
+      describePathCoding(createHashHistory)
     })
   }
 })

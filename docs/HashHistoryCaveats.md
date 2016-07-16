@@ -8,26 +8,30 @@ HTML5 gives us the `pushState` method and the `popstate` event, but in older bro
 import createHistory from 'history/lib/createHashHistory'
 
 // Use _key instead of _k.
-let history = createHistory({
+const history = createHistory({
   queryKey: '_key'
 })
 
 // Opt-out of persistent state, not recommended.
-let history = createHistory({
+const history = createHistory({
   queryKey: false
-})
-
-// Use custom URL transformations, for example for hashbang support
-let history = createHistory({
-  transformPath: (path, encode) => {
-    // if encoding, we transform the path to our hash value
-    if (encode)
-      return path.indexOf('!') !== 0 ? `!${path}` : path
-
-    // when decoding, we transform the hash value back into the original path
-    return path.substring(1)
-  }
 })
 ```
 
 One other thing to keep in mind when using hash history is that you cannot also use `window.location.hash` as it was originally intended, to link an anchor point within your HTML document.
+
+### Using Different Hash Types
+
+Several types of hash URLs are supported if you'd like to customize the characters that appear in your hash fragment. They are:
+
+- `slash` (the default, prefixes all hash paths with `/`)
+- `hashbang` (Google's deprecated [crawlable recommendation](https://developers.google.com/webmasters/ajax-crawling/docs/learn-more))
+- `noslash` (omits the leading `/` in the URL)
+
+Use the `hashType` option to select one of these when you create your hash history.
+
+```js
+const history = createHistory({
+  hashType: 'hashbang'
+})
+```

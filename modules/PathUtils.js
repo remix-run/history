@@ -1,8 +1,5 @@
 import warning from 'warning'
 
-export const isAbsolutePath = (path) =>
-  typeof path === 'string' && path.charAt(0) === '/'
-
 export const addQueryStringValueToPath = (path, key, value) => {
   const { pathname, search, hash } = parsePath(path)
 

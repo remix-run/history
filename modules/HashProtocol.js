@@ -3,7 +3,6 @@ import { createLocation } from './LocationUtils'
 import { addEventListener, removeEventListener } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import {
-  isAbsolutePath,
   addQueryStringValueToPath,
   stripQueryStringValueFromPath,
   getQueryStringValueFromPath,
@@ -32,21 +31,10 @@ const replaceHashPath = (path) => {
   )
 }
 
-export const ensureSlash = (path, encode) => {
-  if (encode) {
-    if (isAbsolutePath(path))
-      return path
-
-    return '/' + path
-  }
-
-  return path
-}
-
 export { getUserConfirmation, go } from './BrowserProtocol'
 
-export const getCurrentLocation = (queryKey, transform) => {
-  let path = transform(getHashPath(), false)
+export const getCurrentLocation = (pathCoder, queryKey) => {
+  let path = pathCoder.decodePath(getHashPath())
   const key = getQueryStringValueFromPath(path, queryKey)
 
   let state
@@ -63,27 +51,30 @@ export const getCurrentLocation = (queryKey, transform) => {
 
 let prevLocation
 
-export const startListener = (listener, queryKey, transform) => {
+export const startListener = (listener, pathCoder, queryKey) => {
   const handleHashChange = () => {
-    const transformedPath = transform(getHashPath(), true)
+    const path = getHashPath()
+    const encodedPath = pathCoder.encodePath(path)
 
-    replaceHashPath(transformedPath)
+    if (path !== encodedPath) {
+      replaceHashPath(encodedPath)
+    } else {
+      const currentLocation = getCurrentLocation(pathCoder, queryKey)
 
-    const currentLocation = getCurrentLocation(queryKey, transform)
+      if (prevLocation && currentLocation.key && prevLocation.key === currentLocation.key)
+        return // Ignore extraneous hashchange events
 
-    if (prevLocation && currentLocation.key && prevLocation.key === currentLocation.key)
-      return // Ignore extraneous hashchange events
+      prevLocation = currentLocation
 
-    prevLocation = currentLocation
-
-    listener(currentLocation)
+      listener(currentLocation)
+    }
   }
 
   const path = getHashPath()
-  const transformedPath = transform(path, true)
+  const encodedPath = pathCoder.encodePath(path)
 
-  if (path !== transformedPath)
-    replaceHashPath(transformedPath)
+  if (path !== encodedPath)
+    replaceHashPath(encodedPath)
 
   addEventListener(window, HashChangeEvent, handleHashChange)
 
@@ -91,9 +82,10 @@ export const startListener = (listener, queryKey, transform) => {
     removeEventListener(window, HashChangeEvent, handleHashChange)
 }
 
-const updateLocation = (location, queryKey, updateHash, transformPath) => {
+const updateLocation = (location, pathCoder, queryKey, updateHash) => {
   const { state, key } = location
-  let path = transformPath(createPath(location), true)
+
+  let path = pathCoder.encodePath(createPath(location))
 
   if (state !== undefined) {
     path = addQueryStringValueToPath(path, queryKey, key)
@@ -105,17 +97,17 @@ const updateLocation = (location, queryKey, updateHash, transformPath) => {
   updateHash(path)
 }
 
-export const pushLocation = (location, queryKey, transformPath) =>
-  updateLocation(location, queryKey, (path) => {
+export const pushLocation = (location, pathCoder, queryKey) =>
+  updateLocation(location, pathCoder, queryKey, (path) => {
     if (getHashPath() !== path) {
       pushHashPath(path)
     } else {
       warning(false, 'You cannot PUSH the same path using hash history')
     }
-  }, transformPath)
+  })
 
-export const replaceLocation = (location, queryKey, transformPath) =>
-  updateLocation(location, queryKey, (path) => {
+export const replaceLocation = (location, pathCoder, queryKey) =>
+  updateLocation(location, pathCoder, queryKey, (path) => {
     if (getHashPath() !== path)
       replaceHashPath(path)
-  }, transformPath)
+  })
