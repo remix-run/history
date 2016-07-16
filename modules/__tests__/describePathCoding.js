@@ -149,7 +149,8 @@ const describePathCoding = (createHistory) => {
             expect(location.action).toEqual(POP)
             expect(location.key).toBe(null)
 
-            expect(window.location.hash).toEqual('')
+            // IE 10+ gives us "#", everyone else gives us ""
+            expect(window.location.hash).toMatch(/^#?$/)
 
             history.push({
               pathname: '/home',
@@ -175,7 +176,8 @@ const describePathCoding = (createHistory) => {
             expect(location.action).toEqual(POP)
             expect(location.key).toBe(null)
 
-            expect(window.location.hash).toEqual('')
+            // IE 10+ gives us "#", everyone else gives us ""
+            expect(window.location.hash).toMatch(/^#?$/)
           }
         ]
 
@@ -193,7 +195,8 @@ const describePathCoding = (createHistory) => {
             expect(location.action).toEqual(POP)
             expect(location.key).toBe(null)
 
-            expect(window.location.hash).toEqual('')
+            // IE 10+ gives us "#", everyone else gives us ""
+            expect(window.location.hash).toMatch(/^#?$/)
 
             history.push({
               pathname: '/home',
@@ -219,7 +222,8 @@ const describePathCoding = (createHistory) => {
             expect(location.action).toEqual(POP)
             expect(location.key).toBe(null)
 
-            expect(window.location.hash).toEqual('')
+            // IE 10+ gives us "#", everyone else gives us ""
+            expect(window.location.hash).toMatch(/^#?$/)
 
             history.goForward()
           },
