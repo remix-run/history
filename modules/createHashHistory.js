@@ -7,6 +7,9 @@ import createHistory from './createHistory'
 
 const DefaultQueryKey = '_k'
 
+const addLeadingSlash = (path) =>
+  path.charAt(0) === '/' ? path : '/' + path
+
 const HashPathCoders = {
   hashbang: {
     encodePath: (path) => path.charAt(0) === '!' ? path : '!' + path,
@@ -14,11 +17,11 @@ const HashPathCoders = {
   },
   noslash: {
     encodePath: (path) => path.charAt(0) === '/' ? path.substring(1) : path,
-    decodePath: (path) => path.charAt(0) === '/' ? path : '/' + path
+    decodePath: addLeadingSlash
   },
   slash: {
-    encodePath: (path) => path.charAt(0) === '/' ? path : '/' + path,
-    decodePath: (path) => path
+    encodePath: addLeadingSlash,
+    decodePath: addLeadingSlash
   }
 }
 
