@@ -1,5 +1,7 @@
 ## [HEAD]
-- **Bugfix:** Fix url restoration on canceled popstate transitions
+- Added `hashType` option to hash history for supporting different
+  hash URL schemes including "hashbang" and no leading slash
+- **Bugfix:** Fix URL restoration on canceled popstate transitions
 
 ## [v3.0.0]
 > May 30, 2016
