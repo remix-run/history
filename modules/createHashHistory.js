@@ -17,7 +17,7 @@ const HashPathCoders = {
     decodePath: (path) => path.charAt(0) === '/' ? path : '/' + path
   },
   slash: {
-    encodePath: (path) => path,
+    encodePath: (path) => path.charAt(0) === '/' ? path : '/' + path,
     decodePath: (path) => path
   }
 }
