@@ -1,12 +1,15 @@
 /* eslint-disable no-empty */
 import warning from 'warning'
 
-const QuotaExceededErrors = [
-  'QuotaExceededError',
-  'QUOTA_EXCEEDED_ERR'
-]
+const QuotaExceededErrors = {
+  QuotaExceededError: true,
+  QUOTA_EXCEEDED_ERR: true
+}
 
-const SecurityError = 'SecurityError'
+const SecurityErrors = {
+  SecurityError: true
+}
+
 const KeyPrefix = '@@History/'
 
 const createKey = (key) =>
@@ -20,6 +23,7 @@ export const saveState = (key, state) => {
       false,
       '[history] Unable to save state; sessionStorage is not available'
     )
+
     return
   }
 
@@ -30,7 +34,7 @@ export const saveState = (key, state) => {
       window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
     }
   } catch (error) {
-    if (error.name === SecurityError) {
+    if (SecurityErrors[error.name]) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
       // attempt to access window.sessionStorage.
       warning(
@@ -41,7 +45,7 @@ export const saveState = (key, state) => {
       return
     }
 
-    if (QuotaExceededErrors.indexOf(error.name) >= 0 && window.sessionStorage.length === 0) {
+    if (QuotaExceededErrors[error.name] && window.sessionStorage.length === 0) {
       // Safari "private mode" throws QuotaExceededError.
       warning(
         false,
@@ -60,7 +64,7 @@ export const readState = (key) => {
   try {
     json = window.sessionStorage.getItem(createKey(key))
   } catch (error) {
-    if (error.name === SecurityError) {
+    if (SecurityErrors[error.name]) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
       // attempt to access window.sessionStorage.
       warning(
