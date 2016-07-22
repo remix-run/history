@@ -1,12 +1,13 @@
 import { createLocation } from './LocationUtils'
-import { addEventListener, removeEventListener, supportsPopstateOnHashchange } from './DOMUtils'
+import { addEventListener, removeEventListener } from './DOMUtils'
+//import { addEventListener, removeEventListener, supportsPopstateOnHashchange } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
 
 const PopStateEvent = 'popstate'
-const HashChangeEvent = 'hashchange'
+//const HashChangeEvent = 'hashchange'
 
-const needsHashchangeListener = supportsPopstateOnHashchange()
+//const needsHashchangeListener = !supportsPopstateOnHashchange()
 
 const _createLocation = (historyState) => {
   const key = historyState && historyState.key
@@ -41,21 +42,21 @@ export const startListener = (listener) => {
       listener(_createLocation(event.state))
   }
 
-  const handleUnpoppedHashChange = () =>
-    listener(getCurrentLocation())
+  // const handleUnpoppedHashChange = () =>
+  //   listener(getCurrentLocation())
 
   addEventListener(window, PopStateEvent, handlePopState)
 
-  if (!needsHashchangeListener) {
-    addEventListener(window, HashChangeEvent, handleUnpoppedHashChange)
-  }
+  // if (needsHashchangeListener) {
+  //   addEventListener(window, HashChangeEvent, handleUnpoppedHashChange)
+  // }
 
   return () => {
     removeEventListener(window, PopStateEvent, handlePopState)
 
-    if (!needsHashchangeListener) {
-      removeEventListener(window, HashChangeEvent, handleUnpoppedHashChange)
-    }
+    // if (needsHashchangeListener) {
+    //   removeEventListener(window, HashChangeEvent, handleUnpoppedHashChange)
+    // }
   }
 }
 

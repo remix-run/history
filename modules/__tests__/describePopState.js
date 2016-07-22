@@ -18,6 +18,14 @@ const describePopState = (createHistory) => {
 
       window.history.back()
     })
+
+    it('is called when only a hash is navigated to', (done) => {
+      unlisten = history.listenBefore(() => {
+        done()
+      })
+
+      window.location.hash = 'newhash'
+    })
   })
 }
 
