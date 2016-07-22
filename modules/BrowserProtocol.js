@@ -1,9 +1,12 @@
 import { createLocation } from './LocationUtils'
-import { addEventListener, removeEventListener } from './DOMUtils'
+import { addEventListener, removeEventListener, supportsPopstateOnHashchange } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
 
 const PopStateEvent = 'popstate'
+const HashChangeEvent = 'hashchange'
+
+const needsHashchangeListener = supportsPopstateOnHashchange()
 
 const _createLocation = (historyState) => {
   const key = historyState && historyState.key
@@ -38,10 +41,22 @@ export const startListener = (listener) => {
       listener(_createLocation(event.state))
   }
 
+  const handleUnpoppedHashChange = () =>
+    listener(getCurrentLocation())
+
   addEventListener(window, PopStateEvent, handlePopState)
 
-  return () =>
+  if (!needsHashchangeListener) {
+    addEventListener(window, HashChangeEvent, handleUnpoppedHashChange)
+  }
+
+  return () => {
     removeEventListener(window, PopStateEvent, handlePopState)
+
+    if (!needsHashchangeListener) {
+      removeEventListener(window, HashChangeEvent, handleUnpoppedHashChange)
+    }
+  }
 }
 
 const updateLocation = (location, updateState) => {

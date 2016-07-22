@@ -33,3 +33,9 @@ export const supportsHistory = () => {
  */
 export const supportsGoWithoutReloadUsingHash = () =>
   window.navigator.userAgent.indexOf('Firefox') === -1
+
+/**
+ * Returns true if browser fires popstate on hash change
+ */
+export const supportsPopstateOnHashchange = () =>
+  !navigator.userAgent.match(/Trident.*rv[ :]*11\./)
