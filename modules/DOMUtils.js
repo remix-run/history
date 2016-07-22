@@ -39,4 +39,4 @@ export const supportsGoWithoutReloadUsingHash = () =>
  * IE10 and IE11 do not.
  */
 export const supportsPopstateOnHashchange = () =>
-  ua.indexOf('Trident') !== -1
+  ua.indexOf('Trident') === -1
