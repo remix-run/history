@@ -14,17 +14,15 @@ const describePopState = (createHistory) => {
     })
 
     it('is called when browser navigation is used', (done) => {
+      const spy = expect.createSpy()
+      unlisten = history.listen(spy)
+
+      window.history.back()
+
       setTimeout(() => {
-        const spy = expect.createSpy()
-        unlisten = history.listen(spy)
-
-        window.history.back()
-
-        setTimeout(() => {
-          expect(spy.calls.length).toEqual(1)
-          done()
-        }, 750)
-      }, 250)
+        expect(spy.calls.length).toEqual(1)
+        done()
+      }, 500)
     })
 
     it('is called when only a hash is navigated to', (done) => {
