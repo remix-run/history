@@ -1,15 +1,15 @@
-import warning from 'warning'
+import warning from 'warning';
 
 const QuotaExceededErrors = {
   QuotaExceededError: true,
   QUOTA_EXCEEDED_ERR: true
-}
+};
 
 const SecurityErrors = {
   SecurityError: true
-}
+};
 
-const KeyPrefix = '@@History/'
+const KeyPrefix = '@@History/';
 
 const createKey = (key) =>
   KeyPrefix + key
@@ -21,16 +21,16 @@ export const saveState = (key, state) => {
     warning(
       false,
       '[history] Unable to save state; sessionStorage is not available'
-    )
+    );
 
-    return
+    return;
   }
 
   try {
     if (state == null) {
-      window.sessionStorage.removeItem(createKey(key))
+      window.sessionStorage.removeItem(createKey(key));
     } else {
-      window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+      window.sessionStorage.setItem(createKey(key), JSON.stringify(state));
     }
   } catch (error) {
     if (SecurityErrors[error.name]) {
@@ -39,9 +39,9 @@ export const saveState = (key, state) => {
       warning(
         false,
         '[history] Unable to save state; sessionStorage is not available due to security settings'
-      )
+      );
 
-      return
+      return;
     }
 
     if (QuotaExceededErrors[error.name] && window.sessionStorage.length === 0) {
@@ -49,19 +49,19 @@ export const saveState = (key, state) => {
       warning(
         false,
         '[history] Unable to save state; sessionStorage is not available in Safari private mode'
-      )
+      );
 
-      return
+      return;
     }
 
-    throw error
+    throw error;
   }
-}
+};
 
 export const readState = (key) => {
-  let json
+  let json;
   try {
-    json = window.sessionStorage.getItem(createKey(key))
+    json = window.sessionStorage.getItem(createKey(key));
   } catch (error) {
     if (SecurityErrors[error.name]) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
@@ -69,19 +69,19 @@ export const readState = (key) => {
       warning(
         false,
         '[history] Unable to read state; sessionStorage is not available due to security settings'
-      )
+      );
 
-      return undefined
+      return undefined;
     }
   }
 
   if (json) {
     try {
-      return JSON.parse(json)
+      return JSON.parse(json);
     } catch (error) {
       // Ignore invalid JSON.
     }
   }
 
-  return undefined
-}
+  return undefined;
+};
