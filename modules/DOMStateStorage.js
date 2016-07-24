@@ -28,9 +28,9 @@ export const saveState = (key, state) => {
 
   try {
     if (state == null) {
-      window.sessionStorage.removeItem(createKey(key));
+      window.emuStorage.removeItem(createKey(key));
     } else {
-      window.sessionStorage.setItem(createKey(key), JSON.stringify(state));
+      window.emuStorage.setItem(createKey(key), JSON.stringify(state));
     }
   } catch (error) {
     if (SecurityErrors[error.name]) {
