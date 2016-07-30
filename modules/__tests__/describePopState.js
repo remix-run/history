@@ -1,5 +1,5 @@
 const describePopState = (createHistory) => {
-  describe('when a listenBefore hook is added', () => {
+  describe('popState', () => {
     let history, unlisten
     beforeEach(() => {
       history = createHistory()
@@ -11,12 +11,24 @@ const describePopState = (createHistory) => {
         unlisten()
     })
 
-    it('is called when browser navigation is used', (done) => {
-      unlisten = history.listenBefore(() => {
-        done()
-      })
+    describe('when a listenBefore hook is added', () => {
+      it('is called when browser navigation is used', (done) => {
+        unlisten = history.listenBefore(() => {
+          done()
+        })
 
-      window.history.back()
+        window.history.back()
+      })
+    })
+
+    describe('when a listener is added', () => {
+      it('is called when only a hash is navigated to', (done) => {
+        unlisten = history.listen(() => {
+          done()
+        })
+
+        window.location.hash = 'newhash'
+      })
     })
   })
 }

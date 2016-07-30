@@ -33,3 +33,10 @@ export const supportsHistory = () => {
  */
 export const supportsGoWithoutReloadUsingHash = () =>
   window.navigator.userAgent.indexOf('Firefox') === -1
+
+/**
+ * Returns true if browser fires popstate on hash change.
+ * IE10 and IE11 do not.
+ */
+export const supportsPopstateOnHashchange = () =>
+  window.navigator.userAgent.indexOf('Trident') === -1
