@@ -1,5 +1,9 @@
 import { createLocation } from './LocationUtils'
-import { addEventListener, removeEventListener, supportsPopstateOnHashchange } from './DOMUtils'
+import {
+  addEventListener,
+  removeEventListener,
+  supportsPopstateOnHashchange
+} from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
 

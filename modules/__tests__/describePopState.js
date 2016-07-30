@@ -1,7 +1,5 @@
-import expect from 'expect'
-
 const describePopState = (createHistory) => {
-  describe('when a listen or listenBefore hook is added', () => {
+  describe('popState', () => {
     let history, unlisten
     beforeEach(() => {
       history = createHistory()
@@ -13,32 +11,24 @@ const describePopState = (createHistory) => {
         unlisten()
     })
 
-    it('is called when browser navigation is used', (done) => {
-      setTimeout(() => {
-        const spy = expect.createSpy()
-        unlisten = history.listen(spy)
+    describe('when a listenBefore hook is added', () => {
+      it('is called when browser navigation is used', (done) => {
+        unlisten = history.listenBefore(() => {
+          done()
+        })
 
         window.history.back()
-
-        setTimeout(() => {
-          expect(spy.calls.length).toEqual(1)
-          done()
-        }, 400)
-      }, 100)
+      })
     })
 
-    it('is called when only a hash is navigated to', (done) => {
-      setTimeout(() => {
-        const spy = expect.createSpy()
-        unlisten = history.listen(spy)
+    describe('when a listener is added', () => {
+      it('is called when only a hash is navigated to', (done) => {
+        unlisten = history.listen(() => {
+          done()
+        })
 
         window.location.hash = 'newhash'
-
-        setTimeout(() => {
-          expect(spy.calls.length).toEqual(1)
-          done()
-        }, 750)
-      }, 250)
+      })
     })
   })
 }
