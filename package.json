@@ -68,15 +68,5 @@
   "keywords": [
     "history",
     "location"
-  ],
-  "babel": {
-    "presets": [
-      "es2015-loose",
-      "stage-1"
-    ],
-    "plugins": [
-      "dev-expression",
-      "transform-object-assign"
-    ]
-  }
+  ]
 }
