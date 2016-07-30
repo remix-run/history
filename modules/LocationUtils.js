@@ -1,4 +1,5 @@
 import invariant from 'invariant'
+import warning from 'warning'
 import { parsePath } from './PathUtils'
 import { POP } from './Actions'
 
@@ -7,6 +8,11 @@ export const createQuery = (props) =>
 
 export const createLocation = (input = '/', action = POP, key = null) => {
   const object = typeof input === 'string' ? parsePath(input) : input
+
+  warning(
+    !object.path,
+    'Location descriptor objects should have a `pathname`, not a `path`.'
+  )
 
   const pathname = object.pathname || '/'
   const search = object.search || ''
