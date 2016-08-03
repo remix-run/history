@@ -36,7 +36,7 @@ const useBasename = (createHistory) =>
       const pathname = normalizedBasename + normalizedPathname
 
       return {
-        ...location,
+        ...object,
         pathname
       }
     }

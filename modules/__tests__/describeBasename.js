@@ -183,6 +183,14 @@ const describeBasename = (createHistory) => {
         expect(location.pathname).toEqual('/the/path')
         expect(location.basename).toEqual('/base/url')
       })
+
+      it('works with string contains search', () => {
+        const location = history.createLocation('/the/path?a=1&b=2')
+
+        expect(location.pathname).toEqual('/the/path')
+        expect(location.basename).toEqual('/base/url')
+        expect(location.search).toEqual('?a=1&b=2')
+      })
     })
   })
 }
