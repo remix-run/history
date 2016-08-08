@@ -35,7 +35,7 @@ describe('hash history', () => {
   if (supportsHistory()) {
     describePopState(createHashHistory)
   } else {
-    describe.skip(null, () => {
+    describe.skip('history API not supported', () => {
       describePopState(createHashHistory)
     })
   }
@@ -45,7 +45,7 @@ describe('hash history', () => {
     describeQueryKey(createHashHistory)
     describePathCoding(createHashHistory)
   } else {
-    describe.skip(null, () => {
+    describe.skip('go without reload not supported', () => {
       describeGo(createHashHistory)
       describeQueryKey(createHashHistory)
       describePathCoding(createHashHistory)
