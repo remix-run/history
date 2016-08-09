@@ -30,7 +30,7 @@ describe('browser history', () => {
     describeQueries(createBrowserHistory)
     describeGo(createBrowserHistory)
   } else {
-    describe.skip(null, () => {
+    describe.skip('history API not supported', () => {
       describeListen(createBrowserHistory)
       describeInitialLocation(createBrowserHistory)
       describeTransitions(createBrowserHistory)
