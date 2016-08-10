@@ -38,9 +38,14 @@ const describePush = (createHistory) => {
         const unlisten = history.listen(spy)
         history.push('/test')
         setTimeout(() => {
-          expect(spy.calls.length).toBe(1)
-          unlisten()
-          done()
+          try {
+            expect(spy.calls.length).toBe(1)
+            done()
+          } catch(error) {
+            throw error
+          } finally {
+            unlisten()
+          }
         }, 10)
       })
     })
