@@ -32,6 +32,22 @@ const describePush = (createHistory) => {
 
         execSteps(steps, history, done)
       })
+
+      it('should trigger only once when path is changed', (done) => {
+        const spy = expect.createSpy()
+        const unlisten = history.listen(spy)
+        history.push('/test')
+        setTimeout(() => {
+          try {
+            expect(spy.calls.length).toBe(1)
+            done()
+          } catch(error) {
+            throw error
+          } finally {
+            unlisten()
+          }
+        }, 10)
+      })
     })
 
     describe('with a path object', () => {
