@@ -61,9 +61,13 @@ export const startListener = (listener, pathCoder, queryKey) => {
       replaceHashPath(encodedPath)
     } else {
       const currentLocation = getCurrentLocation(pathCoder, queryKey)
+      const isEqualKey = prevLocation && currentLocation.key && prevLocation.key === currentLocation.key
+      const isEqualPathname = prevLocation && prevLocation.pathname === currentLocation.pathname
+      const isEqualSearch = prevLocation && prevLocation.search === currentLocation.search
 
-      if (prevLocation && currentLocation.key && prevLocation.key === currentLocation.key)
+      if (isEqualKey || isEqualPathname && isEqualSearch) {
         return // Ignore extraneous hashchange events
+      }
 
       prevLocation = currentLocation
 
