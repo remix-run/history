@@ -85,6 +85,13 @@ const createMemoryHistory = (options = {}) => {
     go
   })
 
+  if (options.asyncListen) {
+    const syncListen = history.listen;
+    history.listen = listener => {
+      setTimeout(syncListen.bind(history, listener), 0);
+    }
+  }
+
   let { entries, current } = options
 
   if (typeof entries === 'string') {
