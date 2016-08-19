@@ -18,7 +18,7 @@ const useBasename = (createHistory) =>
           if (location.pathname === '')
             location.pathname = '/'
         } else {
-          location.basename = ''
+          location.basename = basename
         }
       }
 
