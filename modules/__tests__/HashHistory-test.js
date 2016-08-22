@@ -12,6 +12,7 @@ import describeQueryKey from './describeQueryKey'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
 import describeGo from './describeGo'
+import describeUnlisten from './describeUnlisten'
 
 describe('hash history', function () {
   beforeEach(function () {
@@ -27,6 +28,7 @@ describe('hash history', function () {
   describeReplace(createHashHistory)
   describeBasename(createHashHistory)
   describeQueries(createHashHistory)
+  describeUnlisten(createHashHistory)
 
   if (supportsHistory()) {
     describePopState(createHashHistory)

@@ -11,6 +11,7 @@ import describeHashSupport from './describeHashSupport'
 import describeBasename from './describeBasename'
 import describeQueries from './describeQueries'
 import describeGo from './describeGo'
+import describeUnlisten from './describeUnlisten'
 
 describe('browser history', function () {
   beforeEach(function () {
@@ -29,6 +30,7 @@ describe('browser history', function () {
     describeBasename(createBrowserHistory)
     describeQueries(createBrowserHistory)
     describeGo(createBrowserHistory)
+    describeUnlisten(createBrowserHistory)
   } else {
     describe.skip(null, function () {
       describeInitialLocation(createBrowserHistory)
@@ -42,6 +44,7 @@ describe('browser history', function () {
       describeBasename(createBrowserHistory)
       describeQueries(createBrowserHistory)
       describeGo(createBrowserHistory)
+      describeUnlisten(createBrowserHistory)
     })
   }
 })
