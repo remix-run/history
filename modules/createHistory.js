@@ -82,7 +82,7 @@ function createHistory(options={}) {
     return function () {
       changeListeners = changeListeners.filter(item => item !== listener)
       if (changeListeners.length === 0) {
-        location = undefined
+        location = null
       }
     }
   }
