@@ -6,7 +6,21 @@ import { parsePath } from './PathUtils'
 const defaultStringifyQuery = (query) =>
   stringify(query).replace(/%20/g, '+')
 
-const defaultParseQueryString = parse
+export const defaultParseQueryString = (query) => {
+  try {
+    return parse(query)
+  } catch (e) {
+    if (typeof query === 'string') {
+      return query.split('&').reduce((queryParams, queryPair) => {
+        const parts = queryPair.split('=')
+        if (parts[0]) {
+          queryParams[parts[0]] = parts.slice(1).join('=')
+        }
+        return queryParams
+      }, {})
+    }
+  }
+}
 
 /**
  * Returns a new createHistory function that may be used to create

@@ -1,7 +1,7 @@
 import expect from 'expect'
 import { PUSH, REPLACE, POP } from '../Actions'
 import { createQuery } from '../LocationUtils'
-import useQueries from '../useQueries'
+import useQueries, {defaultParseQueryString} from '../useQueries'
 import execSteps from './execSteps'
 
 const stripHash = (path) =>
@@ -340,6 +340,26 @@ const describeQueries = (createHistory) => {
           }))
         ).toEqual('/the/path?STRINGIFY_QUERY')
       })
+    })
+  })
+
+  describe('defaultParseQueryString', () => {
+    it('should decode valid query param', () => {
+      expect(defaultParseQueryString('a=123').a).toEqual('123')
+    })
+
+    it('should decode query param value', () => {
+      expect(defaultParseQueryString('a=apple%20cider').a).toEqual('apple cider')
+    })
+
+    it('should ignore URIError', () => {
+      expect(defaultParseQueryString('a=apple%cider').a).toEqual('apple%cider')
+    })
+
+    it('should return empty object if query is empty', () => {
+      const queryPrams = defaultParseQueryString('')
+      expect(typeof queryPrams).toEqual('object')
+      expect(Object.keys(queryPrams)).toEqual(0)
     })
   })
 }
