@@ -2,7 +2,9 @@ import expect from 'expect'
 import { PUSH, REPLACE, POP } from '../Actions'
 import { createQuery } from '../LocationUtils'
 import useQueries from '../useQueries'
+import withQueries from '../withQueries'
 import execSteps from './execSteps'
+import shouldWarn from './shouldWarn'
 
 const stripHash = (path) =>
   path.replace(/^#/, '')
@@ -11,7 +13,7 @@ const describeQueries = (createHistory) => {
   describe('default query serialization', () => {
     let history
     beforeEach(() => {
-      history = useQueries(createHistory)()
+      history = withQueries(createHistory())
     })
 
     describe('in push', () => {
@@ -219,9 +221,9 @@ const describeQueries = (createHistory) => {
   describe('custom query serialization', () => {
     let history
     beforeEach(() => {
-      history = useQueries(createHistory)({
-        parseQueryString: () => 'PARSE_QUERY_STRING',
-        stringifyQuery: () => 'STRINGIFY_QUERY'
+      history = withQueries(createHistory(), {
+        parse: () => 'PARSE_QUERY_STRING',
+        stringify: () => 'STRINGIFY_QUERY'
       })
     })
 
@@ -339,6 +341,81 @@ const describeQueries = (createHistory) => {
             query: { the: 'query' }
           }))
         ).toEqual('/the/path?STRINGIFY_QUERY')
+      })
+    })
+  })
+
+  describe('useQueries', () => {
+    describe('default query serialization', () => {
+      it('works', (done) => {
+        shouldWarn('deprecated')
+
+        const history = useQueries(createHistory)()
+
+        const steps = [
+          (location) => {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual(createQuery())
+            expect(location.state).toBe(undefined)
+            expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
+
+            history.push({
+              pathname: '/home',
+              query: { the: 'query value' },
+              state: { the: 'state' }
+            })
+          },
+          (location) => {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?the=query+value')
+            expect(location.query).toEqual(createQuery({ the: 'query value' }))
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
+          }
+        ]
+
+        execSteps(steps, history, done)
+      })
+    })
+
+    describe('custom query serialization', () => {
+      it('works', (done) => {
+        shouldWarn('deprecated')
+
+        const history = useQueries(createHistory)({
+          parseQueryString: () => 'PARSE_QUERY_STRING',
+          stringifyQuery: () => 'STRINGIFY_QUERY'
+        })
+
+        const steps = [
+          (location) => {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toBe(undefined)
+            expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
+
+            history.push({
+              pathname: '/home',
+              query: { the: 'query' },
+              state: { the: 'state' }
+            })
+          },
+          (location) => {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('?STRINGIFY_QUERY')
+            expect(location.query).toEqual('PARSE_QUERY_STRING')
+            expect(location.state).toEqual({ the: 'state' })
+            expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
+          }
+        ]
+
+        execSteps(steps, history, done)
       })
     })
   })

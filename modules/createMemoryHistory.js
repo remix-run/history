@@ -1,5 +1,5 @@
-import warning from 'warning'
 import invariant from 'invariant'
+import warning from './historyWarning'
 import { createLocation } from './LocationUtils'
 import { createPath, parsePath } from './PathUtils'
 import createHistory from './createHistory'

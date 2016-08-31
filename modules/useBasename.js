@@ -1,8 +1,15 @@
+import warning from './historyWarning'
 import runTransitionHook from './runTransitionHook'
 import { parsePath } from './PathUtils'
+import EnhancerSecret from './EnhancerSecret'
 
-const useBasename = (createHistory) =>
-  (options = {}) => {
+const useBasename = (createHistory, secret) => {
+  warning(
+    secret === EnhancerSecret,
+    'useBasename is deprecated. Use withBasename instead.'
+  )
+
+  return (options = {}) => {
     const history = createHistory(options)
     const { basename } = options
 
@@ -82,5 +89,6 @@ const useBasename = (createHistory) =>
       createLocation
     }
   }
+}
 
 export default useBasename

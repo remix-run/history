@@ -1,5 +1,5 @@
 import invariant from 'invariant'
-import warning from 'warning'
+import warning from './historyWarning'
 import { parsePath } from './PathUtils'
 import { POP } from './Actions'
 

@@ -1,7 +1,9 @@
 import { parse, stringify } from 'query-string'
+import warning from './historyWarning'
 import runTransitionHook from './runTransitionHook'
 import { createQuery } from './LocationUtils'
 import { parsePath } from './PathUtils'
+import EnhancerSecret from './EnhancerSecret'
 
 const defaultStringifyQuery = (query) =>
   stringify(query).replace(/%20/g, '+')
@@ -12,8 +14,13 @@ const defaultParseQueryString = parse
  * Returns a new createHistory function that may be used to create
  * history objects that know how to handle URL queries.
  */
-const useQueries = (createHistory) =>
-  (options = {}) => {
+const useQueries = (createHistory, secret) => {
+  warning(
+    secret === EnhancerSecret,
+    'useQueries is deprecated. Use withQueries instead.'
+  )
+
+  return (options = {}) => {
     const history = createHistory(options)
     let { stringifyQuery, parseQueryString } = options
 
@@ -95,5 +102,6 @@ const useQueries = (createHistory) =>
       createLocation
     }
   }
+}
 
 export default useQueries

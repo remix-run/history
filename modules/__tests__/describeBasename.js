@@ -1,7 +1,9 @@
 import expect from 'expect'
 import { PUSH, REPLACE, POP } from '../Actions'
 import useBasename from '../useBasename'
+import withBasename from '../withBasename'
 import execSteps from './execSteps'
+import shouldWarn from './shouldWarn'
 
 const stripHash = (path) =>
   path.replace(/^#/, '')
@@ -10,9 +12,7 @@ const describeBasename = (createHistory) => {
   describe('basename handling', () => {
     let history
     beforeEach(() => {
-      history = useBasename(createHistory)({
-        basename: '/base/url'
-      })
+      history = withBasename(createHistory(), '/base/url')
     })
 
     describe('in push', () => {
@@ -190,6 +190,39 @@ const describeBasename = (createHistory) => {
         expect(location.pathname).toEqual('/the/path')
         expect(location.basename).toEqual('/base/url')
         expect(location.search).toEqual('?a=1&b=2')
+      })
+    })
+  })
+
+  describe('useBasename', () => {
+    describe('basename handling', () => {
+      it('works', (done) => {
+        shouldWarn('deprecated')
+
+        const history = useBasename(createHistory)({ basename: '/base/url' })
+
+        const steps = [
+          (location) => {
+            expect(location.pathname).toEqual('/')
+            expect(location.search).toEqual('')
+            expect(location.state).toBe(undefined)
+            expect(location.action).toEqual(POP)
+            expect(location.key).toBe(null)
+            expect(location.basename).toEqual('')
+
+            history.push('/home')
+          },
+          (location) => {
+            expect(location.pathname).toEqual('/home')
+            expect(location.search).toEqual('')
+            expect(location.state).toBe(undefined)
+            expect(location.action).toEqual(PUSH)
+            expect(location.key).toExist()
+            expect(location.basename).toEqual('/base/url')
+          }
+        ]
+
+        execSteps(steps, history, done)
       })
     })
   })

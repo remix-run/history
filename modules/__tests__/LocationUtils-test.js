@@ -2,6 +2,7 @@ import expect from 'expect'
 import createHistory from '../createHistory'
 import { createLocation } from '../LocationUtils'
 import { POP } from '../Actions'
+import shouldWarn from './shouldWarn'
 
 describe('a location', () => {
   it('knows its pathname', () => {
@@ -20,6 +21,8 @@ describe('a location', () => {
   })
 
   it('compensates if the location is fully qualified', () => {
+    shouldWarn('path must be pathname + search + hash only, not a full URL')
+
     const location = createLocation('https://example.com/home')
     expect(location.pathname).toEqual('/home')
   })

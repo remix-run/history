@@ -36,9 +36,9 @@ const history = createHistory({
 If you need to prevent a browser window or tab from closing, `history` provides the `useBeforeUnload` [enhancer](Glossary.md#createhistoryenhancer) function.
 
 ```js
-import { createHistory, useBeforeUnload } from 'history'
+import { createHistory, withBeforeUnload } from 'history'
 
-const history = useBeforeUnload(createHistory)()
+const history = withBeforeUnload(createHistory())
 
 history.listenBeforeUnload(() => {
   return 'Are you sure you want to leave this page?'
