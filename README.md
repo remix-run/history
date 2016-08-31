@@ -29,10 +29,10 @@ import { createHistory } from 'history'
 var createHistory = require('history').createHistory
 ```
 
-The UMD build is also available on [npmcdn](https://npmcdn.com):
+The UMD build is also available on [unpkg](https://unpkg.com):
 
 ```html
-<script src="https://npmcdn.com/history/umd/history.min.js"></script>
+<script src="https://unpkg.com/history/umd/history.min.js"></script>
 ```
 
 You can find the library on `window.History`.
