@@ -7,7 +7,7 @@ import {
 import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
 
-import { canUseDOM } from './ExecutionEnvironment';
+import { canUseDOM } from './ExecutionEnvironment'
 
 const PopStateEvent = 'popstate'
 const HashChangeEvent = 'hashchange'
