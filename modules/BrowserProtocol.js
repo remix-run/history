@@ -7,10 +7,12 @@ import {
 import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
 
+import { canUseDOM } from './ExecutionEnvironment';
+
 const PopStateEvent = 'popstate'
 const HashChangeEvent = 'hashchange'
 
-const needsHashchangeListener = !supportsPopstateOnHashchange()
+const needsHashchangeListener = canUseDOM && !supportsPopstateOnHashchange()
 
 const _createLocation = (historyState) => {
   const key = historyState && historyState.key
