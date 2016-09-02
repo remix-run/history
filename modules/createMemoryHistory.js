@@ -113,7 +113,10 @@ const createMemoryHistory = (options = {}) => {
   const readState = (key) =>
     storage[key]
 
-  return history
+  return {
+    ...history,
+    canGo
+  }
 }
 
 export default createMemoryHistory
