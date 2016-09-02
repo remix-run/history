@@ -12,6 +12,7 @@ const describeQueryKey = (createHistory) => {
     it('remembers state across transitions', (done) => {
       const steps = [
         (location) => {
+          console.log(1, location)
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.state).toBe(undefined)
@@ -25,6 +26,7 @@ const describeQueryKey = (createHistory) => {
           })
         },
         (location) => {
+          console.log(2, location)
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
           expect(location.state).toEqual({ the: 'state' })
@@ -34,6 +36,7 @@ const describeQueryKey = (createHistory) => {
           history.goBack()
         },
         (location) => {
+          console.log(3, location)
           expect(location.pathname).toEqual('/')
           expect(location.search).toEqual('')
           expect(location.state).toBe(undefined)
@@ -43,6 +46,7 @@ const describeQueryKey = (createHistory) => {
           history.goForward()
         },
         (location) => {
+          console.log(4, location)
           expect(location.pathname).toEqual('/home')
           expect(location.search).toEqual('?the=query')
           expect(location.state).toEqual({ the: 'state' }) // State is present

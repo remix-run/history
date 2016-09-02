@@ -16,7 +16,7 @@ export default (history, done) => {
     }
   ]
 
-  const unlistenBefore = history.listenBefore((location) => {
+  const unlistenBefore = history.listenBefore(location => {
     nextLocation = location
   })
 
