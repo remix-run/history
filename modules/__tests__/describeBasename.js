@@ -33,7 +33,6 @@ const describeBasename = (createHistory) => {
             expect(location.search).toEqual('')
             expect(location.state).toBe(undefined)
             expect(location.action).toEqual(PUSH)
-            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
           }
         ]
@@ -101,7 +100,6 @@ const describeBasename = (createHistory) => {
             expect(location.search).toEqual('')
             expect(location.state).toBe(undefined)
             expect(location.action).toEqual(REPLACE)
-            expect(location.key).toExist()
             expect(location.basename).toEqual('/base/url')
           }
         ]

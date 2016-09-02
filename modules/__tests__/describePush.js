@@ -5,8 +5,17 @@ import execSteps from './execSteps'
 const describePush = (createHistory) => {
   describe('push', () => {
     let history
+    let unlisten
+
     beforeEach(() => {
       history = createHistory()
+      unlisten = null
+    })
+
+    afterEach(() => {
+      if (unlisten) {
+        unlisten()
+      }
     })
 
     describe('with a path string', () => {
@@ -26,11 +35,22 @@ const describePush = (createHistory) => {
             expect(location.search).toEqual('?the=query')
             expect(location.state).toBe(undefined)
             expect(location.action).toEqual(PUSH)
-            expect(location.key).toExist()
           }
         ]
 
         execSteps(steps, history, done)
+      })
+
+      it('should trigger listener only once', (done) => {
+        const spy = expect.createSpy()
+        unlisten = history.listen(spy)
+
+        history.push('/test')
+
+        setTimeout(() => {
+          expect(spy.calls.length).toBe(1)
+          done()
+        })
       })
     })
 

@@ -42,12 +42,12 @@ describe('hash history', () => {
 
   if (supportsHistory() && supportsGoWithoutReloadUsingHash()) {
     describeGo(createHashHistory)
-    describeQueryKey(createHashHistory)
+    describeQueryKey(createHashHistory, () => window.location.hash.slice(1))
     describePathCoding(createHashHistory)
   } else {
     describe.skip('go without reload not supported', () => {
       describeGo(createHashHistory)
-      describeQueryKey(createHashHistory)
+      describeQueryKey(createHashHistory, () => window.location.hash.slice(1))
       describePathCoding(createHashHistory)
     })
   }
