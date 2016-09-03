@@ -1,8 +1,10 @@
 import createHistory from '../createBrowserHistory'
+import { canUseDOM } from '../ExecutionEnvironment'
 import { supportsHistory } from '../DOMUtils'
 import * as TestSequences from './TestSequences'
 
-const describeHistory = supportsHistory() ? describe : describe.skip
+const canUseHistory = canUseDOM && supportsHistory()
+const describeHistory = canUseHistory ? describe : describe.skip
 
 describeHistory('a browser history', () => {
   beforeEach(() => {

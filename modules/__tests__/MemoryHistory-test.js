@@ -1,6 +1,5 @@
 import createHistory from '../createMemoryHistory'
 import * as TestSequences from './TestSequences'
-import expect from 'expect'
 
 describe('a memory history', () => {
   describe('by default', () => {
