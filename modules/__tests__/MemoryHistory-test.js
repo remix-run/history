@@ -74,7 +74,7 @@ describe('a memory history', () => {
     })
   })
 
-  describe('transition hooks', () => {
+  describe('a transition hook', () => {
     const getUserConfirmation = (_, callback) => callback(true)
 
     let history
@@ -84,7 +84,7 @@ describe('a memory history', () => {
       })
     })
 
-    it('receive the next location and action as arguments', (done) => {
+    it('receives the next location and action as arguments', (done) => {
       TestSequences.TransitionHookArgs(history, done)
     })
 
