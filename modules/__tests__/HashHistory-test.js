@@ -100,9 +100,9 @@ describeHistory('a hash history', () => {
       TestSequences.TransitionHookArgs(history, done)
     })
 
-    const testBackButton = canGoWithoutReload ? it : it.skip
+    const itBackButton = canGoWithoutReload ? it : it.skip
 
-    testBackButton('is called when the back button is clicked', (done) => {
+    itBackButton('is called when the back button is clicked', (done) => {
       TestSequences.BackButtonTransitionHook(history, done)
     })
 
