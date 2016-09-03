@@ -1,3 +1,17 @@
+## [v4.0.0-0]
+> Sep 3, 2016
+
+- Easier top-level `import`s. Use `import createHistory from "history/createBrowserHistory"` instead of `history/lib/createBrowserHistory`.
+- Removed the "middleware" API (i.e. all "use" functions).
+- Moved path and query parsing out of core. Location objects are now `{ path, state, key }`. Any other parsing can be done outside core.
+- Removed the `Actions` module. `location.action` is now just a string. No need to `import` our constants.
+- Switched to using `window.history.state` in `createBrowserHistory` instead of `sessionStorage`.
+- Removed `location.state` entirely from `createHashHistory` locations.
+- Removed support for basename in `createMemoryHistory`.
+- Refactored the test suite. Tests are much more flexible and easier to zero in on one that is failing.
+
+[v4.0.0-0]: https://github.com/mjackson/history/compare/v3.2.1...v4.0.0-0
+
 ## [v3.2.0]
 > Sep 1, 2016
 
