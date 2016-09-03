@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "invariant": "^2.2.1",
-    "query-string": "^4.2.2",
     "warning": "^3.0.0",
     "loose-envify": "^1.2.0"
   },
