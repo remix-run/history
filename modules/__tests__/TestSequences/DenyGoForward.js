@@ -2,7 +2,7 @@ import expect from 'expect'
 import execSteps from './execSteps'
 
 export default (history, done) => {
-  let unblock, hookWasCalled = false
+  let unblock
   const steps = [
     (location) => {
       expect(location).toMatch({
@@ -17,11 +17,7 @@ export default (history, done) => {
         path: '/home'
       })
 
-      unblock = history.block(() => {
-        hookWasCalled = true
-      })
-
-      window.history.go(-1)
+      history.goBack()
     },
     (location, action) => {
       expect(action).toBe('POP')
@@ -29,7 +25,21 @@ export default (history, done) => {
         path: '/'
       })
 
-      expect(hookWasCalled).toBe(true)
+      unblock = history.block(nextLocation => {
+        expect(nextLocation).toMatch({
+          path: '/home'
+        })
+
+        return 'Are you sure?'
+      })
+
+      history.goForward()
+    },
+    (location, action) => {
+      expect(action).toBe('POP')
+      expect(location).toMatch({
+        path: '/'
+      })
 
       unblock()
     }

@@ -1,40 +1,6 @@
-import invariant from 'invariant'
-import warning from 'warning'
-import { parsePath } from './PathUtils'
-import { POP } from './Actions'
-
-export const createQuery = (props) =>
-  Object.assign(Object.create(null), props)
-
-export const createLocation = (input = '/', action = POP, key = null) => {
-  const object = typeof input === 'string' ? parsePath(input) : input
-
-  warning(
-    !object.path,
-    'Location descriptor objects should have a `pathname`, not a `path`.'
-  )
-
-  const pathname = object.pathname || '/'
-  const search = object.search || ''
-  const hash = object.hash || ''
-  const state = object.state
-
-  return {
-    pathname,
-    search,
-    hash,
-    state,
-    action,
-    key
-  }
-}
-
-const isDate = (object) =>
-  Object.prototype.toString.call(object) === '[object Date]'
-
-export const statesAreEqual = (a, b) => {
-  if (a === b)
-    return true
+const looseEqual = (a, b) => {
+  if (a == null)
+    return a == b
 
   const typeofA = typeof a
   const typeofB = typeof b
@@ -42,39 +8,23 @@ export const statesAreEqual = (a, b) => {
   if (typeofA !== typeofB)
     return false
 
-  invariant(
-    typeofA !== 'function',
-    'You must not store functions in location state'
-  )
+  if (Array.isArray(a)) {
+    if (!Array.isArray(b) || a.length !== b.length)
+      return false
 
-  // Not the same object, but same type.
-  if (typeofA === 'object') {
-    invariant(
-      !(isDate(a) && isDate(b)),
-      'You must not store Date objects in location state'
-    )
+    return a.every((item, index) => looseEqual(item, b[index]))
+  } else if (typeofA === 'object') {
+    const keysOfA = Object.keys(a)
+    const keysOfB = Object.keys(b)
 
-    if (!Array.isArray(a)) {
-      const keysofA = Object.keys(a)
-      const keysofB = Object.keys(b)
-      return keysofA.length === keysofB.length &&
-        keysofA.every(key => statesAreEqual(a[key], b[key]))
-    }
+    if (keysOfA.length !== keysOfB.length)
+      return false
 
-    return Array.isArray(b) &&
-      a.length === b.length &&
-      a.every((item, index) => statesAreEqual(item, b[index]))
+    return keysOfA.every(key => looseEqual(a[key], b[key]))
   }
 
-  // All other serializable types (string, number, boolean)
-  // should be strict equal.
-  return false
+  return a === b
 }
 
 export const locationsAreEqual = (a, b) =>
-  a.key === b.key &&
-  // a.action === b.action && // Different action !== location change.
-  a.pathname === b.pathname &&
-  a.search === b.search &&
-  a.hash === b.hash &&
-  statesAreEqual(a.state, b.state)
+  a.path === b.path && a.key === b.key && looseEqual(a.state, b.state)

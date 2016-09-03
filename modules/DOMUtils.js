@@ -8,6 +8,9 @@ export const removeEventListener = (node, event, listener) =>
     ? node.removeEventListener(event, listener, false)
     : node.detachEvent('on' + event, listener)
 
+export const getConfirmation = (message, callback) =>
+  callback(window.confirm(message)) // eslint-disable-line no-alert
+
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
@@ -29,14 +32,14 @@ export const supportsHistory = () => {
 }
 
 /**
+ * Returns true if browser fires popstate on hash change.
+ * IE10 and IE11 do not.
+ */
+export const supportsPopStateOnHashChange = () =>
+  window.navigator.userAgent.indexOf('Trident') === -1
+
+/**
  * Returns false if using go(n) with hash history causes a full page reload.
  */
 export const supportsGoWithoutReloadUsingHash = () =>
   window.navigator.userAgent.indexOf('Firefox') === -1
-
-/**
- * Returns true if browser fires popstate on hash change.
- * IE10 and IE11 do not.
- */
-export const supportsPopstateOnHashchange = () =>
-  window.navigator.userAgent.indexOf('Trident') === -1

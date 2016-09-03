@@ -2,27 +2,19 @@ import expect from 'expect'
 import execSteps from './execSteps'
 
 export default (history, done) => {
-  let unblock, hookWasCalled = false
   const steps = [
     (location) => {
       expect(location).toMatch({
         path: '/'
       })
 
-      unblock = history.block(() => {
-        hookWasCalled = true
-      })
-
-      window.location.hash = 'something-new'
+      history.push('/home?the=query#the-hash')
     },
-    (location) => {
+    (location, action) => {
+      expect(action).toBe('PUSH')
       expect(location).toMatch({
-        path: '/#something-new'
+        path: '/home?the=query#the-hash'
       })
-
-      expect(hookWasCalled).toBe(true)
-
-      unblock()
     }
   ]
 

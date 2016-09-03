@@ -1,121 +1,159 @@
-import warning from 'warning'
-import invariant from 'invariant'
-import { createLocation } from './LocationUtils'
-import { createPath, parsePath } from './PathUtils'
-import createHistory from './createHistory'
-import { POP } from './Actions'
+import createTransitionManager from './createTransitionManager'
 
-const createStateStorage = (entries) =>
-  entries
-    .filter(entry => entry.state)
-    .reduce((memo, entry) => {
-      memo[entry.key] = entry.state
-      return memo
-    }, {})
+const clamp = (n, lowerBound, upperBound) =>
+  Math.min(Math.max(n, lowerBound), upperBound)
 
-const createMemoryHistory = (options = {}) => {
-  if (Array.isArray(options)) {
-    options = { entries: options }
-  } else if (typeof options === 'string') {
-    options = { entries: [ options ] }
+/**
+ * Creates a history object that stores locations in memory.
+ */
+const createMemoryHistory = (props = {}) => {
+  const {
+    getUserConfirmation,
+    initialEntries = [ '/' ],
+    initialIndex = 0,
+    keyLength = 6
+  } = props
+
+  // Normalize entries based on type.
+  const entries = initialEntries.map(entry => (
+    typeof entry === 'string' ? { path: entry } : entry
+  ))
+
+  const currentState = {
+    prevIndex: null,
+    action: 'POP',
+    index: clamp(initialIndex, 0, entries.length - 1),
+    entries
   }
 
-  const getCurrentLocation = () => {
-    const entry = entries[current]
-    const path = createPath(entry)
+  const transitionManager = createTransitionManager()
 
-    let key, state
-    if (entry.key) {
-      key = entry.key
-      state = readState(key)
-    }
+  const setState = (nextState) => {
+    Object.assign(currentState, nextState)
 
-    const init = parsePath(path)
-
-    return createLocation({ ...init, state }, undefined, key)
-  }
-
-  const canGo = (n) => {
-    const index = current + n
-    return index >= 0 && index < entries.length
-  }
-
-  const go = (n) => {
-    if (!n)
-      return
-
-    if (!canGo(n)) {
-      warning(
-        false,
-        'Cannot go(%s) there is not enough history',
-        n
-      )
-
-      return
-    }
-
-    current += n
-    const currentLocation = getCurrentLocation()
-
-    // Change action to POP
-    history.transitionTo({ ...currentLocation, action: POP })
-  }
-
-  const pushLocation = (location) => {
-    current += 1
-
-    if (current < entries.length)
-      entries.splice(current)
-
-    entries.push(location)
-
-    saveState(location.key, location.state)
-  }
-
-  const replaceLocation = (location) => {
-    entries[current] = location
-    saveState(location.key, location.state)
-  }
-
-  const history = createHistory({
-    ...options,
-    getCurrentLocation,
-    pushLocation,
-    replaceLocation,
-    go
-  })
-
-  let { entries, current } = options
-
-  if (typeof entries === 'string') {
-    entries = [ entries ]
-  } else if (!Array.isArray(entries)) {
-    entries = [ '/' ]
-  }
-
-  entries = entries.map(entry => createLocation(entry))
-
-  if (current == null) {
-    current = entries.length - 1
-  } else {
-    invariant(
-      current >= 0 && current < entries.length,
-      'Current index must be >= 0 and < %s, was %s',
-      entries.length, current
+    transitionManager.transitionTo(
+      getCurrentLocation(),
+      currentState.action
     )
   }
 
-  const storage = createStateStorage(entries)
+  const createKey = () =>
+    Math.random().toString(36).substr(2, keyLength)
 
-  const saveState = (key, state) =>
-    storage[key] = state
+  // Public interface
 
-  const readState = (key) =>
-    storage[key]
+  const getCurrentLocation = () =>
+    currentState.entries[currentState.index]
+
+  const push = (path, state) => {
+    const action = 'PUSH'
+    const key = createKey()
+    const location = {
+      path,
+      state,
+      key
+    }
+
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+      if (!ok)
+        return
+
+      const prevIndex = currentState.index
+      const nextIndex = prevIndex + 1
+
+      const entries = currentState.entries.slice(0)
+      if (entries.length > nextIndex) {
+        entries.splice(nextIndex, entries.length - nextIndex, location)
+      } else {
+        entries.push(location)
+      }
+
+      setState({
+        prevIndex: currentState.index,
+        action,
+        index: nextIndex,
+        entries
+      })
+    })
+  }
+
+  const replace = (path, state) => {
+    const action = 'REPLACE'
+    const key = createKey()
+    const location = {
+      path,
+      state,
+      key
+    }
+
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+      if (!ok)
+        return
+
+      const prevIndex = currentState.index
+      const entries = currentState.entries.slice(0)
+
+      entries[prevIndex] = location
+
+      setState({
+        prevIndex: currentState.index,
+        action,
+        entries
+      })
+    })
+  }
+
+  const go = (n) => {
+    const { index, entries } = currentState
+    const nextIndex = clamp(index + n, 0, entries.length - 1)
+
+    const action = 'POP'
+    const location = entries[nextIndex]
+
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+      if (ok) {
+        setState({
+          prevIndex: index,
+          action,
+          index: nextIndex
+        })
+      } else {
+        // Mimic the behavior of DOM histories by
+        // causing a render after a cancelled POP.
+        setState()
+      }
+    })
+  }
+
+  const goBack = () =>
+    go(-1)
+
+  const goForward = () =>
+    go(1)
+
+  const canGo = (n) => {
+    const { index, entries } = currentState
+    const nextIndex = index + n
+
+    return nextIndex >= 0 && nextIndex < entries.length
+  }
+
+  const block = (prompt) =>
+    transitionManager.setPrompt(prompt)
+
+  const listen = (listener) =>
+    transitionManager.appendListener(listener)
 
   return {
-    ...history,
-    canGo
+    getCurrentLocation,
+    push,
+    replace,
+    go,
+    goBack,
+    goForward,
+    canGo,
+    block,
+    listen
   }
 }
 

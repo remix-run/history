@@ -8,21 +8,21 @@ export default (history, done) => {
         path: '/'
       })
 
-      history.push('/home')
-    },
-    (location, action) => {
-      expect(action).toEqual('PUSH')
-      expect(location).toMatch({
-        path: '/home'
+      const unblock = history.block(nextLocation => {
+        expect(nextLocation).toMatch({
+          path: '/home'
+        })
+
+        return 'Are you sure?'
       })
 
-      history.goBack()
-    },
-    (location, action) => {
-      expect(action).toEqual('POP')
-      expect(location).toMatch({
+      history.push('/home')
+
+      expect(history.getCurrentLocation()).toMatch({
         path: '/'
       })
+
+      unblock()
     }
   ]
 
