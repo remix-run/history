@@ -105,6 +105,10 @@ describeHistory('a hash history', () => {
     testBackButton('is called when the back button is clicked', (done) => {
       TestSequences.BackButtonTransitionHook(history, done)
     })
+
+    it('cancels the transition when it returns false', (done) => {
+      TestSequences.ReturnFalseTransitionHook(history, done)
+    })
   })
 
   describe('"hashbang" hash path coding', () => {

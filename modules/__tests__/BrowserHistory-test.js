@@ -97,6 +97,10 @@ describeHistory('a browser history', () => {
       TestSequences.TransitionHookArgs(history, done)
     })
 
+    it('cancels the transition when it returns false', (done) => {
+      TestSequences.ReturnFalseTransitionHook(history, done)
+    })
+
     it('is called when the back button is clicked', (done) => {
       TestSequences.BackButtonTransitionHook(history, done)
     })

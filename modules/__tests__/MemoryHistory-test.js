@@ -87,5 +87,9 @@ describe('a memory history', () => {
     it('receive the next location and action as arguments', (done) => {
       TestSequences.TransitionHookArgs(history, done)
     })
+
+    it('cancels the transition when it returns false', (done) => {
+      TestSequences.ReturnFalseTransitionHook(history, done)
+    })
   })
 })

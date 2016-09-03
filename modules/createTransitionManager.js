@@ -31,11 +31,11 @@ const createTransitionManager = () => {
       if (typeof getUserConfirmation === 'function') {
         const message = typeof prompt === 'function' ? prompt(location, action) : prompt
 
-        if (message) {
+        if (typeof message === 'string') {
           getUserConfirmation(message, callback)
         } else {
-          // No message means they decided not to prompt the user.
-          callback(true)
+          // Return false from a transition hook to cancel the transition.
+          callback(message !== false)
         }
       } else {
         warning(
