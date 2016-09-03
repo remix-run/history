@@ -13,6 +13,7 @@ import {
 
 const PopStateEvent = 'popstate'
 const HashChangeEvent = 'hashchange'
+const BlockAllPrompt = () => false
 
 const getHistoryState = () => {
   try {
@@ -239,7 +240,7 @@ const createBrowserHistory = (props = {}) => {
   const goForward = () =>
     go(1)
 
-  const block = (prompt) =>
+  const block = (prompt = BlockAllPrompt) =>
     transitionManager.setPrompt(prompt)
 
   let listenerCount = 0
