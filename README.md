@@ -8,11 +8,6 @@
 
 [`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history anywhere JavaScript runs. `history` abstracts away the differences in various environments and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions.
 
-## Docs & Help
-
-- [Guides and API Docs](/docs#readme)
-- [Changelog](/CHANGES.md)
-
 ## Installation
 
 Using [npm](https://www.npmjs.com/):
@@ -23,10 +18,10 @@ Then with a module bundler like [webpack](https://webpack.github.io/), use as yo
 
 ```js
 // using an ES6 transpiler, like babel
-import { createHistory } from 'history'
+import createHistory from 'history/createBrowserHistory'
 
 // not using an ES6 transpiler
-var createHistory = require('history').createHistory
+var createHistory = require('history').createBrowserHistory
 ```
 
 The UMD build is also available on [unpkg](https://unpkg.com):
