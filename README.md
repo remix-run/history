@@ -1,7 +1,7 @@
 # history [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
 
-[build-badge]: https://img.shields.io/travis/ReactTraining/history/master.svg?style=flat-square
-[build]: https://travis-ci.org/ReactTraining/history
+[build-badge]: https://img.shields.io/travis/mjackson/history/master.svg?style=flat-square
+[build]: https://travis-ci.org/mjackson/history
 
 [npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/history
@@ -51,24 +51,17 @@ const location = history.getCurrentLocation()
 
 // Listen for changes to the current location
 const unlisten = history.listen(location => {
-  console.log(location.pathname)
+  console.log(location.path, location.state)
 })
 
-// Push a new entry onto the history stack
-history.push({
-  pathname: '/the/path',
-  search: '?a=query',
-
-  // Extra location-specific state may be kept in session
-  // storage instead of in the URL query string!
-  state: { the: 'state' }
-})
+// Push a new entry onto the history stack.
+history.push('/the/path?the=query#the-hash', { the: 'state' })
 
 // When you're finished, stop the listener
 unlisten()
 ```
 
-You can find many more examples [in the documentation](https://github.com/ReactTraining/history/tree/master/docs)!
+You can find many more examples [in the documentation](https://github.com/mjackson/history/tree/master/docs)!
 
 ## Thanks
 
