@@ -55,10 +55,6 @@
       "loose-envify"
     ]
   },
-  "tags": [
-    "history",
-    "location"
-  ],
   "keywords": [
     "history",
     "location"
