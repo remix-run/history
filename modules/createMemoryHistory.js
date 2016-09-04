@@ -1,7 +1,5 @@
 import createTransitionManager from './createTransitionManager'
 
-const BlockAllPrompt = () => false
-
 const clamp = (n, lowerBound, upperBound) =>
   Math.min(Math.max(n, lowerBound), upperBound)
 
@@ -140,7 +138,7 @@ const createMemoryHistory = (props = {}) => {
     return nextIndex >= 0 && nextIndex < entries.length
   }
 
-  const block = (prompt = BlockAllPrompt) =>
+  const block = (prompt = false) =>
     transitionManager.setPrompt(prompt)
 
   const listen = (listener) =>

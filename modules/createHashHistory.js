@@ -12,7 +12,6 @@ import {
 } from './DOMUtils'
 
 const HashChangeEvent = 'hashchange'
-const BlockAllPrompt = () => false
 
 const HashPathCoders = {
   hashbang: {
@@ -268,7 +267,7 @@ const createHashHistory = (props = {}) => {
   const goForward = () =>
     go(1)
 
-  const block = (prompt = BlockAllPrompt) =>
+  const block = (prompt = false) =>
     transitionManager.setPrompt(prompt)
 
   let listenerCount = 0
