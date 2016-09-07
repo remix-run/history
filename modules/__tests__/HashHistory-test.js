@@ -44,9 +44,15 @@ describeHistory('a hash history', () => {
       })
     })
 
-    describe('replace', () => {
+    describe('replace a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceNewLocation(history, done)
+      })
+    })
+
+    describe('replace the same path', () => {
+      it('calls change listeners with the new location', (done) => {
+        TestSequences.ReplaceSamePath(history, done)
       })
     })
 
