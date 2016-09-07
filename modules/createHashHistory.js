@@ -196,19 +196,26 @@ const createHashHistory = (props = {}) => {
         // is that other hash histories in the page will consider it a POP.
         ignorePath = path
         pushHashPath(encodedPath)
+
+        const prevPaths = currentState.allPaths
+        const prevIndex = prevPaths.lastIndexOf(currentState.location.path)
+
+        const allPaths = prevPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
+        allPaths.push(location.path)
+
+        setState({
+          action,
+          location,
+          allPaths
+        })
+      } else {
+        warning(
+          false,
+          'Hash history cannot PUSH the same path; a new entry will not be added to the history stack'
+        )
+
+        setState()
       }
-
-      const prevPaths = currentState.allPaths
-      const prevIndex = prevPaths.lastIndexOf(currentState.location.path)
-
-      const allPaths = prevPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
-      allPaths.push(location.path)
-
-      setState({
-        action,
-        location,
-        allPaths
-      })
     })
   }
 

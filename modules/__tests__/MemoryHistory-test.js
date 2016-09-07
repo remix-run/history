@@ -20,9 +20,15 @@ describe('a memory history', () => {
       })
     })
 
-    describe('push', () => {
+    describe('push a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.PushNewLocation(history, done)
+      })
+    })
+
+    describe('push the same path', () => {
+      it('calls change listeners with the new location', (done) => {
+        TestSequences.PushSamePath(history, done)
       })
     })
 
