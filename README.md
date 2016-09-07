@@ -62,6 +62,34 @@ history.push('/home', { some: 'state' })
 unlisten()
 ```
 
+The options that each create method takes, along with their default values, are:
+
+```js
+createBrowserHistory({
+  basename: '',                 // The base URL of the app (see below)
+  forceRefresh: false,          // Set true to force full page refreshes
+  keyLength: 6,                 // The length of location.key
+  // A function to use to confirm navigation with the user (see below)
+  getUserConfirmation: (message, callback) => callback(window.confirm(message))
+})
+
+createMemoryHistory({
+  initialEntries: [ '/' ],  // The initial URLs in the history stack
+  initialIndex: 0,          // The starting index in the history stack
+  keyLength: 6,             // The length of location.key
+  // A function to use to confirm navigation with the user. Required
+  // if you return string prompts from transition hooks (see below)
+  getUserConfirmation: null
+})
+
+createHashHistory({
+  basename: '',                 // The base URL of the app (see below)
+  hashType: 'slash',            // The hash type to use (see below)
+  // A function to use to confirm navigation with the user (see below)
+  getUserConfirmation: (message, callback) => callback(window.confirm(message))
+})
+```
+
 ### Navigation
 
 `history` objects may be used programmatically change the current `location` using the following methods:
@@ -71,6 +99,7 @@ unlisten()
 - `go(n)`
 - `goBack()`
 - `goForward()`
+- `canGo(n)` (only in `createMemoryHistory`)
 
 The `push` and `replace` methods accept two arguments:
 
