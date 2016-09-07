@@ -3,26 +3,13 @@
   <head>
     <script src="/bundle.js"></script>
     <script>
-      var createHistory = History.createHistory
-      var useBeforeUnload = History.useBeforeUnload
+      var createHistory = History.createBrowserHistory
 
       var page = 0
-      var h = useBeforeUnload(createHistory)()
+      var h = createHistory()
 
-      h.listenBeforeUnload(function () {
-        return "Wait, don't leave yet!"
-      })
-
-      h.listenBefore(function (location, callback) {
-        var promptMessage = 'Are you sure you want to go to ' + location.pathname + '?'
-
-        if (Math.random() > 0.5) {
-          callback(promptMessage) // sync
-        } else {
-          setTimeout(function () {
-            callback(promptMessage) // async
-          }, 500)
-        }
+      h.block(function (location, action) {
+        return 'Are you sure you want to go to ' + location.path + '?'
       })
 
       h.listen(function (location) {
@@ -33,9 +20,8 @@
   <body>
     <p>Use the two buttons below to test normal transitions.</p>
     <p>
-      <button onclick="page++; h.pushState({ page: page }, '/' + page)">history.pushState</button>
+      <button onclick="page++; h.push('/' + page, { page: page })">history.push</button>
       <button onclick="h.goBack()">history.goBack</button>
     </p>
-    <p>Close the tab to test <code>beforeunload</code> behavior.</p>
   </body>
 </html>
