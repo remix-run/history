@@ -1,3 +1,8 @@
+## HEAD
+
+- Use block(false) to prevent transitions
+- Better warnings for PUSH with the same path using hash history
+
 ## [v4.0.0-0]
 > Sep 3, 2016
 
