@@ -60,14 +60,14 @@ const createTransitionManager = () => {
     }
   }
 
-  const transitionTo = (...args) =>
+  const notifyListeners = (...args) =>
     listeners.forEach(listener => listener(...args))
 
   return {
     setPrompt,
     confirmTransitionTo,
     appendListener,
-    transitionTo
+    notifyListeners
   }
 }
 

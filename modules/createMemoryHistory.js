@@ -31,7 +31,7 @@ const createMemoryHistory = (props = {}) => {
   const setState = (nextState) => {
     Object.assign(currentState, nextState)
 
-    transitionManager.transitionTo(
+    transitionManager.notifyListeners(
       getCurrentLocation(),
       currentState.action
     )

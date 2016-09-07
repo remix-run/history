@@ -75,7 +75,7 @@ const createBrowserHistory = (props = {}) => {
   const setState = (nextState) => {
     Object.assign(currentState, nextState)
 
-    transitionManager.transitionTo(
+    transitionManager.notifyListeners(
       currentState.location,
       currentState.action
     )
