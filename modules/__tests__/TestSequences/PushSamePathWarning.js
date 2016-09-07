@@ -34,14 +34,6 @@ export default (history, done) => {
 
       // We should see a warning message.
       expect(warningMessage).toMatch('Hash history cannot PUSH the same path; a new entry will not be added to the history stack')
-
-      history.goBack()
-    },
-    (location, action) => {
-      expect(action).toBe('POP')
-      expect(location).toMatch({
-        path: '/'
-      })
     }
   ]
 

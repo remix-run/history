@@ -29,14 +29,6 @@ export default (history, done) => {
       })
 
       expect(location).toNotBe(prevLocation)
-
-      history.goBack()
-    },
-    (location, action) => {
-      expect(action).toBe('POP')
-      expect(location).toMatch({
-        path: '/'
-      })
     }
   ]
 
