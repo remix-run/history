@@ -274,9 +274,6 @@ const createHashHistory = (props = {}) => {
   const goForward = () =>
     go(1)
 
-  const block = (prompt = false) =>
-    transitionManager.setPrompt(prompt)
-
   let listenerCount = 0
 
   const checkDOMListeners = (delta) => {
@@ -286,6 +283,26 @@ const createHashHistory = (props = {}) => {
       addEventListener(window, HashChangeEvent, handleHashChange)
     } else if (listenerCount === 0) {
       removeEventListener(window, HashChangeEvent, handleHashChange)
+    }
+  }
+
+  let isBlocked = false
+
+  const block = (prompt = false) => {
+    const unblock = transitionManager.setPrompt(prompt)
+
+    if (!isBlocked) {
+      checkDOMListeners(1)
+      isBlocked = true
+    }
+
+    return () => {
+      if (isBlocked) {
+        isBlocked = false
+        checkDOMListeners(-1)
+      }
+
+      return unblock()
     }
   }
 

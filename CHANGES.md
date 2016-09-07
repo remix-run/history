@@ -1,5 +1,6 @@
 ## HEAD
 
+- Fix blocking POP transitions in browsers where listen() has not yet been called
 - Use block(false) to prevent transitions
 - Better warnings for PUSH with the same path using hash history
 

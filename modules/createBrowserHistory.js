@@ -239,9 +239,6 @@ const createBrowserHistory = (props = {}) => {
   const goForward = () =>
     go(1)
 
-  const block = (prompt = false) =>
-    transitionManager.setPrompt(prompt)
-
   let listenerCount = 0
 
   const checkDOMListeners = (delta) => {
@@ -257,6 +254,26 @@ const createBrowserHistory = (props = {}) => {
 
       if (needsHashChangeListener)
         removeEventListener(window, HashChangeEvent, handleHashChange)
+    }
+  }
+
+  let isBlocked = false
+
+  const block = (prompt = false) => {
+    const unblock = transitionManager.setPrompt(prompt)
+
+    if (!isBlocked) {
+      checkDOMListeners(1)
+      isBlocked = true
+    }
+
+    return () => {
+      if (isBlocked) {
+        isBlocked = false
+        checkDOMListeners(-1)
+      }
+
+      return unblock()
     }
   }
 
