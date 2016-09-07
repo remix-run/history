@@ -1,4 +1,5 @@
 export BackButtonTransitionHook from './BackButtonTransitionHook'
+export BlockEverything from './BlockEverything'
 export DenyPush from './DenyPush'
 export DenyGoBack from './DenyGoBack'
 export DenyGoForward from './DenyGoForward'

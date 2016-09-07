@@ -64,6 +64,12 @@ describeHistory('a browser history', () => {
         TestSequences.GoForward(history, done)
       })
     })
+
+    describe('block', () => {
+      it('blocks all transitions', (done) => {
+        TestSequences.BlockEverything(history, done)
+      })
+    })
   })
 
   describe('that denies all transitions', () => {
