@@ -8,7 +8,12 @@ const execSteps = (steps, history, done) => {
 
   const execNextStep = (...args) => {
     try {
-      steps[index++](...args)
+      const nextStep = steps[index++]
+
+      if (!nextStep)
+        throw new Error('Test is missing step ' + index)
+
+      nextStep(...args)
 
       if (index === steps.length)
         cleanup()
