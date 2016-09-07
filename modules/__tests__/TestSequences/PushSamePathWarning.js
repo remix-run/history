@@ -45,15 +45,15 @@ export default (history, done) => {
     }
   ]
 
-  let consoleError = console.error
+  let consoleError = console.error // eslint-disable-line no-console
   let warningMessage
 
-  console.error = (message) => {
+  console.error = (message) => { // eslint-disable-line no-console
     warningMessage = message
   }
 
   execSteps(steps, history, (...args) => {
-    console.error = consoleError
+    console.error = consoleError // eslint-disable-line no-console
     done(...args)
   })
 }

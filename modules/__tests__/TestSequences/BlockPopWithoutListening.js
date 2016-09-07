@@ -1,5 +1,4 @@
 import expect from 'expect'
-import execSteps from './execSteps'
 
 export default (history, done) => {
   expect(history.getCurrentLocation()).toMatch({
@@ -9,7 +8,7 @@ export default (history, done) => {
   history.push('/home')
 
   let transitionHookWasCalled = false
-  const unblock = history.block((location, action) => {
+  const unblock = history.block(() => {
     transitionHookWasCalled = true
   })
 
