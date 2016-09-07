@@ -74,7 +74,7 @@ describeHistory('a hash history', () => {
       })
     })
 
-    describe('block a POP without listening', () => {
+    describeGo('block a POP without listening', () => {
       it('receives the next location and action as arguments', (done) => {
         TestSequences.BlockPopWithoutListening(history, done)
       })
