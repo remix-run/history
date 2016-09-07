@@ -1,8 +1,11 @@
-## HEAD
+## [v4.0.0-1]
+> Sep 6, 2016
 
 - Fix blocking POP transitions in browsers where listen() has not yet been called
 - Use block(false) to prevent transitions
 - Better warnings for PUSH with the same path using hash history
+
+[v4.0.0-1]: https://github.com/mjackson/history/compare/v4.0.0-0...v4.0.0-1
 
 ## [v4.0.0-0]
 > Sep 3, 2016
