@@ -66,9 +66,9 @@ The options that each create method takes, along with their default values, are:
 
 ```js
 createBrowserHistory({
-  basename: '',                 // The base URL of the app (see below)
-  forceRefresh: false,          // Set true to force full page refreshes
-  keyLength: 6,                 // The length of location.key
+  basename: '',             // The base URL of the app (see below)
+  forceRefresh: false,      // Set true to force full page refreshes
+  keyLength: 6,             // The length of location.key
   // A function to use to confirm navigation with the user (see below)
   getUserConfirmation: (message, callback) => callback(window.confirm(message))
 })
@@ -83,8 +83,8 @@ createMemoryHistory({
 })
 
 createHashHistory({
-  basename: '',                 // The base URL of the app (see below)
-  hashType: 'slash',            // The hash type to use (see below)
+  basename: '',             // The base URL of the app (see below)
+  hashType: 'slash',        // The hash type to use (see below)
   // A function to use to confirm navigation with the user (see below)
   getUserConfirmation: (message, callback) => callback(window.confirm(message))
 })
@@ -131,12 +131,17 @@ history.goBack()
 `history` lets you register a prompt message that will be shown to the user before location listeners are notified. This allows you to make sure the user wants to leave the current page before they navigate away.
 
 ```js
-// Register a simple prompt message that will be shown the user
-// before they navigate away from the current page.
+// Register a simple prompt message that will be shown the
+// user before they navigate away from the current page.
 const unblock = history.block('Are you sure you want to leave this page?')
 
 // Or use a function that returns the message when it's needed.
-history.block(location => {
+history.block((location, action) => {
+  // The location and action arguments indicate the location
+  // we're transitioning to and how we're getting there.
+
+  // A common use case is to prevent the user from leaving the
+  // page if there's a form they haven't submitted yet.
   if (input.value !== '')
     return 'Are you sure you want to leave this page?'
 })
