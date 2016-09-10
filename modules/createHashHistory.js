@@ -166,9 +166,9 @@ const createHashHistory = (props = {}) => {
 
   // Public interface
 
-  const push = (to) => {
+  const push = (path, state) => {
     const action = 'PUSH'
-    const location = createLocation(to)
+    const location = createLocation(path, state)
 
     warning(
       location.state === undefined,
@@ -208,9 +208,9 @@ const createHashHistory = (props = {}) => {
     })
   }
 
-  const replace = (to) => {
+  const replace = (path, state) => {
     const action = 'REPLACE'
-    const location = createLocation(to)
+    const location = createLocation(path, state)
 
     warning(
       location.state === undefined,

@@ -138,9 +138,9 @@ const createBrowserHistory = (props = {}) => {
 
   // Public interface
 
-  const push = (to) => {
+  const push = (path, state) => {
     const action = 'PUSH'
-    const location = createLocation(to, createKey())
+    const location = createLocation(path, state, createKey())
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
@@ -174,9 +174,9 @@ const createBrowserHistory = (props = {}) => {
     })
   }
 
-  const replace = (to) => {
+  const replace = (path, state) => {
     const action = 'REPLACE'
-    const location = createLocation(to, createKey())
+    const location = createLocation(path, state, createKey())
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)

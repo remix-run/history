@@ -1,3 +1,7 @@
+## HEAD
+
+- Added back two-arg form of `push` and `replace`
+
 ## [v4.0.0-2]
 > Sep 9, 2016
 

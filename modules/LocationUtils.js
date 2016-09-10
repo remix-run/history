@@ -1,8 +1,33 @@
+import warning from 'warning'
 import { parsePath } from './PathUtils'
 
-export const createLocation = (to, key) => {
-  const location = typeof to === 'string' ? parsePath(to) : { ...to }
+// A private helper function used to create location
+// objects from the args to push/replace.
+export const createLocation = (path, state, key) => {
+  let location
+  if (typeof path === 'string') {
+    // Two-arg form: push(path, state)
+    location = parsePath(path)
+    location.state = state
+  } else {
+    // One-arg form: push(location)
+    location = { ...path }
+
+    if (state !== undefined) {
+      if (location.state === undefined) {
+        location.state = state
+      } else {
+        warning(
+          false,
+          'When providing a location-like object with state as the first argument to push/replace ' +
+          'you should avoid providing a second "state" argument; it is ignored'
+        )
+      }
+    }
+  }
+
   location.key = key
+
   return location
 }
 

@@ -32,6 +32,12 @@ describe('a memory history', () => {
       })
     })
 
+    describe('push state', () => {
+      it('calls change listeners with the new location', (done) => {
+        TestSequences.PushState(history, done)
+      })
+    })
+
     describe('replace a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceNewLocation(history, done)
@@ -41,6 +47,12 @@ describe('a memory history', () => {
     describe('replace the same path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceSamePath(history, done)
+      })
+    })
+
+    describe('replace state', () => {
+      it('calls change listeners with the new location', (done) => {
+        TestSequences.ReplaceState(history, done)
       })
     })
 

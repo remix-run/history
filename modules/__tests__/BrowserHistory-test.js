@@ -41,6 +41,12 @@ describeHistory('a browser history', () => {
       })
     })
 
+    describe('push state', () => {
+      it('calls change listeners with the new location', (done) => {
+        TestSequences.PushState(history, done)
+      })
+    })
+
     describe('replace a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceNewLocation(history, done)
@@ -50,6 +56,12 @@ describeHistory('a browser history', () => {
     describe('replace the same path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceSamePath(history, done)
+      })
+    })
+
+    describe('replace state', () => {
+      it('calls change listeners with the new location', (done) => {
+        TestSequences.ReplaceState(history, done)
       })
     })
 

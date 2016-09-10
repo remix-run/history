@@ -131,16 +131,16 @@ The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got
 
 `history` objects may be used programmatically change the current location using the following methods:
 
-- `history.push(to)`
-- `history.replace(to)`
+- `history.push(path, [state])`
+- `history.replace(path, [state])`
 - `history.go(n)`
 - `history.goBack()`
 - `history.goForward()`
 - `history.canGo(n)` (only in `createMemoryHistory`)
 
-The `push` and `replace` methods accept a single `to` argument. This is either:
+The `path` argument to `push`/`replace` may be either:
 
-1. A URL path OR
+1. A URL path *or*
 2. A location-like object with `{ pathname, search, hash, state }`
 
 ```js
