@@ -1,6 +1,9 @@
-## HEAD
+## [v4.0.0]
+> Sep 10, 2016
 
 - Added back two-arg form of `push` and `replace`
+
+[v4.0.0]: https://github.com/mjackson/history/compare/v4.0.0-2...v4.0.0
 
 ## [v4.0.0-2]
 > Sep 9, 2016
