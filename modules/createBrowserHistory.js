@@ -68,6 +68,8 @@ const createBrowserHistory = (props = {}) => {
   const setState = (nextState) => {
     Object.assign(history, nextState)
 
+    history.length = window.history.length
+
     transitionManager.notifyListeners(
       history.location,
       history.action
@@ -272,6 +274,7 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const history = {
+    length: window.history.length,
     action: 'POP',
     location: initialLocation,
     push,

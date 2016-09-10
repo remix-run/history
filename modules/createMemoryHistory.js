@@ -19,6 +19,8 @@ const createMemoryHistory = (props = {}) => {
   const setState = (nextState) => {
     Object.assign(history, nextState)
 
+    history.length = history.entries.length
+
     transitionManager.notifyListeners(
       history.location,
       history.action
@@ -126,6 +128,7 @@ const createMemoryHistory = (props = {}) => {
     transitionManager.appendListener(listener)
 
   const history = {
+    length: entries.length,
     action: 'POP',
     location: entries[index],
     index,
