@@ -53,6 +53,7 @@ const createHashHistory = (props = {}) => {
     'Hash history needs a DOM'
   )
 
+  const globalHistory = window.history
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash()
 
   const {
@@ -79,7 +80,7 @@ const createHashHistory = (props = {}) => {
   const setState = (nextState) => {
     Object.assign(history, nextState)
 
-    history.length = window.history.length
+    history.length = globalHistory.length
 
     transitionManager.notifyListeners(
       history.location,
@@ -251,7 +252,7 @@ const createHashHistory = (props = {}) => {
       'Hash history go(n) causes a full page reload in this browser'
     )
 
-    window.history.go(n)
+    globalHistory.go(n)
   }
 
   const goBack = () =>
@@ -303,7 +304,7 @@ const createHashHistory = (props = {}) => {
   }
 
   const history = {
-    length: window.history.length,
+    length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
     push,

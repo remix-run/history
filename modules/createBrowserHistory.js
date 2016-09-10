@@ -34,6 +34,7 @@ const createBrowserHistory = (props = {}) => {
     'Browser history needs a DOM'
   )
 
+  const globalHistory = window.history
   const canUseHistory = supportsHistory()
   const needsHashChangeListener = !supportsPopStateOnHashChange()
 
@@ -68,7 +69,7 @@ const createBrowserHistory = (props = {}) => {
   const setState = (nextState) => {
     Object.assign(history, nextState)
 
-    history.length = window.history.length
+    history.length = globalHistory.length
 
     transitionManager.notifyListeners(
       history.location,
@@ -152,7 +153,7 @@ const createBrowserHistory = (props = {}) => {
       const url = basename + path
 
       if (canUseHistory) {
-        window.history.pushState({ key, state }, null, url)
+        globalHistory.pushState({ key, state }, null, url)
 
         if (forceRefresh) {
           window.location.href = url
@@ -192,7 +193,7 @@ const createBrowserHistory = (props = {}) => {
       const url = basename + path
 
       if (canUseHistory) {
-        window.history.replaceState({ key, state }, null, url)
+        globalHistory.replaceState({ key, state }, null, url)
 
         if (forceRefresh) {
           window.location.replace(url)
@@ -216,7 +217,7 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const go = (n) => {
-    window.history.go(n)
+    globalHistory.go(n)
   }
 
   const goBack = () =>
@@ -274,7 +275,7 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const history = {
-    length: window.history.length,
+    length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
     push,
