@@ -216,10 +216,14 @@ const history = createHistory({
   basename: '/the/base'
 })
 
+history.listen(location => {
+  console.log(location.pathname) // /home
+})
+
 history.push('/home') // URL is now /the/base/home
 ```
 
-**Note:** This feature is not suppported in `createMemoryHistory`.
+**Note:** `basename` is not suppported in `createMemoryHistory`.
 
 ### Forcing Full Page Refreshes in createBrowserHistory
 
