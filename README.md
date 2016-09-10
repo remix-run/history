@@ -113,7 +113,16 @@ history.listen((location, action) => {
 })
 ```
 
-The `location` is an object with the shape `{ path, state, key }`.
+The `location` object implements a subset of [the `window.location` interface](https://developer.mozilla.org/en-US/docs/Web/API/Location), including:
+
+- `pathname` - The path of the URL
+- `search` - The URL query string
+- `hash` - The URL hash fragment
+
+Locations may also have the following properties:
+
+- `state` - Some extra state for this location that does not reside in the URL (supported in `createBrowserHistory` and `createMemoryHistory`)
+- `key` - A unique string representing this location (supported in `createBrowserHistory` and `createMemoryHistory`)
 
 The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got to the current URL.
 
@@ -121,19 +130,17 @@ The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got
 
 `history` objects may be used programmatically change the current location using the following methods:
 
-- `push(path, state)`
-- `replace(path, state)`
+- `push(to)`
+- `replace(to)`
 - `go(n)`
 - `goBack()`
 - `goForward()`
 - `canGo(n)` (only in `createMemoryHistory`)
 
-The `push` and `replace` methods accept two arguments:
+The `push` and `replace` methods accept a single `to` argument. This is either:
 
-1. The current URL `path` (including the query string and any hash fragment)
-2. The location's state
-
-The "location state" is an arbitrary object of data that may be tied to a particular location. In contrast to query parameters, this method of storing state keeps data out of the URL.
+1. A URL `path` (including the query string and hash fragment) OR
+2. A location-like object with `{ pathname, search, hash, state }`
 
 ```js
 // Push a new entry onto the history stack.
@@ -142,8 +149,14 @@ history.push('/home')
 // Replace the current entry on the history stack.
 history.replace('/profile')
 
-// Push a new entry with state onto the history stack.
-history.push('/about?the=query', { some: 'state' })
+// Push a new entry with state onto the history stack. State may
+// be any arbitrary data tied to a particular location. Unlike the
+// query string, location state does not appear in the URL.
+history.push({
+  pathname: '/about',
+  search: '?the=query',
+  state: { some: 'state' }
+})
 
 // Go back to the previous history entry. The following
 // two lines are synonymous.
