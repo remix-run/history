@@ -1,8 +1,13 @@
-## HEAD
+## [v4.0.0-2]
 
 - Added `history.length`, `history.location`, and `history.action` properties
 - Added `history.index` and `history.entries` properties in memory history
+- Added `location.pathname`, `location.search`, and `location.hash` instead of
+  `location.path` since this is work most people will always have to do
+- Added `parsePath` and `createPath` helpers to top-level exports
 - Removed `history.getCurrentLocation()`
+
+[v4.0.0-2]: https://github.com/mjackson/history/compare/v4.0.0-1...v4.0.0-2
 
 ## [v4.0.0-1]
 > Sep 6, 2016
