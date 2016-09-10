@@ -54,7 +54,8 @@ const location = history.location
 
 // Listen for changes to the current location.
 const unlisten = history.listen((location, action) => {
-  console.log(action, location.path, location.state)
+  // location is an object like window.location
+  console.log(action, location.pathname, location.state)
 })
 
 // Use push, replace, and go to navigate around.
@@ -108,7 +109,7 @@ You can listen for changes to the current location using `history.listen`:
 
 ```js
 history.listen((location, action) => {
-  console.log(`The current URL is ${location.path}`)
+  console.log(`The current URL is ${location.pathname}${location.search}${location.hash}`)
   console.log(`The last navigation action was ${action}`)
 })
 ```
