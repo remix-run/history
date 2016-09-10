@@ -244,7 +244,7 @@ const history = createHashHistory({
 history.push('/home') // window.location.hash is #/home
 
 const history = createHashHistory({
-  hashType: 'noslash' // Omit's the leading slash
+  hashType: 'noslash' // Omit the leading slash
 })
 
 history.push('/home') // window.location.hash is #home
