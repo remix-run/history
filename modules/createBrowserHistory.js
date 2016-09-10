@@ -146,14 +146,14 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const path = basename + createPath(location)
+      const url = basename + createPath(location)
       const { key, state } = location
 
       if (canUseHistory) {
-        globalHistory.pushState({ key, state }, null, path)
+        globalHistory.pushState({ key, state }, null, url)
 
         if (forceRefresh) {
-          window.location.href = path
+          window.location.href = url
         } else {
           const prevIndex = allKeys.indexOf(history.location.key)
           const nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
@@ -169,7 +169,7 @@ const createBrowserHistory = (props = {}) => {
           'Browser history cannot push state in browsers that do not support HTML5 history'
         )
 
-        window.location.href = path
+        window.location.href = url
       }
     })
   }
@@ -182,14 +182,14 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const path = basename + createPath(location)
+      const url = basename + createPath(location)
       const { key, state } = location
 
       if (canUseHistory) {
-        globalHistory.replaceState({ key, state }, null, path)
+        globalHistory.replaceState({ key, state }, null, url)
 
         if (forceRefresh) {
-          window.location.replace(path)
+          window.location.replace(url)
         } else {
           const prevIndex = allKeys.indexOf(history.location.key)
 
@@ -204,7 +204,7 @@ const createBrowserHistory = (props = {}) => {
           'Browser history cannot replace state in browsers that do not support HTML5 history'
         )
 
-        window.location.replace(path)
+        window.location.replace(url)
       }
     })
   }
