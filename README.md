@@ -138,7 +138,7 @@ The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got
 - `history.goForward()`
 - `history.canGo(n)` (only in `createMemoryHistory`)
 
-The `path` argument to `push`/`replace` may be either:
+When using `push` or `replace` you can either specify both the URL path and state as separate arguments or include everything in a single location-like object as the first argument.
 
 1. A URL path *or*
 2. A location-like object with `{ pathname, search, hash, state }`
@@ -147,14 +147,14 @@ The `path` argument to `push`/`replace` may be either:
 // Push a new entry onto the history stack.
 history.push('/home')
 
-// Replace the current entry on the history stack.
-history.replace('/profile')
+// Push a new entry onto the history stack with a query string
+// and some state. Location state does not appear in the URL.
+history.push('/home?the=query', { some: 'state' })
 
-// Push a new entry with state onto the history stack. State may
-// be any arbitrary data tied to a particular location. Unlike the
-// query string, location state does not appear in the URL.
+// If you prefer, use a single location-like object to specify both
+// the URL and state. This is equivalent to the example above.
 history.push({
-  pathname: '/about',
+  pathname: '/home',
   search: '?the=query',
   state: { some: 'state' }
 })
