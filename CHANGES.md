@@ -1,3 +1,9 @@
+## HEAD
+
+- Added `history.length`, `history.location`, and `history.action` properties
+- Added `history.index` and `history.entries` properties in memory history
+- Removed `history.getCurrentLocation()`
+
 ## [v4.0.0-1]
 > Sep 6, 2016
 
