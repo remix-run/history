@@ -42,13 +42,15 @@ You can find the library on `window.History`.
 
 Depending on the method you want to use to keep track of history, you'll `import` (or `require`) one of these methods directly from the root directory (i.e. `history/createBrowserHistory`). The remainder of this document uses the term `createHistory` to refer to any of these implementations.
 
+Basic usage looks like this:
+
 ```js
 import createHistory from 'history/createBrowserHistory'
 
 const history = createHistory()
 
 // Get the current location.
-const location = history.getCurrentLocation()
+const location = history.location
 
 // Listen for changes to the current location.
 const unlisten = history.listen((location, action) => {
@@ -62,7 +64,7 @@ history.push('/home', { some: 'state' })
 unlisten()
 ```
 
-The options that each create method takes, along with their default values, are:
+The options that each `create` method takes, along with its default values, are:
 
 ```js
 createBrowserHistory({
@@ -90,9 +92,34 @@ createHashHistory({
 })
 ```
 
+### Properties
+
+Each `history` object has the following properties:
+
+- `length` - The number of entries in the history stack
+- `location` - The current location (see below)
+- `action` - The current navigation action (see below)
+
+Additionally, `createMemoryHistory` provides `index` and `entries` properties that let you inspect the history stack.
+
+### Listening
+
+You can listen for changes to the current location using `history.listen`:
+
+```js
+history.listen((location, action) => {
+  console.log(`The current URL is ${location.path}`)
+  console.log(`The last navigation action was ${action}`)
+})
+```
+
+The `location` is an object with the shape `{ path, state, key }`.
+
+The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got to the current URL.
+
 ### Navigation
 
-`history` objects may be used programmatically change the current `location` using the following methods:
+`history` objects may be used programmatically change the current location using the following methods:
 
 - `push(path, state)`
 - `replace(path, state)`
