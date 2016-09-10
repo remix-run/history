@@ -39,8 +39,14 @@ describeHistory('a hash history', () => {
     })
 
     describe('push the same path', () => {
-      it('calls change listeners with the same location and a warning', (done) => {
+      it('calls change listeners with the same location and emits a warning', (done) => {
         TestSequences.PushSamePathWarning(history, done)
+      })
+    })
+
+    describe('push state', () => {
+      it('calls change listeners with the new location and emits a warning', (done) => {
+        TestSequences.PushStateWarning(history, done)
       })
     })
 
@@ -53,6 +59,12 @@ describeHistory('a hash history', () => {
     describe('replace the same path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceSamePath(history, done)
+      })
+    })
+
+    describe('replace state', () => {
+      it('calls change listeners with the new location and emits a warning', (done) => {
+        TestSequences.ReplaceStateWarning(history, done)
       })
     })
 

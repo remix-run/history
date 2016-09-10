@@ -167,13 +167,13 @@ const createHashHistory = (props = {}) => {
   // Public interface
 
   const push = (path, state) => {
-    const action = 'PUSH'
-    const location = createLocation(path, state)
-
     warning(
-      location.state === undefined,
-      'Hash history cannot push state; it will be dropped'
+      state === undefined,
+      'Hash history cannot push state; it is ignored'
     )
+
+    const action = 'PUSH'
+    const location = createLocation(path)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
@@ -209,13 +209,13 @@ const createHashHistory = (props = {}) => {
   }
 
   const replace = (path, state) => {
-    const action = 'REPLACE'
-    const location = createLocation(path, state)
-
     warning(
-      location.state === undefined,
-      'Hash history cannot replace state; it will be dropped'
+      state === undefined,
+      'Hash history cannot replace state; it is ignored'
     )
+
+    const action = 'REPLACE'
+    const location = createLocation(path)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
