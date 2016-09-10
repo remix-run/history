@@ -97,11 +97,11 @@ createHashHistory({
 
 Each `history` object has the following properties:
 
-- `length` - The number of entries in the history stack
-- `location` - The current location (see below)
-- `action` - The current navigation action (see below)
+- `history.length` - The number of entries in the history stack
+- `history.location` - The current location (see below)
+- `history.action` - The current navigation action (see below)
 
-Additionally, `createMemoryHistory` provides `index` and `entries` properties that let you inspect the history stack.
+Additionally, `createMemoryHistory` provides `history.index` and `history.entries` properties that let you inspect the history stack.
 
 ### Listening
 
@@ -116,14 +116,14 @@ history.listen((location, action) => {
 
 The `location` object implements a subset of [the `window.location` interface](https://developer.mozilla.org/en-US/docs/Web/API/Location), including:
 
-- `pathname` - The path of the URL
-- `search` - The URL query string
-- `hash` - The URL hash fragment
+- `location.pathname` - The path of the URL
+- `location.search` - The URL query string
+- `location.hash` - The URL hash fragment
 
 Locations may also have the following properties:
 
-- `state` - Some extra state for this location that does not reside in the URL (supported in `createBrowserHistory` and `createMemoryHistory`)
-- `key` - A unique string representing this location (supported in `createBrowserHistory` and `createMemoryHistory`)
+- `location.state` - Some extra state for this location that does not reside in the URL (supported in `createBrowserHistory` and `createMemoryHistory`)
+- `location.key` - A unique string representing this location (supported in `createBrowserHistory` and `createMemoryHistory`)
 
 The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got to the current URL.
 
@@ -131,16 +131,16 @@ The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got
 
 `history` objects may be used programmatically change the current location using the following methods:
 
-- `push(to)`
-- `replace(to)`
-- `go(n)`
-- `goBack()`
-- `goForward()`
-- `canGo(n)` (only in `createMemoryHistory`)
+- `history.push(to)`
+- `history.replace(to)`
+- `history.go(n)`
+- `history.goBack()`
+- `history.goForward()`
+- `history.canGo(n)` (only in `createMemoryHistory`)
 
 The `push` and `replace` methods accept a single `to` argument. This is either:
 
-1. A URL `path` (including the query string and hash fragment) OR
+1. A URL path OR
 2. A location-like object with `{ pathname, search, hash, state }`
 
 ```js
