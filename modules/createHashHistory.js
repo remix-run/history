@@ -74,28 +74,14 @@ const createHashHistory = (props = {}) => {
     }
   }
 
-  // Ensure the hash is encoded properly before doing anything else.
-  const path = getHashPath()
-  const encodedPath = encodePath(path)
-
-  if (path !== encodedPath)
-    replaceHashPath(encodedPath)
-
-  const initialLocation = createLocation()
-  const currentState = {
-    action: 'POP',
-    location: initialLocation,
-    allPaths: [ initialLocation.path ]
-  }
-
   const transitionManager = createTransitionManager()
 
   const setState = (nextState) => {
-    Object.assign(currentState, nextState)
+    Object.assign(history, nextState)
 
     transitionManager.notifyListeners(
-      currentState.location,
-      currentState.action
+      history.location,
+      history.action
     )
   }
 
@@ -111,7 +97,7 @@ const createHashHistory = (props = {}) => {
       replaceHashPath(encodedPath)
     } else {
       const location = createLocation()
-      const prevLocation = currentState.location
+      const prevLocation = history.location
 
       if (!forceNextPop && locationsAreEqual(prevLocation, location))
         return // A hashchange doesn't always == location change.
@@ -143,7 +129,7 @@ const createHashHistory = (props = {}) => {
   }
 
   const revertPop = (fromLocation) => {
-    const { location: toLocation, allPaths } = currentState
+    const toLocation = history.location
 
     // TODO: We could probably make this more reliable by
     // keeping a list of paths we've seen in sessionStorage.
@@ -167,10 +153,17 @@ const createHashHistory = (props = {}) => {
     }
   }
 
-  // Public interface
+  // Ensure the hash is encoded properly before doing anything else.
+  const path = getHashPath()
+  const encodedPath = encodePath(path)
 
-  const getCurrentLocation = () =>
-    currentState.location || createLocation()
+  if (path !== encodedPath)
+    replaceHashPath(encodedPath)
+
+  const initialLocation = createLocation()
+  let allPaths = [ initialLocation.path ]
+
+  // Public interface
 
   const push = (path, state) => {
     warning(
@@ -197,17 +190,13 @@ const createHashHistory = (props = {}) => {
         ignorePath = path
         pushHashPath(encodedPath)
 
-        const prevPaths = currentState.allPaths
-        const prevIndex = prevPaths.lastIndexOf(currentState.location.path)
+        const prevIndex = allPaths.lastIndexOf(history.location.path)
+        const nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
 
-        const allPaths = prevPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
-        allPaths.push(location.path)
+        nextPaths.push(location.path)
+        allPaths = nextPaths
 
-        setState({
-          action,
-          location,
-          allPaths
-        })
+        setState({ action, location })
       } else {
         warning(
           false,
@@ -245,17 +234,12 @@ const createHashHistory = (props = {}) => {
         replaceHashPath(encodedPath)
       }
 
-      const allPaths = currentState.allPaths.slice(0)
-      const prevIndex = allPaths.indexOf(currentState.location.path)
+      const prevIndex = allPaths.indexOf(history.location.path)
 
       if (prevIndex !== -1)
         allPaths[prevIndex] = location.path
 
-      setState({
-        action,
-        location,
-        allPaths
-      })
+      setState({ action, location })
     })
   }
 
@@ -316,8 +300,9 @@ const createHashHistory = (props = {}) => {
     }
   }
 
-  return {
-    getCurrentLocation,
+  const history = {
+    action: 'POP',
+    location: initialLocation,
     push,
     replace,
     go,
@@ -326,6 +311,8 @@ const createHashHistory = (props = {}) => {
     block,
     listen
   }
+
+  return history
 }
 
 export default createHashHistory

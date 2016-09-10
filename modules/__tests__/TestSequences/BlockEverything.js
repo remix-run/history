@@ -12,7 +12,7 @@ export default (history, done) => {
 
       history.push('/home')
 
-      expect(history.getCurrentLocation()).toMatch({
+      expect(history.location).toMatch({
         path: '/'
       })
 

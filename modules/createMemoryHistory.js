@@ -14,36 +14,27 @@ const createMemoryHistory = (props = {}) => {
     keyLength = 6
   } = props
 
-  // Normalize entries based on type.
-  const entries = initialEntries.map(entry => (
-    typeof entry === 'string' ? { path: entry } : entry
-  ))
-
-  const currentState = {
-    prevIndex: null,
-    action: 'POP',
-    index: clamp(initialIndex, 0, entries.length - 1),
-    entries
-  }
-
   const transitionManager = createTransitionManager()
 
   const setState = (nextState) => {
-    Object.assign(currentState, nextState)
+    Object.assign(history, nextState)
 
     transitionManager.notifyListeners(
-      getCurrentLocation(),
-      currentState.action
+      history.location,
+      history.action
     )
   }
 
   const createKey = () =>
     Math.random().toString(36).substr(2, keyLength)
 
-  // Public interface
+  const index = clamp(initialIndex, 0, initialEntries.length - 1)
+  // Normalize entries based on type.
+  const entries = initialEntries.map(entry => (
+    typeof entry === 'string' ? { path: entry } : entry
+  ))
 
-  const getCurrentLocation = () =>
-    currentState.entries[currentState.index]
+  // Public interface
 
   const push = (path, state) => {
     const action = 'PUSH'
@@ -58,21 +49,21 @@ const createMemoryHistory = (props = {}) => {
       if (!ok)
         return
 
-      const prevIndex = currentState.index
+      const prevIndex = history.index
       const nextIndex = prevIndex + 1
 
-      const entries = currentState.entries.slice(0)
-      if (entries.length > nextIndex) {
-        entries.splice(nextIndex, entries.length - nextIndex, location)
+      const nextEntries = history.entries.slice(0)
+      if (nextEntries.length > nextIndex) {
+        nextEntries.splice(nextIndex, nextEntries.length - nextIndex, location)
       } else {
-        entries.push(location)
+        nextEntries.push(location)
       }
 
       setState({
-        prevIndex: currentState.index,
         action,
+        location: nextEntries[nextIndex],
         index: nextIndex,
-        entries
+        entries: nextEntries
       })
     })
   }
@@ -90,31 +81,23 @@ const createMemoryHistory = (props = {}) => {
       if (!ok)
         return
 
-      const prevIndex = currentState.index
-      const entries = currentState.entries.slice(0)
+      history.entries[history.index] = location
 
-      entries[prevIndex] = location
-
-      setState({
-        prevIndex: currentState.index,
-        action,
-        entries
-      })
+      setState({ action, location })
     })
   }
 
   const go = (n) => {
-    const { index, entries } = currentState
-    const nextIndex = clamp(index + n, 0, entries.length - 1)
+    const nextIndex = clamp(history.index + n, 0, history.entries.length - 1)
 
     const action = 'POP'
-    const location = entries[nextIndex]
+    const location = history.entries[nextIndex]
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (ok) {
         setState({
-          prevIndex: index,
           action,
+          location,
           index: nextIndex
         })
       } else {
@@ -132,10 +115,8 @@ const createMemoryHistory = (props = {}) => {
     go(1)
 
   const canGo = (n) => {
-    const { index, entries } = currentState
-    const nextIndex = index + n
-
-    return nextIndex >= 0 && nextIndex < entries.length
+    const nextIndex = history.index + n
+    return nextIndex >= 0 && nextIndex < history.entries.length
   }
 
   const block = (prompt = false) =>
@@ -144,8 +125,11 @@ const createMemoryHistory = (props = {}) => {
   const listen = (listener) =>
     transitionManager.appendListener(listener)
 
-  return {
-    getCurrentLocation,
+  const history = {
+    action: 'POP',
+    location: entries[index],
+    index,
+    entries,
     push,
     replace,
     go,
@@ -155,6 +139,8 @@ const createMemoryHistory = (props = {}) => {
     block,
     listen
   }
+
+  return history
 }
 
 export default createMemoryHistory

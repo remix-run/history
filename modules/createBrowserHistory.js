@@ -44,7 +44,7 @@ const createBrowserHistory = (props = {}) => {
     keyLength = 6
   } = props
 
-  const createLocation = (historyState) => {
+  const getDOMLocation = (historyState) => {
     const { key, state } = (historyState || {})
     const { pathname, search, hash } = window.location
 
@@ -63,21 +63,14 @@ const createBrowserHistory = (props = {}) => {
   const createKey = () =>
     Math.random().toString(36).substr(2, keyLength)
 
-  const initialLocation = createLocation(getHistoryState())
-  const currentState = {
-    action: 'POP',
-    location: initialLocation,
-    allKeys: [ initialLocation.key ]
-  }
-  
   const transitionManager = createTransitionManager()
 
   const setState = (nextState) => {
-    Object.assign(currentState, nextState)
+    Object.assign(history, nextState)
 
     transitionManager.notifyListeners(
-      currentState.location,
-      currentState.action
+      history.location,
+      history.action
     )
   }
 
@@ -85,11 +78,11 @@ const createBrowserHistory = (props = {}) => {
     if (event.state === undefined)
       return // Ignore extraneous popstate events in WebKit.
 
-    handlePop(createLocation(event.state))
+    handlePop(getDOMLocation(event.state))
   }
 
   const handleHashChange = () => {
-    handlePop(createLocation(getHistoryState()))
+    handlePop(getDOMLocation(getHistoryState()))
   }
 
   let forceNextPop = false
@@ -112,7 +105,7 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const revertPop = (fromLocation) => {
-    const { location: toLocation, allKeys } = currentState
+    const toLocation = history.location
 
     // TODO: We could probably make this more reliable by
     // keeping a list of keys we've seen in sessionStorage.
@@ -136,10 +129,10 @@ const createBrowserHistory = (props = {}) => {
     }
   }
 
-  // Public interface
+  const initialLocation = getDOMLocation(getHistoryState())
+  let allKeys = [ initialLocation.key ]
 
-  const getCurrentLocation = () =>
-    currentState.location || createLocation(getHistoryState())
+  // Public interface
 
   const push = (path, state) => {
     const action = 'PUSH'
@@ -162,17 +155,13 @@ const createBrowserHistory = (props = {}) => {
         if (forceRefresh) {
           window.location.href = url
         } else {
-          const prevKeys = currentState.allKeys
-          const prevIndex = prevKeys.indexOf(currentState.location.key)
+          const prevIndex = allKeys.indexOf(history.location.key)
+          const nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
 
-          const allKeys = prevKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
-          allKeys.push(location.key)
+          nextKeys.push(location.key)
+          allKeys = nextKeys
 
-          setState({
-            action,
-            location,
-            allKeys
-          })
+          setState({ action, location })
         }
       } else {
         warning(
@@ -206,17 +195,12 @@ const createBrowserHistory = (props = {}) => {
         if (forceRefresh) {
           window.location.replace(url)
         } else {
-          const allKeys = currentState.allKeys.slice(0)
-          const prevIndex = allKeys.indexOf(currentState.location.key)
+          const prevIndex = allKeys.indexOf(history.location.key)
 
           if (prevIndex !== -1)
             allKeys[prevIndex] = location.key
 
-          setState({
-            action,
-            location,
-            allKeys
-          })
+          setState({ action, location })
         }
       } else {
         warning(
@@ -287,8 +271,9 @@ const createBrowserHistory = (props = {}) => {
     }
   }
 
-  return {
-    getCurrentLocation,
+  const history = {
+    action: 'POP',
+    location: initialLocation,
     push,
     replace,
     go,
@@ -297,6 +282,8 @@ const createBrowserHistory = (props = {}) => {
     block,
     listen
   }
+
+  return history
 }
 
 export default createBrowserHistory

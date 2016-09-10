@@ -24,7 +24,7 @@ const execSteps = (steps, history, done) => {
 
   if (steps.length) {
     unlisten = history.listen(execNextStep)
-    execNextStep(history.getCurrentLocation())
+    execNextStep(history.location)
   } else {
     done()
   }
