@@ -1,4 +1,5 @@
 ## [v4.0.0-2]
+> Sep 9, 2016
 
 - Added `history.length`, `history.location`, and `history.action` properties
 - Added `history.index` and `history.entries` properties in memory history
