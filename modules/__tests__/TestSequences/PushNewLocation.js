@@ -5,7 +5,7 @@ export default (history, done) => {
   const steps = [
     (location) => {
       expect(location).toMatch({
-        path: '/'
+        pathname: '/'
       })
 
       history.push('/home?the=query#the-hash')
@@ -13,7 +13,9 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('PUSH')
       expect(location).toMatch({
-        path: '/home?the=query#the-hash'
+        pathname: '/home',
+        search: '?the=query',
+        hash: '#the-hash'
       })
     }
   ]

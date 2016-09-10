@@ -7,7 +7,7 @@ export default (history, done) => {
   const steps = [
     (location) => {
       expect(location).toMatch({
-        path: '/'
+        pathname: '/'
       })
 
       history.replace('/home')
@@ -15,7 +15,7 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('REPLACE')
       expect(location).toMatch({
-        path: '/home'
+        pathname: '/home'
       })
 
       prevLocation = location
@@ -25,7 +25,7 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('REPLACE')
       expect(location).toMatch({
-        path: '/home'
+        pathname: '/home'
       })
 
       expect(location).toNotBe(prevLocation)

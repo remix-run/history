@@ -6,7 +6,7 @@ export default (history, done) => {
   const steps = [
     (location) => {
       expect(location).toMatch({
-        path: '/'
+        pathname: '/'
       })
 
       history.push('/home')
@@ -14,7 +14,7 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('PUSH')
       expect(location).toMatch({
-        path: '/home'
+        pathname: '/home'
       })
 
       unblock = history.block(() => {
@@ -26,7 +26,7 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('POP')
       expect(location).toMatch({
-        path: '/'
+        pathname: '/'
       })
 
       expect(hookWasCalled).toBe(true)

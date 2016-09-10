@@ -1,7 +1,7 @@
 import warning from 'warning'
 import invariant from 'invariant'
-import { locationsAreEqual } from './LocationUtils'
-import { addLeadingSlash, stripLeadingSlash, stripPrefix } from './PathUtils'
+import { createLocation, locationsAreEqual } from './LocationUtils'
+import { addLeadingSlash, stripLeadingSlash, stripPrefix, parsePath, createPath } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import { canUseDOM } from './ExecutionEnvironment'
 import {
@@ -64,15 +64,13 @@ const createHashHistory = (props = {}) => {
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 
-  const createLocation = () => {
+  const getDOMLocation = () => {
     let path = decodePath(getHashPath())
 
     if (basename)
       path = stripPrefix(path, basename)
 
-    return {
-      path
-    }
+    return parsePath(path)
   }
 
   const transitionManager = createTransitionManager()
@@ -99,13 +97,13 @@ const createHashHistory = (props = {}) => {
       // Ensure we always have a properly-encoded hash.
       replaceHashPath(encodedPath)
     } else {
-      const location = createLocation()
+      const location = getDOMLocation()
       const prevLocation = history.location
 
       if (!forceNextPop && locationsAreEqual(prevLocation, location))
         return // A hashchange doesn't always == location change.
 
-      if (ignorePath === location.path)
+      if (ignorePath === createPath(location))
         return // Ignore this change; we already setState in push/replace.
 
       ignorePath = null
@@ -138,12 +136,12 @@ const createHashHistory = (props = {}) => {
     // keeping a list of paths we've seen in sessionStorage.
     // Instead, we just default to 0 for paths we don't know.
 
-    let toIndex = allPaths.lastIndexOf(toLocation.path)
+    let toIndex = allPaths.lastIndexOf(createPath(toLocation))
 
     if (toIndex === -1)
       toIndex = 0
 
-    let fromIndex = allPaths.lastIndexOf(fromLocation.path)
+    let fromIndex = allPaths.lastIndexOf(createPath(fromLocation))
 
     if (fromIndex === -1)
       fromIndex = 0
@@ -163,26 +161,25 @@ const createHashHistory = (props = {}) => {
   if (path !== encodedPath)
     replaceHashPath(encodedPath)
 
-  const initialLocation = createLocation()
-  let allPaths = [ initialLocation.path ]
+  const initialLocation = getDOMLocation()
+  let allPaths = [ createPath(initialLocation) ]
 
   // Public interface
 
-  const push = (path, state) => {
+  const push = (to) => {
+    const action = 'PUSH'
+    const location = createLocation(to)
+
     warning(
-      state === undefined,
+      location.state === undefined,
       'Hash history cannot push state; it will be dropped'
     )
-
-    const action = 'PUSH'
-    const location = {
-      path
-    }
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
         return
 
+      const path = createPath(location)
       const encodedPath = encodePath(basename + path)
       const hashChanged = getHashPath() !== encodedPath
 
@@ -193,10 +190,10 @@ const createHashHistory = (props = {}) => {
         ignorePath = path
         pushHashPath(encodedPath)
 
-        const prevIndex = allPaths.lastIndexOf(history.location.path)
+        const prevIndex = allPaths.lastIndexOf(createPath(history.location))
         const nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
 
-        nextPaths.push(location.path)
+        nextPaths.push(path)
         allPaths = nextPaths
 
         setState({ action, location })
@@ -211,21 +208,20 @@ const createHashHistory = (props = {}) => {
     })
   }
 
-  const replace = (path, state) => {
+  const replace = (to) => {
+    const action = 'REPLACE'
+    const location = createLocation(to)
+
     warning(
-      state === undefined,
+      location.state === undefined,
       'Hash history cannot replace state; it will be dropped'
     )
-
-    const action = 'REPLACE'
-    const location = {
-      path
-    }
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
         return
 
+      const path = createPath(location)
       const encodedPath = encodePath(basename + path)
       const hashChanged = getHashPath() !== encodedPath
 
@@ -237,10 +233,10 @@ const createHashHistory = (props = {}) => {
         replaceHashPath(encodedPath)
       }
 
-      const prevIndex = allPaths.indexOf(history.location.path)
+      const prevIndex = allPaths.indexOf(createPath(history.location))
 
       if (prevIndex !== -1)
-        allPaths[prevIndex] = location.path
+        allPaths[prevIndex] = path
 
       setState({ action, location })
     })

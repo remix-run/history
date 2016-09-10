@@ -1,3 +1,4 @@
+import { createLocation } from './LocationUtils'
 import createTransitionManager from './createTransitionManager'
 
 const clamp = (n, lowerBound, upperBound) =>
@@ -31,21 +32,15 @@ const createMemoryHistory = (props = {}) => {
     Math.random().toString(36).substr(2, keyLength)
 
   const index = clamp(initialIndex, 0, initialEntries.length - 1)
-  // Normalize entries based on type.
-  const entries = initialEntries.map(entry => (
-    typeof entry === 'string' ? { path: entry } : entry
+  const entries = initialEntries.map((entry, index) => (
+    typeof entry === 'string' ? createLocation(entry, index ? createKey() : undefined) : entry
   ))
 
   // Public interface
 
-  const push = (path, state) => {
+  const push = (to) => {
     const action = 'PUSH'
-    const key = createKey()
-    const location = {
-      path,
-      state,
-      key
-    }
+    const location = createLocation(to, createKey())
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
@@ -63,21 +58,16 @@ const createMemoryHistory = (props = {}) => {
 
       setState({
         action,
-        location: nextEntries[nextIndex],
+        location,
         index: nextIndex,
         entries: nextEntries
       })
     })
   }
 
-  const replace = (path, state) => {
+  const replace = (to) => {
     const action = 'REPLACE'
-    const key = createKey()
-    const location = {
-      path,
-      state,
-      key
-    }
+    const location = createLocation(to, createKey())
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)

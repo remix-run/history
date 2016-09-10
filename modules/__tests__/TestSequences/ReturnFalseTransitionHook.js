@@ -5,12 +5,12 @@ export default (history, done) => {
   const steps = [
     (location) => {
       expect(location).toMatch({
-        path: '/'
+        pathname: '/'
       })
 
       const unblock = history.block(nextLocation => {
         expect(nextLocation).toMatch({
-          path: '/home'
+          pathname: '/home'
         })
 
         // Cancel the transition.
@@ -20,7 +20,7 @@ export default (history, done) => {
       history.push('/home')
 
       expect(history.location).toMatch({
-        path: '/'
+        pathname: '/'
       })
 
       unblock()

@@ -1,6 +1,7 @@
 import warning from 'warning'
 import invariant from 'invariant'
-import { stripPrefix } from './PathUtils'
+import { createLocation } from './LocationUtils'
+import { stripPrefix, parsePath, createPath } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import { canUseDOM } from './ExecutionEnvironment'
 import {
@@ -55,7 +56,7 @@ const createBrowserHistory = (props = {}) => {
       path = stripPrefix(path, basename)
 
     return {
-      path,
+      ...parsePath(path),
       state,
       key
     }
@@ -137,26 +138,22 @@ const createBrowserHistory = (props = {}) => {
 
   // Public interface
 
-  const push = (path, state) => {
+  const push = (to) => {
     const action = 'PUSH'
-    const key = createKey()
-    const location = {
-      path,
-      state,
-      key
-    }
+    const location = createLocation(to, createKey())
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
         return
 
-      const url = basename + path
+      const path = basename + createPath(location)
+      const { key, state } = location
 
       if (canUseHistory) {
-        globalHistory.pushState({ key, state }, null, url)
+        globalHistory.pushState({ key, state }, null, path)
 
         if (forceRefresh) {
-          window.location.href = url
+          window.location.href = path
         } else {
           const prevIndex = allKeys.indexOf(history.location.key)
           const nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
@@ -172,31 +169,27 @@ const createBrowserHistory = (props = {}) => {
           'Browser history cannot push state in browsers that do not support HTML5 history'
         )
 
-        window.location.href = url
+        window.location.href = path
       }
     })
   }
 
-  const replace = (path, state) => {
+  const replace = (to) => {
     const action = 'REPLACE'
-    const key = createKey()
-    const location = {
-      path,
-      state,
-      key
-    }
+    const location = createLocation(to, createKey())
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
         return
 
-      const url = basename + path
+      const path = basename + createPath(location)
+      const { key, state } = location
 
       if (canUseHistory) {
-        globalHistory.replaceState({ key, state }, null, url)
+        globalHistory.replaceState({ key, state }, null, path)
 
         if (forceRefresh) {
-          window.location.replace(url)
+          window.location.replace(path)
         } else {
           const prevIndex = allKeys.indexOf(history.location.key)
 
@@ -211,7 +204,7 @@ const createBrowserHistory = (props = {}) => {
           'Browser history cannot replace state in browsers that do not support HTML5 history'
         )
 
-        window.location.replace(url)
+        window.location.replace(path)
       }
     })
   }

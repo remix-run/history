@@ -2,7 +2,7 @@ import expect from 'expect'
 
 export default (history, done) => {
   expect(history.location).toMatch({
-    path: '/'
+    pathname: '/'
   })
 
   history.push('/home')

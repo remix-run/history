@@ -1,3 +1,11 @@
+import { parsePath } from './PathUtils'
+
+export const createLocation = (to, key) => {
+  const location = typeof to === 'string' ? parsePath(to) : { ...to }
+  location.key = key
+  return location
+}
+
 const looseEqual = (a, b) => {
   if (a == null)
     return a == b
@@ -27,4 +35,8 @@ const looseEqual = (a, b) => {
 }
 
 export const locationsAreEqual = (a, b) =>
-  a.path === b.path && a.key === b.key && looseEqual(a.state, b.state)
+  a.pathname === b.pathname &&
+  a.search === b.search &&
+  a.hash === b.hash &&
+  a.key === b.key &&
+  looseEqual(a.state, b.state)

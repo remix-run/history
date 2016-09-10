@@ -6,7 +6,7 @@ export default (history, done) => {
   const steps = [
     (location) => {
       expect(location).toMatch({
-        path: '/'
+        pathname: '/'
       })
 
       history.push('/home')
@@ -14,12 +14,12 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('PUSH')
       expect(location).toMatch({
-        path: '/home'
+        pathname: '/home'
       })
 
       unblock = history.block(nextLocation => {
         expect(nextLocation).toMatch({
-          path: '/'
+          pathname: '/'
         })
 
         return 'Are you sure?'
@@ -30,7 +30,7 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('PUSH')
       expect(location).toMatch({
-        path: '/home'
+        pathname: '/home'
       })
 
       unblock()
