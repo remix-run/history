@@ -1,7 +1,7 @@
 {
   "name": "history",
   "version": "4.0.0",
-  "description": "Manage browser history with JavaScript",
+  "description": "Manage session history with JavaScript",
   "repository": "mjackson/history",
   "author": "Michael Jackson",
   "license": "MIT",
