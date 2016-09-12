@@ -40,7 +40,7 @@ You can find the library on `window.History`.
 - `createMemoryHistory` is used as a reference implementation and may also be used in non-DOM environments, like [React Native](https://facebook.github.io/react-native/)
 - `createHashHistory` is for use in legacy web browsers
 
-Depending on the method you want to use to keep track of history, you'll `import` (or `require`) one of these methods directly from the root directory (i.e. `history/createBrowserHistory`). The remainder of this document uses the term `createHistory` to refer to any of these implementations.
+Depending on the method you want to use to keep track of history, you'll `import` (or `require`) one of these methods directly from the package root (i.e. `history/createBrowserHistory`). The remainder of this document uses the term `createHistory` to refer to any of these implementations.
 
 Basic usage looks like this:
 
