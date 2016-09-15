@@ -1,4 +1,3 @@
-import warning from 'warning'
 import { parsePath } from './PathUtils'
 
 // A private helper function used to create location
@@ -22,17 +21,8 @@ export const createLocation = (path, state, key) => {
     if (location.hash && location.hash.charAt(0) !== '#')
       location.hash = '#' + location.hash
 
-    if (state !== undefined) {
-      if (location.state === undefined) {
-        location.state = state
-      } else {
-        warning(
-          false,
-          'When providing a location-like object with state as the first argument to push/replace ' +
-          'you should avoid providing a second "state" argument; it is ignored'
-        )
-      }
-    }
+    if (state !== undefined && location.state === undefined)
+      location.state = state
   }
 
   location.key = key

@@ -1,3 +1,4 @@
+import warning from 'warning'
 import { createLocation } from './LocationUtils'
 import createTransitionManager from './createTransitionManager'
 
@@ -39,6 +40,12 @@ const createMemoryHistory = (props = {}) => {
   // Public interface
 
   const push = (path, state) => {
+    warning(
+      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      'You should avoid providing a 2nd state argument to push when the 1st ' +
+      'argument is a location-like object that already has state; it is ignored'
+    )
+
     const action = 'PUSH'
     const location = createLocation(path, state, createKey())
 
@@ -66,6 +73,12 @@ const createMemoryHistory = (props = {}) => {
   }
 
   const replace = (path, state) => {
+    warning(
+      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      'You should avoid providing a 2nd state argument to replace when the 1st ' +
+      'argument is a location-like object that already has state; it is ignored'
+    )
+
     const action = 'REPLACE'
     const location = createLocation(path, state, createKey())
 
