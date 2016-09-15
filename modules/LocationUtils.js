@@ -1,7 +1,5 @@
 import { parsePath } from './PathUtils'
 
-// A private helper function used to create location
-// objects from the args to push/replace.
 export const createLocation = (path, state, key) => {
   let location
   if (typeof path === 'string') {

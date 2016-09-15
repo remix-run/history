@@ -1,3 +1,8 @@
+## HEAD
+
+- Add `createLocation` to top-level exports
+- Better warnings
+
 ## [v4.1.0]
 > Sep 15, 2016
 
