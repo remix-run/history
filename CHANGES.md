@@ -1,6 +1,7 @@
 ## HEAD
 
 - Automatically use a leading `/` when doing `history.push('')`
+- Automatically clean up bad location descriptors
 
 ## [v4.0.0]
 > Sep 10, 2016

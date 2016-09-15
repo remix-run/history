@@ -38,6 +38,12 @@ describe('a memory history', () => {
       })
     })
 
+    describe('push with bad args', () => {
+      it('calls change listeners with the normalized location', (done) => {
+        TestSequences.PushBadArgs(history, done)
+      })
+    })
+
     describe('replace a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceNewLocation(history, done)
