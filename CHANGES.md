@@ -1,3 +1,7 @@
+## HEAD
+
+- Automatically use a leading `/` when doing `history.push('')`
+
 ## [v4.0.0]
 > Sep 10, 2016
 

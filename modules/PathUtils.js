@@ -8,7 +8,7 @@ export const stripPrefix = (path, prefix) =>
   path.indexOf(prefix) === 0 ? path.substr(prefix.length) : path
 
 export const parsePath = (path) => {
-  let pathname = path
+  let pathname = path || '/'
   let search = ''
   let hash = ''
 
