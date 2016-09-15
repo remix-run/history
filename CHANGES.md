@@ -1,7 +1,10 @@
-## HEAD
+## [v4.1.0]
+> Sep 15, 2016
 
 - Automatically use a leading `/` when doing `history.push('')`
 - Automatically clean up bad location descriptors
+
+[v4.1.0]: https://github.com/mjackson/history/compare/v4.0.0...v4.1.0
 
 ## [v4.0.0]
 > Sep 10, 2016
