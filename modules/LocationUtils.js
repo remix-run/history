@@ -10,14 +10,22 @@ export const createLocation = (path, state, key) => {
     // One-arg form: push(location)
     location = { ...path }
 
-    if (!location.pathname)
-      location.pathname = '/'
+    if (location.pathname === undefined)
+      location.pathname = ''
 
-    if (location.search && location.search.charAt(0) !== '?')
-      location.search = '?' + location.search
+    if (location.search) {
+      if (location.search.charAt(0) !== '?')
+        location.search = '?' + location.search
+    } else {
+      location.search = ''
+    }
 
-    if (location.hash && location.hash.charAt(0) !== '#')
-      location.hash = '#' + location.hash
+    if (location.hash) {
+      if (location.hash.charAt(0) !== '#')
+        location.hash = '#' + location.hash
+    } else {
+      location.hash = ''
+    }
 
     if (state !== undefined && location.state === undefined)
       location.state = state

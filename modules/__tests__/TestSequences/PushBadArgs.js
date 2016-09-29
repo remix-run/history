@@ -9,7 +9,6 @@ export default (history, done) => {
       })
 
       history.push({
-        pathname: null,
         search: 'the=query',
         hash: 'the-hash'
       })
@@ -17,7 +16,7 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe('PUSH')
       expect(location).toMatch({
-        pathname: '/',
+        pathname: '',
         search: '?the=query',
         hash: '#the-hash'
       })
