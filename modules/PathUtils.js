@@ -33,6 +33,7 @@ export const parsePath = (path) => {
 
 export const createPath = (location) => {
   const { pathname, search, hash } = location
+
   let path = pathname || '/'
 
   if (search && search !== '?')

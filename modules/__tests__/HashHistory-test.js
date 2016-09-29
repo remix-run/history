@@ -50,9 +50,9 @@ describeHistory('a hash history', () => {
       })
     })
 
-    describe('push with bad args', () => {
+    describe('push with no pathname', () => {
       it('calls change listeners with the normalized location', (done) => {
-        TestSequences.PushBadArgs(history, done)
+        TestSequences.PushMissingPathname(history, done)
       })
     })
 
