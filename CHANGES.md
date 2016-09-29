@@ -1,3 +1,9 @@
+## HEAD
+
+- Allow relative pathnames in `history.push` and `history.replace` ([#135])
+
+[#135]: https://github.com/mjackson/history/issues/135
+
 ## [v4.2.1]
 > Sep 29, 2016
 
