@@ -52,13 +52,13 @@ const looseEqual = (a, b) => {
 
     return a.every((item, index) => looseEqual(item, b[index]))
   } else if (typeofA === 'object') {
-    const keysOfA = Object.keys(a)
-    const keysOfB = Object.keys(b)
+    const aKeys = Object.keys(a)
+    const bKeys = Object.keys(b)
 
-    if (keysOfA.length !== keysOfB.length)
+    if (aKeys.length !== bKeys.length)
       return false
 
-    return keysOfA.every(key => looseEqual(a[key], b[key]))
+    return aKeys.every(key => looseEqual(a[key], b[key]))
   }
 
   return a === b
