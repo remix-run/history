@@ -1,6 +1,7 @@
+import resolvePathname from 'resolve-pathname'
 import { parsePath } from './PathUtils'
 
-export const createLocation = (path, state, key) => {
+export const createLocation = (path, state, key, currentLocation) => {
   let location
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
@@ -32,6 +33,15 @@ export const createLocation = (path, state, key) => {
   }
 
   location.key = key
+
+  if (currentLocation) {
+    // Resolve incomplete/relative pathname relative to current location.
+    if (!location.pathname) {
+      location.pathname = currentLocation.pathname
+    } else if (location.pathname.charAt(0) !== '/') {
+      location.pathname = resolvePathname(location.pathname, currentLocation.pathname)
+    }
+  }
 
   return location
 }

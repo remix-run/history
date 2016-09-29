@@ -56,6 +56,12 @@ describeHistory('a hash history', () => {
       })
     })
 
+    describe('push with a relative pathname', () => {
+      it('calls change listeners with the normalized location', (done) => {
+        TestSequences.PushRelativePathname(history, done)
+      })
+    })
+
     describe('replace a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceNewLocation(history, done)

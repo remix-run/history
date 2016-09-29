@@ -173,7 +173,7 @@ const createHashHistory = (props = {}) => {
     )
 
     const action = 'PUSH'
-    const location = createLocation(path)
+    const location = createLocation(path, undefined, undefined, history.location)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
@@ -215,7 +215,7 @@ const createHashHistory = (props = {}) => {
     )
 
     const action = 'REPLACE'
-    const location = createLocation(path)
+    const location = createLocation(path, undefined, undefined, history.location)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
