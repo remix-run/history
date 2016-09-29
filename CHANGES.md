@@ -1,3 +1,10 @@
+## [v4.2.1]
+> Sep 29, 2016
+
+- Fixed `createLocation` defaults when using objects instead of strings
+
+[v4.2.1]: https://github.com/mjackson/history/compare/v4.2.0...v4.2.1
+
 ## [v4.2.0]
 > Sep 15, 2016
 
