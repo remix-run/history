@@ -34,7 +34,9 @@ const createMemoryHistory = (props = {}) => {
 
   const index = clamp(initialIndex, 0, initialEntries.length - 1)
   const entries = initialEntries.map((entry, index) => (
-    typeof entry === 'string' ? createLocation(entry, index ? createKey() : undefined) : entry
+    typeof entry === 'string'
+      ? createLocation(entry, undefined, index ? createKey() : undefined)
+      : createLocation(entry, undefined, index ? (entry.key || createKey()) : undefined)
   ))
 
   // Public interface
