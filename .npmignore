@@ -4,7 +4,6 @@
 .npmignore
 .travis.yml
 CONTRIBUTING.md
-docs
 index.html
 karma.conf.js
 modules
