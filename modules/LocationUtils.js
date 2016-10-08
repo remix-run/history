@@ -46,7 +46,7 @@ export const createLocation = (path, state, key, currentLocation) => {
   return location
 }
 
-const looseEqual = (a, b) => {
+const deepEqual = (a, b) => {
   if (a == null)
     return a == b
 
@@ -60,7 +60,7 @@ const looseEqual = (a, b) => {
     if (!Array.isArray(b) || a.length !== b.length)
       return false
 
-    return a.every((item, index) => looseEqual(item, b[index]))
+    return a.every((item, index) => deepEqual(item, b[index]))
   } else if (typeofA === 'object') {
     const aKeys = Object.keys(a)
     const bKeys = Object.keys(b)
@@ -68,7 +68,7 @@ const looseEqual = (a, b) => {
     if (aKeys.length !== bKeys.length)
       return false
 
-    return aKeys.every(key => looseEqual(a[key], b[key]))
+    return aKeys.every(key => deepEqual(a[key], b[key]))
   }
 
   return a === b
@@ -79,4 +79,4 @@ export const locationsAreEqual = (a, b) =>
   a.search === b.search &&
   a.hash === b.hash &&
   a.key === b.key &&
-  looseEqual(a.state, b.state)
+  deepEqual(a.state, b.state)
