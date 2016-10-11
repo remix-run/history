@@ -122,8 +122,7 @@ The `location` object implements a subset of [the `window.location` interface](h
 
 Locations may also have the following properties:
 
-- `location.state` - Some extra state for this location that does not reside in the URL (supported in `createBrowserHistory` and `
-`)
+- `location.state` - Some extra state for this location that does not reside in the URL (supported in `createBrowserHistory` and `createMemoryHistory`)
 - `location.key` - A unique string representing this location (supported in `createBrowserHistory` and `createMemoryHistory`)
 
 The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got to the current URL.
