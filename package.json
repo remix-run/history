@@ -59,5 +59,6 @@
   "keywords": [
     "history",
     "location"
-  ]
+  ],
+  "typings": "./index.d.ts"
 }
