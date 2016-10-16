@@ -143,3 +143,8 @@ interface HashHistoryOptions {
 export function createHashHistory(options?: HashHistoryOptions): History;
 
 
+export function createLocation(path: string | Location, state?: any, key?: string, currentLocation?: Location): LocationAndKey;
+export function locationsAreEqual(a: LocationAndKey, b: LocationAndKey): boolean;
+
+export function parsePath(path: string): Location;
+export function createPath(location: Location): string;
