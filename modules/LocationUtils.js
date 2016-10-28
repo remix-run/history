@@ -1,4 +1,5 @@
 import resolvePathname from 'resolve-pathname'
+import valueEqual from 'value-equal'
 import { parsePath } from './PathUtils'
 
 export const createLocation = (path, state, key, currentLocation) => {
@@ -46,37 +47,9 @@ export const createLocation = (path, state, key, currentLocation) => {
   return location
 }
 
-const deepEqual = (a, b) => {
-  if (a == null)
-    return a == b
-
-  const typeofA = typeof a
-  const typeofB = typeof b
-
-  if (typeofA !== typeofB)
-    return false
-
-  if (Array.isArray(a)) {
-    if (!Array.isArray(b) || a.length !== b.length)
-      return false
-
-    return a.every((item, index) => deepEqual(item, b[index]))
-  } else if (typeofA === 'object') {
-    const aKeys = Object.keys(a)
-    const bKeys = Object.keys(b)
-
-    if (aKeys.length !== bKeys.length)
-      return false
-
-    return aKeys.every(key => deepEqual(a[key], b[key]))
-  }
-
-  return a === b
-}
-
 export const locationsAreEqual = (a, b) =>
   a.pathname === b.pathname &&
   a.search === b.search &&
   a.hash === b.hash &&
   a.key === b.key &&
-  deepEqual(a.state, b.state)
+  valueEqual(a.state, b.state)
