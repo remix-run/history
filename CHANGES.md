@@ -1,3 +1,7 @@
+## HEAD
+
+- Use `value-equal` instead of own `deepEqual` function for checking state equality
+
 ## [v4.3.0]
 > Sep 29, 2016
 
