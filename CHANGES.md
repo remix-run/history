@@ -1,6 +1,9 @@
-## HEAD
+## [v4.4.0]
+> Nov 1, 2016
 
 - Use `value-equal` instead of own `deepEqual` function for checking state equality
+
+[v4.4.0]: https://github.com/mjackson/history/compare/v4.3.0...v4.4.0
 
 ## [v4.3.0]
 > Sep 29, 2016
