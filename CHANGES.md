@@ -1,3 +1,8 @@
+## HEAD
+> Nov 1, 2016
+
+- Fix the back button on Chrome iOS
+
 ## [v4.4.0]
 > Nov 1, 2016
 

@@ -9,7 +9,8 @@ import {
   removeEventListener,
   getConfirmation,
   supportsHistory,
-  supportsPopStateOnHashChange
+  supportsPopStateOnHashChange,
+  isExtraneousPopstateEvent
 } from './DOMUtils'
 
 const PopStateEvent = 'popstate'
@@ -79,8 +80,9 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const handlePopState = (event) => {
-    if (event.state === undefined)
-      return // Ignore extraneous popstate events in WebKit.
+    // Ignore extraneous popstate events in WebKit.
+    if (isExtraneousPopstateEvent(event))
+      return 
 
     handlePop(getDOMLocation(event.state))
   }
