@@ -18,7 +18,7 @@ Then with a module bundler like [webpack](https://webpack.github.io/), use as yo
 
 ```js
 // using an ES6 transpiler, like babel
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/lib/createBrowserHistory'
 
 // not using an ES6 transpiler
 var createHistory = require('history').createBrowserHistory
@@ -45,7 +45,7 @@ Depending on the method you want to use to keep track of history, you'll `import
 Basic usage looks like this:
 
 ```js
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/lib/createBrowserHistory'
 
 const history = createHistory()
 
