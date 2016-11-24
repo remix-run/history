@@ -1,6 +1,9 @@
-## HEAD
+## [v4.4.1]
+> Nov 24, 2016
 
 - Fix the back button on Chrome iOS
+
+[v4.4.1]: https://github.com/mjackson/history/compare/v4.4.0...v4.4.1
 
 ## [v4.4.0]
 > Nov 1, 2016
