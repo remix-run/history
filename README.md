@@ -37,7 +37,7 @@ You can find the library on `window.History`.
 `history` provides 3 different methods for creating a `history` object, depending on your environment.
 
 - `createBrowserHistory` is for use in modern web browsers that support the [HTML5 history API](http://diveintohtml5.info/history.html) (see [cross-browser compatibility](http://caniuse.com/#feat=history))
-- `createMemoryHistory` is used as a reference implementation and may also be used in non-DOM environments, like [React Native](https://facebook.github.io/react-native/), unit-tests or server-side rendering. It can also be useful for [Cordova](https://cordova.apache.org/) applications, if you need the url to stay on Cordova's `index.html` in this specific environment, while your mobile website is already using `createBrowserHistory`
+- `createMemoryHistory` is used as a reference implementation and may also be used in non-DOM environments, like [React Native](https://facebook.github.io/react-native/) or tests
 - `createHashHistory` is for use in legacy web browsers
 
 Depending on the method you want to use to keep track of history, you'll `import` (or `require`) one of these methods directly from the package root (i.e. `history/createBrowserHistory`). The remainder of this document uses the term `createHistory` to refer to any of these implementations.
