@@ -1,6 +1,9 @@
-## HEAD
+## [v4.5.0]
+> Dec 14, 2016
 
 - Added `history.createHref(location)` for creating hrefs suitable for use in `<a href>`
+
+[v4.5.0]: https://github.com/mjackson/history/compare/v4.4.1...v4.5.0
 
 ## [v4.4.1]
 > Nov 24, 2016
