@@ -140,6 +140,9 @@ const createBrowserHistory = (props = {}) => {
 
   // Public interface
 
+  const createHref = (location) =>
+    basename + createPath(location)
+
   const push = (path, state) => {
     warning(
       !(typeof path === 'object' && path.state !== undefined && state !== undefined),
@@ -154,14 +157,14 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const url = basename + createPath(location)
+      const href = createHref(location)
       const { key, state } = location
 
       if (canUseHistory) {
-        globalHistory.pushState({ key, state }, null, url)
+        globalHistory.pushState({ key, state }, null, href)
 
         if (forceRefresh) {
-          window.location.href = url
+          window.location.href = href
         } else {
           const prevIndex = allKeys.indexOf(history.location.key)
           const nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
@@ -177,7 +180,7 @@ const createBrowserHistory = (props = {}) => {
           'Browser history cannot push state in browsers that do not support HTML5 history'
         )
 
-        window.location.href = url
+        window.location.href = href
       }
     })
   }
@@ -196,14 +199,14 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const url = basename + createPath(location)
+      const href = createHref(location)
       const { key, state } = location
 
       if (canUseHistory) {
-        globalHistory.replaceState({ key, state }, null, url)
+        globalHistory.replaceState({ key, state }, null, href)
 
         if (forceRefresh) {
-          window.location.replace(url)
+          window.location.replace(href)
         } else {
           const prevIndex = allKeys.indexOf(history.location.key)
 
@@ -218,7 +221,7 @@ const createBrowserHistory = (props = {}) => {
           'Browser history cannot replace state in browsers that do not support HTML5 history'
         )
 
-        window.location.replace(url)
+        window.location.replace(href)
       }
     })
   }
@@ -285,6 +288,7 @@ const createBrowserHistory = (props = {}) => {
     length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
+    createHref,
     push,
     replace,
     go,

@@ -1,3 +1,7 @@
+## HEAD
+
+- Added `history.createHref(location)` for creating hrefs suitable for use in `<a href>`
+
 ## [v4.4.1]
 > Nov 24, 2016
 

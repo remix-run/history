@@ -1,4 +1,5 @@
 import warning from 'warning'
+import { createPath } from './PathUtils'
 import { createLocation } from './LocationUtils'
 import createTransitionManager from './createTransitionManager'
 
@@ -40,6 +41,8 @@ const createMemoryHistory = (props = {}) => {
   ))
 
   // Public interface
+
+  const createHref = createPath
 
   const push = (path, state) => {
     warning(
@@ -138,6 +141,7 @@ const createMemoryHistory = (props = {}) => {
     location: entries[index],
     index,
     entries,
+    createHref,
     push,
     replace,
     go,

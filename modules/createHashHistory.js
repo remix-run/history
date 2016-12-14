@@ -166,6 +166,9 @@ const createHashHistory = (props = {}) => {
 
   // Public interface
 
+  const createHref = (location) =>
+    '#' + encodePath(basename + createPath(location))
+
   const push = (path, state) => {
     warning(
       state === undefined,
@@ -303,6 +306,7 @@ const createHashHistory = (props = {}) => {
     length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
+    createHref,
     push,
     replace,
     go,
