@@ -128,7 +128,8 @@ const createMemoryHistory = (props = {}) => {
     const nextIndex = clamp(history.index + n, 0, history.entries.length - 1)
 
     const action = 'POP'
-    const location = history.entries[nextIndex]
+    const entries = history.entries.slice(0, history.length + n)
+    const location = entries[nextIndex]
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
@@ -137,7 +138,7 @@ const createMemoryHistory = (props = {}) => {
       setState({
         action,
         location,
-        entries: history.entries.slice(0, history.length + n),
+        entries,
         index: nextIndex
       })
     })
