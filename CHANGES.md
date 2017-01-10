@@ -1,3 +1,17 @@
+## HEAD
+
+- Ensure `basename` always starts with a slash (source of a common user error, see [#404])
+
+[#404]: https://github.com/mjackson/history/issues/404
+
+## [v4.5.1]
+> Jan 9, 2017
+
+- Fix a bug that allowed a history listener to still be called if it was
+  unregistered in another listener
+
+[v4.5.1]: https://github.com/mjackson/history/compare/v4.5.0...v4.5.1
+
 ## [v4.5.0]
 > Dec 14, 2016
 
