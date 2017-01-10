@@ -57,10 +57,10 @@ const createHashHistory = (props = {}) => {
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash()
 
   const {
-    basename = '',
     getUserConfirmation = getConfirmation,
     hashType = 'slash'
   } = props
+  const basename = props.basename ? addLeadingSlash(props.basename) : ''
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 

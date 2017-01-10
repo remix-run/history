@@ -1,7 +1,7 @@
 import warning from 'warning'
 import invariant from 'invariant'
 import { createLocation } from './LocationUtils'
-import { stripPrefix, parsePath, createPath } from './PathUtils'
+import { addLeadingSlash, stripPrefix, parsePath, createPath } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import { canUseDOM } from './ExecutionEnvironment'
 import {
@@ -41,11 +41,11 @@ const createBrowserHistory = (props = {}) => {
   const needsHashChangeListener = !supportsPopStateOnHashChange()
 
   const {
-    basename = '',
     forceRefresh = false,
     getUserConfirmation = getConfirmation,
     keyLength = 6
   } = props
+  const basename = props.basename ? addLeadingSlash(props.basename) : ''
 
   const getDOMLocation = (historyState) => {
     const { key, state } = (historyState || {})
