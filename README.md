@@ -6,7 +6,7 @@
 [npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/history
 
-[`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history anywhere JavaScript runs. `history` abstracts away the differences in various environments and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions.
+[`history`](https://www.npmjs.com/package/history) is a JavaScript library that lets you easily manage session history in a web browser. `history` abstracts away the differences in various environments and provides a minimal API that lets you manage the history stack, navigate, confirm navigation, and persist state between sessions.
 
 ## Installation
 
