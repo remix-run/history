@@ -24,7 +24,7 @@
     "warning": "^3.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
+    "babel-cli": "^6.22.2",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^6.2.10",
     "babel-plugin-dev-expression": "^0.2.1",
