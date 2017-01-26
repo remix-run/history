@@ -43,7 +43,7 @@
     "karma-mocha": "^1.0.1",
     "karma-mocha-reporter": "^2.0.4",
     "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^2.0.1",
+    "karma-webpack": "^2.0.2",
     "mocha": "^3.0.2",
     "pretty-bytes": "^4.0.2",
     "readline-sync": "^1.4.4",
