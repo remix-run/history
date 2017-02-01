@@ -21,7 +21,7 @@ const getHistoryState = () => {
     return window.history.state || {}
   } catch (e) {
     // IE 11 sometimes throws when accessing window.history.state
-    // See https://github.com/mjackson/history/pull/289
+    // See https://github.com/ReactTraining/history/pull/289
     return {}
   }
 }
