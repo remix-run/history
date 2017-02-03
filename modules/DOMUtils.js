@@ -40,3 +40,12 @@ export const supportsGoWithoutReloadUsingHash = () =>
  */
 export const supportsPopstateOnHashchange = () =>
   window.navigator.userAgent.indexOf('Trident') === -1
+
+/**
+ * Returns true if a given popstate event is an extraneous WebKit event.
+ * Accounts for the fact that Chrome on iOS fires real popstate events
+ * containing undefined state when pressing the back button.
+ */
+export const isExtraneousPopstateEvent = event =>
+  event.state === undefined &&
+  navigator.userAgent.indexOf('CriOS') === -1
