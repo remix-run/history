@@ -1,3 +1,7 @@
+## HEAD
+
+- Fix the back button on Chrome iOS
+
 ## [v3.2.0]
 > Sep 1, 2016
 
