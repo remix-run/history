@@ -1,7 +1,12 @@
 import warning from 'warning'
 import invariant from 'invariant'
 import { createLocation } from './LocationUtils'
-import { addLeadingSlash, stripPrefix, parsePath, createPath } from './PathUtils'
+import {
+  stripPrefix,
+  parsePath,
+  createPath,
+  cleanBasename
+} from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import { canUseDOM } from './ExecutionEnvironment'
 import {
@@ -45,7 +50,7 @@ const createBrowserHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     keyLength = 6
   } = props
-  const basename = props.basename ? addLeadingSlash(props.basename) : ''
+  const basename = cleanBasename(props.basename)
 
   const getDOMLocation = (historyState) => {
     const { key, state } = (historyState || {})

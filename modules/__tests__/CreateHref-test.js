@@ -37,6 +37,23 @@ describe('a browser history', () => {
       expect(href).toEqual('/the/base/the/path?the=query#the-hash')
     })
   })
+
+  describe('with a bad basename', () => {
+    let history
+    beforeEach(() => {
+      history = createBrowserHistory({ basename: '/the/bad/base/' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/the/bad/base/the/path?the=query#the-hash')
+    })
+  })
 })
 
 describe('a hash history', () => {
@@ -88,6 +105,38 @@ describe('a hash history', () => {
       })
 
       expect(href).toEqual('#!/the/path?the=query#the-hash')
+    })
+  })
+
+  describe('with a basename', () => {
+    let history
+    beforeEach(() => {
+      history = createHashHistory({ basename: '/the/base' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query'
+      })
+
+      expect(href).toEqual('#/the/base/the/path?the=query')
+    })
+  })
+
+  describe('with a bad basename', () => {
+    let history
+    beforeEach(() => {
+      history = createHashHistory({ basename: '/the/bad/base/' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query'
+      })
+
+      expect(href).toEqual('#/the/bad/base/the/path?the=query')
     })
   })
 })
