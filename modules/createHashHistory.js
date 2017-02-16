@@ -67,7 +67,7 @@ const createHashHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     hashType = 'slash'
   } = props
-  const basename = props.basename ? addLeadingSlash(stripTrailingSlash(props.basename)) : ''
+  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 

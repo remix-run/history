@@ -51,7 +51,7 @@ const createBrowserHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     keyLength = 6
   } = props
-  const basename = props.basename ? addLeadingSlash(stripTrailingSlash(props.basename)) : ''
+  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
 
   const getDOMLocation = (historyState) => {
     const { key, state } = (historyState || {})
