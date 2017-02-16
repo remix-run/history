@@ -7,11 +7,8 @@ export const stripLeadingSlash = (path) =>
 export const stripPrefix = (path, prefix) =>
   path.indexOf(prefix) === 0 ? path.substr(prefix.length) : path
 
-const stripTrailingSlash = (path) =>
-  path.charAt(path.length-1) === '/' ? path.slice(0, -1) : path
-
-export const cleanBasename = basename =>
-  basename ? stripTrailingSlash(addLeadingSlash(basename)) : ''
+export const stripTrailingSlash = (path) =>
+  path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path
 
 export const parsePath = (path) => {
   let pathname = path || '/'

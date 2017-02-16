@@ -4,10 +4,10 @@ import { createLocation, locationsAreEqual } from './LocationUtils'
 import {
   addLeadingSlash,
   stripLeadingSlash,
+  stripTrailingSlash,
   stripPrefix,
   parsePath,
-  createPath,
-  cleanBasename
+  createPath
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import { canUseDOM } from './ExecutionEnvironment'
@@ -67,7 +67,7 @@ const createHashHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     hashType = 'slash'
   } = props
-  const basename = cleanBasename(props.basename)
+  const basename = props.basename ? addLeadingSlash(stripTrailingSlash(props.basename)) : ''
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 
