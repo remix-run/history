@@ -1,7 +1,14 @@
 import warning from 'warning'
 import invariant from 'invariant'
 import { createLocation, locationsAreEqual } from './LocationUtils'
-import { addLeadingSlash, stripLeadingSlash, stripPrefix, parsePath, createPath } from './PathUtils'
+import {
+  addLeadingSlash,
+  stripLeadingSlash,
+  stripPrefix,
+  parsePath,
+  createPath,
+  cleanBasename
+} from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import { canUseDOM } from './ExecutionEnvironment'
 import {
@@ -60,7 +67,7 @@ const createHashHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     hashType = 'slash'
   } = props
-  const basename = props.basename ? addLeadingSlash(props.basename) : ''
+  const basename = cleanBasename(props.basename)
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 
