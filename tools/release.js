@@ -22,27 +22,16 @@ const nextVersion = prompt(`Next version (current version is ${getPackageVersion
 const isPrerelease = nextVersion.substr(0, 3) === 'pre' || nextVersion.indexOf('-') !== -1
 
 // 1) Make sure the tests pass
-exec('npm test -- --single-run')
+exec('npm test')
 
 // 2) Increment the package version in package.json
 // 3) Create a new commit
 // 4) Create a v* tag that points to that commit
 exec(`npm version ${nextVersion} -m "Version %s"`)
 
-// 5) Push to the same branch on the git remote (GitHub).
-// Do this before we publish in case anyone has pushed
-// since we last pulled
-exec('git push origin')
-
-// 6) Publish to npm. Use the "next" tag for pre-releases,
+// 5) Publish to npm. Use the "next" tag for pre-releases,
 // "latest" for all others
 exec(`npm publish --tag ${isPrerelease ? 'next' : 'latest'}`)
 
-// 7) Push the v* tag to GitHub
+// 6) Push the v* tag to GitHub
 exec(`git push -f origin v${getPackageVersion()}`)
-
-// 8) Push the "latest" tag to GitHub
-if (!isPrerelease) {
-  exec('git tag -f latest')
-  exec('git push -f origin latest')
-}
