@@ -15,8 +15,8 @@ describe('a memory history', () => {
     })
 
     describe('the initial location', () => {
-      it('does not have a key', (done) => {
-        TestSequences.InitialLocationNoKey(history, done)
+      it('has a key', (done) => {
+        TestSequences.InitialLocationHasKey(history, done)
       })
     })
 

@@ -34,10 +34,10 @@ const createMemoryHistory = (props = {}) => {
     Math.random().toString(36).substr(2, keyLength)
 
   const index = clamp(initialIndex, 0, initialEntries.length - 1)
-  const entries = initialEntries.map((entry, index) => (
+  const entries = initialEntries.map(entry => (
     typeof entry === 'string'
-      ? createLocation(entry, undefined, index ? createKey() : undefined)
-      : createLocation(entry, undefined, index ? (entry.key || createKey()) : undefined)
+      ? createLocation(entry, undefined, createKey())
+      : createLocation(entry, undefined, entry.key || createKey())
   ))
 
   // Public interface
