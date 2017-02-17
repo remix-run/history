@@ -4,7 +4,13 @@
     "stage-1"
   ],
   "plugins": [
-    "dev-expression",
     "transform-object-assign"
-  ]
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+        "dev-expression"
+      ]
+    }
+  }
 }
