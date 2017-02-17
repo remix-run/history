@@ -1,8 +1,11 @@
 ## HEAD
 
-- Ensure `basename` always starts with a slash (source of a common user error, see [#404])
+- Added `location.key` to the initial location in memory history
+- Added ES modules build in `es` package directory
+- Improve `basename` slash handling (source of a common user error, see [#404] and [#432])
 
 [#404]: https://github.com/ReactTraining/history/issues/404
+[#432]: https://github.com/ReactTraining/history/pull/432
 
 ## [v4.5.1]
 > Jan 9, 2017
