@@ -1,6 +1,6 @@
 {
   "presets": [
-    [ "es2015", { "loose": true } ],
+    "../tools/es2015-preset",
     "stage-1"
   ],
   "plugins": [

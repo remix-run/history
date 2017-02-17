@@ -7,14 +7,11 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
-    "build-lib": "babel ./modules -d . --ignore '__tests__'",
-    "build-umd": "webpack modules/index.js umd/history.js",
-    "build-min": "webpack -p modules/index.js umd/history.min.js",
-    "build": "node ./scripts/build.js",
-    "release": "node ./scripts/release.js",
-    "prepublish": "node ./scripts/build.js",
-    "test": "npm run lint && karma start",
-    "lint": "eslint modules"
+    "build": "node ./tools/build.js",
+    "prepublish": "node ./tools/build.js",
+    "release": "node ./tools/release.js",
+    "lint": "eslint modules",
+    "test": "karma start --single-run"
   },
   "dependencies": {
     "invariant": "^2.2.1",
