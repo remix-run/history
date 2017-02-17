@@ -3,8 +3,21 @@
   "version": "4.5.1",
   "description": "Manage session history with JavaScript",
   "repository": "ReactTraining/history",
-  "author": "Michael Jackson",
   "license": "MIT",
+  "author": "Michael Jackson",
+  "files": [
+    "DOMUtils.js",
+    "ExecutionEnvironment.js",
+    "LocationUtils.js",
+    "PathUtils.js",
+    "README.md",
+    "createBrowserHistory.js",
+    "createHashHistory.js",
+    "createMemoryHistory.js",
+    "createTransitionManager.js",
+    "es",
+    "umd"
+  ],
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "build": "node ./tools/build.js",
