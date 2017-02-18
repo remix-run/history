@@ -10,7 +10,6 @@
     "ExecutionEnvironment.js",
     "LocationUtils.js",
     "PathUtils.js",
-    "README.md",
     "createBrowserHistory.js",
     "createHashHistory.js",
     "createMemoryHistory.js",
