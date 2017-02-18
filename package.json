@@ -15,6 +15,7 @@
     "createMemoryHistory.js",
     "createTransitionManager.js",
     "es",
+    "index.js",
     "umd"
   ],
   "scripts": {
