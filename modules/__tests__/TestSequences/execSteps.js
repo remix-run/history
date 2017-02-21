@@ -3,6 +3,8 @@ const execSteps = (steps, history, done) => {
 
   const cleanup = (...args) => {
     unlisten()
+    // Avoid unsubscribing a second time when we double cleanup.
+    unlisten = () => {}
     done(...args)
   }
 
