@@ -32,6 +32,21 @@ const getHistoryState = () => {
   }
 }
 
+const once = f => {
+  let alreadyCalled = false;
+
+  return (...args) => {
+    if (!alreadyCalled) {
+      alreadyCalled = true;
+      return f(...args);
+    }
+    warning(
+      !alreadyCalled,
+      'Expected only one call to this function.'
+    );
+  }
+}
+
 /**
  * Creates a history object that uses the HTML5 history API including
  * pushState, replaceState, and the popstate event.
@@ -88,7 +103,7 @@ const createBrowserHistory = (props = {}) => {
   const handlePopState = (event) => {
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event))
-      return 
+      return
 
     handlePop(getDOMLocation(event.state))
   }
@@ -247,7 +262,12 @@ const createBrowserHistory = (props = {}) => {
   const checkDOMListeners = (delta) => {
     listenerCount += delta
 
-    if (listenerCount === 1) {
+    invariant(
+      listenerCount >= 0,
+      `listenerCount went negative: ${listenerCount}`
+    );
+
+    if (listenerCount === 1 && delta > 0) {
       addEventListener(window, PopStateEvent, handlePopState)
 
       if (needsHashChangeListener)
@@ -284,10 +304,10 @@ const createBrowserHistory = (props = {}) => {
     const unlisten = transitionManager.appendListener(listener)
     checkDOMListeners(1)
 
-    return () => {
+    return once(() => {
       checkDOMListeners(-1)
       return unlisten()
-    }
+    })
   }
 
   const history = {
