@@ -284,8 +284,16 @@ const createBrowserHistory = (props = {}) => {
     const unlisten = transitionManager.appendListener(listener)
     checkDOMListeners(1)
 
+    let unlistenCalled = false
     return () => {
       checkDOMListeners(-1)
+      warning(
+        !unlistenCalled,
+        'Unlisten function should not be called multiple times.' +
+        'listenerCount is now set to %s',
+        listenerCount
+      )
+      unlistenCalled = true
       return unlisten()
     }
   }
