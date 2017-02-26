@@ -1,6 +1,7 @@
-## [HEAD]
+## HEAD
 
-- **Bugfix:** Fix basename being case sensitive ([#413])
+- Fix the back button on Chrome iOS
+- Fix basename being case sensitive ([#413])
 
 ## [v3.2.0]
 > Sep 1, 2016

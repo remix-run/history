@@ -2,7 +2,8 @@ import { createLocation } from './LocationUtils'
 import {
   addEventListener,
   removeEventListener,
-  supportsPopstateOnHashchange
+  supportsPopstateOnHashchange,
+  isExtraneousPopstateEvent
 } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
@@ -43,8 +44,9 @@ export const getUserConfirmation = (message, callback) =>
 
 export const startListener = (listener) => {
   const handlePopState = (event) => {
-    if (event.state !== undefined) // Ignore extraneous popstate events in WebKit
-      listener(_createLocation(event.state))
+    if (isExtraneousPopstateEvent(event)) // Ignore extraneous popstate events in WebKit
+      return
+    listener(_createLocation(event.state))
   }
 
   addEventListener(window, PopStateEvent, handlePopState)
