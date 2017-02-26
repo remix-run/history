@@ -1,9 +1,12 @@
 const execSteps = (steps, history, done) => {
-  let index = 0, unlisten
+  let index = 0, unlisten, cleanedUp = false
 
   const cleanup = (...args) => {
-    unlisten()
-    done(...args)
+    if (!cleanedUp) {
+      cleanedUp = true
+      unlisten()
+      done(...args)
+    }
   }
 
   const execNextStep = (...args) => {
