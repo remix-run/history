@@ -15,18 +15,18 @@ const createKey = (key) =>
   KeyPrefix + key
 
 export const saveState = (key, state) => {
-  if (!window.sessionStorage) {
-    // Session storage is not available or hidden.
-    // sessionStorage is undefined in Internet Explorer when served via file protocol.
-    warning(
-      false,
-      '[history] Unable to save state; sessionStorage is not available'
-    )
-
-    return
-  }
-
   try {
+    if (!window.sessionStorage) {
+      // Session storage is not available or hidden.
+      // sessionStorage is undefined in Internet Explorer when served via file protocol.
+      warning(
+        false,
+        '[history] Unable to save state; sessionStorage is not available'
+      )
+
+      return
+    }
+
     if (state == null) {
       window.sessionStorage.removeItem(createKey(key))
     } else {
