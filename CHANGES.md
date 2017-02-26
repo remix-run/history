@@ -1,4 +1,5 @@
 ## [v3.3.0]
+> Feb 25, 2017
 
 - Fix the back button on Chrome iOS ([#425])
 - Fix basename being case sensitive ([#413])
