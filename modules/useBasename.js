@@ -11,7 +11,7 @@ const useBasename = (createHistory) =>
         return location
 
       if (basename && location.basename == null) {
-        if (location.pathname.indexOf(basename) === 0) {
+        if (location.pathname.toLowerCase().indexOf(basename.toLowerCase()) === 0) {
           location.pathname = location.pathname.substring(basename.length)
           location.basename = basename
 
