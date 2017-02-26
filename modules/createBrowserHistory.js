@@ -9,8 +9,8 @@ import {
   createPath
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
-import { canUseDOM } from './ExecutionEnvironment'
 import {
+  canUseDOM,
   addEventListener,
   removeEventListener,
   getConfirmation,

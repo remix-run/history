@@ -1,3 +1,7 @@
+export const canUseDOM = !!(
+  typeof window !== 'undefined' && window.document && window.document.createElement
+)
+
 export const addEventListener = (node, event, listener) =>
   node.addEventListener
     ? node.addEventListener(event, listener, false)

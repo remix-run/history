@@ -1,6 +1,5 @@
 import createHistory from '../createHashHistory'
-import { canUseDOM } from '../ExecutionEnvironment'
-import { supportsGoWithoutReloadUsingHash } from '../DOMUtils'
+import { canUseDOM, supportsGoWithoutReloadUsingHash } from '../DOMUtils'
 import * as TestSequences from './TestSequences'
 
 const describeHistory = canUseDOM ? describe : describe.skip

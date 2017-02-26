@@ -1,6 +1,5 @@
 import createHistory from '../createBrowserHistory'
-import { canUseDOM } from '../ExecutionEnvironment'
-import { supportsHistory } from '../DOMUtils'
+import { canUseDOM, supportsHistory } from '../DOMUtils'
 import * as TestSequences from './TestSequences'
 
 const canUseHistory = canUseDOM && supportsHistory()
