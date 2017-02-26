@@ -286,7 +286,7 @@ const createBrowserHistory = (props = {}) => {
 
     return () => {
       checkDOMListeners(-1)
-      return unlisten()
+      unlisten()
     }
   }
 
