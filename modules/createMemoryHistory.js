@@ -124,6 +124,26 @@ const createMemoryHistory = (props = {}) => {
   const goForward = () =>
     go(1)
 
+  const pop = (n = -1) => {
+    const nextIndex = clamp(history.index + n, 0, history.entries.length - 1)
+    const nextEntries = history.entries.slice(0, nextIndex + 1)
+
+    const action = 'POP'
+    const location = entries[nextIndex]
+
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+      if (!ok)
+        return
+
+      setState({
+        action,
+        location,
+        index: nextIndex,
+        entries: nextEntries,
+      })
+    })
+  }
+
   const canGo = (n) => {
     const nextIndex = history.index + n
     return nextIndex >= 0 && nextIndex < history.entries.length
@@ -147,6 +167,7 @@ const createMemoryHistory = (props = {}) => {
     go,
     goBack,
     goForward,
+    pop,
     canGo,
     block,
     listen

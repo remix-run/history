@@ -80,6 +80,12 @@ describe('a memory history', () => {
       })
     })
 
+    describe('pop', () => {
+      it('calls change listeners with the previous location', (done) => {
+        TestSequences.Pop(history, done)
+      })
+    })
+
     describe('block', () => {
       it('blocks all transitions', (done) => {
         TestSequences.BlockEverything(history, done)
