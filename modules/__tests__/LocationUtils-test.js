@@ -111,4 +111,73 @@ describe('createLocation', () => {
       })
     })
   })
+
+  describe('with a current location', () => {
+    const currentLocation = {
+      pathname: '/The/Old/Path',
+      search: '?theQuery',
+      hash: '#fragment'
+    };
+
+    const createRelative = url => createLocation(url, undefined, undefined, currentLocation)
+
+    describe('can resolve a relative pathname', () => {
+      describe('given as a string', () => {
+        it('has the correct properties', () => {
+          expect(createRelative('new/path')).toMatch({
+            pathname: '/The/Old/new/path',
+            search: '',
+            hash: ''
+          })
+        })
+      })
+      describe('given as an object', () => {
+        it('has the correct properties', () => {
+          expect(createRelative({ pathname: 'new/path' })).toMatch({
+            pathname: '/The/Old/new/path',
+            search: '',
+            hash: ''
+          })
+        })
+      })
+      describe('with a leading dot', () => {
+        it('has the correct properties', () => {
+          expect(createRelative('./new/path')).toMatch({
+            pathname: '/The/Old/new/path',
+            search: '',
+            hash: ''
+          })
+        })
+      })
+      describe('with two leading dots', () => {
+        it('has the correct properties', () => {
+          expect(createRelative('../new/path')).toMatch({
+            pathname: '/The/new/path',
+            search: '',
+            hash: ''
+          })
+        })
+      })
+    })
+    describe('can resolve a relative query', () => {
+      describe('given as a string', () => {
+        it('has the correct properties', () => {
+          expect(createRelative('?newquery')).toMatch({
+            pathname: '/The/Old/Path',
+            search: '?newquery',
+            hash: ''
+          })
+        })
+      })
+      describe('given as an object', () => {
+        it('has the correct properties', () => {
+          expect(createRelative({ search: '?newquery' })).toMatch({
+            pathname: '/The/Old/Path',
+            search: '?newquery',
+            hash: ''
+          })
+        })
+      })
+    })
+  })
 })
