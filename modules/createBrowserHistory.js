@@ -284,9 +284,13 @@ const createBrowserHistory = (props = {}) => {
     const unlisten = transitionManager.appendListener(listener)
     checkDOMListeners(1)
 
+    let isUnlistened = false
     return () => {
-      checkDOMListeners(-1)
-      unlisten()
+      if (!isUnlistened) {
+        checkDOMListeners(-1)
+        unlisten()
+        isUnlistened = true
+      }
     }
   }
 
