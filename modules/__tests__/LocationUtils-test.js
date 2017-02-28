@@ -179,5 +179,25 @@ describe('createLocation', () => {
         })
       })
     })
+    describe('can resolve a relative fragment', () => {
+      describe('given as a string', () => {
+        it('has the correct properties', () => {
+          expect(createRelative('#foo')).toMatch({
+            pathname: '/The/Old/Path',
+            search: '?theQuery',
+            hash: '#foo'
+          })
+        })
+      })
+      describe('given as an object', () => {
+        it('has the correct properties', () => {
+          expect(createRelative({ hash: '#foo' })).toMatch({
+            pathname: '/The/Old/Path',
+            search: '?theQuery',
+            hash: '#foo'
+          })
+        })
+      })
+    })
   })
 })
