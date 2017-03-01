@@ -88,7 +88,7 @@ const createBrowserHistory = (props = {}) => {
   const handlePopState = (event) => {
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event))
-      return 
+      return
 
     handlePop(getDOMLocation(event.state))
   }
