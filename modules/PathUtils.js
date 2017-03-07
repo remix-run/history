@@ -15,6 +15,7 @@ export const parsePath = (path) => {
   let search = ''
   let hash = ''
 
+  pathname = decodeURI(pathname)
   const hashIndex = pathname.indexOf('#')
   if (hashIndex !== -1) {
     hash = pathname.substr(hashIndex)
@@ -45,5 +46,5 @@ export const createPath = (location) => {
   if (hash && hash !== '#')
     path += (hash.charAt(0) === '#' ? hash : `#${hash}`)
 
-  return path
+  return encodeURI(path)
 }
