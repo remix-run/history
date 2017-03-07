@@ -71,6 +71,26 @@ describe('a browser history', () => {
       expect(href).toEqual('/the/path?the=query#the-hash')
     })
   })
+
+  describe('with a unicode location', () => {
+    let history
+    beforeEach(() => {
+      history = createBrowserHistory({ basename: '/' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/歴史',
+        search: '?キー=値',
+        hash: '#ハッシュ'
+      })
+
+      const pathname = '/%E6%AD%B4%E5%8F%B2'
+      const search = '?%E3%82%AD%E3%83%BC=%E5%80%A4'
+      const hash = '#%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5'
+      expect(href).toEqual(pathname + search + hash)
+    })
+  })
 })
 
 describe('a hash history', () => {
@@ -172,6 +192,24 @@ describe('a hash history', () => {
       expect(href).toEqual('#/the/path?the=query')
     })
   })
+
+  describe('with a unicode location', () => {
+    let history
+    beforeEach(() => {
+      history = createHashHistory({ basename: '/' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/歴史',
+        search: '?キー=値'
+      })
+
+      const pathname = '#/%E6%AD%B4%E5%8F%B2'
+      const search = '?%E3%82%AD%E3%83%BC=%E5%80%A4'
+      expect(href).toEqual(pathname + search)
+    })
+  })
 })
 
 describe('a memory history', () => {
@@ -188,5 +226,20 @@ describe('a memory history', () => {
     })
 
     expect(href).toEqual('/the/path?the=query#the-hash')
+  })
+
+  describe('with a unicode location', () => {
+    it('encodes unicode pathnames', () => {
+      const href = history.createHref({
+        pathname: '/歴史',
+        search: '?キー=値',
+        hash: '#ハッシュ'
+      })
+
+      const pathname = '/%E6%AD%B4%E5%8F%B2'
+      const search = '?%E3%82%AD%E3%83%BC=%E5%80%A4'
+      const hash = '#%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5'
+      expect(href).toEqual(pathname + search + hash)
+    })
   })
 })
