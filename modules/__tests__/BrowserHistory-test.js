@@ -58,6 +58,18 @@ describeHistory('a browser history', () => {
       })
     })
 
+    describe('push with a unicode path string', () => {
+      it('creates a location with decoded properties', (done) => {
+        TestSequences.PushUnicodeLocation(history, done)
+      })
+    })
+
+    describe('push with an encoded path string', () => {
+      it('creates a location object with decoded properties', (done) => {
+        TestSequences.PushEncodedLocation(history, done)
+      })
+    })
+
     describe('replace a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceNewLocation(history, done)
