@@ -1,9 +1,12 @@
-## HEAD
+## [v4.6.0]
+> Mar 7, 2017
 
+- Encode/decode URLs
 - Added `location.key` to the initial location in memory history
 - Added ES modules build in `es` package directory
 - Improve `basename` slash handling (source of a common user error, see [#404] and [#432])
 
+[v4.6.0]: https://github.com/ReactTraining/history/compare/v4.5.1...v4.6.0
 [#404]: https://github.com/ReactTraining/history/issues/404
 [#432]: https://github.com/ReactTraining/history/pull/432
 
