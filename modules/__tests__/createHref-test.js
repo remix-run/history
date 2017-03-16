@@ -78,17 +78,30 @@ describe('a browser history', () => {
       history = createBrowserHistory({ basename: '/' })
     })
 
-    it('knows how to create hrefs', () => {
+    it('encodes the pathname', () => {
       const href = history.createHref({
-        pathname: '/歴史',
-        search: '?キー=値',
+        pathname: '/歴史'
+      })
+
+      expect(href).toEqual('/%E6%AD%B4%E5%8F%B2')
+    })
+
+    it('does not encode the hash', () => {
+      const href = history.createHref({
+        pathname: '/',
         hash: '#ハッシュ'
       })
 
-      const pathname = '/%E6%AD%B4%E5%8F%B2'
-      const search = '?%E3%82%AD%E3%83%BC=%E5%80%A4'
-      const hash = '#%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5'
-      expect(href).toEqual(pathname + search + hash)
+      expect(href).toEqual('/#ハッシュ')
+    })
+
+    it('does not encode the search string', () => {
+      const href = history.createHref({
+        pathname: '/',
+        search: '?キー=値'
+      })
+
+      expect(href).toEqual('/?キー=値')
     })
   })
 })
@@ -199,15 +212,33 @@ describe('a hash history', () => {
       history = createHashHistory({ basename: '/' })
     })
 
-    it('knows how to create hrefs', () => {
+    it('encodes the pathname', () => {
       const href = history.createHref({
-        pathname: '/歴史',
+        pathname: '/歴史'
+      })
+
+      const pathname = '/%E6%AD%B4%E5%8F%B2'
+      expect(href).toEqual('#' + pathname)
+    })
+
+    it('does not encode the hash', () => {
+      const href = history.createHref({
+        pathname: '/',
+        hash: '#ハッシュ'
+      })
+
+      const hash = '#ハッシュ'
+      expect(href).toEqual('#/' + hash)
+    })
+
+    it('does not encode the search string', () => {
+      const href = history.createHref({
+        pathname: '/',
         search: '?キー=値'
       })
 
-      const pathname = '#/%E6%AD%B4%E5%8F%B2'
-      const search = '?%E3%82%AD%E3%83%BC=%E5%80%A4'
-      expect(href).toEqual(pathname + search)
+      const search = '?キー=値'
+      expect(href).toEqual('#/' + search)
     })
   })
 })
@@ -229,17 +260,35 @@ describe('a memory history', () => {
   })
 
   describe('with a unicode location', () => {
-    it('encodes unicode pathnames', () => {
+    let history
+    beforeEach(() => {
+      history = createMemoryHistory()
+    })
+
+    it('encodes the pathname', () => {
       const href = history.createHref({
-        pathname: '/歴史',
-        search: '?キー=値',
+        pathname: '/歴史'
+      })
+
+      expect(href).toEqual('/%E6%AD%B4%E5%8F%B2')
+    })
+
+    it('does not encode the hash', () => {
+      const href = history.createHref({
+        pathname: '/',
         hash: '#ハッシュ'
       })
 
-      const pathname = '/%E6%AD%B4%E5%8F%B2'
-      const search = '?%E3%82%AD%E3%83%BC=%E5%80%A4'
-      const hash = '#%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5'
-      expect(href).toEqual(pathname + search + hash)
+      expect(href).toEqual('/#ハッシュ')
+    })
+
+    it('does not encode the search string', () => {
+      const href = history.createHref({
+        pathname: '/',
+        search: '?キー=値'
+      })
+
+      expect(href).toEqual('/?キー=値')
     })
   })
 })

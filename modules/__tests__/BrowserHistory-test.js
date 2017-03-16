@@ -65,7 +65,7 @@ describeHistory('a browser history', () => {
     })
 
     describe('push with an encoded path string', () => {
-      it('creates a location object with decoded properties', (done) => {
+      it('creates a location object with decoded pathname', (done) => {
         TestSequences.PushEncodedLocation(history, done)
       })
     })
