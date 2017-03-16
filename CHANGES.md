@@ -1,3 +1,11 @@
+## [v4.6.1]
+> Mar 15, 2017
+
+- Only encode/decode pathname portion of the URL (see [#445])
+
+[v4.6.1]: https://github.com/ReactTraining/history/compare/v4.6.0...v4.6.1
+[#445]: https://github.com/ReactTraining/history/pull/445
+
 ## [v4.6.0]
 > Mar 7, 2017
 
