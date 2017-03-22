@@ -199,35 +199,5 @@ describe('createLocation', () => {
         })
       })
     })
-    describe('can resolve a relative fragment when there is no query', () => {
-      const currentNoQuery = {
-        pathname: '/The/Old/Path',
-        search: '',
-        hash: '#fragment'
-      };
-
-      describe('given as a string', () => {
-        it('has the correct properties', () => {
-          expect(
-            createLocation('#foo', undefined, undefined, currentNoQuery)
-          ).toMatch({
-            pathname: '/The/Old/Path',
-            search: '',
-            hash: '#foo'
-          })
-        })
-      })
-      describe('given as an object', () => {
-        it('has the correct properties', () => {
-          expect(
-            createLocation({ hash: '#foo' }, undefined, undefined, currentNoQuery)
-          ).toMatch({
-            pathname: '/The/Old/Path',
-            search: '',
-            hash: '#foo'
-          })
-        })
-      })
-    })
   })
 })
