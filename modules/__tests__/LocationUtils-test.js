@@ -119,21 +119,10 @@ describe('createLocation', () => {
       hash: '#fragment'
     };
 
-    const createRelative = url => createLocation(url, undefined, undefined, currentLocation)
-
     describe('can resolve a relative pathname', () => {
-      describe('given as a string', () => {
+      describe('without any dots', () => {
         it('has the correct properties', () => {
-          expect(createRelative('new/path')).toMatch({
-            pathname: '/The/Old/new/path',
-            search: '',
-            hash: ''
-          })
-        })
-      })
-      describe('given as an object', () => {
-        it('has the correct properties', () => {
-          expect(createRelative({ pathname: 'new/path' })).toMatch({
+          expect(createLocation('new/path', undefined, undefined, currentLocation)).toMatch({
             pathname: '/The/Old/new/path',
             search: '',
             hash: ''
@@ -142,7 +131,7 @@ describe('createLocation', () => {
       })
       describe('with a leading dot', () => {
         it('has the correct properties', () => {
-          expect(createRelative('./new/path')).toMatch({
+          expect(createLocation('./new/path', undefined, undefined, currentLocation)).toMatch({
             pathname: '/The/Old/new/path',
             search: '',
             hash: ''
@@ -151,7 +140,7 @@ describe('createLocation', () => {
       })
       describe('with two leading dots', () => {
         it('has the correct properties', () => {
-          expect(createRelative('../new/path')).toMatch({
+          expect(createLocation('../new/path', undefined, undefined, currentLocation)).toMatch({
             pathname: '/The/new/path',
             search: '',
             hash: ''
@@ -160,42 +149,20 @@ describe('createLocation', () => {
       })
     })
     describe('can resolve a relative query', () => {
-      describe('given as a string', () => {
-        it('has the correct properties', () => {
-          expect(createRelative('?newquery')).toMatch({
-            pathname: '/The/Old/Path',
-            search: '?newquery',
-            hash: ''
-          })
-        })
-      })
-      describe('given as an object', () => {
-        it('has the correct properties', () => {
-          expect(createRelative({ search: '?newquery' })).toMatch({
-            pathname: '/The/Old/Path',
-            search: '?newquery',
-            hash: ''
-          })
+      it('has the correct properties', () => {
+        expect(createLocation('?newquery', undefined, undefined, currentLocation)).toMatch({
+          pathname: '/The/Old/Path',
+          search: '?newquery',
+          hash: ''
         })
       })
     })
     describe('can resolve a relative fragment', () => {
-      describe('given as a string', () => {
-        it('has the correct properties', () => {
-          expect(createRelative('#foo')).toMatch({
-            pathname: '/The/Old/Path',
-            search: '?theQuery',
-            hash: '#foo'
-          })
-        })
-      })
-      describe('given as an object', () => {
-        it('has the correct properties', () => {
-          expect(createRelative({ hash: '#foo' })).toMatch({
-            pathname: '/The/Old/Path',
-            search: '?theQuery',
-            hash: '#foo'
-          })
+      it('has the correct properties', () => {
+        expect(createLocation('#foo', undefined, undefined, currentLocation)).toMatch({
+          pathname: '/The/Old/Path',
+          search: '?theQuery',
+          hash: '#foo'
         })
       })
     })
