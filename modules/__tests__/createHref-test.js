@@ -249,46 +249,13 @@ describe('a memory history', () => {
     history = createMemoryHistory()
   })
 
-  it('knows how to create hrefs', () => {
+  it('does not create hrefs', () => {
     const href = history.createHref({
       pathname: '/the/path',
       search: '?the=query',
       hash: '#the-hash'
     })
 
-    expect(href).toEqual('/the/path?the=query#the-hash')
-  })
-
-  describe('with a unicode location', () => {
-    let history
-    beforeEach(() => {
-      history = createMemoryHistory()
-    })
-
-    it('encodes the pathname', () => {
-      const href = history.createHref({
-        pathname: '/歴史'
-      })
-
-      expect(href).toEqual('/%E6%AD%B4%E5%8F%B2')
-    })
-
-    it('does not encode the hash', () => {
-      const href = history.createHref({
-        pathname: '/',
-        hash: '#ハッシュ'
-      })
-
-      expect(href).toEqual('/#ハッシュ')
-    })
-
-    it('does not encode the search string', () => {
-      const href = history.createHref({
-        pathname: '/',
-        search: '?キー=値'
-      })
-
-      expect(href).toEqual('/?キー=値')
-    })
+    expect(href).toEqual(null)
   })
 })
