@@ -15,6 +15,7 @@ import {
   removeEventListener,
   getConfirmation,
   supportsHistory,
+  getOrigin,
   supportsPopStateOnHashChange,
   isExtraneousPopstateEvent
 } from './DOMUtils'
@@ -51,9 +52,7 @@ const createBrowserHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     keyLength = 6
   } = props
-  const rawBasename = props.basename || '';
-  const isFullUrl = rawBasename.indexOf(window.location.origin) === 0;
-  const basename = stripTrailingSlash(isFullUrl ? rawBasename : addLeadingSlash(rawBasename));
+  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
 
   const getDOMLocation = (historyState) => {
     const { key, state } = (historyState || {})
@@ -90,7 +89,7 @@ const createBrowserHistory = (props = {}) => {
   const handlePopState = (event) => {
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event))
-      return 
+      return
 
     handlePop(getDOMLocation(event.state))
   }
@@ -144,12 +143,14 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const initialLocation = getDOMLocation(getHistoryState())
-  let allKeys = [ initialLocation.key ]
+  let allKeys = [initialLocation.key]
 
   // Public interface
 
-  const createHref = (location) =>
-    basename + createPath(location)
+  const createHref = (location) => {
+    var origin = props.includeOrigin ? getOrigin() : '';
+    return origin + basename + createPath(location);
+  }
 
   const push = (path, state) => {
     warning(
