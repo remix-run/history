@@ -4,7 +4,7 @@ import { createLocation } from './LocationUtils'
 import {
   addLeadingSlash,
   stripTrailingSlash,
-  stripPrefix,
+  stripBasename,
   parsePath,
   createPath
 } from './PathUtils'
@@ -66,7 +66,7 @@ const createBrowserHistory = (props = {}) => {
     )
 
     if (basename)
-      path = stripPrefix(path, basename)
+      path = stripBasename(path, basename)
 
     return {
       ...parsePath(path),

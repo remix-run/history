@@ -5,7 +5,7 @@ import {
   addLeadingSlash,
   stripLeadingSlash,
   stripTrailingSlash,
-  stripPrefix,
+  stripBasename,
   parsePath,
   createPath
 } from './PathUtils'
@@ -81,7 +81,7 @@ const createHashHistory = (props = {}) => {
     )
 
     if (basename)
-      path = stripPrefix(path, basename)
+      path = stripBasename(path, basename)
 
     return parsePath(path)
   }

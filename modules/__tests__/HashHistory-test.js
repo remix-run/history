@@ -1,3 +1,4 @@
+import expect from 'expect'
 import createHistory from '../createHashHistory'
 import { canUseDOM, supportsGoWithoutReloadUsingHash } from '../DOMUtils'
 import * as TestSequences from './TestSequences'
@@ -206,6 +207,47 @@ describeHistory('a hash history', () => {
 
     it('properly encodes and decodes window.location.hash', (done) => {
       TestSequences.SlashHashPathCoding(history, done)
+    })
+  })
+
+
+  describe('basename', () => {
+    it('strips the basename from the pathname', () => {
+      window.location.hash = '#/prefix/pathname'
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/pathname')
+    })
+
+    it('is not case-sensitive', () => {
+      window.location.hash = '#/PREFIX/pathname'
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/pathname')
+    })
+
+    it('does not strip partial prefix matches', () => {
+      window.location.hash = '#/prefixed/pathname'
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/prefixed/pathname')
+    })
+
+    it('strips when path is only the prefix', () => {
+      window.location.hash = '#/prefix'
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/')
+    })
+
+    it('strips with no pathname, but with a search string', () => {
+      window.location.hash = '#/prefix?a=b'
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('')
+    })
+
+    it('strips with no pathname, but with a hash string', () => {
+      console.log('\n\n\n\n\n\n\n\n')
+      window.location.hash = '#/prefix#rest'
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('')
+      console.log('\n\n\n\n\n\n\n\n')
     })
   })
 })
