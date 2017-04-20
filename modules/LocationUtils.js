@@ -33,7 +33,8 @@ export const createLocation = (path, state, key, currentLocation) => {
       location.state = state
   }
 
-  location.key = key
+  if (key)
+    location.key = key
 
   if (currentLocation) {
     // Resolve incomplete/relative pathname relative to current location.
