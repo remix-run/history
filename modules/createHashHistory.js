@@ -74,6 +74,12 @@ const createHashHistory = (props = {}) => {
   const getDOMLocation = () => {
     let path = decodePath(getHashPath())
 
+    warning(
+      !(basename && path.indexOf(basename) !== 0),
+      'You are attempting to use a basename on a page whose URL path does not begin ' +
+      'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
+    )
+
     if (basename)
       path = stripPrefix(path, basename)
 
