@@ -4,6 +4,7 @@ import { createLocation } from './LocationUtils'
 import {
   addLeadingSlash,
   stripTrailingSlash,
+  hasBasename,
   stripBasename,
   parsePath,
   createPath
@@ -60,7 +61,7 @@ const createBrowserHistory = (props = {}) => {
     let path = pathname + search + hash
 
     warning(
-      !(basename && path.indexOf(basename) !== 0),
+      !(basename && hasBasename(path, basename)),
       'You are attempting to use a basename on a page whose URL path does not begin ' +
       'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
     )

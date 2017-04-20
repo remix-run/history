@@ -5,6 +5,7 @@ import {
   addLeadingSlash,
   stripLeadingSlash,
   stripTrailingSlash,
+  hasBasename,
   stripBasename,
   parsePath,
   createPath
@@ -75,7 +76,7 @@ const createHashHistory = (props = {}) => {
     let path = decodePath(getHashPath())
 
     warning(
-      !(basename && path.indexOf(basename) !== 0),
+      !(basename && hasBasename(path, basename)),
       'You are attempting to use a basename on a page whose URL path does not begin ' +
       'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
     )
