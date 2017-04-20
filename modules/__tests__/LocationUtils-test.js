@@ -111,4 +111,16 @@ describe('createLocation', () => {
       })
     })
   })
+
+  describe('key', () => {
+    it('has a key property if a key is provided', () => {
+      const location = createLocation('/the/path', undefined, 'key')
+      expect(location).toIncludeKey('key')
+    })
+
+    it('has no key property if no key is provided', () => {
+      const location = createLocation('/the/path')
+      expect(location).toExcludeKey('key')
+    })
+  })
 })
