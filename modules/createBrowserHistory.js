@@ -6,7 +6,6 @@ import {
   stripTrailingSlash,
   hasBasename,
   stripBasename,
-  parsePath,
   createPath
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
@@ -69,11 +68,7 @@ const createBrowserHistory = (props = {}) => {
     if (basename)
       path = stripBasename(path, basename)
 
-    return {
-      ...parsePath(path),
-      state,
-      key
-    }
+    return createLocation(path, state, key)
   }
 
   const createKey = () =>

@@ -42,6 +42,11 @@ export const createLocation = (path, state, key, currentLocation) => {
     } else if (location.pathname.charAt(0) !== '/') {
       location.pathname = resolvePathname(location.pathname, currentLocation.pathname)
     }
+  } else {
+    // When there is no prior location and pathname is empty, set it to /
+    if (!location.pathname) {
+      location.pathname = '/'
+    }
   }
 
   return location

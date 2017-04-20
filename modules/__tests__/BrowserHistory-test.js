@@ -198,13 +198,13 @@ describeHistory('a browser history', () => {
     it('strips with no pathname, but with a search string', () => {
       window.history.replaceState(null, null, '/prefix?a=b')
       const history = createHistory({ basename: '/prefix' })
-      expect(history.location.pathname).toEqual('')
+      expect(history.location.pathname).toEqual('/')
     })
 
     it('strips with no pathname, but with a hash string', () => {
       window.history.replaceState(null, null, '/prefix#rest')
       const history = createHistory({ basename: '/prefix' })
-      expect(history.location.pathname).toEqual('')
+      expect(history.location.pathname).toEqual('/')
     })
   })
 })

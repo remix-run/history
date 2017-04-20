@@ -29,7 +29,7 @@ export const parsePath = (path) => {
     search = pathname.substr(searchIndex)
     pathname = pathname.substr(0, searchIndex)
   }
-
+  
   pathname = decodeURI(pathname)
 
   return {

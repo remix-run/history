@@ -7,7 +7,6 @@ import {
   stripTrailingSlash,
   hasBasename,
   stripBasename,
-  parsePath,
   createPath
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
@@ -84,7 +83,7 @@ const createHashHistory = (props = {}) => {
     if (basename)
       path = stripBasename(path, basename)
 
-    return parsePath(path)
+    return createLocation(path)
   }
 
   const transitionManager = createTransitionManager()

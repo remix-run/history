@@ -239,15 +239,13 @@ describeHistory('a hash history', () => {
     it('strips with no pathname, but with a search string', () => {
       window.location.hash = '#/prefix?a=b'
       const history = createHistory({ basename: '/prefix' })
-      expect(history.location.pathname).toEqual('')
+      expect(history.location.pathname).toEqual('/')
     })
 
     it('strips with no pathname, but with a hash string', () => {
-      console.log('\n\n\n\n\n\n\n\n')
       window.location.hash = '#/prefix#rest'
       const history = createHistory({ basename: '/prefix' })
-      expect(history.location.pathname).toEqual('')
-      console.log('\n\n\n\n\n\n\n\n')
+      expect(history.location.pathname).toEqual('/')
     })
   })
 })
