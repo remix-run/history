@@ -1,3 +1,4 @@
+import expect from 'expect'
 import createHistory from '../createBrowserHistory'
 import { canUseDOM, supportsHistory } from '../DOMUtils'
 import * as TestSequences from './TestSequences'
@@ -166,6 +167,44 @@ describeHistory('a browser history', () => {
 
     it('is called on the hashchange event', (done) => {
       TestSequences.HashChangeTransitionHook(history, done)
+    })
+  })
+
+  describe('basename', () => {
+    it('strips the basename from the pathname', () => {
+      window.history.replaceState(null, null, '/prefix/pathname')
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/pathname')
+    })
+
+    it('is not case-sensitive', () => {
+      window.history.replaceState(null, null, '/PREFIX/pathname')
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/pathname')
+    })
+
+    it('does not strip partial prefix matches', () => {
+      window.history.replaceState(null, null, '/prefixed/pathname')
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/prefixed/pathname')
+    })
+
+    it('strips when path is only the prefix', () => {
+      window.history.replaceState(null, null, '/prefix')
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/')
+    })
+
+    it('strips with no pathname, but with a search string', () => {
+      window.history.replaceState(null, null, '/prefix?a=b')
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/')
+    })
+
+    it('strips with no pathname, but with a hash string', () => {
+      window.history.replaceState(null, null, '/prefix#rest')
+      const history = createHistory({ basename: '/prefix' })
+      expect(history.location.pathname).toEqual('/')
     })
   })
 })

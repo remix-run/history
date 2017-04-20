@@ -50,7 +50,7 @@ describe('createLocation', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
         expect(createLocation('?the=query#the-hash')).toMatch({
-          pathname: '',
+          pathname: '/',
           search: '?the=query',
           hash: '#the-hash'
         })
@@ -60,7 +60,7 @@ describe('createLocation', () => {
     describe('given as an object', () => {
       it('has the correct properties', () => {
         expect(createLocation({ search: '?the=query', hash: '#the-hash' })).toMatch({
-          pathname: '',
+          pathname: '/',
           search: '?the=query',
           hash: '#the-hash'
         })
@@ -109,6 +109,18 @@ describe('createLocation', () => {
           hash: ''
         })
       })
+    })
+  })
+
+  describe('key', () => {
+    it('has a key property if a key is provided', () => {
+      const location = createLocation('/the/path', undefined, 'key')
+      expect(location).toIncludeKey('key')
+    })
+
+    it('has no key property if no key is provided', () => {
+      const location = createLocation('/the/path')
+      expect(location).toExcludeKey('key')
     })
   })
 })

@@ -4,8 +4,11 @@ export const addLeadingSlash = (path) =>
 export const stripLeadingSlash = (path) =>
   path.charAt(0) === '/' ? path.substr(1) : path
 
-export const stripPrefix = (path, prefix) =>
-  path.indexOf(prefix) === 0 ? path.substr(prefix.length) : path
+export const hasBasename = (path, prefix) => 
+  (new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i')).test(path)
+
+export const stripBasename = (path, prefix) =>
+  hasBasename(path, prefix) ? path.substr(prefix.length) : path
 
 export const stripTrailingSlash = (path) =>
   path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path
@@ -26,7 +29,7 @@ export const parsePath = (path) => {
     search = pathname.substr(searchIndex)
     pathname = pathname.substr(0, searchIndex)
   }
-
+  
   pathname = decodeURI(pathname)
 
   return {
