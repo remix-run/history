@@ -111,4 +111,60 @@ describe('createLocation', () => {
       })
     })
   })
+
+  describe('with a current location', () => {
+    const currentLocation = {
+      pathname: '/The/Old/Path',
+      search: '?theQuery',
+      hash: '#fragment'
+    };
+
+    describe('can resolve a relative pathname', () => {
+      describe('without any dots', () => {
+        it('has the correct properties', () => {
+          expect(createLocation('new/path', undefined, undefined, currentLocation)).toMatch({
+            pathname: '/The/Old/new/path',
+            search: '',
+            hash: ''
+          })
+        })
+      })
+      describe('with a leading dot', () => {
+        it('has the correct properties', () => {
+          expect(createLocation('./new/path', undefined, undefined, currentLocation)).toMatch({
+            pathname: '/The/Old/new/path',
+            search: '',
+            hash: ''
+          })
+        })
+      })
+      describe('with two leading dots', () => {
+        it('has the correct properties', () => {
+          expect(createLocation('../new/path', undefined, undefined, currentLocation)).toMatch({
+            pathname: '/The/new/path',
+            search: '',
+            hash: ''
+          })
+        })
+      })
+    })
+    describe('can resolve a relative query', () => {
+      it('has the correct properties', () => {
+        expect(createLocation('?newquery', undefined, undefined, currentLocation)).toMatch({
+          pathname: '/The/Old/Path',
+          search: '?newquery',
+          hash: ''
+        })
+      })
+    })
+    describe('can resolve a relative fragment', () => {
+      it('has the correct properties', () => {
+        expect(createLocation('#foo', undefined, undefined, currentLocation)).toMatch({
+          pathname: '/The/Old/Path',
+          search: '?theQuery',
+          hash: '#foo'
+        })
+      })
+    })
+  })
 })
