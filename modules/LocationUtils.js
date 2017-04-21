@@ -33,6 +33,8 @@ export const createLocation = (path, state, key, currentLocation) => {
       location.state = state
   }
 
+  location.pathname = decodeURI(location.pathname)
+
   if (key)
     location.key = key
 

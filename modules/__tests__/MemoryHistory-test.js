@@ -80,6 +80,18 @@ describe('a memory history', () => {
       })
     })
 
+    describe('location created by encoded and unencoded pathname', () => {
+      it('produces the same location.pathname', (done) => {
+        TestSequences.LocationPathnameAlwaysDecoded(history, done)
+      })
+    })
+
+    describe('location created with encoded/unencoded reserved characters', () => {
+      it('produces different location objects', (done) => {
+        TestSequences.EncodedReservedCharacters(history, done)
+      })
+    })
+
     describe('goBack', () => {
       it('calls change listeners with the previous location', (done) => {
         TestSequences.GoBack(history, done)
