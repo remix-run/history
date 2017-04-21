@@ -22,7 +22,7 @@
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "build": "node ./tools/build.js",
     "prepublish": "node ./tools/build.js",
-    "clean": "git clean -e '!node_modules' -fdX .",
+    "clean": "git clean -fdX .",
     "release": "node ./tools/release.js",
     "lint": "eslint modules",
     "test": "karma start --single-run"
