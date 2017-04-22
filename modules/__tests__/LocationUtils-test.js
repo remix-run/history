@@ -113,50 +113,20 @@ describe('createLocation', () => {
   })
 
   describe('with a path that cannot be decoded', () => {
-    let consoleError = console.error // eslint-disable-line no-console
-    let warningMessage
-
-    beforeEach(() => {
-      console.error = (message) => { // eslint-disable-line no-console
-        warningMessage = message
-      }
-    })
-
-    afterEach(() => {
-      console.error = consoleError // eslint-disable-line no-console
-    })
 
     describe('given as a string', () => {
-      it('does not throw when decodeURI throws a URIError, but logs warning', () => {
+      it('throws custom message when decodeURI throws a URIError', () => {
         expect(() => {
           createLocation('/test%')
-          expect(warningMessage).toBe(
-            'Warning: Pathname "/test%" could not be decoded. ' +
-            'Location\'s pathname will be encoded.'
-          )
-        }).toNotThrow()
-      })
-
-      it('sets pathname to be encoded string', () => {
-        const location = createLocation('/test%')
-        expect(location).toMatch({ pathname: '/test%' })
+        }).toThrow('Pathname "/test%" could not be decoded.')
       })
     })
 
     describe('given as an object', () => {
-      it('does not throw when decodeURI throws a URIError, but logs warning', () => {
+      it('throws custom message when decodeURI throws a URIError', () => {
         expect(() => {
           createLocation({ pathname: '/test%' })
-          expect(warningMessage).toBe(
-            'Warning: Pathname "/test%" could not be decoded. ' +
-            'Location\'s pathname will be encoded.'
-          )
-        }).toNotThrow()
-      })
-
-      it('sets pathname to be encoded string', () => {
-        const location = createLocation({ pathname: '/test%' })
-        expect(location).toMatch({ pathname: '/test%' })
+        }).toThrow('Pathname "/test%" could not be decoded.')
       })
     })
   })
