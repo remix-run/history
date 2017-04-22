@@ -37,16 +37,32 @@ export const parsePath = (path) => {
   }
 }
 
+const validatePath = (path) => {
+  try {
+    decodeURI(path)
+  } catch(e) {
+    if (e instanceof URIError) {
+      throw new Error(
+        'You are attempting to create a path that cannot be decoded. ' +
+        'Please call encodeURI on the pathname.'
+      )
+    }
+    throw e
+  }
+}
+
 export const createPath = (location) => {
   const { pathname, search, hash } = location
 
   let path = pathname || '/'
+  validatePath(path)
 
   if (search && search !== '?')
     path += (search.charAt(0) === '?' ? search : `?${search}`)
 
   if (hash && hash !== '#')
     path += (hash.charAt(0) === '#' ? hash : `#${hash}`)
+
 
   return path
 }

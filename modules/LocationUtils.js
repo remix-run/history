@@ -1,5 +1,6 @@
 import resolvePathname from 'resolve-pathname'
 import valueEqual from 'value-equal'
+import warning from 'warning'
 import { parsePath } from './PathUtils'
 
 export const createLocation = (path, state, key, currentLocation) => {
@@ -33,7 +34,19 @@ export const createLocation = (path, state, key, currentLocation) => {
       location.state = state
   }
 
-  location.pathname = decodeURI(location.pathname)
+  try {
+    location.pathname = decodeURI(location.pathname)
+  } catch (e) {
+    if (e instanceof URIError) {
+      warning(
+        false,
+        'Pathname "' + location.pathname + '" could not be decoded. ' + 
+        'Location\'s pathname will be encoded.'
+      )
+    } else {
+      throw e
+    }
+  }
 
   if (key)
     location.key = key
