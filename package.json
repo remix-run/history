@@ -60,7 +60,7 @@
     "pretty-bytes": "^4.0.2",
     "readline-sync": "^1.4.4",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^2.2.1"
   },
   "browserify": {
     "transform": [
