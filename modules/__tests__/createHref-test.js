@@ -1,4 +1,5 @@
 import expect from 'expect'
+import { getOrigin } from '../DOMUtils'
 import createBrowserHistory from '../createBrowserHistory'
 import createHashHistory from '../createHashHistory'
 import createMemoryHistory from '../createMemoryHistory'
@@ -69,6 +70,34 @@ describe('a browser history', () => {
       })
 
       expect(href).toEqual('/the/path?the=query#the-hash')
+    })
+  })
+
+  describe('with includeOrigin', () => {
+    let history
+
+    it('knows how to create hrefs', () => {
+      history = createBrowserHistory({ includeOrigin: true })
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      const origin = getOrigin();
+      expect(href).toEqual(`${origin}/the/path?the=query#the-hash`)
+    })
+
+    it('and basename, knows how to create hrefs', () => {
+      history = createBrowserHistory({ includeOrigin: true, basename: '/the/base' })
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      const origin = getOrigin();
+      expect(href).toEqual(`${origin}/the/base/the/path?the=query#the-hash`)
     })
   })
 
