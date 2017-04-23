@@ -42,7 +42,7 @@ const createMemoryHistory = (props = {}) => {
 
   // Public interface
 
-  const createHref = createPath
+  const createHref = () => null;
 
   const push = (path, state) => {
     warning(
