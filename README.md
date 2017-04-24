@@ -70,6 +70,7 @@ The options that each `create` method takes, along with its default values, are:
 ```js
 createBrowserHistory({
   basename: '',             // The base URL of the app (see below)
+  includeOrigin: false,     // Set true to include the origin in generated urls. 
   forceRefresh: false,      // Set true to force full page refreshes
   keyLength: 6,             // The length of location.key
   // A function to use to confirm navigation with the user (see below)
