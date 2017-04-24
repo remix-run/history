@@ -37,7 +37,7 @@ export const createLocation = (path, state, key, currentLocation) => {
     location.pathname = decodeURI(location.pathname)
   } catch (e) {
     if (e instanceof URIError) {
-      throw new Error(
+      throw new URIError(
         'Pathname "' + location.pathname + '" could not be decoded. ' +
         'This is likely caused by an invalid percent-encoding.'
       )

@@ -62,6 +62,12 @@ describe('a memory history', () => {
       })
     })
 
+    describe('push with an invalid path string (bad percent-encoding)', () => {
+      it('throws an error', (done) => {
+        TestSequences.PushInvalidPathname(history, done)
+      })
+    })
+
     describe('replace a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceNewLocation(history, done)
@@ -77,6 +83,12 @@ describe('a memory history', () => {
     describe('replace state', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.ReplaceState(history, done)
+      })
+    })
+
+    describe('replace  with an invalid path string (bad percent-encoding)', () => {
+      it('throws an error', (done) => {
+        TestSequences.ReplaceInvalidPathname(history, done)
       })
     })
 
