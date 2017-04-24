@@ -36,6 +36,14 @@ export const supportsHistory = () => {
 }
 
 /**
+ * Polyfill returns window.location.origin 
+ * https://developer.mozilla.org/en-US/docs/Web/API/Window/location#Browser_compatibility
+ */
+export const getOrigin = () =>
+  window.location.origin ||
+  window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+
+/**
  * Returns true if browser fires popstate on hash change.
  * IE10 and IE11 do not.
  */
