@@ -31,14 +31,6 @@ export default (history, done) => {
         pathname: '/view/',
         hash: '#abc'
       })
-      // unencoded object
-      const pathname = '/view/#abc'
-      history.replace({ pathname })
-    },
-    (location) => {
-      expect(location).toMatch({
-        pathname: '/view/#abc'
-      })
     }
   ]
 
