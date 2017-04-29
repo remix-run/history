@@ -1,6 +1,6 @@
 import warning from 'warning'
 import invariant from 'invariant'
-import { createLocation, locationsAreEqual } from './LocationUtils'
+import { createLocation, locationsAreEqual, locationPathsAreEqual } from './LocationUtils'
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -177,21 +177,8 @@ const createHashHistory = (props = {}) => {
   const initialLocation = getDOMLocation()
   let allPaths = [ createPath(initialLocation) ]
 
-  // Public interface
-
-  const createHref = (location) =>
-    '#' + encodePath(basename + createPath(location))
-
-  const push = (path, state) => {
-    warning(
-      state === undefined,
-      'Hash history cannot push state; it is ignored'
-    )
-
-    const action = 'PUSH'
-    const location = createLocation(path, undefined, undefined, history.location)
-
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+  const createPushCallback = (location, action) =>
+    (ok) => {
       if (!ok)
         return
 
@@ -221,19 +208,10 @@ const createHashHistory = (props = {}) => {
 
         setState()
       }
-    })
-  }
+    }
 
-  const replace = (path, state) => {
-    warning(
-      state === undefined,
-      'Hash history cannot replace state; it is ignored'
-    )
-
-    const action = 'REPLACE'
-    const location = createLocation(path, undefined, undefined, history.location)
-
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+  const createReplaceCallback = (location, action) =>
+    (ok) => {
       if (!ok)
         return
 
@@ -255,7 +233,64 @@ const createHashHistory = (props = {}) => {
         allPaths[prevIndex] = path
 
       setState({ action, location })
-    })
+    }
+
+  // Public interface
+
+  const createHref = (location) =>
+    '#' + encodePath(basename + createPath(location))
+
+  const push = (path, state) => {
+    warning(
+      state === undefined,
+      'Hash history cannot push state; it is ignored'
+    )
+
+    const action = 'PUSH'
+    const location = createLocation(path, undefined, undefined, history.location)
+
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      createPushCallback(location, action)
+    )
+  }
+
+  const replace = (path, state) => {
+    warning(
+      state === undefined,
+      'Hash history cannot replace state; it is ignored'
+    )
+
+    const action = 'REPLACE'
+    const location = createLocation(path, undefined, undefined, history.location)
+
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      createReplaceCallback(location, action)
+    )
+  }
+
+  const navigate = (path, state) => {
+    warning(
+      state === undefined,
+      'Hash history cannot use state; it is ignored'
+    )
+
+    const location = createLocation(path, undefined, undefined, history.location)
+    const samePath = locationPathsAreEqual(location, history.location)
+    const action = samePath ? 'REPLACE' : 'PUSH'
+    const callback = samePath ? createReplaceCallback(location, action) : createPushCallback(location, action)
+
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      callback
+    ) 
   }
 
   const go = (n) => {
@@ -320,6 +355,7 @@ const createHashHistory = (props = {}) => {
     action: 'POP',
     location: initialLocation,
     createHref,
+    navigate,
     push,
     replace,
     go,
