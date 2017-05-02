@@ -2,7 +2,7 @@ const webpack = require('webpack')
 
 module.exports = {
   output: {
-    library: 'History',
+    library: '_History',
     libraryTarget: 'umd'
   },
 
