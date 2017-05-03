@@ -19,6 +19,24 @@ describe('a browser history', () => {
 
       expect(href).toEqual('/the/path?the=query#the-hash')
     })
+
+    it('creates href with root pathname, search and hash', () => {
+      const href = history.createHref({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/?the=query#the-hash')
+    })
+
+    it('creates href with root pathname', () => {
+      const href = history.createHref({
+        pathname: '/'
+      })
+
+      expect(href).toEqual('/')
+    })
   })
 
   describe('with a basename', () => {
@@ -35,6 +53,24 @@ describe('a browser history', () => {
       })
 
       expect(href).toEqual('/the/base/the/path?the=query#the-hash')
+    })
+
+    it('creates href with root pathname, search and query', () => {
+      const href = history.createHref({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/the/base?the=query#the-hash')
+    })
+
+    it('creates href with root pathname', () => {
+      const href = history.createHref({
+        pathname: '/'
+      })
+
+      expect(href).toEqual('/the/base')
     })
   })
 
@@ -53,6 +89,24 @@ describe('a browser history', () => {
 
       expect(href).toEqual('/the/bad/base/the/path?the=query#the-hash')
     })
+
+    it('creates href with root pathname, search and query', () => {
+      const href = history.createHref({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/the/bad/base?the=query#the-hash')
+    })
+
+    it('creates href with root pathname', () => {
+      const href = history.createHref({
+        pathname: '/'
+      })
+
+      expect(href).toEqual('/the/bad/base')
+    })
   })
 
   describe('with a slash basename', () => {
@@ -69,6 +123,24 @@ describe('a browser history', () => {
       })
 
       expect(href).toEqual('/the/path?the=query#the-hash')
+    })
+
+    it('creates href with root pathname, search and query', () => {
+      const href = history.createHref({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/?the=query#the-hash')
+    })
+
+    it('creates href with root pathname', () => {
+      const href = history.createHref({
+        pathname: '/'
+      })
+
+      expect(href).toEqual('/')
     })
   })
 
