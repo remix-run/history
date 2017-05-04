@@ -167,6 +167,137 @@ describe('PathUtils createHref function without options', () => {
   })
 })
 
+describe('PathUtils createHref function with enforce trailing slash policy', () => {
+  let options
+  beforeEach(() => {
+    options = {
+      enforcePolicy: true
+    }
+  })
+  describe('where location has no trailing slash', () => {
+    let location
+    beforeEach(() => {
+      location = {
+        pathname: '/the/path'
+      }
+    })
+
+    it('handles empty basename', () => {
+      const href = createHref('', location, options)
+      expect(href).toEqual('/the/path/')
+    })
+
+    it('handles normal basename', () => {
+      const href = createHref('/the/base', location, options)
+      expect(href).toEqual('/the/base/the/path/')
+    })
+  })
+
+  describe('where location has trailing slash', () => {
+    let location
+    beforeEach(() => {
+      location = {
+        pathname: '/the/path/'
+      }
+    })
+    
+    it('handles empty basename', () => {
+      const href = createHref('', location, options)
+      expect(href).toEqual('/the/path/')
+    })
+
+    it('handles normal basename', () => {
+      const href = createHref('/the/base', location, options)
+      expect(href).toEqual('/the/base/the/path/')
+    })
+  })
+
+  describe('where location has root pathname', () => {
+    let location
+    beforeEach(() => {
+      location = {
+        pathname: '/'
+      }
+    })
+    
+    it('handles empty basename', () => {
+      const href = createHref('', location, options)
+      expect(href).toEqual('/')
+    })
+
+    it('handles normal basename', () => {
+      const href = createHref('/the/base', location, options)
+      expect(href).toEqual('/the/base/')
+    })
+  })
+})
+
+describe('PathUtils createHref function with enforce no trailing slash policy', () => {
+  let options
+  beforeEach(() => {
+    options = {
+      enforcePolicy: false
+    }
+  })
+
+  describe('where location has no trailing slash', () => {
+    let location
+    beforeEach(() => {
+      location = {
+        pathname: '/the/path'
+      }
+    })
+    
+    it('handles empty basename', () => {
+      const href = createHref('', location, options)
+      expect(href).toEqual('/the/path')
+    })
+
+    it('handles normal basename', () => {
+      const href = createHref('/the/base', location, options)
+      expect(href).toEqual('/the/base/the/path')
+    })
+  })
+
+  describe('where location has trailing slash', () => {
+    let location
+    beforeEach(() => {
+      location = {
+        pathname: '/the/path/'
+      }
+    })
+    
+    it('handles empty basename', () => {
+      const href = createHref('', location, options)
+      expect(href).toEqual('/the/path')
+    })
+
+    it('handles normal basename', () => {
+      const href = createHref('/the/base', location, options)
+      expect(href).toEqual('/the/base/the/path')
+    })
+  })
+
+  describe('where location has root pathname', () => {
+    let location
+    beforeEach(() => {
+      location = {
+        pathname: '/'
+      }
+    })
+    
+    it('handles empty basename', () => {
+      const href = createHref('', location, options)
+      expect(href).toEqual('/')
+    })
+
+    it('handles normal basename', () => {
+      const href = createHref('/the/base', location, options)
+      expect(href).toEqual('/the/base')
+    })
+  })
+})
+
 describe('a browser history', () => {
   describe('with no basename', () => {
     let history
