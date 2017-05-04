@@ -52,3 +52,17 @@ export const createPath = (location) => {
 
   return path
 }
+
+export const createHref = (basename, location, trailingSlashOptions) => {
+  throw new Error('not implemented')
+  /*
+  trailingSlashOptions?: {
+    enforcePolicy?: boolean, //if not undefined, determines whether
+                             //hrefs will have trailing slash.
+                             //if undefined, keeps format of location.pathname
+    basePath?: boolean       //how to handle non-empty basename, root location.
+                             //if truthy, '/the/base/'.
+                             //if falsey, '/the/base'.
+  }
+  */
+}
