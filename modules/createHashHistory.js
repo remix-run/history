@@ -7,7 +7,8 @@ import {
   stripTrailingSlash,
   hasBasename,
   stripBasename,
-  createPath
+  createPath,
+  normalizePath
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import {
@@ -67,7 +68,7 @@ const createHashHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     hashType = 'slash'
   } = props
-  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
+  const basename = normalizePath(props.basename)
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 
