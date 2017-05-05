@@ -179,10 +179,13 @@ const createHashHistory = (props = {}) => {
   const initialLocation = getDOMLocation()
   let allPaths = [ createPath(initialLocation) ]
 
+  const createHref_withoutHash = (location) => //used by push/replace
+    encodePath(utilCreateHref(basename, location))
+
   // Public interface
 
   const createHref = (location) =>
-    '#' + encodePath(utilCreateHref(basename, location))
+    '#' + createHref_withoutHash(location)
 
   const push = (path, state) => {
     warning(
@@ -198,7 +201,7 @@ const createHashHistory = (props = {}) => {
         return
 
       const path = createPath(location)
-      const encodedPath = encodePath(basename + path)
+      const encodedPath = createHref_withoutHash(location)
       const hashChanged = getHashPath() !== encodedPath
 
       if (hashChanged) {
@@ -240,7 +243,7 @@ const createHashHistory = (props = {}) => {
         return
 
       const path = createPath(location)
-      const encodedPath = encodePath(basename + path)
+      const encodedPath = createHref_withoutHash(location)
       const hashChanged = getHashPath() !== encodedPath
 
       if (hashChanged) {
