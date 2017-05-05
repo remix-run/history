@@ -207,232 +207,235 @@ describeHistory('a browser history', () => {
       expect(history.location.pathname).toEqual('/')
     })
   })
+})
 
-  describe('createHref matches new location', () => {
-    window.history.replaceState(null, null, '/')
-    const originLength = window.location.origin.length
-    const ignoreOrigin = () => window.location.href.substr(originLength)
+describe('createHref matches new location', () => {
+  window.history.replaceState(null, null, '/')
+  const originLength = window.location.href.length - 1
+  const ignoreOrigin = () => window.location.href.substr(originLength)
 
-    describe('with a basename', () => {
-      const basename = '/the/base'
-      const startingLocation = basename + '/start/here'
-      let history
-      beforeEach(() => {
-        window.history.replaceState(null, null, basename)
-        history = createHistory({ basename })
+  describe('with a basename', () => {
+    const basename = '/the/base'
+    const startingLocation = basename + '/start/here'
+    let history
+    beforeEach(() => {
+      window.history.replaceState(null, null, startingLocation)
+      history = createHistory({ basename })
+    })
+
+    describe('to root path', () => {
+      const getLocation = () => ({
+        pathname: '/'
       })
 
-      describe('to root path', () => {
-        const getLocation = () => ({
-          pathname: '/'
-        })
-
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
       })
 
-      describe('to root path with search and hash', () => {
-        const getLocation = () => ({
-          pathname: '/',
-          search: '?the=query',
-          hash: '#the-hash'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
-      })
-
-      describe('to path with no trailing slash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
-      })
-
-      describe('to path with no trailing slash, with search and hash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path',
-          search: '?the=query',
-          hash: '#the-hash'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
-      })
-
-      describe('to path with trailing slash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path/'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
-      })
-
-      describe('to path with trailing slash, with search and hash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path/',
-          search: '?the=query',
-          hash: '#the-hash'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
       })
     })
 
-    describe('without a basename', () => {
-      const startingLocation = '/start/here'
-      let history
-      beforeEach(() => {
-        history = createHistory()
+    describe('to root path with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
       })
 
-      describe('to root path', () => {
-        const getLocation = () => ({
-          pathname: '/'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
       })
 
-      describe('to root path with search and hash', () => {
-        const getLocation = () => ({
-          pathname: '/',
-          search: '?the=query',
-          hash: '#the-hash'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with no trailing slash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path'
       })
 
-      describe('to path with no trailing slash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
       })
 
-      describe('to path with no trailing slash, with search and hash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path',
-          search: '?the=query',
-          hash: '#the-hash'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with no trailing slash, with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
       })
 
-      describe('to path with trailing slash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path/'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
       })
 
-      describe('to path with trailing slash, with search and hash', () => {
-        const getLocation = () => ({
-          pathname: '/the/path/',
-          search: '?the=query',
-          hash: '#the-hash'
-        })
-        
-        it('pushes correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done)
-        })
-        
-        it('replaces correctly', (done) => {
-          TestSequences.CompareHrefToNewLocation(history, startingLocation,
-            getLocation, ignoreOrigin, done, true)
-        })
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with trailing slash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path/'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with trailing slash, with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
       })
     })
   })
+
+  describe('without a basename', () => {
+    const startingLocation = '/start/here'
+    let history
+    beforeEach(() => {
+      window.history.replaceState(null, null, startingLocation)
+      history = createHistory()
+    })
+
+    describe('to root path', () => {
+      const getLocation = () => ({
+        pathname: '/'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to root path with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with no trailing slash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with no trailing slash, with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with trailing slash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path/'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+      })
+    })
+
+    describe('to path with trailing slash, with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, startingLocation,
+          getLocation, ignoreOrigin, done, true)
+
+      })
+    })
+  })
+
 })

@@ -13,11 +13,14 @@ import execSteps from './execSteps'
  * @param { () => string } getWindowHref get the "href" portion of window's current location
  * @param { () => any } done callback passed to "it" function in test
  * @param { boolean } replaceIt if true, history.replace instead of history.push
+ * @param { boolean } setInitialHistory if true, replaces history state with fromLocationStr at start
  */
 export default (history, fromLocationStr,
-                       getToLocationObj, getWindowHref, done, replaceIt) => {
-    window.history.replaceState(null, null, fromLocationStr)
-
+                       getToLocationObj, getWindowHref, done, replaceIt, setInitialHistory) => {
+    if (setInitialHistory) {
+        window.history.replaceState(null, null, fromLocationStr)
+    }
+    
     const href = history.createHref(getToLocationObj())
 
     const steps = [
