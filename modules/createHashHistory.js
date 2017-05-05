@@ -8,7 +8,8 @@ import {
   hasBasename,
   stripBasename,
   createPath,
-  normalizePath
+  normalizePath,
+  createHref as utilCreateHref
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import {
@@ -181,7 +182,7 @@ const createHashHistory = (props = {}) => {
   // Public interface
 
   const createHref = (location) =>
-    '#' + encodePath(basename + createPath(location))
+    '#' + encodePath(utilCreateHref(basename, location))
 
   const push = (path, state) => {
     warning(
