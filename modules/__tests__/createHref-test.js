@@ -244,6 +244,24 @@ describe('a hash history', () => {
 
       expect(href).toEqual('#/the/base/the/path?the=query')
     })
+
+    it('creates href with root pathname, search and query', () => {
+      const href = history.createHref({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('#/the/base?the=query#the-hash')
+    })
+
+    it ('creates href with root pathname', () => {
+      const href = history.createHref({
+        pathname: '/'
+      })
+
+      expect(href).toEqual('#/the/base')
+    })
   })
 
   describe('with a bad basename', () => {
