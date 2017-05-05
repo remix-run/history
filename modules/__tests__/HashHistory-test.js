@@ -250,23 +250,16 @@ describeHistory('a hash history', () => {
   })
 })
 
-describe('createHref matches new location', () => {
-  window.history.replaceState(null, null, '/')
-  const baseLength = window.location.href.length
-  const getHash = () => window.location.href.substr(baseLength)
-
-  beforeEach(() => {
-    window.history.replaceState(null, null, '/')
-  })
+describe('hash history createHref matches new location', () => {
+  const getHash = () => {
+    const preHashLength = window.location.href.indexOf('#')
+    return preHashLength > -1 ? window.location.href.substr(preHashLength) : ''
+  }
 
   describe('with a basename', () => {
-    const basename = '/the/base'
-    const baseHash = '#' + basename
-    const startingLocation = baseHash + '/start/here'
     let history
     beforeEach(() => {
-      window.history.replaceState(null, null, startingLocation)
-      history = createHistory({ basename })
+      history = createHistory({ basename: '/the/base' })
     })
 
     describe('to root path', () => {
@@ -275,13 +268,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -293,13 +284,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -309,13 +298,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -327,13 +314,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -343,13 +328,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -361,22 +344,18 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
   })
 
   describe('without a basename', () => {
-    const startingLocation = '#/start/here'
     let history
     beforeEach(() => {
-      window.history.replaceState(null, null, startingLocation)
       history = createHistory()
     })
 
@@ -386,13 +365,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -404,13 +381,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -420,13 +395,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -438,13 +411,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -454,13 +425,11 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
 
@@ -472,16 +441,12 @@ describe('createHref matches new location', () => {
       })
 
       it('pushes correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done)
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
       })
 
       it('replaces correctly', (done) => {
-        TestSequences.CompareHrefToNewLocation(history, startingLocation,
-          getLocation, getHash, done, true)
-
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
       })
     })
   })
-
 })
