@@ -3,8 +3,8 @@
 
 - Adds `createHref(basename, location, trailingSlashOptions)` in PathUtils module
   to provide consistent implementation with options for handling trailing slashes.
-- Browser history's `createHref(location)` result no longer includes a trailing slash
-  when `basename` is non-empty and `location.pathname` is `/` or empty.
+- Browser and hash histories' `createHref(location)` results no longer include a
+  trailing slash when `basename` is non-empty and `location.pathname` is `/` or empty.
 
 ## [v4.6.1]
 > Mar 15, 2017
