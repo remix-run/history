@@ -51,7 +51,8 @@ const createBrowserHistory = (props = {}) => {
   const {
     forceRefresh = false,
     getUserConfirmation = getConfirmation,
-    keyLength = 6
+    keyLength = 6,
+    trailingSlashOptions = {}
   } = props
   const basename = normalizePath(props.basename)
 
@@ -150,10 +151,14 @@ const createBrowserHistory = (props = {}) => {
 
   // Public interface
 
-  const createHref = (location) =>
-    utilCreateHref(basename, location)
+  const createHref = (location, trailingSlashOverrides = {}) => {
+    const combinedOptions = Object.assign({},
+      trailingSlashOptions, trailingSlashOverrides)
+    return utilCreateHref(basename, location, combinedOptions)
+  }
+    
 
-  const push = (path, state) => {
+  const push = (path, state, trailingSlashOverrides = {}) => {
     warning(
       !(typeof path === 'object' && path.state !== undefined && state !== undefined),
       'You should avoid providing a 2nd state argument to push when the 1st ' +
@@ -167,7 +172,7 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const href = createHref(location)
+      const href = createHref(location, trailingSlashOverrides)
       const { key, state } = location
 
       if (canUseHistory) {
@@ -195,7 +200,7 @@ const createBrowserHistory = (props = {}) => {
     })
   }
 
-  const replace = (path, state) => {
+  const replace = (path, state, trailingSlashOverrides = {}) => {
     warning(
       !(typeof path === 'object' && path.state !== undefined && state !== undefined),
       'You should avoid providing a 2nd state argument to replace when the 1st ' +
@@ -209,7 +214,7 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const href = createHref(location)
+      const href = createHref(location, trailingSlashOverrides)
       const { key, state } = location
 
       if (canUseHistory) {

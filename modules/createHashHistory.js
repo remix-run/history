@@ -67,7 +67,8 @@ const createHashHistory = (props = {}) => {
 
   const {
     getUserConfirmation = getConfirmation,
-    hashType = 'slash'
+    hashType = 'slash',
+    trailingSlashOptions = {}
   } = props
   const basename = normalizePath(props.basename)
 
@@ -179,15 +180,18 @@ const createHashHistory = (props = {}) => {
   const initialLocation = getDOMLocation()
   let allPaths = [ createPath(initialLocation) ]
 
-  const createHref_withoutHash = (location) => //used by push/replace
-    encodePath(utilCreateHref(basename, location))
+  const createHref_withoutHash = (location, trailingSlashOverrides = {}) => {
+    const combinedOptions = Object.assign({},
+      trailingSlashOptions, trailingSlashOverrides)
+    return encodePath(utilCreateHref(basename, location, combinedOptions))
+  }
 
   // Public interface
 
-  const createHref = (location) =>
-    '#' + createHref_withoutHash(location)
+  const createHref = (location, trailingSlashOverrides = {}) =>
+    '#' + createHref_withoutHash(location, trailingSlashOverrides)
 
-  const push = (path, state) => {
+  const push = (path, state, trailingSlashOverrides = {}) => {
     warning(
       state === undefined,
       'Hash history cannot push state; it is ignored'
@@ -201,7 +205,7 @@ const createHashHistory = (props = {}) => {
         return
 
       const path = createPath(location)
-      const encodedPath = createHref_withoutHash(location)
+      const encodedPath = createHref_withoutHash(location, trailingSlashOverrides)
       const hashChanged = getHashPath() !== encodedPath
 
       if (hashChanged) {
@@ -229,7 +233,7 @@ const createHashHistory = (props = {}) => {
     })
   }
 
-  const replace = (path, state) => {
+  const replace = (path, state, trailingSlashOverrides = {}) => {
     warning(
       state === undefined,
       'Hash history cannot replace state; it is ignored'
@@ -243,7 +247,7 @@ const createHashHistory = (props = {}) => {
         return
 
       const path = createPath(location)
-      const encodedPath = createHref_withoutHash(location)
+      const encodedPath = createHref_withoutHash(location, trailingSlashOverrides)
       const hashChanged = getHashPath() !== encodedPath
 
       if (hashChanged) {

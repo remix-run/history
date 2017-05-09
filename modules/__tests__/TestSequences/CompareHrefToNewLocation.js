@@ -12,13 +12,17 @@ import execSteps from './execSteps'
  * @param { () => string } getWindowHref get the "href" portion of window's current location
  * @param { () => any } done callback passed to "it" function in test
  * @param { boolean } replaceIt if true, history.replace instead of history.push
+ * @param { () => { basePath?: boolean, enforcePolicy?: boolean } } getSlashOptions override
+ * trailingSlashOptions for push/replace call
  */
-export default (history, getToLocationObj, getWindowHref, done, replaceIt) => {
-    const href = history.createHref(getToLocationObj())
+export default (history, getToLocationObj, getWindowHref, done, replaceIt, getSlashOptions) => {
+    const href = history.createHref(getToLocationObj(),
+        getSlashOptions && getSlashOptions())
 
     const steps = [
         (location) => {
-            history[replaceIt ? 'replace' : 'push'](getToLocationObj())
+            history[replaceIt ? 'replace' : 'push'](getToLocationObj(),
+                null, getSlashOptions && getSlashOptions())
         },
         (location) => {
             const locationHref = getWindowHref()
