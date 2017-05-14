@@ -22,12 +22,12 @@ describe('PathUtils createHref function without options', () => {
 
     it('handles normal basename', () => {
       const href = createHref('/the/base', location)
-      expect(href).toEqual('/the/base')
+      expect(href).toEqual('/the/base/')
     })
 
     it('handles basename with trailing slash', () => {
       const href = createHref('/the/base/', location)
-      expect(href).toEqual('/the/base')
+      expect(href).toEqual('/the/base/')
     })
   })
 
@@ -53,12 +53,12 @@ describe('PathUtils createHref function without options', () => {
 
     it('handles normal basename', () => {
       const href = createHref('/the/base', location)
-      expect(href).toEqual('/the/base?the=query#the-hash')
+      expect(href).toEqual('/the/base/?the=query#the-hash')
     })
     
     it('handles basename with trailing slash', () => {
       const href = createHref('/the/base/', location)
-      expect(href).toEqual('/the/base?the=query#the-hash')
+      expect(href).toEqual('/the/base/?the=query#the-hash')
     })
   })
 
@@ -313,7 +313,7 @@ describe('PathUtils createHref function with basename trailing slash option', ()
 
     it('handles normal basename', () => {
       const href = createHref('/the/base', location, options)
-      expect(href).toEqual('/the/base/')
+      expect(href).toEqual('/the/base')
     })
   })
 
@@ -329,7 +329,7 @@ describe('PathUtils createHref function with basename trailing slash option', ()
 
     it('handles normal basename', () => {
       const href = createHref('/the/base', location, options)
-      expect(href).toEqual('/the/base/?the=query#the-hash')
+      expect(href).toEqual('/the/base?the=query#the-hash')
     })
   })
 })

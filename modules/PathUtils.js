@@ -68,7 +68,7 @@ export const createHref = (basename, location, trailingSlashOptions) => {
   const normBase = normalizePath(basename, true)
   const { pathname, search, hash } = location
   let normPath = addLeadingSlash(pathname)
-  if (!trailingSlashOptions.basePath && normPath === '/') {
+  if (trailingSlashOptions.basePath && normPath === '/') {
     normPath = ''
   }
   let fullPath = normBase + normPath
@@ -86,8 +86,8 @@ export const createHref = (basename, location, trailingSlashOptions) => {
                              //if undefined, keeps format of location.pathname
     basePath?: boolean       //how to handle non-empty basename and
                              //location.pathname == "/".
-                             //if truthy, '/the/base/'.
-                             //if falsey, '/the/base'.
+                             //if truthy, '/the/base'.
+                             //if falsey, '/the/base/'.
   }
   */
 }

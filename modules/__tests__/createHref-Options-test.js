@@ -31,11 +31,11 @@ describe('when history is created with default trailing slash options', () => {
         const expectation = createExpectation(() => location, () => overrideOptions)
 
         it('browser history uses override', () => {
-          expectation(testBrowserHistory(), '/the/base/')
+          expectation(testBrowserHistory(), '/the/base')
         })
 
         it('hash history uses override', () => {
-          expectation(testHashHistory(), '#/the/base/')
+          expectation(testHashHistory(), '#/the/base')
         })
       })
 
@@ -51,11 +51,11 @@ describe('when history is created with default trailing slash options', () => {
         const expectation = createExpectation(() => location, () => overrideOptions)
 
         it('browser history uses override setting', () => {
-          expectation(testBrowserHistory(), '/the/base/?the=query#the-hash')
+          expectation(testBrowserHistory(), '/the/base?the=query#the-hash')
         })
 
         it('hash history uses override setting', () => {
-          expectation(testHashHistory(), '#/the/base/?the=query#the-hash')
+          expectation(testHashHistory(), '#/the/base?the=query#the-hash')
         })
       })
     })
@@ -161,7 +161,7 @@ describe('when history is created with default trailing slash options', () => {
   })
 })
 
-describe('when history is created with option to keep trailing slash on base path', () => {
+describe('when history is created with option basePath==true', () => {
   let ownOptions
   beforeEach(() => {
     ownOptions = {
@@ -191,11 +191,11 @@ describe('when history is created with option to keep trailing slash on base pat
         const expectation = createExpectation(() => location)
 
         it('browser history uses its own options', () => {
-          expectation(testBrowserHistory(), '/the/base/')
+          expectation(testBrowserHistory(), '/the/base')
         })
 
         it('hash history uses its own options', () => {
-          expectation(testHashHistory(), '#/the/base/')
+          expectation(testHashHistory(), '#/the/base')
         })
       })
 
@@ -211,11 +211,11 @@ describe('when history is created with option to keep trailing slash on base pat
         const expectation = createExpectation(() => location)
 
         it('browser history uses its own options', () => {
-          expectation(testBrowserHistory(), '/the/base/?the=query#the-hash')
+          expectation(testBrowserHistory(), '/the/base?the=query#the-hash')
         })
 
         it('hash history uses its own options', () => {
-          expectation(testHashHistory(), '#/the/base/?the=query#the-hash')
+          expectation(testHashHistory(), '#/the/base?the=query#the-hash')
         })
       })
     })
@@ -238,11 +238,11 @@ describe('when history is created with option to keep trailing slash on base pat
         const expectation = createExpectation(() => location, () => overrideOptions)
 
         it('browser history uses override setting', () => {
-          expectation(testBrowserHistory(), '/the/base')
+          expectation(testBrowserHistory(), '/the/base/')
         })
 
         it('hash history uses override setting', () => {
-          expectation(testHashHistory(), '#/the/base')
+          expectation(testHashHistory(), '#/the/base/')
         })
       })
 
@@ -258,11 +258,11 @@ describe('when history is created with option to keep trailing slash on base pat
         const expectation = createExpectation(() => location, () => overrideOptions)
 
         it('browser history uses override setting', () => {
-          expectation(testBrowserHistory(), '/the/base?the=query#the-hash')
+          expectation(testBrowserHistory(), '/the/base/?the=query#the-hash')
         })
 
         it('hash history uses override setting', () => {
-          expectation(testHashHistory(), '#/the/base?the=query#the-hash')
+          expectation(testHashHistory(), '#/the/base/?the=query#the-hash')
         })
       })
     })
