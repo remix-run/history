@@ -1,3 +1,10 @@
+## HEAD
+> May 13, 2017
+
+- Adds options for handling trailing slashes with browser and hash history `createHref`
+  functions. Among these options is the new ability to omit the trailing slash when
+  making an href to the history's basename.
+
 ## [v4.6.1]
 > Mar 15, 2017
 

@@ -7,7 +7,9 @@ import {
   stripTrailingSlash,
   hasBasename,
   stripBasename,
-  createPath
+  createPath,
+  normalizePath,
+  createHref as utilCreateHref
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import {
@@ -65,9 +67,10 @@ const createHashHistory = (props = {}) => {
 
   const {
     getUserConfirmation = getConfirmation,
-    hashType = 'slash'
+    hashType = 'slash',
+    trailingSlashOptions = {}
   } = props
-  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
+  const basename = normalizePath(props.basename)
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 
@@ -75,7 +78,7 @@ const createHashHistory = (props = {}) => {
     let path = decodePath(getHashPath())
 
     warning(
-      !(basename && hasBasename(path, basename)),
+      (!basename || hasBasename(path, basename)),
       'You are attempting to use a basename on a page whose URL path does not begin ' +
       'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
     )
@@ -177,12 +180,18 @@ const createHashHistory = (props = {}) => {
   const initialLocation = getDOMLocation()
   let allPaths = [ createPath(initialLocation) ]
 
+  const createHref_withoutHash = (location, trailingSlashOverrides = {}) => {
+    const combinedOptions = Object.assign({},
+      trailingSlashOptions, trailingSlashOverrides)
+    return encodePath(utilCreateHref(basename, location, combinedOptions))
+  }
+
   // Public interface
 
-  const createHref = (location) =>
-    '#' + encodePath(basename + createPath(location))
+  const createHref = (location, trailingSlashOverrides = {}) =>
+    '#' + createHref_withoutHash(location, trailingSlashOverrides)
 
-  const push = (path, state) => {
+  const push = (path, state, trailingSlashOverrides = {}) => {
     warning(
       state === undefined,
       'Hash history cannot push state; it is ignored'
@@ -196,7 +205,7 @@ const createHashHistory = (props = {}) => {
         return
 
       const path = createPath(location)
-      const encodedPath = encodePath(basename + path)
+      const encodedPath = createHref_withoutHash(location, trailingSlashOverrides)
       const hashChanged = getHashPath() !== encodedPath
 
       if (hashChanged) {
@@ -224,7 +233,7 @@ const createHashHistory = (props = {}) => {
     })
   }
 
-  const replace = (path, state) => {
+  const replace = (path, state, trailingSlashOverrides = {}) => {
     warning(
       state === undefined,
       'Hash history cannot replace state; it is ignored'
@@ -238,7 +247,7 @@ const createHashHistory = (props = {}) => {
         return
 
       const path = createPath(location)
-      const encodedPath = encodePath(basename + path)
+      const encodedPath = createHref_withoutHash(location, trailingSlashOverrides)
       const hashChanged = getHashPath() !== encodedPath
 
       if (hashChanged) {

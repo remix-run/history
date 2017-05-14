@@ -249,3 +249,116 @@ describeHistory('a hash history', () => {
     })
   })
 })
+
+describe('hash history createHref matches new location', () => {
+  const getHash = () => {
+    const preHashLength = window.location.href.indexOf('#')
+    return preHashLength > -1 ? window.location.href.substr(preHashLength) : ''
+  }
+
+  describe('with a basename', () => {
+    let history
+    beforeEach(() => {
+      history = createHistory({ basename: '/the/base' })
+    })
+
+    describe('to root path with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
+      })
+    })
+  })
+
+  describe('without a basename', () => {
+    let history
+    beforeEach(() => {
+      history = createHistory()
+    })
+
+    describe('to path with no trailing slash, with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
+      })
+    })
+
+    describe('to path with trailing slash, with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/the/path/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
+      })
+    })
+  })
+
+  describe('with basename and specified trailing slash option basePath==true', () => {
+    let history
+    beforeEach(() => {
+      history = createHistory({
+        basename: '/the/base',
+        trailingSlashOptions: {
+          basePath: true,
+        }
+      })
+    })
+
+    describe('to root path with search and hash', () => {
+      const getLocation = () => ({
+        pathname: '/',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      it('pushes correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done)
+      })
+
+      it('replaces correctly', (done) => {
+        TestSequences.CompareHrefToNewLocation(history, getLocation, getHash, done, true)
+      })
+
+      describe('with override option basePath==false', () => {
+        const getTrailingSlashOverrides = () => ({
+          basePath: false
+        })
+
+        it('pushes correctly', (done) => {
+          TestSequences.CompareHrefToNewLocation(history, getLocation, getHash,
+            done, false, getTrailingSlashOverrides)
+        })
+
+        it('replaces correctly', (done) => {
+          TestSequences.CompareHrefToNewLocation(history, getLocation, getHash,
+            done, true, getTrailingSlashOverrides)
+        })
+      })
+    })
+  })
+})

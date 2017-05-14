@@ -10,6 +10,9 @@ export const hasBasename = (path, prefix) =>
 export const stripBasename = (path, prefix) =>
   hasBasename(path, prefix) ? path.substr(prefix.length) : path
 
+export const addTrailingSlash = (path) =>
+  path.charAt(path.length - 1) === '/' ? path : path + '/'
+
 export const stripTrailingSlash = (path) =>
   path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path
 
@@ -39,11 +42,10 @@ export const parsePath = (path) => {
   }
 }
 
-export const createPath = (location) => {
-  const { pathname, search, hash } = location
+export const normalizePath = (path) =>
+  path ? stripTrailingSlash(addLeadingSlash(path)) : ''
 
-  let path = encodeURI(pathname || '/')
-
+const combinePathSearchHash = (path, search, hash) => {
   if (search && search !== '?')
     path += (search.charAt(0) === '?' ? search : `?${search}`)
 
@@ -51,4 +53,41 @@ export const createPath = (location) => {
     path += (hash.charAt(0) === '#' ? hash : `#${hash}`)
 
   return path
+}
+
+export const createPath = (location) => {
+  const { pathname, search, hash } = location
+
+  let path = encodeURI(pathname || '/')
+
+  return combinePathSearchHash(path, search, hash)
+}
+
+export const createHref = (basename, location, trailingSlashOptions) => {
+  trailingSlashOptions = trailingSlashOptions || {}
+  const normBase = normalizePath(basename, true)
+  const { pathname, search, hash } = location
+  let normPath = addLeadingSlash(pathname)
+  if (trailingSlashOptions.basePath && normPath === '/') {
+    normPath = ''
+  }
+  let fullPath = normBase + normPath
+  if (typeof trailingSlashOptions.enforcePolicy !== 'undefined') {
+    fullPath = (trailingSlashOptions.enforcePolicy ?
+      addTrailingSlash : 
+      stripTrailingSlash)(fullPath)
+  }
+  fullPath = encodeURI(fullPath || '/')
+  return combinePathSearchHash(fullPath, search, hash)
+  /*
+  trailingSlashOptions?: {
+    enforcePolicy?: boolean, //if not undefined, determines whether
+                             //hrefs will have trailing slash.
+                             //if undefined, keeps format of location.pathname
+    basePath?: boolean       //how to handle non-empty basename and
+                             //location.pathname == "/".
+                             //if truthy, '/the/base'.
+                             //if falsey, '/the/base/'.
+  }
+  */
 }

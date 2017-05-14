@@ -6,7 +6,9 @@ import {
   stripTrailingSlash,
   hasBasename,
   stripBasename,
-  createPath
+  createPath,
+  normalizePath,
+  createHref as utilCreateHref
 } from './PathUtils'
 import createTransitionManager from './createTransitionManager'
 import {
@@ -49,9 +51,10 @@ const createBrowserHistory = (props = {}) => {
   const {
     forceRefresh = false,
     getUserConfirmation = getConfirmation,
-    keyLength = 6
+    keyLength = 6,
+    trailingSlashOptions = {}
   } = props
-  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
+  const basename = normalizePath(props.basename)
 
   const getDOMLocation = (historyState) => {
     const { key, state } = (historyState || {})
@@ -60,7 +63,7 @@ const createBrowserHistory = (props = {}) => {
     let path = pathname + search + hash
 
     warning(
-      !(basename && hasBasename(path, basename)),
+      (!basename || hasBasename(path, basename)),
       'You are attempting to use a basename on a page whose URL path does not begin ' +
       'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
     )
@@ -148,10 +151,14 @@ const createBrowserHistory = (props = {}) => {
 
   // Public interface
 
-  const createHref = (location) =>
-    basename + createPath(location)
+  const createHref = (location, trailingSlashOverrides = {}) => {
+    const combinedOptions = Object.assign({},
+      trailingSlashOptions, trailingSlashOverrides)
+    return utilCreateHref(basename, location, combinedOptions)
+  }
+    
 
-  const push = (path, state) => {
+  const push = (path, state, trailingSlashOverrides = {}) => {
     warning(
       !(typeof path === 'object' && path.state !== undefined && state !== undefined),
       'You should avoid providing a 2nd state argument to push when the 1st ' +
@@ -165,7 +172,7 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const href = createHref(location)
+      const href = createHref(location, trailingSlashOverrides)
       const { key, state } = location
 
       if (canUseHistory) {
@@ -193,7 +200,7 @@ const createBrowserHistory = (props = {}) => {
     })
   }
 
-  const replace = (path, state) => {
+  const replace = (path, state, trailingSlashOverrides = {}) => {
     warning(
       !(typeof path === 'object' && path.state !== undefined && state !== undefined),
       'You should avoid providing a 2nd state argument to replace when the 1st ' +
@@ -207,7 +214,7 @@ const createBrowserHistory = (props = {}) => {
       if (!ok)
         return
 
-      const href = createHref(location)
+      const href = createHref(location, trailingSlashOverrides)
       const { key, state } = location
 
       if (canUseHistory) {
