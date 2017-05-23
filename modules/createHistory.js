@@ -34,6 +34,8 @@ const createHistory = (options = {}) => {
     return -1
   }
 
+  const getKeysLength = () => allKeys.length
+
   const updateLocation = (nextLocation) => {
     const currentIndex = getCurrentIndex()
 
@@ -146,6 +148,8 @@ const createHistory = (options = {}) => {
     _createLocation(location, action, key)
 
   return {
+    getKeysLength,
+    getCurrentIndex,
     getCurrentLocation,
     listenBefore,
     listen,
