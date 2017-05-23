@@ -1,3 +1,8 @@
+## [HEAD]
+> May 23, 2017
+
+- Expose `getCurrentIndex` method and add new `getKeysLength` method that returns history keys count ([#475])
+
 ## [v3.3.0]
 > Feb 25, 2017
 
