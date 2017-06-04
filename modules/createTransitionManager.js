@@ -24,7 +24,9 @@ const createTransitionManager = () => {
     if (prompt != null) {
       const result = typeof prompt === 'function' ? prompt(location, action) : prompt
 
-      if (typeof result === 'string') {
+      if (typeof result === 'function') {
+        result(callback)
+      } else if (typeof result === 'string') {
         if (typeof getUserConfirmation === 'function') {
           getUserConfirmation(result, callback)
         } else {

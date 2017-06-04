@@ -207,6 +207,15 @@ const history = createHistory({
 })
 ```
 
+If a block requires a unique dialog or special functionality, you may curry a custom confirm function in the `history.block()` function.
+
+```js
+history.block((location, action) => (callback) => {
+  // Call callback() as used in getUserConfirmation()
+  // Note: getUserConfirmation is replaced by this function for this block.
+})
+```
+
 ### Using a Base URL
 
 If all the URLs in your app are relative to some other "base" URL, use the `basename` option. This option transparently adds the given string to the front of all URLs you use.

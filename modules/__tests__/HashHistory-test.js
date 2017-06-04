@@ -171,6 +171,21 @@ describeHistory('a hash history', () => {
     })
   })
 
+  describe('with a custom confirm', () => {
+    const getUserConfirmation = (_, callback) => callback(true)
+
+    let history
+    beforeEach(() => {
+      history = createHistory({
+        getUserConfirmation
+      })
+    })
+
+    it('replaces the user confirmation from history creation', (done) => {
+      TestSequences.BlockWithCustomConfirm(history, done)
+    })
+  })
+
   describe('"hashbang" hash path coding', () => {
     let history
     beforeEach(() => {
