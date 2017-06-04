@@ -1,3 +1,8 @@
+## HEAD
+> Jun 04, 2017
+
+- Added per-block user confirm customization
+
 ## [v4.6.1]
 > Mar 15, 2017
 
