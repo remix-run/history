@@ -1,3 +1,5 @@
+import pathToRegexp from 'path-to-regexp'
+
 export const addLeadingSlash = (path) =>
   path.charAt(0) === '/' ? path : '/' + path
 
@@ -5,10 +7,41 @@ export const stripLeadingSlash = (path) =>
   path.charAt(0) === '/' ? path.substr(1) : path
 
 export const hasBasename = (path, prefix) => 
-  (new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i')).test(path)
+  matchBasename(path, prefix)
 
-export const stripBasename = (path, prefix) =>
-  hasBasename(path, prefix) ? path.substr(prefix.length) : path
+const matchBasename = (path, prefix) => {
+  const pattern = stripPattern(path, prefix)
+
+  const keys = []
+  const re = pathToRegexp(pattern, keys)
+
+  const pathTest = pathNeedsTrailingSlash(path) ? `${path}/` : path
+
+  const match = re.exec(pathTest)
+
+  return match
+}
+
+const pathIsSearchOrHash = path =>
+  path.indexOf('?') !== -1 || path.indexOf('#') !== -1
+
+const pathNeedsTrailingSlash = path =>
+  path.substring(path.length - 1) !== '/' && !pathIsSearchOrHash(path)
+
+const stripPattern = (path, prefix) =>
+  pathIsSearchOrHash(path) ? `${prefix}*` : `${prefix}/*`
+
+export const stripBasename = (path, prefix) => {
+  const match = matchBasename(path, prefix)
+
+  if (!match) return path
+  else if (match.length < 1) return '/'
+
+  const lastMatch = match[match.length - 1]
+  const last = pathNeedsTrailingSlash(path) ? stripTrailingSlash(lastMatch) : lastMatch
+
+  return `/${last}`
+}
 
 export const stripTrailingSlash = (path) =>
   path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path
