@@ -30,6 +30,7 @@
   "dependencies": {
     "invariant": "^2.2.1",
     "loose-envify": "^1.2.0",
+    "path-to-regexp": "^1.5.3",
     "resolve-pathname": "^2.0.0",
     "value-equal": "^0.2.0",
     "warning": "^3.0.0"

@@ -223,6 +223,14 @@ history.listen(location => {
 history.push('/home') // URL is now /the/base/home
 ```
 
+You can use parameters in the basename, using [path-to-regexp](https://github.com/pillarjs/path-to-regexp)
+
+```js
+const history = createHistory({
+  basename: '/the/:param/base'
+})
+```
+
 **Note:** `basename` is not suppported in `createMemoryHistory`.
 
 ### Forcing Full Page Refreshes in createBrowserHistory

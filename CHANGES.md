@@ -1,3 +1,8 @@
+## 
+> Jun 6, 2017
+
+- Add path-to-regexp to the `basename` parsing, allowing use of parameters in `basename`
+
 ## [v4.6.1]
 > Mar 15, 2017
 
