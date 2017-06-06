@@ -75,7 +75,7 @@ const createHashHistory = (props = {}) => {
     let path = decodePath(getHashPath())
 
     warning(
-      !(basename && hasBasename(path, basename)),
+      (!basename || hasBasename(path, basename)),
       'You are attempting to use a basename on a page whose URL path does not begin ' +
       'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
     )
