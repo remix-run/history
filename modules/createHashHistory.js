@@ -214,10 +214,7 @@ const createHashHistory = (props = {}) => {
 
         setState({ action, location })
       } else {
-        warning(
-          false,
-          'Hash history cannot PUSH the same path; a new entry will not be added to the history stack'
-        )
+        console.warn('Hash history cannot PUSH the same path; a new entry will not be added to the history stack');
 
         setState()
       }
