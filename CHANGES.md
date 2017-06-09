@@ -1,3 +1,7 @@
+## HEAD
+
+- Rely on the user/browser to encode pathname portion of the URL.
+
 ## [v4.6.1]
 > Mar 15, 2017
 
