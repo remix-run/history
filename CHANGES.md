@@ -1,3 +1,7 @@
+## HEAD
+
+- Add a `history.navigate` method that determines whether to `push` or `replace` for you.
+
 ## [v4.6.1]
 > Mar 15, 2017
 
