@@ -1,6 +1,6 @@
 import warning from 'warning'
 import { createPath } from './PathUtils'
-import { createLocation } from './LocationUtils'
+import { createLocation, locationPathsAreEqual } from './LocationUtils'
 import createTransitionManager from './createTransitionManager'
 
 const clamp = (n, lowerBound, upperBound) =>
@@ -40,21 +40,8 @@ const createMemoryHistory = (props = {}) => {
       : createLocation(entry, undefined, entry.key || createKey())
   ))
 
-  // Public interface
-
-  const createHref = createPath
-
-  const push = (path, state) => {
-    warning(
-      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
-      'You should avoid providing a 2nd state argument to push when the 1st ' +
-      'argument is a location-like object that already has state; it is ignored'
-    )
-
-    const action = 'PUSH'
-    const location = createLocation(path, state, createKey(), history.location)
-
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+  const createPushCallback = (location, action) =>
+    (ok) => {
       if (!ok)
         return
 
@@ -74,7 +61,38 @@ const createMemoryHistory = (props = {}) => {
         index: nextIndex,
         entries: nextEntries
       })
-    })
+    }
+
+  const createReplaceCallback = (location, action) => 
+    (ok) => {
+      if (!ok)
+        return
+
+      history.entries[history.index] = location
+
+      setState({ action, location })
+    }
+
+  // Public interface
+
+  const createHref = createPath
+
+  const push = (path, state) => {
+    warning(
+      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      'You should avoid providing a 2nd state argument to push when the 1st ' +
+      'argument is a location-like object that already has state; it is ignored'
+    )
+
+    const action = 'PUSH'
+    const location = createLocation(path, state, createKey(), history.location)
+
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      createPushCallback(location, action)
+    )
   }
 
   const replace = (path, state) => {
@@ -87,14 +105,31 @@ const createMemoryHistory = (props = {}) => {
     const action = 'REPLACE'
     const location = createLocation(path, state, createKey(), history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
-      if (!ok)
-        return
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      createReplaceCallback(location, action)
+    )
+  }
 
-      history.entries[history.index] = location
+  const navigate = (path, state) => {
+    warning(
+      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      'You should avoid providing a 2nd state argument to navigate when the 1st ' +
+      'argument is a location-like object that already has state; it is ignored'
+    )
+    const location = createLocation(path, state, createKey(), history.location)
+    const samePath = locationPathsAreEqual(location, history.location)
+    const action = samePath ? 'REPLACE' : 'PUSH'
+    const callback = samePath ? createReplaceCallback(location, action) : createPushCallback(location, action)
 
-      setState({ action, location })
-    })
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      callback
+    )
   }
 
   const go = (n) => {
@@ -142,6 +177,7 @@ const createMemoryHistory = (props = {}) => {
     index,
     entries,
     createHref,
+    navigate,
     push,
     replace,
     go,

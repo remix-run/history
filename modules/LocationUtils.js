@@ -59,3 +59,8 @@ export const locationsAreEqual = (a, b) =>
   a.hash === b.hash &&
   a.key === b.key &&
   valueEqual(a.state, b.state)
+
+export const locationPathsAreEqual = (a, b) =>
+  a.pathname === b.pathname &&
+  a.search === b.search &&
+  a.hash === b.hash

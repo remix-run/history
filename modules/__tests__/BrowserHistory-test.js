@@ -29,6 +29,24 @@ describeHistory('a browser history', () => {
       })
     })
 
+    describe('navigate to new location', () => {
+      it('pushes new location', (done) => {
+        TestSequences.NavigateNewLocation(history, done)
+      })
+    })
+
+    describe('navigate to same location', () => {
+      it('replaces instead of pushes', (done) => {
+        TestSequences.NavigateSameLocation(history, done)
+      })
+    })
+
+    describe('navigate to same location with different state', () => {
+      it('replaces intead of pushes', (done) => {
+        TestSequences.NavigateSameLocationDifferentState(history, done)
+      })
+    })
+
     describe('push a new path', () => {
       it('calls change listeners with the new location', (done) => {
         TestSequences.PushNewLocation(history, done)

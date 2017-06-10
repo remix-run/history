@@ -1,6 +1,6 @@
 import warning from 'warning'
 import invariant from 'invariant'
-import { createLocation } from './LocationUtils'
+import { createLocation, locationPathsAreEqual } from './LocationUtils'
 import {
   addLeadingSlash,
   stripTrailingSlash,
@@ -146,22 +146,8 @@ const createBrowserHistory = (props = {}) => {
   const initialLocation = getDOMLocation(getHistoryState())
   let allKeys = [ initialLocation.key ]
 
-  // Public interface
-
-  const createHref = (location) =>
-    basename + createPath(location)
-
-  const push = (path, state) => {
-    warning(
-      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
-      'You should avoid providing a 2nd state argument to push when the 1st ' +
-      'argument is a location-like object that already has state; it is ignored'
-    )
-
-    const action = 'PUSH'
-    const location = createLocation(path, state, createKey(), history.location)
-
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+  const createPushCallback = (location, action) =>
+    (ok) => {
       if (!ok)
         return
 
@@ -190,20 +176,10 @@ const createBrowserHistory = (props = {}) => {
 
         window.location.href = href
       }
-    })
-  }
+    }
 
-  const replace = (path, state) => {
-    warning(
-      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
-      'You should avoid providing a 2nd state argument to replace when the 1st ' +
-      'argument is a location-like object that already has state; it is ignored'
-    )
-
-    const action = 'REPLACE'
-    const location = createLocation(path, state, createKey(), history.location)
-
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+  const createReplaceCallback = (location, action) =>
+    (ok) => {
       if (!ok)
         return
 
@@ -231,7 +207,65 @@ const createBrowserHistory = (props = {}) => {
 
         window.location.replace(href)
       }
-    })
+    }
+
+  // Public interface
+
+  const createHref = (location) =>
+    basename + createPath(location)
+
+
+  const push = (path, state) => {
+    warning(
+      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      'You should avoid providing a 2nd state argument to push when the 1st ' +
+      'argument is a location-like object that already has state; it is ignored'
+    )
+
+    const location = createLocation(path, state, createKey(), history.location)
+    const action = 'PUSH'
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      createPushCallback(location, action)
+    )
+  }
+
+  const replace = (path, state) => {
+    warning(
+      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      'You should avoid providing a 2nd state argument to replace when the 1st ' +
+      'argument is a location-like object that already has state; it is ignored'
+    )
+
+    const location = createLocation(path, state, createKey(), history.location)
+    const action = 'REPLACE'
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      createReplaceCallback(location, action)
+    )
+  }
+
+  const navigate = (path, state) => {
+    warning(
+      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      'You should avoid providing a 2nd state argument to navigate when the 1st ' +
+      'argument is a location-like object that already has state; it is ignored'
+    )
+    const location = createLocation(path, state, createKey(), history.location)
+    const samePath = locationPathsAreEqual(location, history.location)
+    const action = samePath ? 'REPLACE' : 'PUSH'
+    const callback = samePath ? createReplaceCallback(location, action) : createPushCallback(location, action)
+
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      callback
+    )
   }
 
   const go = (n) => {
@@ -297,6 +331,7 @@ const createBrowserHistory = (props = {}) => {
     action: 'POP',
     location: initialLocation,
     createHref,
+    navigate,
     push,
     replace,
     go,
