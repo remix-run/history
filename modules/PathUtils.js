@@ -29,8 +29,6 @@ export const parsePath = (path) => {
     search = pathname.substr(searchIndex)
     pathname = pathname.substr(0, searchIndex)
   }
-  
-  pathname = decodeURI(pathname)
 
   return {
     pathname,
@@ -42,13 +40,14 @@ export const parsePath = (path) => {
 export const createPath = (location) => {
   const { pathname, search, hash } = location
 
-  let path = encodeURI(pathname || '/')
+  let path = pathname || '/'
 
   if (search && search !== '?')
     path += (search.charAt(0) === '?' ? search : `?${search}`)
 
   if (hash && hash !== '#')
     path += (hash.charAt(0) === '#' ? hash : `#${hash}`)
+
 
   return path
 }
