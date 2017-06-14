@@ -1,8 +1,10 @@
-## HEAD
+## [v4.6.2]
+> Jun 14, 2017
 
-- Rely on the user/browser to encode pathname portion of the URL.
-- Add more complete basename matching support (case insensitive matching, basename must be a complete match). (see [#459])
+- Rely on the user/browser to encode pathname portion of the URL
+- Add more complete basename matching support (case insensitive matching, basename must be a complete match, see [#459])
 
+[v4.6.2]: https://github.com/ReactTraining/history/compare/v4.6.1...v4.6.2
 [#459]: https://github.com/ReactTraining/history/pull/459
 
 ## [v4.6.1]
