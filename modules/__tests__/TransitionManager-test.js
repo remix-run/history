@@ -8,7 +8,7 @@ describe('transition manager', () => {
     manager = createTransitionManager()
   })
 
-  it('should notify all of its listeners functions registered with "after" when "transition" is called', () => {
+  it('notifies all of its listeners functions registered with "after" when "transition" is called', () => {
     const fn1 = createSpy()
     const fn2 = createSpy()
     const arg1 = 'foo'
@@ -18,7 +18,7 @@ describe('transition manager', () => {
     ;[fn1, fn2].forEach(fn => expect(fn).toHaveBeenCalledWith(arg1, arg2))
   })
 
-  it('should iterate through the pre-transition listeners registered with "before" when "confirmTransitionTo" is called', async () => {
+  it('iterates through the pre-transition listeners registered with "before" when "confirmTransitionTo" is called', async () => {
     const fn1 = createSpy()
     const fn2 = createSpy()
     const arg1 = 'foo'
@@ -29,7 +29,7 @@ describe('transition manager', () => {
     ;[fn1, fn2].forEach(fn => expect(fn).toHaveBeenCalledWith(arg1, arg2))
   })
 
-  it('should return false from the async "confirmTransitionTo" function if any of the async pre-listeners return a truthy value', async () => {
+  it('returns false from the async "confirmTransitionTo" function if any of the async pre-listeners return a truthy value', async () => {
     const fn1 = createSpy()
     let fn2 = createSpy(async () => {
       await delay(2)
@@ -44,7 +44,7 @@ describe('transition manager', () => {
     expect(fn3).toNotHaveBeenCalled()
   })
 
-  it('should return an idempotent unsubscribe function when registering before listeners', async () => {
+  it('returns an idempotent unsubscribe function when registering before listeners', async () => {
     const fn1 = createSpy()
     const unsub = manager.before(fn1)
     await manager.confirmTransitionTo()
@@ -54,7 +54,7 @@ describe('transition manager', () => {
     expect(fn1.calls.length).toBe(1)
   })
 
-  it('should return an idempotent unsubscribe function when registering after listeners', () => {
+  it('returns an idempotent unsubscribe function when registering after listeners', () => {
     const fn1 = createSpy()
     const unsub = manager.appendListener(fn1)
     manager.notifyListeners()
@@ -64,7 +64,7 @@ describe('transition manager', () => {
     expect(fn1.calls.length).toBe(1)
   })
 
-  it('will can unsubscribe multiple pre-hooks in one call if a function has been registered more than once', () => {
+  it('unsubscribes multiple pre-hooks in one call if a function has been registered more than once', () => {
     const beforeHook = createSpy()
     const unsubBefore = manager.before(beforeHook)
     manager.before(beforeHook)
@@ -73,7 +73,7 @@ describe('transition manager', () => {
     expect(beforeHook).toNotHaveBeenCalled()
   })
 
-  it('will have unique unsubscribe functions for appendListener', () => {
+  it('has unique unsubscribe functions for appendListener', () => {
     const afterHook = createSpy()
     const unsubAfter = manager.appendListener(afterHook)
     manager.appendListener(afterHook)
