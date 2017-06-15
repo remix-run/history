@@ -14,7 +14,6 @@ import {
   canUseDOM,
   addEventListener,
   removeEventListener,
-  getConfirmation,
   supportsGoWithoutReloadUsingHash
 } from './DOMUtils'
 
@@ -64,7 +63,6 @@ const createHashHistory = (props = {}) => {
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash()
 
   const {
-    getUserConfirmation = getConfirmation,
     hashType = 'slash'
   } = props
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
