@@ -1,46 +1,28 @@
-import warning from 'warning'
+const runHook = (i, fns, ...args) => {
+  if (i === fns.length) return Promise.resolve()
+  return Promise.resolve(fns[i](...args))
+    .then(res => res ? res : runHook(i+1, fns, ...args))
+}
 
 const createTransitionManager = () => {
-  let prompt = null
+  let preListeners = []
 
-  const setPrompt = (nextPrompt) => {
-    warning(
-      prompt == null,
-      'A history supports only one prompt at a time'
-    )
-
-    prompt = nextPrompt
-
-    return () => {
-      if (prompt === nextPrompt)
-        prompt = null
-    }
-  }
-
-  const confirmTransitionTo = (location, action, getUserConfirmation, callback) => {
+  const confirmTransitionTo = (location, action) => {
     // TODO: If another transition starts while we're still confirming
     // the previous one, we may end up in a weird state. Figure out the
     // best way to handle this.
-    if (prompt != null) {
-      const result = typeof prompt === 'function' ? prompt(location, action) : prompt
+    return runHook(0, preListeners, location, action)
+      // If any hook returns truthy, not confirmed
+      .then(res => !res)
+      // If an error was thrown, don't block the transition
+      .catch(() => true)
+  }
 
-      if (typeof result === 'string') {
-        if (typeof getUserConfirmation === 'function') {
-          getUserConfirmation(result, callback)
-        } else {
-          warning(
-            false,
-            'A history needs a getUserConfirmation function in order to use a prompt message'
-          )
+  const before = hook => {
+    preListeners.push(hook)
 
-          callback(true)
-        }
-      } else {
-        // Return false from a transition hook to cancel the transition.
-        callback(result !== false)
-      }
-    } else {
-      callback(true)
+    return () => {
+      preListeners = preListeners.filter(fn => fn !== hook)
     }
   }
 
@@ -67,7 +49,7 @@ const createTransitionManager = () => {
   }
 
   return {
-    setPrompt,
+    before,
     confirmTransitionTo,
     appendListener,
     notifyListeners
