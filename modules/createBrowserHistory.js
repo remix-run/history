@@ -13,7 +13,6 @@ import {
   canUseDOM,
   addEventListener,
   removeEventListener,
-  getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
   isExtraneousPopstateEvent
@@ -48,7 +47,6 @@ const createBrowserHistory = (props = {}) => {
 
   const {
     forceRefresh = false,
-    getUserConfirmation = getConfirmation,
     keyLength = 6
   } = props
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
@@ -90,7 +88,7 @@ const createBrowserHistory = (props = {}) => {
   const handlePopState = (event) => {
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event))
-      return 
+      return
 
     handlePop(getDOMLocation(event.state))
   }
@@ -108,7 +106,7 @@ const createBrowserHistory = (props = {}) => {
     } else {
       const action = 'POP'
 
-      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+      transitionManager.confirmTransitionTo(location, action).then(ok => {
         if (ok) {
           setState({ action, location })
         } else {
@@ -161,7 +159,7 @@ const createBrowserHistory = (props = {}) => {
     const action = 'PUSH'
     const location = createLocation(path, state, createKey(), history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+    transitionManager.confirmTransitionTo(location, action).then(ok => {
       if (!ok)
         return
 
@@ -203,7 +201,7 @@ const createBrowserHistory = (props = {}) => {
     const action = 'REPLACE'
     const location = createLocation(path, state, createKey(), history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+    transitionManager.confirmTransitionTo(location, action).then(ok => {
       if (!ok)
         return
 
@@ -262,23 +260,13 @@ const createBrowserHistory = (props = {}) => {
     }
   }
 
-  let isBlocked = false
-
-  const block = (prompt = false) => {
-    const unblock = transitionManager.setPrompt(prompt)
-
-    if (!isBlocked) {
-      checkDOMListeners(1)
-      isBlocked = true
-    }
+  const before = (hook) => {
+    const unhook = transitionManager.before(hook)
+    checkDOMListeners(1)
 
     return () => {
-      if (isBlocked) {
-        isBlocked = false
-        checkDOMListeners(-1)
-      }
-
-      return unblock()
+      unhook()
+      checkDOMListeners(-1)
     }
   }
 
@@ -302,7 +290,7 @@ const createBrowserHistory = (props = {}) => {
     go,
     goBack,
     goForward,
-    block,
+    before,
     listen
   }
 

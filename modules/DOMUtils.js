@@ -12,9 +12,6 @@ export const removeEventListener = (node, event, listener) =>
     ? node.removeEventListener(event, listener, false)
     : node.detachEvent('on' + event, listener)
 
-export const getConfirmation = (message, callback) =>
-  callback(window.confirm(message)) // eslint-disable-line no-alert
-
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
