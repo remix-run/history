@@ -5,6 +5,8 @@
   "repository": "ReactTraining/history",
   "license": "MIT",
   "author": "Michael Jackson",
+  "main": "index.js",
+  "module": "es/index.js",
   "files": [
     "DOMUtils.js",
     "ExecutionEnvironment.js",
