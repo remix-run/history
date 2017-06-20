@@ -1,3 +1,6 @@
+## [v4.6.3]
+- DOMUtils no longer throws errors if window is undefined
+
 ## [v4.6.2]
 > Jun 14, 2017
 
