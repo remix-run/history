@@ -1,3 +1,10 @@
+## [v4.6.3]
+> Jun 20, 2017
+
+- Add main/module entries to package.json (thanks @pshrmn)
+
+[v4.6.3]: https://github.com/ReactTraining/history/compare/v4.6.2...v4.6.3
+
 ## [v4.6.2]
 > Jun 14, 2017
 
