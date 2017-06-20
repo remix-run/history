@@ -1,3 +1,8 @@
+## [v4.6.3]
+- DOMUtils no longer throws errors if window is undefined
+
+[#496]: https://github.com/ReactTraining/history/pull/497
+
 ## [v4.6.2]
 > Jun 14, 2017
 
