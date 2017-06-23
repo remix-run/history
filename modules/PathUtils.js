@@ -42,10 +42,10 @@ export const createPath = (location) => {
 
   let path = pathname || '/'
 
-  if (search && search !== '?')
+  if (search && (typeof search === 'string') && search !== '?')
     path += (search.charAt(0) === '?' ? search : `?${search}`)
 
-  if (hash && hash !== '#')
+  if (hash && (typeof hash === 'string') && hash !== '#')
     path += (hash.charAt(0) === '#' ? hash : `#${hash}`)
 
 
