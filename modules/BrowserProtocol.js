@@ -5,7 +5,6 @@ import {
   supportsPopstateOnHashchange,
   isExtraneousPopstateEvent
 } from './DOMUtils'
-import { saveState, readState } from './DOMStateStorage'
 import { createPath } from './PathUtils'
 
 import { canUseDOM } from './ExecutionEnvironment'
@@ -22,7 +21,7 @@ const _createLocation = (historyState) => {
     pathname: window.location.pathname,
     search: window.location.search,
     hash: window.location.hash,
-    state: (key ? readState(key) : undefined)
+    state: historyState ? historyState.userState : undefined
   }, undefined, key)
 }
 
@@ -70,10 +69,7 @@ export const startListener = (listener) => {
 const updateLocation = (location, updateState) => {
   const { state, key } = location
 
-  if (state !== undefined)
-    saveState(key, state)
-
-  updateState({ key }, createPath(location))
+  updateState({ key, userState: state}, createPath(location))
 }
 
 export const pushLocation = (location) =>
