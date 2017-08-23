@@ -128,20 +128,20 @@ describeHistory('a hash history', () => {
       })
     })
 
-    describe('block', () => {
+    describe.skip('block', () => {
       it('blocks all transitions', (done) => {
         TestSequences.BlockEverything(history, done)
       })
     })
 
-    describeGo('block a POP without listening', () => {
+    describeGo.skip('block a POP without listening', () => {
       it('receives the next location and action as arguments', (done) => {
         TestSequences.BlockPopWithoutListening(history, done)
       })
     })
   })
 
-  describe('that denies all transitions', () => {
+  describe.skip('that denies all transitions', () => {
     const getUserConfirmation = (_, callback) => callback(false)
 
     let history
@@ -170,7 +170,7 @@ describeHistory('a hash history', () => {
     })
   })
 
-  describe('a transition hook', () => {
+  describe.skip('a transition hook', () => {
     const getUserConfirmation = (_, callback) => callback(true)
 
     let history

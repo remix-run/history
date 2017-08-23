@@ -14,7 +14,6 @@ import {
   canUseDOM,
   addEventListener,
   removeEventListener,
-  getConfirmation,
   supportsGoWithoutReloadUsingHash
 } from './DOMUtils'
 
@@ -64,7 +63,6 @@ const createHashHistory = (props = {}) => {
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash()
 
   const {
-    getUserConfirmation = getConfirmation,
     hashType = 'slash'
   } = props
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
@@ -132,7 +130,7 @@ const createHashHistory = (props = {}) => {
     } else {
       const action = 'POP'
 
-      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+      transitionManager.confirmTransitionTo(location, action).then(ok => {
         if (ok) {
           setState({ action, location })
         } else {
@@ -191,7 +189,7 @@ const createHashHistory = (props = {}) => {
     const action = 'PUSH'
     const location = createLocation(path, undefined, undefined, history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+    transitionManager.confirmTransitionTo(location, action).then(ok => {
       if (!ok)
         return
 
@@ -233,7 +231,7 @@ const createHashHistory = (props = {}) => {
     const action = 'REPLACE'
     const location = createLocation(path, undefined, undefined, history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+    transitionManager.confirmTransitionTo(location, action).then(ok => {
       if (!ok)
         return
 
@@ -285,23 +283,13 @@ const createHashHistory = (props = {}) => {
     }
   }
 
-  let isBlocked = false
-
-  const block = (prompt = false) => {
-    const unblock = transitionManager.setPrompt(prompt)
-
-    if (!isBlocked) {
-      checkDOMListeners(1)
-      isBlocked = true
-    }
+  const before = (hook) => {
+    const unhook = transitionManager.before(hook)
+    checkDOMListeners(1)
 
     return () => {
-      if (isBlocked) {
-        isBlocked = false
-        checkDOMListeners(-1)
-      }
-
-      return unblock()
+      unhook()
+      checkDOMListeners(-1)
     }
   }
 
@@ -325,7 +313,7 @@ const createHashHistory = (props = {}) => {
     go,
     goBack,
     goForward,
-    block,
+    before,
     listen
   }
 

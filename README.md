@@ -72,24 +72,18 @@ createBrowserHistory({
   basename: '',             // The base URL of the app (see below)
   forceRefresh: false,      // Set true to force full page refreshes
   keyLength: 6,             // The length of location.key
-  // A function to use to confirm navigation with the user (see below)
-  getUserConfirmation: (message, callback) => callback(window.confirm(message))
 })
 
 createMemoryHistory({
   initialEntries: [ '/' ],  // The initial URLs in the history stack
   initialIndex: 0,          // The starting index in the history stack
   keyLength: 6,             // The length of location.key
-  // A function to use to confirm navigation with the user. Required
-  // if you return string prompts from transition hooks (see below)
-  getUserConfirmation: null
 })
 
 createHashHistory({
   basename: '',             // The base URL of the app (see below)
   hashType: 'slash',        // The hash type to use (see below)
   // A function to use to confirm navigation with the user (see below)
-  getUserConfirmation: (message, callback) => callback(window.confirm(message))
 })
 ```
 
@@ -103,7 +97,9 @@ Each `history` object has the following properties:
 
 Additionally, `createMemoryHistory` provides `history.index` and `history.entries` properties that let you inspect the history stack.
 
-### Listening
+### Transition Hooks
+
+#### Post-change hook
 
 You can listen for changes to the current location using `history.listen`:
 
@@ -113,6 +109,45 @@ history.listen((location, action) => {
   console.log(`The last navigation action was ${action}`)
 })
 ```
+
+Post-change listener functions will be not be invoked when a transition is blocked by a pre-change hook, unless the user used the built-in browser back or forward features to initiate the transition. In this case, the listener functions will be called with the same `location` and `action` as the previous invocation.
+
+#### Pre-change hook
+You can perform side effects before history state changes by registering functions with `history.before`
+
+```js
+const unsub = history.before((location, action) => {
+  location.query = queryParseFn(location.search)
+})
+```
+
+Before hooks can also be `async` functions, i.e. return a Promise, to block the state change asynchronously.
+
+```js
+const unsub = history.before(async (location, action) => {
+  await getDataAndCodeForLocation(location)
+})
+```
+
+Returning a truthy value from any before hook functions will cancel the transition.
+
+```js
+const unsub = history.before((location, action) => {
+  return await askUserIfTheyreSureTheyWantToLeave()
+})
+```
+
+Or in a simpler, less custom fashion
+
+```js
+const unsub = history.before(async (location, action) => {
+  return window.confirm('Are you sure you want to leave this page?')
+})
+```
+
+The hooks are called in the order they're registered. Not every hook will be called if one of them blocks the transition.
+
+### `Location`
 
 The `location` object implements a subset of [the `window.location` interface](https://developer.mozilla.org/en-US/docs/Web/API/Location), including:
 
@@ -166,46 +201,6 @@ history.goBack()
 ```
 
 **Note:** Location state is only supported in `createBrowserHistory` and `createMemoryHistory`.
-
-### Blocking Transitions
-
-`history` lets you register a prompt message that will be shown to the user before location listeners are notified. This allows you to make sure the user wants to leave the current page before they navigate away.
-
-```js
-// Register a simple prompt message that will be shown the
-// user before they navigate away from the current page.
-const unblock = history.block('Are you sure you want to leave this page?')
-
-// Or use a function that returns the message when it's needed.
-history.block((location, action) => {
-  // The location and action arguments indicate the location
-  // we're transitioning to and how we're getting there.
-
-  // A common use case is to prevent the user from leaving the
-  // page if there's a form they haven't submitted yet.
-  if (input.value !== '')
-    return 'Are you sure you want to leave this page?'
-})
-
-// To stop blocking transitions, call the function returned from block().
-unblock()
-```
-
-**Note:** You'll need to provide a `getUserConfirmation` function to use this feature with `createMemoryHistory` (see below).
-
-### Customizing the Confirm Dialog
-
-By default, [`window.confirm`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm) is used to show prompt messages to the user. If you need to override this behavior (or if you're using `createMemoryHistory`, which doesn't assume a DOM environment), provide a `getUserConfirmation` function when you create your history object.
-
-```js
-const history = createHistory({
-  getUserConfirmation(message, callback) {
-    // Show some custom dialog to the user and call
-    // callback(true) to continue the transiton, or
-    // callback(false) to abort it.
-  }
-})
-```
 
 ### Using a Base URL
 

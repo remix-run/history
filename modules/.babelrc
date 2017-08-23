@@ -7,6 +7,11 @@
     "transform-object-assign"
   ],
   "env": {
+    "test": {
+      "plugins": [
+        "transform-runtime"
+      ]
+    },
     "production": {
       "plugins": [
         "dev-expression"

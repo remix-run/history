@@ -11,7 +11,6 @@ const clamp = (n, lowerBound, upperBound) =>
  */
 const createMemoryHistory = (props = {}) => {
   const {
-    getUserConfirmation,
     initialEntries = [ '/' ],
     initialIndex = 0,
     keyLength = 6
@@ -54,7 +53,7 @@ const createMemoryHistory = (props = {}) => {
     const action = 'PUSH'
     const location = createLocation(path, state, createKey(), history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+    transitionManager.confirmTransitionTo(location, action).then(ok => {
       if (!ok)
         return
 
@@ -87,7 +86,7 @@ const createMemoryHistory = (props = {}) => {
     const action = 'REPLACE'
     const location = createLocation(path, state, createKey(), history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+    transitionManager.confirmTransitionTo(location, action).then(ok => {
       if (!ok)
         return
 
@@ -103,7 +102,7 @@ const createMemoryHistory = (props = {}) => {
     const action = 'POP'
     const location = history.entries[nextIndex]
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
+    transitionManager.confirmTransitionTo(location, action).then(ok => {
       if (ok) {
         setState({
           action,
@@ -129,8 +128,8 @@ const createMemoryHistory = (props = {}) => {
     return nextIndex >= 0 && nextIndex < history.entries.length
   }
 
-  const block = (prompt = false) =>
-    transitionManager.setPrompt(prompt)
+  const before = (hook) =>
+    transitionManager.before(hook)
 
   const listen = (listener) =>
     transitionManager.appendListener(listener)
@@ -148,7 +147,7 @@ const createMemoryHistory = (props = {}) => {
     goBack,
     goForward,
     canGo,
-    block,
+    before,
     listen
   }
 
