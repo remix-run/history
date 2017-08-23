@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "4.6.3",
+  "version": "4.7.0",
   "description": "Manage session history with JavaScript",
   "repository": "ReactTraining/history",
   "license": "MIT",
