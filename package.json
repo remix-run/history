@@ -14,12 +14,12 @@
     "createHashHistory.js",
     "createMemoryHistory.js",
     "createTransitionManager.js",
-    "cjs",
+    "es",
     "index.js",
     "umd"
   ],
-  "main": "cjs/index.js",
-  "module": "index.js",
+  "main": "index.js",
+  "module": "es/index.js",
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "build": "node ./tools/build.js",
