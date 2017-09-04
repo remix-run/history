@@ -5,7 +5,7 @@ describe('createLocation', () => {
   describe('with a full path', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('/the/path?the=query#the-hash')).toMatch({
+        expect(createLocation('/the/path?the=query#the-hash')).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
           hash: '#the-hash'
@@ -15,7 +15,7 @@ describe('createLocation', () => {
 
     describe('given as an object', () => {
       it('has the correct properties', () => {
-        expect(createLocation({ pathname: '/the/path', search: '?the=query', hash: '#the-hash' })).toMatch({
+        expect(createLocation({ pathname: '/the/path', search: '?the=query', hash: '#the-hash' })).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
           hash: '#the-hash'
@@ -27,7 +27,7 @@ describe('createLocation', () => {
   describe('with a relative path', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('the/path?the=query#the-hash')).toMatch({
+        expect(createLocation('the/path?the=query#the-hash')).toMatchObject({
           pathname: 'the/path',
           search: '?the=query',
           hash: '#the-hash'
@@ -37,7 +37,7 @@ describe('createLocation', () => {
 
     describe('given as an object', () => {
       it('has the correct properties', () => {
-        expect(createLocation({ pathname: 'the/path', search: '?the=query', hash: '#the-hash' })).toMatch({
+        expect(createLocation({ pathname: 'the/path', search: '?the=query', hash: '#the-hash' })).toMatchObject({
           pathname: 'the/path',
           search: '?the=query',
           hash: '#the-hash'
@@ -49,7 +49,7 @@ describe('createLocation', () => {
   describe('with a path with no pathname', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('?the=query#the-hash')).toMatch({
+        expect(createLocation('?the=query#the-hash')).toMatchObject({
           pathname: '/',
           search: '?the=query',
           hash: '#the-hash'
@@ -59,7 +59,7 @@ describe('createLocation', () => {
 
     describe('given as an object', () => {
       it('has the correct properties', () => {
-        expect(createLocation({ search: '?the=query', hash: '#the-hash' })).toMatch({
+        expect(createLocation({ search: '?the=query', hash: '#the-hash' })).toMatchObject({
           pathname: '/',
           search: '?the=query',
           hash: '#the-hash'
@@ -71,7 +71,7 @@ describe('createLocation', () => {
   describe('with a path with no search', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('/the/path#the-hash')).toMatch({
+        expect(createLocation('/the/path#the-hash')).toMatchObject({
           pathname: '/the/path',
           search: '',
           hash: '#the-hash'
@@ -81,7 +81,7 @@ describe('createLocation', () => {
 
     describe('given as an object', () => {
       it('has the correct properties', () => {
-        expect(createLocation({ pathname: '/the/path', hash: '#the-hash' })).toMatch({
+        expect(createLocation({ pathname: '/the/path', hash: '#the-hash' })).toMatchObject({
           pathname: '/the/path',
           search: '',
           hash: '#the-hash'
@@ -93,7 +93,7 @@ describe('createLocation', () => {
   describe('with a path with no hash', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('/the/path?the=query')).toMatch({
+        expect(createLocation('/the/path?the=query')).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
           hash: ''
@@ -103,7 +103,7 @@ describe('createLocation', () => {
 
     describe('given as an object', () => {
       it('has the correct properties', () => {
-        expect(createLocation({ pathname: '/the/path', search: '?the=query' })).toMatch({
+        expect(createLocation({ pathname: '/the/path', search: '?the=query' })).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
           hash: ''
@@ -134,12 +134,12 @@ describe('createLocation', () => {
   describe('key', () => {
     it('has a key property if a key is provided', () => {
       const location = createLocation('/the/path', undefined, 'key')
-      expect(location).toIncludeKey('key')
+      expect(Object.keys(location)).toContain('key')
     })
 
     it('has no key property if no key is provided', () => {
       const location = createLocation('/the/path')
-      expect(location).toExcludeKey('key')
+      expect(Object.keys(location)).not.toContain('key')
     })
   })
 })

@@ -5,7 +5,7 @@ export default (history, done) => {
   let unblock, hookWasCalled = false
   const steps = [
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/'
       })
 
@@ -16,7 +16,7 @@ export default (history, done) => {
       window.location.hash = 'something-new'
     },
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/',
         hash: '#something-new'
       })

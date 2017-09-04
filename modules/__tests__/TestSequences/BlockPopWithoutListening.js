@@ -1,7 +1,7 @@
 import expect from 'expect'
 
 export default (history, done) => {
-  expect(history.location).toMatch({
+  expect(history.location).toMatchObject({
     pathname: '/'
   })
 

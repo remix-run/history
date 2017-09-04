@@ -9,7 +9,7 @@ export default (history, done) => {
       history.replace(pathname)
     },
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/歴史'
       })
 
@@ -18,7 +18,7 @@ export default (history, done) => {
       history.replace({ pathname })
     },
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/歴史'
       })
       // unencoded string
@@ -27,7 +27,7 @@ export default (history, done) => {
     }
     ,
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/歴史'
       })
       // unencoded object
@@ -35,7 +35,7 @@ export default (history, done) => {
       history.replace({ pathname })
     },
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/歴史'
       })
     }
