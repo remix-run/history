@@ -1,3 +1,10 @@
+## [v4.6.4]
+> Sep 5, 2017
+
+- add default `getUserConfirmation` option to `createMemoryHistory`, which throws if `window.confirm` is not available.
+
+[v4.6.4]: https://github.com/ReactTraining/history/compare/v4.6.3...v4.6.4
+
 ## [v4.6.3]
 > Jun 20, 2017
 
