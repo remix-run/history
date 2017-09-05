@@ -14,7 +14,7 @@ const getConfirmation = (message, callback) => {
   invariant(
     hasConfirm,
     'Environment needs a window + window.confirm function. You can provide' +
-    'your own confirmation UI via the getUserConfirmation option.' +
+    'your own confirmation UI via the getUserConfirmation option.'
   )
   
   return callback(window.confirm(message)) // eslint-disable-line no-alert
