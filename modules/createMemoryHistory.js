@@ -6,12 +6,26 @@ import createTransitionManager from './createTransitionManager'
 const clamp = (n, lowerBound, upperBound) =>
   Math.min(Math.max(n, lowerBound), upperBound)
 
+const hasConfirm = !!(
+  typeof window !== 'undefined' && typeof window.confirm !== 'undefined'
+)
+
+const getConfirmation = (message, callback) => {
+  invariant(
+    hasConfirm,
+    'Environment needs a window + window.confirm function. You can provide' +
+    'your own confirmation UI via the getUserConfirmation option.' +
+  )
+  
+  return callback(window.confirm(message)) // eslint-disable-line no-alert
+}
+
 /**
  * Creates a history object that stores locations in memory.
  */
 const createMemoryHistory = (props = {}) => {
   const {
-    getUserConfirmation,
+    getUserConfirmation = getConfirmation,
     initialEntries = [ '/' ],
     initialIndex = 0,
     keyLength = 6
