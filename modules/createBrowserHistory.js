@@ -32,6 +32,19 @@ const getHistoryState = () => {
   }
 }
 
+const normalizeInitialHistoryState = () => {
+  let historyState = window.history.state;
+  let url = window.location.href;
+
+  if (!historyState) {
+    try {
+      window.history.replaceState({}, window.document.title, url);
+    } catch (e) {
+      window.location.replace(url);
+    }
+  }
+}
+
 /**
  * Creates a history object that uses the HTML5 history API including
  * pushState, replaceState, and the popstate event.
@@ -90,12 +103,12 @@ const createBrowserHistory = (props = {}) => {
   const handlePopState = (event) => {
     // Ignore initial popstate present in Chrome (prior to v34) and Safari (prior to 10.0)
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
-    if (!event.state && allKeys.length === 1 && allKeys[0] === undefined)
-      return
+    var stateFromHistory = (globalHistory && globalHistory.state) || null;
+    var isPageLoadPopState = (event.state === null) && !!stateFromHistory;
 
     // Ignore extraneous popstate events in WebKit.
-    if (isExtraneousPopstateEvent(event))
-      return 
+    if (isPageLoadPopState || isExtraneousPopstateEvent(event))
+      return
 
     handlePop(getDOMLocation(event.state))
   }
@@ -147,6 +160,8 @@ const createBrowserHistory = (props = {}) => {
       go(delta)
     }
   }
+
+  normalizeInitialHistoryState();
 
   const initialLocation = getDOMLocation(getHistoryState())
   let allKeys = [ initialLocation.key ]
