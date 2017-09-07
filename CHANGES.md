@@ -1,3 +1,10 @@
+## [v4.7.3]
+> Sep 7, 2017
+
+- Normalize browser behavior by ignoring popstate on load present in Chrome (prior to v34) and Safari (prior to 10.0).
+
+[v4.7.3]: https://github.com/ReactTraining/history/compare/v4.6.3...v4.7.3
+
 ## [v4.6.3]
 > Jun 20, 2017
 

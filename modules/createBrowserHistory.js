@@ -88,6 +88,11 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const handlePopState = (event) => {
+    // Ignore initial popstate present in Chrome (prior to v34) and Safari (prior to 10.0)
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
+    if (!event.state && allKeys.length === 1 && allKeys[0] === undefined)
+      return
+
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event))
       return 
