@@ -1,5 +1,11 @@
 import warning from 'warning'
-import { createPath } from './PathUtils'
+import {
+  addLeadingSlash,
+  createPath,
+  hasBasename,
+  stripBasename,
+  stripTrailingSlash
+} from './PathUtils'
 import { createLocation } from './LocationUtils'
 import createTransitionManager from './createTransitionManager'
 
@@ -16,6 +22,8 @@ const createMemoryHistory = (props = {}) => {
     initialIndex = 0,
     keyLength = 6
   } = props
+
+  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
 
   const transitionManager = createTransitionManager()
 
@@ -34,15 +42,32 @@ const createMemoryHistory = (props = {}) => {
     Math.random().toString(36).substr(2, keyLength)
 
   const index = clamp(initialIndex, 0, initialEntries.length - 1)
+
+  const getStrippedPath = (path) => {
+    warning(
+      (!basename || hasBasename(path, basename)),
+      'You are attempting to use a basename on a page whose URL path does not begin ' +
+      'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
+    )
+
+    if (basename) {
+      return stripBasename(path, basename)
+    }
+
+    return path
+  }
+
   const entries = initialEntries.map(entry => (
     typeof entry === 'string'
-      ? createLocation(entry, undefined, createKey())
-      : createLocation(entry, undefined, entry.key || createKey())
+      ? createLocation(getStrippedPath(entry), undefined, createKey())
+      : createLocation(getStrippedPath(entry), undefined, entry.key || createKey())
   ))
 
   // Public interface
 
-  const createHref = createPath
+  //const createHref = createPath
+  const createHref = (location) =>
+    basename + createPath(location)
 
   const push = (path, state) => {
     warning(
@@ -52,7 +77,7 @@ const createMemoryHistory = (props = {}) => {
     )
 
     const action = 'PUSH'
-    const location = createLocation(path, state, createKey(), history.location)
+    const location = createLocation(getStrippedPath(path), state, createKey(), history.location)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
@@ -85,7 +110,7 @@ const createMemoryHistory = (props = {}) => {
     )
 
     const action = 'REPLACE'
-    const location = createLocation(path, state, createKey(), history.location)
+    const location = createLocation(getStrippedPath(path), state, createKey(), history.location)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
