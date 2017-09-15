@@ -1,10 +1,11 @@
+import mock from 'jest-mock';
 import expect from 'expect'
 
 export default (history, done) => {
-  const spy = expect.createSpy()
+  const spy = mock.fn()
   const unlisten = history.listen(spy)
 
-  expect(spy).toNotHaveBeenCalled()
+  expect(spy).not.toHaveBeenCalled()
 
   unlisten()
   done()

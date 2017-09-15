@@ -4,7 +4,7 @@ import execSteps from './execSteps'
 export default (history, done) => {
   const steps = [
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/'
       })
 
@@ -12,7 +12,7 @@ export default (history, done) => {
 
       history.push('/home')
 
-      expect(history.location).toMatch({
+      expect(history.location).toMatchObject({
         pathname: '/'
       })
 

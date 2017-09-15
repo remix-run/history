@@ -9,7 +9,7 @@ export default (history, done) => {
       history.replace(pathname)
     },
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/view/%23abc'
       })
 
@@ -18,7 +18,7 @@ export default (history, done) => {
       history.replace({ pathname })
     },
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/view/%23abc'
       })
       // unencoded string
@@ -27,7 +27,7 @@ export default (history, done) => {
     }
     ,
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/view/',
         hash: '#abc'
       })

@@ -4,7 +4,7 @@ import execSteps from './execSteps'
 export default (history, done) => {
   const steps = [
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/'
       })
 
@@ -12,7 +12,7 @@ export default (history, done) => {
     },
     (location, action) => {
       expect(action).toBe('PUSH')
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/the/path',
         search: '?the=query',
         hash: '#the-hash'
@@ -22,7 +22,7 @@ export default (history, done) => {
     },
     (location, action) => {
       expect(action).toBe('PUSH')
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/other/path',
         search: '?another=query',
         hash: '#another-hash'

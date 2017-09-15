@@ -5,7 +5,7 @@ export default (history, done) => {
   let hookLocation, hookAction
   const steps = [
     (location) => {
-      expect(location).toMatch({
+      expect(location).toMatchObject({
         pathname: '/'
       })
 
