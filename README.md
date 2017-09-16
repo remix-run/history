@@ -1,5 +1,3 @@
-> NOTE: this is a fork of the `history` package with `basename` functionality added to the memory history. It's specifically for use with [https://github.com/faceyspacey/redux-first-router](Rudy). Other modifications may follow.
-
 # history [![Travis][build-badge]][build] [![npm package][npm-badge]][npm]
 
 [build-badge]: https://img.shields.io/travis/ReactTraining/history/master.svg?style=flat-square
