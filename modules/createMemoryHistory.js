@@ -43,19 +43,8 @@ const createMemoryHistory = (props = {}) => {
 
   const index = clamp(initialIndex, 0, initialEntries.length - 1)
 
-  const getStrippedPath = (path) => {
-    warning(
-      (!basename || hasBasename(path, basename)),
-      'You are attempting to use a basename on a page whose URL path does not begin ' +
-      'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
-    )
-
-    if (basename) {
-      return stripBasename(path, basename)
-    }
-
-    return path
-  }
+  const getStrippedPath = (path) =>
+    basename ? stripBasename(path, basename) : path
 
   const entries = initialEntries.map(entry => (
     typeof entry === 'string'

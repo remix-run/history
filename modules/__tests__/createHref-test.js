@@ -217,19 +217,72 @@ describe('a hash history', () => {
 })
 
 describe('a memory history', () => {
-  let history
-  beforeEach(() => {
-    history = createMemoryHistory()
-  })
-
-  it('knows how to create hrefs', () => {
-    const href = history.createHref({
-      pathname: '/the/path',
-      search: '?the=query',
-      hash: '#the-hash'
+  describe('with no basename', () => {
+    let history
+    beforeEach(() => {
+      history = createMemoryHistory()
     })
 
-    expect(href).toEqual('/the/path?the=query#the-hash')
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/the/path?the=query#the-hash')
+    })
+  })
+
+  describe('with a basename', () => {
+    let history
+    beforeEach(() => {
+      history = createMemoryHistory({ basename: '/the/base' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/the/base/the/path?the=query#the-hash')
+    })
+  })
+
+  describe('with a bad basename', () => {
+    let history
+    beforeEach(() => {
+      history = createMemoryHistory({ basename: '/the/bad/base/' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/the/bad/base/the/path?the=query#the-hash')
+    })
+  })
+
+  describe('with a slash basename', () => {
+    let history
+    beforeEach(() => {
+      history = createMemoryHistory({ basename: '/' })
+    })
+
+    it('knows how to create hrefs', () => {
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      })
+
+      expect(href).toEqual('/the/path?the=query#the-hash')
+    })
   })
 
   describe('encoding', () => {

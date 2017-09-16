@@ -1,3 +1,4 @@
+import expect from 'expect'
 import createHistory from '../createMemoryHistory'
 import * as TestSequences from './TestSequences'
 
@@ -176,4 +177,64 @@ describe('a memory history', () => {
       TestSequences.ReturnFalseTransitionHook(history, done)
     })
   })
+
+  describe('a transition hook', () => {
+    const getUserConfirmation = (_, callback) => callback(true)
+  
+    let history
+    beforeEach(() => {
+      history = createHistory({
+        getUserConfirmation
+      })
+    })
+  
+    it('receives the next location and action as arguments', (done) => {
+      TestSequences.TransitionHookArgs(history, done)
+    })
+  
+    it('cancels the transition when it returns false', (done) => {
+      TestSequences.ReturnFalseTransitionHook(history, done)
+    })
+  })
+
+  describe('basename', () => {
+    let history
+    beforeEach(() => {
+      history = createHistory({ basename: '/prefix' })
+    })
+
+    it('strips the basename from the pathname', () => {
+      history.push('/prefix/pathname')
+      expect(history.location.pathname).toEqual('/pathname')
+    })
+
+    it('is not case-sensitive', () => {
+      history.push('/PREFIX/pathname')
+      expect(history.location.pathname).toEqual('/pathname')
+    })
+
+    it('does not strip partial prefix matches', () => {
+      history.push('/prefixed/pathname')
+      expect(history.location.pathname).toEqual('/prefixed/pathname')
+    })
+
+    it('strips when path is only the prefix', () => {
+      history.push('/prefix')
+      expect(history.location.pathname).toEqual('/')
+    })
+
+    it('strips with no pathname, but with a search string', () => {
+      history.push('/prefix?a=b')
+      expect(history.location.pathname).toEqual('/')
+    })
+
+    it('strips with no pathname, but with a hash string', () => {
+      history.push('/prefix#rest')
+      expect(history.location.pathname).toEqual('/')
+    })
+
+   
+  })
 })
+
+
