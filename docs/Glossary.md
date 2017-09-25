@@ -102,7 +102,7 @@ A *location* answers two important (philosophical) questions:
   - Where am I?
   - How did I get here?
 
-New locations are typically created each time the URL changes. You can read more about locations in [the `history` docs](https://github.com/rackt/history/blob/master/docs/Location.md).
+New locations are typically created each time the URL changes. You can read more about locations in [the `history` docs](https://github.com/rackt/history/blob/v2/docs/Location.md).
 
 ### LocationDescriptor
 
