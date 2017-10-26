@@ -139,6 +139,12 @@ describeHistory('a hash history', () => {
         TestSequences.BlockPopWithoutListening(history, done)
       })
     })
+
+    describe('type', () => {
+      it('has type HashHistory', () => {
+        expect(history.type).toEqual('HashHistory')
+      })
+    })
   })
 
   describe('that denies all transitions', () => {

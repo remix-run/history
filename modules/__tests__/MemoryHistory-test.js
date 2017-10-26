@@ -1,3 +1,4 @@
+import expect from 'expect'
 import createHistory from '../createMemoryHistory'
 import * as TestSequences from './TestSequences'
 
@@ -125,6 +126,12 @@ describe('a memory history', () => {
     describe('block a POP without listening', () => {
       it('receives the next location and action as arguments', (done) => {
         TestSequences.BlockPopWithoutListening(history, done)
+      })
+    })
+
+    describe('type', () => {
+      it('has type MemoryHistory', () => {
+        expect(history.type).toEqual('MemoryHistory')
       })
     })
   })

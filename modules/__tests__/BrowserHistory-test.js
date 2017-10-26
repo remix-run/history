@@ -136,6 +136,12 @@ describeHistory('a browser history', () => {
         TestSequences.BlockPopWithoutListening(history, done)
       })
     })
+
+    describe('type', () => {
+      it('has type BrowserHistory', () => {
+        expect(history.type).toEqual('BrowserHistory')
+      })
+    })
   })
 
   describe('that denies all transitions', () => {
