@@ -1,3 +1,7 @@
+## HEAD
+
+- **Bugfix:** Fix error thrown when passing `null` to `history.push` or `history.replace` ([#538])
+
 ## [v4.6.3]
 > Jun 20, 2017
 
