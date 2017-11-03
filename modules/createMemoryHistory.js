@@ -46,7 +46,7 @@ const createMemoryHistory = (props = {}) => {
 
   const push = (path, state) => {
     warning(
-      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      !(typeof path === 'object' && path !== null && path.state !== undefined && state !== undefined),
       'You should avoid providing a 2nd state argument to push when the 1st ' +
       'argument is a location-like object that already has state; it is ignored'
     )
@@ -79,7 +79,7 @@ const createMemoryHistory = (props = {}) => {
 
   const replace = (path, state) => {
     warning(
-      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
+      !(typeof path === 'object' && path !== null && path.state !== undefined && state !== undefined),
       'You should avoid providing a 2nd state argument to replace when the 1st ' +
       'argument is a location-like object that already has state; it is ignored'
     )
