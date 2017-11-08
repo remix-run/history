@@ -73,7 +73,7 @@ const updateLocation = (location, updateState) => {
   if (state !== undefined)
     saveState(key, state)
 
-  updateState({ key }, createPath(location))
+  updateState({ ...state, key }, createPath(location))
 }
 
 export const pushLocation = (location) =>
