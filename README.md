@@ -129,7 +129,7 @@ The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got
 
 ### Navigation
 
-`history` objects may be used programmatically change the current location using the following methods:
+`history` objects may be used to programmatically change the current location using the following methods:
 
 - `history.push(path, [state])`
 - `history.replace(path, [state])`
