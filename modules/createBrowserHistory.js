@@ -143,7 +143,11 @@ const createBrowserHistory = (props = {}) => {
     }
   }
 
-  const initialLocation = getDOMLocation(getHistoryState())
+  let initialHistoryState = getHistoryState()
+  if (!initialHistoryState.key) {
+    initialHistoryState = Object.assign({}, initialHistoryState, { key: createKey() })
+  }
+  const initialLocation = getDOMLocation(initialHistoryState)
   let allKeys = [ initialLocation.key ]
 
   // Public interface

@@ -25,7 +25,7 @@ describeHistory('a browser history', () => {
 
     describe('the initial location', () => {
       it('does not have a key', (done) => {
-        TestSequences.InitialLocationNoKey(history, done)
+        TestSequences.InitialLocationHasKey(history, done)
       })
     })
 
