@@ -136,6 +136,7 @@ const createMemoryHistory = (props = {}) => {
     transitionManager.appendListener(listener)
 
   const history = {
+    type: 'MemoryHistory',
     length: entries.length,
     action: 'POP',
     location: entries[index],

@@ -316,6 +316,7 @@ const createHashHistory = (props = {}) => {
   }
 
   const history = {
+    type: 'HashHistory',
     length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
