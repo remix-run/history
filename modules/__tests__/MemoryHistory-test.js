@@ -57,7 +57,7 @@ describe('a memory history', () => {
     })
 
     describe('push with an encoded path string', () => {
-      it('creates a location object with decoded pathname', (done) => {
+      it('creates a location object with decoded pathname and rawPathname', (done) => {
         TestSequences.PushEncodedLocation(history, done)
       })
     })

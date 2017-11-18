@@ -56,3 +56,9 @@ export const supportsGoWithoutReloadUsingHash = () =>
 export const isExtraneousPopstateEvent = event =>
   event.state === undefined &&
   navigator.userAgent.indexOf('CriOS') === -1
+
+export const browserEncode = pathname => {
+  const a = document.createElement('a')
+  a.href = pathname
+  return a.pathname
+}

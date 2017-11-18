@@ -78,18 +78,13 @@ describe('a browser history', () => {
       history = createBrowserHistory()
     })
 
-    it('does not encode the generated path', () => {
-      // encoded
-      const encodedHref = history.createHref({
-        pathname: '/%23abc'
-      })
-      // unencoded
-      const unencodedHref = history.createHref({
-        pathname: '/#abc'
-      })
-
-      expect(encodedHref).toEqual('/%23abc')
-      expect(unencodedHref).toEqual('/#abc')
+    it('prefers the rawPathname over the pathname', () => {
+      const location = {
+        rawPathname: '/test%20ing',
+        pathname: '/test ing'
+      }
+      const href = history.createHref(location)
+      expect(href).toEqual('/test%20ing')
     })
   })
 })
@@ -200,18 +195,13 @@ describe('a hash history', () => {
       history = createHashHistory()
     })
 
-    it('does not encode the generated path', () => {
-      // encoded
-      const encodedHref = history.createHref({
-        pathname: '/%23abc'
-      })
-      // unencoded
-      const unencodedHref = history.createHref({
-        pathname: '/#abc'
-      })
-
-      expect(encodedHref).toEqual('#/%23abc')
-      expect(unencodedHref).toEqual('#/#abc')
+    it('prefers the rawPathname over the pathname', () => {
+      const location = {
+        rawPathname: '/test%20ing',
+        pathname: '/test ing'
+      }
+      const href = history.createHref(location)
+      expect(href).toEqual('#/test%20ing')
     })
   })
 })
@@ -238,18 +228,14 @@ describe('a memory history', () => {
       history = createMemoryHistory()
     })
 
-    it('does not encode the generated path', () => {
-      // encoded
-      const encodedHref = history.createHref({
-        pathname: '/%23abc'
-      })
-      // unencoded
-      const unencodedHref = history.createHref({
-        pathname: '/#abc'
-      })
-
-      expect(encodedHref).toEqual('/%23abc')
-      expect(unencodedHref).toEqual('/#abc')
+    it('prefers the rawPathname over the pathname', () => {
+      // memory history's rawPathname is same as pathname
+      const location = {
+        rawPathname: '/test ing',
+        pathname: '/test ing'
+      }
+      const href = history.createHref(location)
+      expect(href).toEqual('/test ing')
     })
   })
 })

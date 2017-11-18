@@ -2,7 +2,9 @@ import resolvePathname from 'resolve-pathname'
 import valueEqual from 'value-equal'
 import { parsePath } from './PathUtils'
 
-export const createLocation = (path, state, key, currentLocation) => {
+const defaultRaw = p => p
+
+export const createLocation = (path, state, key, currentLocation, raw = defaultRaw) => {
   let location
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
@@ -32,6 +34,8 @@ export const createLocation = (path, state, key, currentLocation) => {
     if (state !== undefined && location.state === undefined)
       location.state = state
   }
+
+  location.rawPathname = raw(location.pathname);
 
   try {
     location.pathname = decodeURI(location.pathname)

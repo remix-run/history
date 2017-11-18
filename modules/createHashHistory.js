@@ -15,7 +15,8 @@ import {
   addEventListener,
   removeEventListener,
   getConfirmation,
-  supportsGoWithoutReloadUsingHash
+  supportsGoWithoutReloadUsingHash,
+  browserEncode
 } from './DOMUtils'
 
 const HashChangeEvent = 'hashchange'
@@ -83,7 +84,7 @@ const createHashHistory = (props = {}) => {
     if (basename)
       path = stripBasename(path, basename)
 
-    return createLocation(path)
+    return createLocation(path, undefined, undefined, undefined, browserEncode)
   }
 
   const transitionManager = createTransitionManager()
@@ -189,7 +190,7 @@ const createHashHistory = (props = {}) => {
     )
 
     const action = 'PUSH'
-    const location = createLocation(path, undefined, undefined, history.location)
+    const location = createLocation(path, undefined, undefined, history.location, browserEncode)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)
@@ -231,7 +232,7 @@ const createHashHistory = (props = {}) => {
     )
 
     const action = 'REPLACE'
-    const location = createLocation(path, undefined, undefined, history.location)
+    const location = createLocation(path, undefined, undefined, history.location, browserEncode)
 
     transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
       if (!ok)

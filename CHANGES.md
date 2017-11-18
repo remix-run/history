@@ -1,3 +1,7 @@
+## HEAD
+
+- Add `rawPathname` property to location objects and prefer that over `pathname` in `createPath`. For browser and hash histories, `rawPathname` is an encoded string, while for memory histories, it is the same as the `pathname`.
+
 ## [v4.6.3]
 > Jun 20, 2017
 
