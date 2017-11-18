@@ -56,3 +56,14 @@ export const supportsGoWithoutReloadUsingHash = () =>
 export const isExtraneousPopstateEvent = event =>
   event.state === undefined &&
   navigator.userAgent.indexOf('CriOS') === -1
+
+export const browserEncode = pathname => {
+    const a = document.createElement('a')
+    a.href = pathname
+    const encodedPathname = a.pathname
+    // IE10 and IE11 do not prepend the pathname with a `/` contrary
+    // to other browsers.
+    return encodedPathname.charAt(0) === '/'
+      ? encodedPathname
+      : '/' + encodedPathname
+}
