@@ -1,35 +1,34 @@
-import expect from 'expect'
-import execSteps from './execSteps'
+import expect from "expect"
+import execSteps from "./execSteps"
 
 export default (history, done) => {
   const steps = [
     () => {
       // encoded string
-      const pathname = '/view/%23abc'
+      const pathname = "/view/%23abc"
       history.replace(pathname)
     },
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/view/%23abc'
+        pathname: "/view/%23abc"
       })
 
       // encoded object
-      const pathname = '/view/%23abc'
+      const pathname = "/view/%23abc"
       history.replace({ pathname })
     },
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/view/%23abc'
+        pathname: "/view/%23abc"
       })
       // unencoded string
-      const pathname = '/view/#abc'
+      const pathname = "/view/#abc"
       history.replace(pathname)
-    }
-    ,
-    (location) => {
+    },
+    location => {
       expect(location).toMatchObject({
-        pathname: '/view/',
-        hash: '#abc'
+        pathname: "/view/",
+        hash: "#abc"
       })
     }
   ]

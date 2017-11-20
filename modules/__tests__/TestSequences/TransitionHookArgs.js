@@ -1,15 +1,15 @@
-import expect from 'expect'
-import execSteps from './execSteps'
+import expect from "expect"
+import execSteps from "./execSteps"
 
 export default (history, done) => {
   let hookLocation, hookAction
   const steps = [
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/'
+        pathname: "/"
       })
 
-      history.push('/home')
+      history.push("/home")
     },
     (location, action) => {
       expect(hookAction).toBe(action)
@@ -21,7 +21,7 @@ export default (history, done) => {
     hookLocation = location
     hookAction = action
 
-    return 'Are you sure?'
+    return "Are you sure?"
   })
 
   execSteps(steps, history, (...args) => {

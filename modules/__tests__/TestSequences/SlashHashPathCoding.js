@@ -1,45 +1,45 @@
-import expect from 'expect'
-import execSteps from './execSteps'
+import expect from "expect"
+import execSteps from "./execSteps"
 
 export default (history, done) => {
   const steps = [
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/'
+        pathname: "/"
       })
 
-      expect(window.location.hash).toBe('#/')
+      expect(window.location.hash).toBe("#/")
 
-      history.push('/home?the=query#the-hash')
+      history.push("/home?the=query#the-hash")
     },
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/home',
-        search: '?the=query',
-        hash: '#the-hash'
+        pathname: "/home",
+        search: "?the=query",
+        hash: "#the-hash"
       })
 
-      expect(window.location.hash).toBe('#/home?the=query#the-hash')
+      expect(window.location.hash).toBe("#/home?the=query#the-hash")
 
       history.goBack()
     },
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/'
+        pathname: "/"
       })
 
-      expect(window.location.hash).toBe('#/')
+      expect(window.location.hash).toBe("#/")
 
       history.goForward()
     },
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/home',
-        search: '?the=query',
-        hash: '#the-hash'
+        pathname: "/home",
+        search: "?the=query",
+        hash: "#the-hash"
       })
 
-      expect(window.location.hash).toBe('#/home?the=query#the-hash')
+      expect(window.location.hash).toBe("#/home?the=query#the-hash")
     }
   ]
 

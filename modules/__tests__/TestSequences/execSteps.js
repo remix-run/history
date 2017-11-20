@@ -1,5 +1,7 @@
 const execSteps = (steps, history, done) => {
-  let index = 0, unlisten, cleanedUp = false
+  let index = 0,
+    unlisten,
+    cleanedUp = false
 
   const cleanup = (...args) => {
     if (!cleanedUp) {
@@ -13,13 +15,11 @@ const execSteps = (steps, history, done) => {
     try {
       const nextStep = steps[index++]
 
-      if (!nextStep)
-        throw new Error('Test is missing step ' + index)
+      if (!nextStep) throw new Error("Test is missing step " + index)
 
       nextStep(...args)
 
-      if (index === steps.length)
-        cleanup()
+      if (index === steps.length) cleanup()
     } catch (error) {
       cleanup(error)
     }

@@ -1,31 +1,31 @@
-import expect from 'expect'
-import execSteps from './execSteps'
+import expect from "expect"
+import execSteps from "./execSteps"
 
 export default (history, done) => {
   let prevLocation
 
   const steps = [
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/'
+        pathname: "/"
       })
 
-      history.push('/home')
+      history.push("/home")
     },
     (location, action) => {
-      expect(action).toBe('PUSH')
+      expect(action).toBe("PUSH")
       expect(location).toMatchObject({
-        pathname: '/home'
+        pathname: "/home"
       })
 
       prevLocation = location
 
-      history.push('/home')
+      history.push("/home")
     },
     (location, action) => {
-      expect(action).toBe('PUSH')
+      expect(action).toBe("PUSH")
       expect(location).toMatchObject({
-        pathname: '/home'
+        pathname: "/home"
       })
 
       // We should get the SAME location object. Nothing
@@ -33,14 +33,17 @@ export default (history, done) => {
       expect(location).toBe(prevLocation)
 
       // We should see a warning message.
-      expect(warningMessage).toMatch('Hash history cannot PUSH the same path; a new entry will not be added to the history stack')
+      expect(warningMessage).toMatch(
+        "Hash history cannot PUSH the same path; a new entry will not be added to the history stack"
+      )
     }
   ]
 
   let consoleError = console.error // eslint-disable-line no-console
   let warningMessage
 
-  console.error = (message) => { // eslint-disable-line no-console
+  console.error = message => {
+    // eslint-disable-line no-console
     warningMessage = message
   }
 

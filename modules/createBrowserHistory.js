@@ -1,24 +1,24 @@
-import warning from 'warning'
-import invariant from 'invariant'
-import { createLocation } from './LocationUtils'
+import warning from "warning"
+import invariant from "invariant"
+import { createLocation } from "./LocationUtils"
 import {
   addLeadingSlash,
   stripTrailingSlash,
   hasBasename,
   stripBasename,
   createPath
-} from './PathUtils'
-import createTransitionManager from './createTransitionManager'
+} from "./PathUtils"
+import createTransitionManager from "./createTransitionManager"
 import {
   canUseDOM,
   getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
   isExtraneousPopstateEvent
-} from './DOMUtils'
+} from "./DOMUtils"
 
-const PopStateEvent = 'popstate'
-const HashChangeEvent = 'hashchange'
+const PopStateEvent = "popstate"
+const HashChangeEvent = "hashchange"
 
 const getHistoryState = () => {
   try {
@@ -35,10 +35,7 @@ const getHistoryState = () => {
  * pushState, replaceState, and the popstate event.
  */
 const createBrowserHistory = (props = {}) => {
-  invariant(
-    canUseDOM,
-    'Browser history needs a DOM'
-  )
+  invariant(canUseDOM, "Browser history needs a DOM")
 
   const globalHistory = window.history
   const canUseHistory = supportsHistory()
@@ -49,46 +46,49 @@ const createBrowserHistory = (props = {}) => {
     getUserConfirmation = getConfirmation,
     keyLength = 6
   } = props
-  const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : ''
+  const basename = props.basename
+    ? stripTrailingSlash(addLeadingSlash(props.basename))
+    : ""
 
-  const getDOMLocation = (historyState) => {
-    const { key, state } = (historyState || {})
+  const getDOMLocation = historyState => {
+    const { key, state } = historyState || {}
     const { pathname, search, hash } = window.location
 
     let path = pathname + search + hash
 
     warning(
-      (!basename || hasBasename(path, basename)),
-      'You are attempting to use a basename on a page whose URL path does not begin ' +
-      'with the basename. Expected path "' + path + '" to begin with "' + basename + '".'
+      !basename || hasBasename(path, basename),
+      "You are attempting to use a basename on a page whose URL path does not begin " +
+        'with the basename. Expected path "' +
+        path +
+        '" to begin with "' +
+        basename +
+        '".'
     )
 
-    if (basename)
-      path = stripBasename(path, basename)
+    if (basename) path = stripBasename(path, basename)
 
     return createLocation(path, state, key)
   }
 
   const createKey = () =>
-    Math.random().toString(36).substr(2, keyLength)
+    Math.random()
+      .toString(36)
+      .substr(2, keyLength)
 
   const transitionManager = createTransitionManager()
 
-  const setState = (nextState) => {
+  const setState = nextState => {
     Object.assign(history, nextState)
 
     history.length = globalHistory.length
 
-    transitionManager.notifyListeners(
-      history.location,
-      history.action
-    )
+    transitionManager.notifyListeners(history.location, history.action)
   }
 
-  const handlePopState = (event) => {
+  const handlePopState = event => {
     // Ignore extraneous popstate events in WebKit.
-    if (isExtraneousPopstateEvent(event))
-      return
+    if (isExtraneousPopstateEvent(event)) return
 
     handlePop(getDOMLocation(event.state))
   }
@@ -99,24 +99,29 @@ const createBrowserHistory = (props = {}) => {
 
   let forceNextPop = false
 
-  const handlePop = (location) => {
+  const handlePop = location => {
     if (forceNextPop) {
       forceNextPop = false
       setState()
     } else {
-      const action = 'POP'
+      const action = "POP"
 
-      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
-        if (ok) {
-          setState({ action, location })
-        } else {
-          revertPop(location)
+      transitionManager.confirmTransitionTo(
+        location,
+        action,
+        getUserConfirmation,
+        ok => {
+          if (ok) {
+            setState({ action, location })
+          } else {
+            revertPop(location)
+          }
         }
-      })
+      )
     }
   }
 
-  const revertPop = (fromLocation) => {
+  const revertPop = fromLocation => {
     const toLocation = history.location
 
     // TODO: We could probably make this more reliable by
@@ -125,13 +130,11 @@ const createBrowserHistory = (props = {}) => {
 
     let toIndex = allKeys.indexOf(toLocation.key)
 
-    if (toIndex === -1)
-      toIndex = 0
+    if (toIndex === -1) toIndex = 0
 
     let fromIndex = allKeys.indexOf(fromLocation.key)
 
-    if (fromIndex === -1)
-      fromIndex = 0
+    if (fromIndex === -1) fromIndex = 0
 
     const delta = toIndex - fromIndex
 
@@ -142,109 +145,124 @@ const createBrowserHistory = (props = {}) => {
   }
 
   const initialLocation = getDOMLocation(getHistoryState())
-  let allKeys = [ initialLocation.key ]
+  let allKeys = [initialLocation.key]
 
   // Public interface
 
-  const createHref = (location) =>
-    basename + createPath(location)
+  const createHref = location => basename + createPath(location)
 
   const push = (path, state) => {
     warning(
-      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
-      'You should avoid providing a 2nd state argument to push when the 1st ' +
-      'argument is a location-like object that already has state; it is ignored'
+      !(
+        typeof path === "object" &&
+        path.state !== undefined &&
+        state !== undefined
+      ),
+      "You should avoid providing a 2nd state argument to push when the 1st " +
+        "argument is a location-like object that already has state; it is ignored"
     )
 
-    const action = 'PUSH'
+    const action = "PUSH"
     const location = createLocation(path, state, createKey(), history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
-      if (!ok)
-        return
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      ok => {
+        if (!ok) return
 
-      const href = createHref(location)
-      const { key, state } = location
+        const href = createHref(location)
+        const { key, state } = location
 
-      if (canUseHistory) {
-        globalHistory.pushState({ key, state }, null, href)
+        if (canUseHistory) {
+          globalHistory.pushState({ key, state }, null, href)
 
-        if (forceRefresh) {
-          window.location.href = href
+          if (forceRefresh) {
+            window.location.href = href
+          } else {
+            const prevIndex = allKeys.indexOf(history.location.key)
+            const nextKeys = allKeys.slice(
+              0,
+              prevIndex === -1 ? 0 : prevIndex + 1
+            )
+
+            nextKeys.push(location.key)
+            allKeys = nextKeys
+
+            setState({ action, location })
+          }
         } else {
-          const prevIndex = allKeys.indexOf(history.location.key)
-          const nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1)
+          warning(
+            state === undefined,
+            "Browser history cannot push state in browsers that do not support HTML5 history"
+          )
 
-          nextKeys.push(location.key)
-          allKeys = nextKeys
-
-          setState({ action, location })
+          window.location.href = href
         }
-      } else {
-        warning(
-          state === undefined,
-          'Browser history cannot push state in browsers that do not support HTML5 history'
-        )
-
-        window.location.href = href
       }
-    })
+    )
   }
 
   const replace = (path, state) => {
     warning(
-      !(typeof path === 'object' && path.state !== undefined && state !== undefined),
-      'You should avoid providing a 2nd state argument to replace when the 1st ' +
-      'argument is a location-like object that already has state; it is ignored'
+      !(
+        typeof path === "object" &&
+        path.state !== undefined &&
+        state !== undefined
+      ),
+      "You should avoid providing a 2nd state argument to replace when the 1st " +
+        "argument is a location-like object that already has state; it is ignored"
     )
 
-    const action = 'REPLACE'
+    const action = "REPLACE"
     const location = createLocation(path, state, createKey(), history.location)
 
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, (ok) => {
-      if (!ok)
-        return
+    transitionManager.confirmTransitionTo(
+      location,
+      action,
+      getUserConfirmation,
+      ok => {
+        if (!ok) return
 
-      const href = createHref(location)
-      const { key, state } = location
+        const href = createHref(location)
+        const { key, state } = location
 
-      if (canUseHistory) {
-        globalHistory.replaceState({ key, state }, null, href)
+        if (canUseHistory) {
+          globalHistory.replaceState({ key, state }, null, href)
 
-        if (forceRefresh) {
-          window.location.replace(href)
+          if (forceRefresh) {
+            window.location.replace(href)
+          } else {
+            const prevIndex = allKeys.indexOf(history.location.key)
+
+            if (prevIndex !== -1) allKeys[prevIndex] = location.key
+
+            setState({ action, location })
+          }
         } else {
-          const prevIndex = allKeys.indexOf(history.location.key)
+          warning(
+            state === undefined,
+            "Browser history cannot replace state in browsers that do not support HTML5 history"
+          )
 
-          if (prevIndex !== -1)
-            allKeys[prevIndex] = location.key
-
-          setState({ action, location })
+          window.location.replace(href)
         }
-      } else {
-        warning(
-          state === undefined,
-          'Browser history cannot replace state in browsers that do not support HTML5 history'
-        )
-
-        window.location.replace(href)
       }
-    })
+    )
   }
 
-  const go = (n) => {
+  const go = n => {
     globalHistory.go(n)
   }
 
-  const goBack = () =>
-    go(-1)
+  const goBack = () => go(-1)
 
-  const goForward = () =>
-    go(1)
+  const goForward = () => go(1)
 
   let listenerCount = 0
 
-  const checkDOMListeners = (delta) => {
+  const checkDOMListeners = delta => {
     listenerCount += delta
 
     if (listenerCount === 1) {
@@ -280,7 +298,7 @@ const createBrowserHistory = (props = {}) => {
     }
   }
 
-  const listen = (listener) => {
+  const listen = listener => {
     const unlisten = transitionManager.appendListener(listener)
     checkDOMListeners(1)
 
@@ -292,7 +310,7 @@ const createBrowserHistory = (props = {}) => {
 
   const history = {
     length: globalHistory.length,
-    action: 'POP',
+    action: "POP",
     location: initialLocation,
     createHref,
     push,

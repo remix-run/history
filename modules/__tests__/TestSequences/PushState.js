@@ -1,22 +1,22 @@
-import expect from 'expect'
-import execSteps from './execSteps'
+import expect from "expect"
+import execSteps from "./execSteps"
 
 export default (history, done) => {
   const steps = [
-    (location) => {
+    location => {
       expect(location).toMatchObject({
-        pathname: '/'
+        pathname: "/"
       })
 
-      history.push('/home?the=query#the-hash', { the: 'state' })
+      history.push("/home?the=query#the-hash", { the: "state" })
     },
     (location, action) => {
-      expect(action).toBe('PUSH')
+      expect(action).toBe("PUSH")
       expect(location).toMatchObject({
-        pathname: '/home',
-        search: '?the=query',
-        hash: '#the-hash',
-        state: { the: 'state' }
+        pathname: "/home",
+        search: "?the=query",
+        hash: "#the-hash",
+        state: { the: "state" }
       })
     }
   ]
