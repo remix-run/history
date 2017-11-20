@@ -2,16 +2,6 @@ export const canUseDOM = !!(
   typeof window !== 'undefined' && window.document && window.document.createElement
 )
 
-export const addEventListener = (node, event, listener) =>
-  node.addEventListener
-    ? node.addEventListener(event, listener, false)
-    : node.attachEvent('on' + event, listener)
-
-export const removeEventListener = (node, event, listener) =>
-  node.removeEventListener
-    ? node.removeEventListener(event, listener, false)
-    : node.detachEvent('on' + event, listener)
-
 export const getConfirmation = (message, callback) =>
   callback(window.confirm(message)) // eslint-disable-line no-alert
 

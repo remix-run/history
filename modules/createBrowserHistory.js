@@ -11,8 +11,6 @@ import {
 import createTransitionManager from './createTransitionManager'
 import {
   canUseDOM,
-  addEventListener,
-  removeEventListener,
   getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
@@ -90,7 +88,7 @@ const createBrowserHistory = (props = {}) => {
   const handlePopState = (event) => {
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event))
-      return 
+      return
 
     handlePop(getDOMLocation(event.state))
   }
@@ -250,15 +248,15 @@ const createBrowserHistory = (props = {}) => {
     listenerCount += delta
 
     if (listenerCount === 1) {
-      addEventListener(window, PopStateEvent, handlePopState)
+      window.addEventListener(PopStateEvent, handlePopState)
 
       if (needsHashChangeListener)
-        addEventListener(window, HashChangeEvent, handleHashChange)
+        window.addEventListener(HashChangeEvent, handleHashChange)
     } else if (listenerCount === 0) {
-      removeEventListener(window, PopStateEvent, handlePopState)
+      window.removeEventListener(PopStateEvent, handlePopState)
 
       if (needsHashChangeListener)
-        removeEventListener(window, HashChangeEvent, handleHashChange)
+        window.removeEventListener(HashChangeEvent, handleHashChange)
     }
   }
 

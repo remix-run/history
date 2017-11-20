@@ -12,8 +12,6 @@ import {
 import createTransitionManager from './createTransitionManager'
 import {
   canUseDOM,
-  addEventListener,
-  removeEventListener,
   getConfirmation,
   supportsGoWithoutReloadUsingHash
 } from './DOMUtils'
@@ -279,9 +277,9 @@ const createHashHistory = (props = {}) => {
     listenerCount += delta
 
     if (listenerCount === 1) {
-      addEventListener(window, HashChangeEvent, handleHashChange)
+      window.addEventListener(HashChangeEvent, handleHashChange)
     } else if (listenerCount === 0) {
-      removeEventListener(window, HashChangeEvent, handleHashChange)
+      window.removeEventListener(HashChangeEvent, handleHashChange)
     }
   }
 
