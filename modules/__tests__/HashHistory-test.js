@@ -269,5 +269,11 @@ describeHistory("a hash history", () => {
       const history = createHistory({ basename: "/prefix" })
       expect(history.location.pathname).toEqual("/")
     })
+
+	it('allows URL with regex special characters', () => {
+      window.location.hash = '/prefix$special/hello'
+      const history = createHistory({ basename: '/prefix$special'})
+      expect(history.location.pathname).toEqual('/hello')
+    })
   })
 })
