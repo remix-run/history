@@ -37,6 +37,18 @@ const createTransitionManager = () => {
 
           callback(true)
         }
+      } else if (result && result.then && result.catch) {
+        result.then(function(res) {
+          callback(res);
+        }).catch(function(e) {
+          warning(
+            false,
+            "Navigation was prevented because of error in prompt function: " + e.message
+          )
+          callback(false);
+        });
+      } else if (result && typeof result === "function") {
+        result(callback);
       } else {
         // Return false from a transition hook to cancel the transition.
         callback(result !== false)
