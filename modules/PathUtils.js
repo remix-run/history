@@ -5,7 +5,7 @@ export const stripLeadingSlash = path =>
   path.charAt(0) === "/" ? path.substr(1) : path
 
 export const hasBasename = (path, prefix) =>
-  path.toLowerCase().lastIndexOf(prefix.toLowerCase(), 0) === 0 && "/?#".indexOf(path.charAt(prefix.length)) !== -1
+  path.toLowerCase().indexOf(prefix.toLowerCase()) === 0 && "/?#".indexOf(path.charAt(prefix.length)) !== -1
 
 export const stripBasename = (path, prefix) =>
   hasBasename(path, prefix) ? path.substr(prefix.length) : path
