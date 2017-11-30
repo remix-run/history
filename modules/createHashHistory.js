@@ -34,22 +34,29 @@ const HashPathCoders = {
   }
 }
 
-const getHashPath = () => {
+const getHashPath = bypassIframe => {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
-  const href = window.location.href
+  const href = bypassIframe ? window.top.location.href : window.location.href
   const hashIndex = href.indexOf("#")
   return hashIndex === -1 ? "" : href.substring(hashIndex + 1)
 }
 
-const pushHashPath = path => (window.location.hash = path)
+const pushHashPath = (path, bypassIframe) => (bypassIframe ? window.top.location.hash = path : window.location.hash = path)
 
-const replaceHashPath = path => {
-  const hashIndex = window.location.href.indexOf("#")
+const replaceHashPath = (path, bypassIframe) => {
+  const href = bypassIframe ? window.top.location.href : window.location.href
+  const hashIndex = href.indexOf("#")
 
-  window.location.replace(
-    window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + "#" + path
-  )
+  if (bypassIframe) {
+    window.top.location.replace(
+        window.top.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + "#" + path
+    )
+  } else {
+    window.location.replace(
+        window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + "#" + path
+    )
+  }
 }
 
 const createHashHistory = (props = {}) => {
@@ -62,11 +69,12 @@ const createHashHistory = (props = {}) => {
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
     : ""
+  const bypassIframeLocation = props.bypassIframeLocation
 
   const { encodePath, decodePath } = HashPathCoders[hashType]
 
   const getDOMLocation = () => {
-    let path = decodePath(getHashPath())
+    let path = decodePath(getHashPath(bypassIframeLocation))
 
     warning(
       !basename || hasBasename(path, basename),
@@ -97,12 +105,12 @@ const createHashHistory = (props = {}) => {
   let ignorePath = null
 
   const handleHashChange = () => {
-    const path = getHashPath()
+    const path = getHashPath(bypassIframeLocation)
     const encodedPath = encodePath(path)
 
     if (path !== encodedPath) {
       // Ensure we always have a properly-encoded hash.
-      replaceHashPath(encodedPath)
+      replaceHashPath(encodedPath, bypassIframeLocation)
     } else {
       const location = getDOMLocation()
       const prevLocation = history.location
@@ -163,10 +171,10 @@ const createHashHistory = (props = {}) => {
   }
 
   // Ensure the hash is encoded properly before doing anything else.
-  const path = getHashPath()
+  const path = getHashPath(bypassIframeLocation)
   const encodedPath = encodePath(path)
 
-  if (path !== encodedPath) replaceHashPath(encodedPath)
+  if (path !== encodedPath) replaceHashPath(encodedPath, bypassIframeLocation)
 
   const initialLocation = getDOMLocation()
   let allPaths = [createPath(initialLocation)]
@@ -199,14 +207,14 @@ const createHashHistory = (props = {}) => {
 
         const path = createPath(location)
         const encodedPath = encodePath(basename + path)
-        const hashChanged = getHashPath() !== encodedPath
+        const hashChanged = getHashPath(bypassIframeLocation) !== encodedPath
 
         if (hashChanged) {
           // We cannot tell if a hashchange was caused by a PUSH, so we'd
           // rather setState here and ignore the hashchange. The caveat here
           // is that other hash histories in the page will consider it a POP.
           ignorePath = path
-          pushHashPath(encodedPath)
+          pushHashPath(encodedPath, bypassIframeLocation)
 
           const prevIndex = allPaths.lastIndexOf(createPath(history.location))
           const nextPaths = allPaths.slice(
@@ -253,14 +261,14 @@ const createHashHistory = (props = {}) => {
 
         const path = createPath(location)
         const encodedPath = encodePath(basename + path)
-        const hashChanged = getHashPath() !== encodedPath
+        const hashChanged = getHashPath(bypassIframeLocation) !== encodedPath
 
         if (hashChanged) {
           // We cannot tell if a hashchange was caused by a REPLACE, so we'd
           // rather setState here and ignore the hashchange. The caveat here
           // is that other hash histories in the page will consider it a POP.
           ignorePath = path
-          replaceHashPath(encodedPath)
+          replaceHashPath(encodedPath, bypassIframeLocation)
         }
 
         const prevIndex = allPaths.indexOf(createPath(history.location))
