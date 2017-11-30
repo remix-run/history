@@ -1,3 +1,8 @@
+## [v4.7.3]
+> Nov 30, 2017
+
+- Add and expose `history` and `location` `prop-types` (thanks @lutangar)
+
 ## [v4.6.3]
 > Jun 20, 2017
 

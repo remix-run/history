@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "4.7.2",
+  "version": "4.7.3",
   "description": "Manage session history with JavaScript",
   "repository": "ReactTraining/history",
   "license": "MIT",
@@ -32,6 +32,7 @@
   "dependencies": {
     "invariant": "^2.2.1",
     "loose-envify": "^1.2.0",
+    "prop-types": "^15.6.0",
     "resolve-pathname": "^2.2.0",
     "value-equal": "^0.4.0",
     "warning": "^3.0.0"
