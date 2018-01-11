@@ -27,7 +27,8 @@
     "clean": "git clean -fdX .",
     "release": "node ./tools/release.js",
     "lint": "eslint modules",
-    "test": "karma start --single-run"
+    "test": "karma start --single-run",
+    "test-watch": "karma start"
   },
   "dependencies": {
     "invariant": "^2.2.1",
