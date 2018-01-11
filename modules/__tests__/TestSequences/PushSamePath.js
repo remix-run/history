@@ -19,7 +19,7 @@ export default (history, done) => {
       history.push("/home")
     },
     (location, action) => {
-      expect(action).toBe("PUSH")
+      expect(action).toBe("REPLACE")
       expect(location).toMatchObject({
         pathname: "/home"
       })
@@ -29,7 +29,7 @@ export default (history, done) => {
     (location, action) => {
       expect(action).toBe("POP")
       expect(location).toMatchObject({
-        pathname: "/home"
+        pathname: "/"
       })
     }
   ]
