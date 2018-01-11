@@ -165,7 +165,7 @@ const createBrowserHistory = (props = {}) => {
     const action = "PUSH"
     const location = createLocation(path, state, createKey(), history.location)
     
-    if (createPath(location) === creatPath(history.location)) {
+    if (createPath(location) === createPath(history.location)) {
       replace(path, state)
       return
     }
