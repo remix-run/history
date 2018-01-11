@@ -1,6 +1,6 @@
 import warning from "warning"
 import invariant from "invariant"
-import { createLocation } from "./LocationUtils"
+import { createLocation, locationsAreEqual } from "./LocationUtils"
 import {
   addLeadingSlash,
   stripTrailingSlash,
@@ -165,7 +165,7 @@ const createBrowserHistory = (props = {}) => {
     const action = "PUSH"
     const location = createLocation(path, state, createKey(), history.location)
 
-    if (createPath(location) === createPath(history.location)) {
+    if (locationsAreEqual(location, history.location)) {
       replace(path, state)
       return
     }
