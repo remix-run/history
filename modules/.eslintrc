@@ -11,7 +11,6 @@
     "plugin:import/errors"
   ],
   "rules": {
-    "prefer-arrow-callback": 2,
-    "semi": [ 2, "never" ]
+    "prefer-arrow-callback": 2
   }
 }
