@@ -1,40 +1,40 @@
-import expect from "expect"
-import execSteps from "./execSteps"
+import expect from "expect";
+import execSteps from "./execSteps";
 
 export default (history, done) => {
   let unblock,
-    hookWasCalled = false
+    hookWasCalled = false;
   const steps = [
     location => {
       expect(location).toMatchObject({
         pathname: "/"
-      })
+      });
 
-      history.push("/home")
+      history.push("/home");
     },
     (location, action) => {
-      expect(action).toBe("PUSH")
+      expect(action).toBe("PUSH");
       expect(location).toMatchObject({
         pathname: "/home"
-      })
+      });
 
       unblock = history.block(() => {
-        hookWasCalled = true
-      })
+        hookWasCalled = true;
+      });
 
-      window.history.go(-1)
+      window.history.go(-1);
     },
     (location, action) => {
-      expect(action).toBe("POP")
+      expect(action).toBe("POP");
       expect(location).toMatchObject({
         pathname: "/"
-      })
+      });
 
-      expect(hookWasCalled).toBe(true)
+      expect(hookWasCalled).toBe(true);
 
-      unblock()
+      unblock();
     }
-  ]
+  ];
 
-  execSteps(steps, history, done)
-}
+  execSteps(steps, history, done);
+};

@@ -1,12 +1,12 @@
-import expect from "expect"
-import execSteps from "./execSteps"
+import expect from "expect";
+import execSteps from "./execSteps";
 
 export default (history, done) => {
   const steps = [
     location => {
-      expect(location.key).toBeTruthy()
+      expect(location.key).toBeTruthy();
     }
-  ]
+  ];
 
-  execSteps(steps, history, done)
-}
+  execSteps(steps, history, done);
+};

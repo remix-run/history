@@ -1,36 +1,36 @@
 const execSteps = (steps, history, done) => {
   let index = 0,
     unlisten,
-    cleanedUp = false
+    cleanedUp = false;
 
   const cleanup = (...args) => {
     if (!cleanedUp) {
-      cleanedUp = true
-      unlisten()
-      done(...args)
+      cleanedUp = true;
+      unlisten();
+      done(...args);
     }
-  }
+  };
 
   const execNextStep = (...args) => {
     try {
-      const nextStep = steps[index++]
+      const nextStep = steps[index++];
 
-      if (!nextStep) throw new Error("Test is missing step " + index)
+      if (!nextStep) throw new Error("Test is missing step " + index);
 
-      nextStep(...args)
+      nextStep(...args);
 
-      if (index === steps.length) cleanup()
+      if (index === steps.length) cleanup();
     } catch (error) {
-      cleanup(error)
+      cleanup(error);
     }
-  }
+  };
 
   if (steps.length) {
-    unlisten = history.listen(execNextStep)
-    execNextStep(history.location)
+    unlisten = history.listen(execNextStep);
+    execNextStep(history.location);
   } else {
-    done()
+    done();
   }
-}
+};
 
-export default execSteps
+export default execSteps;

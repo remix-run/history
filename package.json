@@ -73,8 +73,5 @@
   "keywords": [
     "history",
     "location"
-  ],
-  "prettier": {
-    "semi": false
-  }
+  ]
 }

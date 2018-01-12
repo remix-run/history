@@ -1,16 +1,16 @@
-import expect from "expect"
+import expect from "expect";
 
 export default (history, done) => {
   expect(history.location).toMatchObject({
     pathname: "/"
-  })
+  });
 
-  history.push("/home")
+  history.push("/home");
 
-  let transitionHookWasCalled = false
+  let transitionHookWasCalled = false;
   const unblock = history.block(() => {
-    transitionHookWasCalled = true
-  })
+    transitionHookWasCalled = true;
+  });
 
   // These timeouts are a hack to allow for the time it takes
   // for histories to reflect the change in the URL. Normally
@@ -20,14 +20,14 @@ export default (history, done) => {
 
   // Allow some time for history to detect the PUSH.
   setTimeout(() => {
-    history.goBack()
+    history.goBack();
 
     // Allow some time for history to detect the POP.
     setTimeout(() => {
-      expect(transitionHookWasCalled).toBe(true)
-      unblock()
+      expect(transitionHookWasCalled).toBe(true);
+      unblock();
 
-      done()
-    }, 100)
-  }, 10)
-}
+      done();
+    }, 100);
+  }, 10);
+};

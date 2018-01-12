@@ -1,17 +1,17 @@
-import warning from "warning"
+import warning from "warning";
 
 const createTransitionManager = () => {
-  let prompt = null
+  let prompt = null;
 
   const setPrompt = nextPrompt => {
-    warning(prompt == null, "A history supports only one prompt at a time")
+    warning(prompt == null, "A history supports only one prompt at a time");
 
-    prompt = nextPrompt
+    prompt = nextPrompt;
 
     return () => {
-      if (prompt === nextPrompt) prompt = null
-    }
-  }
+      if (prompt === nextPrompt) prompt = null;
+    };
+  };
 
   const confirmTransitionTo = (
     location,
@@ -24,55 +24,55 @@ const createTransitionManager = () => {
     // best way to handle this.
     if (prompt != null) {
       const result =
-        typeof prompt === "function" ? prompt(location, action) : prompt
+        typeof prompt === "function" ? prompt(location, action) : prompt;
 
       if (typeof result === "string") {
         if (typeof getUserConfirmation === "function") {
-          getUserConfirmation(result, callback)
+          getUserConfirmation(result, callback);
         } else {
           warning(
             false,
             "A history needs a getUserConfirmation function in order to use a prompt message"
-          )
+          );
 
-          callback(true)
+          callback(true);
         }
       } else {
         // Return false from a transition hook to cancel the transition.
-        callback(result !== false)
+        callback(result !== false);
       }
     } else {
-      callback(true)
+      callback(true);
     }
-  }
+  };
 
-  let listeners = []
+  let listeners = [];
 
   const appendListener = fn => {
-    let isActive = true
+    let isActive = true;
 
     const listener = (...args) => {
-      if (isActive) fn(...args)
-    }
+      if (isActive) fn(...args);
+    };
 
-    listeners.push(listener)
+    listeners.push(listener);
 
     return () => {
-      isActive = false
-      listeners = listeners.filter(item => item !== listener)
-    }
-  }
+      isActive = false;
+      listeners = listeners.filter(item => item !== listener);
+    };
+  };
 
   const notifyListeners = (...args) => {
-    listeners.forEach(listener => listener(...args))
-  }
+    listeners.forEach(listener => listener(...args));
+  };
 
   return {
     setPrompt,
     confirmTransitionTo,
     appendListener,
     notifyListeners
-  }
-}
+  };
+};
 
-export default createTransitionManager
+export default createTransitionManager;
