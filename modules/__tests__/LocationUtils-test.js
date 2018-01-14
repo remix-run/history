@@ -1,5 +1,5 @@
-import expect from "expect"
-import { createLocation } from "../LocationUtils"
+import expect from "expect";
+import { createLocation } from "../LocationUtils";
 
 describe("createLocation", () => {
   describe("with a full path", () => {
@@ -9,9 +9,9 @@ describe("createLocation", () => {
           pathname: "/the/path",
           search: "?the=query",
           hash: "#the-hash"
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe("given as an object", () => {
       it("has the correct properties", () => {
@@ -25,10 +25,10 @@ describe("createLocation", () => {
           pathname: "/the/path",
           search: "?the=query",
           hash: "#the-hash"
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   describe("with a relative path", () => {
     describe("given as a string", () => {
@@ -37,9 +37,9 @@ describe("createLocation", () => {
           pathname: "the/path",
           search: "?the=query",
           hash: "#the-hash"
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe("given as an object", () => {
       it("has the correct properties", () => {
@@ -53,10 +53,10 @@ describe("createLocation", () => {
           pathname: "the/path",
           search: "?the=query",
           hash: "#the-hash"
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   describe("with a path with no pathname", () => {
     describe("given as a string", () => {
@@ -65,9 +65,9 @@ describe("createLocation", () => {
           pathname: "/",
           search: "?the=query",
           hash: "#the-hash"
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe("given as an object", () => {
       it("has the correct properties", () => {
@@ -77,10 +77,10 @@ describe("createLocation", () => {
           pathname: "/",
           search: "?the=query",
           hash: "#the-hash"
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   describe("with a path with no search", () => {
     describe("given as a string", () => {
@@ -89,9 +89,9 @@ describe("createLocation", () => {
           pathname: "/the/path",
           search: "",
           hash: "#the-hash"
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe("given as an object", () => {
       it("has the correct properties", () => {
@@ -101,10 +101,10 @@ describe("createLocation", () => {
           pathname: "/the/path",
           search: "",
           hash: "#the-hash"
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   describe("with a path with no hash", () => {
     describe("given as a string", () => {
@@ -113,9 +113,9 @@ describe("createLocation", () => {
           pathname: "/the/path",
           search: "?the=query",
           hash: ""
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe("given as an object", () => {
       it("has the correct properties", () => {
@@ -125,38 +125,38 @@ describe("createLocation", () => {
           pathname: "/the/path",
           search: "?the=query",
           hash: ""
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   describe("with a path that cannot be decoded", () => {
     describe("given as a string", () => {
       it("throws custom message when decodeURI throws a URIError", () => {
         expect(() => {
-          createLocation("/test%")
-        }).toThrow('Pathname "/test%" could not be decoded.')
-      })
-    })
+          createLocation("/test%");
+        }).toThrow('Pathname "/test%" could not be decoded.');
+      });
+    });
 
     describe("given as an object", () => {
       it("throws custom message when decodeURI throws a URIError", () => {
         expect(() => {
-          createLocation({ pathname: "/test%" })
-        }).toThrow('Pathname "/test%" could not be decoded.')
-      })
-    })
-  })
+          createLocation({ pathname: "/test%" });
+        }).toThrow('Pathname "/test%" could not be decoded.');
+      });
+    });
+  });
 
   describe("key", () => {
     it("has a key property if a key is provided", () => {
-      const location = createLocation("/the/path", undefined, "key")
-      expect(Object.keys(location)).toContain("key")
-    })
+      const location = createLocation("/the/path", undefined, "key");
+      expect(Object.keys(location)).toContain("key");
+    });
 
     it("has no key property if no key is provided", () => {
-      const location = createLocation("/the/path")
-      expect(Object.keys(location)).not.toContain("key")
-    })
-  })
-})
+      const location = createLocation("/the/path");
+      expect(Object.keys(location)).not.toContain("key");
+    });
+  });
+});

@@ -1,39 +1,39 @@
-import expect from "expect"
-import execSteps from "./execSteps"
+import expect from "expect";
+import execSteps from "./execSteps";
 
 export default (history, done) => {
   const steps = [
     location => {
       expect(location).toMatchObject({
         pathname: "/"
-      })
+      });
 
-      history.push("/home", { the: "state" })
+      history.push("/home", { the: "state" });
     },
     (location, action) => {
-      expect(action).toBe("PUSH")
+      expect(action).toBe("PUSH");
       expect(location).toMatchObject({
         pathname: "/home",
         state: undefined
-      })
+      });
 
       // We should see a warning message.
       expect(warningMessage).toMatch(
         "Hash history cannot push state; it is ignored"
-      )
+      );
     }
-  ]
+  ];
 
-  let consoleError = console.error // eslint-disable-line no-console
-  let warningMessage
+  let consoleError = console.error; // eslint-disable-line no-console
+  let warningMessage;
 
   console.error = message => {
     // eslint-disable-line no-console
-    warningMessage = message
-  }
+    warningMessage = message;
+  };
 
   execSteps(steps, history, (...args) => {
-    console.error = consoleError // eslint-disable-line no-console
-    done(...args)
-  })
-}
+    console.error = consoleError; // eslint-disable-line no-console
+    done(...args);
+  });
+};

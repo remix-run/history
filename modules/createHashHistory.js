@@ -1,6 +1,6 @@
-import warning from "warning"
-import invariant from "invariant"
-import { createLocation, locationsAreEqual } from "./LocationUtils"
+import warning from "warning";
+import invariant from "invariant";
+import { createLocation, locationsAreEqual } from "./LocationUtils";
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -8,15 +8,15 @@ import {
   hasBasename,
   stripBasename,
   createPath
-} from "./PathUtils"
-import createTransitionManager from "./createTransitionManager"
+} from "./PathUtils";
+import createTransitionManager from "./createTransitionManager";
 import {
   canUseDOM,
   getConfirmation,
   supportsGoWithoutReloadUsingHash
-} from "./DOMUtils"
+} from "./DOMUtils";
 
-const HashChangeEvent = "hashchange"
+const HashChangeEvent = "hashchange";
 
 const HashPathCoders = {
   hashbang: {
@@ -32,41 +32,41 @@ const HashPathCoders = {
     encodePath: addLeadingSlash,
     decodePath: addLeadingSlash
   }
-}
+};
 
 const getHashPath = () => {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
-  const href = window.location.href
-  const hashIndex = href.indexOf("#")
-  return hashIndex === -1 ? "" : href.substring(hashIndex + 1)
-}
+  const href = window.location.href;
+  const hashIndex = href.indexOf("#");
+  return hashIndex === -1 ? "" : href.substring(hashIndex + 1);
+};
 
-const pushHashPath = path => (window.location.hash = path)
+const pushHashPath = path => (window.location.hash = path);
 
 const replaceHashPath = path => {
-  const hashIndex = window.location.href.indexOf("#")
+  const hashIndex = window.location.href.indexOf("#");
 
   window.location.replace(
     window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + "#" + path
-  )
-}
+  );
+};
 
 const createHashHistory = (props = {}) => {
-  invariant(canUseDOM, "Hash history needs a DOM")
+  invariant(canUseDOM, "Hash history needs a DOM");
 
-  const globalHistory = window.history
-  const canGoWithoutReload = supportsGoWithoutReloadUsingHash()
+  const globalHistory = window.history;
+  const canGoWithoutReload = supportsGoWithoutReloadUsingHash();
 
-  const { getUserConfirmation = getConfirmation, hashType = "slash" } = props
+  const { getUserConfirmation = getConfirmation, hashType = "slash" } = props;
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
-    : ""
+    : "";
 
-  const { encodePath, decodePath } = HashPathCoders[hashType]
+  const { encodePath, decodePath } = HashPathCoders[hashType];
 
   const getDOMLocation = () => {
-    let path = decodePath(getHashPath())
+    let path = decodePath(getHashPath());
 
     warning(
       !basename || hasBasename(path, basename),
@@ -76,53 +76,53 @@ const createHashHistory = (props = {}) => {
         '" to begin with "' +
         basename +
         '".'
-    )
+    );
 
-    if (basename) path = stripBasename(path, basename)
+    if (basename) path = stripBasename(path, basename);
 
-    return createLocation(path)
-  }
+    return createLocation(path);
+  };
 
-  const transitionManager = createTransitionManager()
+  const transitionManager = createTransitionManager();
 
   const setState = nextState => {
-    Object.assign(history, nextState)
+    Object.assign(history, nextState);
 
-    history.length = globalHistory.length
+    history.length = globalHistory.length;
 
-    transitionManager.notifyListeners(history.location, history.action)
-  }
+    transitionManager.notifyListeners(history.location, history.action);
+  };
 
-  let forceNextPop = false
-  let ignorePath = null
+  let forceNextPop = false;
+  let ignorePath = null;
 
   const handleHashChange = () => {
-    const path = getHashPath()
-    const encodedPath = encodePath(path)
+    const path = getHashPath();
+    const encodedPath = encodePath(path);
 
     if (path !== encodedPath) {
       // Ensure we always have a properly-encoded hash.
-      replaceHashPath(encodedPath)
+      replaceHashPath(encodedPath);
     } else {
-      const location = getDOMLocation()
-      const prevLocation = history.location
+      const location = getDOMLocation();
+      const prevLocation = history.location;
 
-      if (!forceNextPop && locationsAreEqual(prevLocation, location)) return // A hashchange doesn't always == location change.
+      if (!forceNextPop && locationsAreEqual(prevLocation, location)) return; // A hashchange doesn't always == location change.
 
-      if (ignorePath === createPath(location)) return // Ignore this change; we already setState in push/replace.
+      if (ignorePath === createPath(location)) return; // Ignore this change; we already setState in push/replace.
 
-      ignorePath = null
+      ignorePath = null;
 
-      handlePop(location)
+      handlePop(location);
     }
-  }
+  };
 
   const handlePop = location => {
     if (forceNextPop) {
-      forceNextPop = false
-      setState()
+      forceNextPop = false;
+      setState();
     } else {
-      const action = "POP"
+      const action = "POP";
 
       transitionManager.confirmTransitionTo(
         location,
@@ -130,202 +130,202 @@ const createHashHistory = (props = {}) => {
         getUserConfirmation,
         ok => {
           if (ok) {
-            setState({ action, location })
+            setState({ action, location });
           } else {
-            revertPop(location)
+            revertPop(location);
           }
         }
-      )
+      );
     }
-  }
+  };
 
   const revertPop = fromLocation => {
-    const toLocation = history.location
+    const toLocation = history.location;
 
     // TODO: We could probably make this more reliable by
     // keeping a list of paths we've seen in sessionStorage.
     // Instead, we just default to 0 for paths we don't know.
 
-    let toIndex = allPaths.lastIndexOf(createPath(toLocation))
+    let toIndex = allPaths.lastIndexOf(createPath(toLocation));
 
-    if (toIndex === -1) toIndex = 0
+    if (toIndex === -1) toIndex = 0;
 
-    let fromIndex = allPaths.lastIndexOf(createPath(fromLocation))
+    let fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
 
-    if (fromIndex === -1) fromIndex = 0
+    if (fromIndex === -1) fromIndex = 0;
 
-    const delta = toIndex - fromIndex
+    const delta = toIndex - fromIndex;
 
     if (delta) {
-      forceNextPop = true
-      go(delta)
+      forceNextPop = true;
+      go(delta);
     }
-  }
+  };
 
   // Ensure the hash is encoded properly before doing anything else.
-  const path = getHashPath()
-  const encodedPath = encodePath(path)
+  const path = getHashPath();
+  const encodedPath = encodePath(path);
 
-  if (path !== encodedPath) replaceHashPath(encodedPath)
+  if (path !== encodedPath) replaceHashPath(encodedPath);
 
-  const initialLocation = getDOMLocation()
-  let allPaths = [createPath(initialLocation)]
+  const initialLocation = getDOMLocation();
+  let allPaths = [createPath(initialLocation)];
 
   // Public interface
 
   const createHref = location =>
-    "#" + encodePath(basename + createPath(location))
+    "#" + encodePath(basename + createPath(location));
 
   const push = (path, state) => {
     warning(
       state === undefined,
       "Hash history cannot push state; it is ignored"
-    )
+    );
 
-    const action = "PUSH"
+    const action = "PUSH";
     const location = createLocation(
       path,
       undefined,
       undefined,
       history.location
-    )
+    );
 
     transitionManager.confirmTransitionTo(
       location,
       action,
       getUserConfirmation,
       ok => {
-        if (!ok) return
+        if (!ok) return;
 
-        const path = createPath(location)
-        const encodedPath = encodePath(basename + path)
-        const hashChanged = getHashPath() !== encodedPath
+        const path = createPath(location);
+        const encodedPath = encodePath(basename + path);
+        const hashChanged = getHashPath() !== encodedPath;
 
         if (hashChanged) {
           // We cannot tell if a hashchange was caused by a PUSH, so we'd
           // rather setState here and ignore the hashchange. The caveat here
           // is that other hash histories in the page will consider it a POP.
-          ignorePath = path
-          pushHashPath(encodedPath)
+          ignorePath = path;
+          pushHashPath(encodedPath);
 
-          const prevIndex = allPaths.lastIndexOf(createPath(history.location))
+          const prevIndex = allPaths.lastIndexOf(createPath(history.location));
           const nextPaths = allPaths.slice(
             0,
             prevIndex === -1 ? 0 : prevIndex + 1
-          )
+          );
 
-          nextPaths.push(path)
-          allPaths = nextPaths
+          nextPaths.push(path);
+          allPaths = nextPaths;
 
-          setState({ action, location })
+          setState({ action, location });
         } else {
           warning(
             false,
             "Hash history cannot PUSH the same path; a new entry will not be added to the history stack"
-          )
+          );
 
-          setState()
+          setState();
         }
       }
-    )
-  }
+    );
+  };
 
   const replace = (path, state) => {
     warning(
       state === undefined,
       "Hash history cannot replace state; it is ignored"
-    )
+    );
 
-    const action = "REPLACE"
+    const action = "REPLACE";
     const location = createLocation(
       path,
       undefined,
       undefined,
       history.location
-    )
+    );
 
     transitionManager.confirmTransitionTo(
       location,
       action,
       getUserConfirmation,
       ok => {
-        if (!ok) return
+        if (!ok) return;
 
-        const path = createPath(location)
-        const encodedPath = encodePath(basename + path)
-        const hashChanged = getHashPath() !== encodedPath
+        const path = createPath(location);
+        const encodedPath = encodePath(basename + path);
+        const hashChanged = getHashPath() !== encodedPath;
 
         if (hashChanged) {
           // We cannot tell if a hashchange was caused by a REPLACE, so we'd
           // rather setState here and ignore the hashchange. The caveat here
           // is that other hash histories in the page will consider it a POP.
-          ignorePath = path
-          replaceHashPath(encodedPath)
+          ignorePath = path;
+          replaceHashPath(encodedPath);
         }
 
-        const prevIndex = allPaths.indexOf(createPath(history.location))
+        const prevIndex = allPaths.indexOf(createPath(history.location));
 
-        if (prevIndex !== -1) allPaths[prevIndex] = path
+        if (prevIndex !== -1) allPaths[prevIndex] = path;
 
-        setState({ action, location })
+        setState({ action, location });
       }
-    )
-  }
+    );
+  };
 
   const go = n => {
     warning(
       canGoWithoutReload,
       "Hash history go(n) causes a full page reload in this browser"
-    )
+    );
 
-    globalHistory.go(n)
-  }
+    globalHistory.go(n);
+  };
 
-  const goBack = () => go(-1)
+  const goBack = () => go(-1);
 
-  const goForward = () => go(1)
+  const goForward = () => go(1);
 
-  let listenerCount = 0
+  let listenerCount = 0;
 
   const checkDOMListeners = delta => {
-    listenerCount += delta
+    listenerCount += delta;
 
     if (listenerCount === 1) {
-      window.addEventListener(HashChangeEvent, handleHashChange)
+      window.addEventListener(HashChangeEvent, handleHashChange);
     } else if (listenerCount === 0) {
-      window.removeEventListener(HashChangeEvent, handleHashChange)
+      window.removeEventListener(HashChangeEvent, handleHashChange);
     }
-  }
+  };
 
-  let isBlocked = false
+  let isBlocked = false;
 
   const block = (prompt = false) => {
-    const unblock = transitionManager.setPrompt(prompt)
+    const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {
-      checkDOMListeners(1)
-      isBlocked = true
+      checkDOMListeners(1);
+      isBlocked = true;
     }
 
     return () => {
       if (isBlocked) {
-        isBlocked = false
-        checkDOMListeners(-1)
+        isBlocked = false;
+        checkDOMListeners(-1);
       }
 
-      return unblock()
-    }
-  }
+      return unblock();
+    };
+  };
 
   const listen = listener => {
-    const unlisten = transitionManager.appendListener(listener)
-    checkDOMListeners(1)
+    const unlisten = transitionManager.appendListener(listener);
+    checkDOMListeners(1);
 
     return () => {
-      checkDOMListeners(-1)
-      unlisten()
-    }
-  }
+      checkDOMListeners(-1);
+      unlisten();
+    };
+  };
 
   const history = {
     length: globalHistory.length,
@@ -339,9 +339,9 @@ const createHashHistory = (props = {}) => {
     goForward,
     block,
     listen
-  }
+  };
 
-  return history
-}
+  return history;
+};
 
-export default createHashHistory
+export default createHashHistory;
