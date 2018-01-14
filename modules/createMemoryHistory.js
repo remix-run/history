@@ -1,6 +1,6 @@
 import warning from "warning";
 import { createPath } from "./PathUtils";
-import { createLocation } from "./LocationUtils";
+import { createLocation, locationsAreEqual } from "./LocationUtils";
 import createTransitionManager from "./createTransitionManager";
 
 const clamp = (n, lowerBound, upperBound) =>
@@ -57,6 +57,11 @@ const createMemoryHistory = (props = {}) => {
 
     const action = "PUSH";
     const location = createLocation(path, state, createKey(), history.location);
+
+    if (locationsAreEqual(location, history.location)) {
+      replace(path, state);
+      return;
+    }
 
     transitionManager.confirmTransitionTo(
       location,

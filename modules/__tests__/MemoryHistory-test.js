@@ -27,7 +27,7 @@ describe("a memory history", () => {
     });
 
     describe("push the same path", () => {
-      it("calls change listeners with the new location", done => {
+      it("calls change listeners with the same location", done => {
         TestSequences.PushSamePath(history, done);
       });
     });
