@@ -27,8 +27,8 @@ export default (history, done) => {
   let consoleError = console.error; // eslint-disable-line no-console
   let warningMessage;
 
+  // eslint-disable-next-line no-console
   console.error = message => {
-    // eslint-disable-line no-console
     warningMessage = message;
   };
 
