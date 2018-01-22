@@ -42,7 +42,8 @@ export const supportsGoWithoutReloadUsingHash = () =>
   window.navigator.userAgent.indexOf("Firefox") === -1;
 
 /**
- * Returns true if a given popstate event is an extraneous WebKit event, or it fired on initial page load.
+ * Returns true if a given popstate event is an extraneous WebKit event,
+ * or it fired on initial page load (the solution is from page.js [https://github.com/visionmedia/page.js]).
  * Accounts for the fact that Chrome on iOS fires real popstate events
  * containing undefined state when pressing the back button.
  */
