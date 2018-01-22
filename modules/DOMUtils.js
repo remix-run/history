@@ -42,9 +42,17 @@ export const supportsGoWithoutReloadUsingHash = () =>
   window.navigator.userAgent.indexOf("Firefox") === -1;
 
 /**
- * Returns true if a given popstate event is an extraneous WebKit event.
+ * Returns true if a given popstate event is an extraneous WebKit event, or it fired on initial page load.
  * Accounts for the fact that Chrome on iOS fires real popstate events
  * containing undefined state when pressing the back button.
  */
-export const isExtraneousPopstateEvent = event =>
-  event.state === undefined && navigator.userAgent.indexOf("CriOS") === -1;
+export const shouldIgnorePopstateEvent = (() => {
+  let loaded = false;
+  if (document.readyState === 'complete') {
+    loaded = true;
+  } else {
+    window.addEventListener('load', () => setTimeout(() => { loaded = true }));
+  }
+  return event =>
+    (event.state === undefined && navigator.userAgent.indexOf("CriOS") === -1) || !loaded;
+})();
