@@ -23,7 +23,7 @@
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "build": "node ./tools/build.js",
-    "prepublish": "node ./tools/build.js",
+    "prepublishOnly": "node ./tools/build.js",
     "clean": "git clean -fdX .",
     "lint": "eslint modules",
     "test": "karma start --single-run"
@@ -48,7 +48,6 @@
     "eslint-plugin-import": "^2.0.0",
     "expect": "^21.0.0",
     "gzip-size": "^3.0.0",
-    "in-publish": "^2.0.0",
     "jest-mock": "^21.0.0",
     "karma": "^1.2.0",
     "karma-browserstack-launcher": "^1.0.1",
