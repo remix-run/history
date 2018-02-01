@@ -3186,10 +3186,6 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
-readline-sync@^1.4.4:
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/readline-sync/-/readline-sync-1.4.6.tgz#87fdacf3a15c50ee88750251b14dc5a531c59118"
-
 readline2@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/readline2/-/readline2-1.0.1.tgz#41059608ffc154757b715d9989d199ffbf372e35"
