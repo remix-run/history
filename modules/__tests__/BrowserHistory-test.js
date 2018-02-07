@@ -230,5 +230,11 @@ describeHistory("a browser history", () => {
       const history = createHistory({ basename: "/prefix" });
       expect(history.location.pathname).toEqual("/");
     });
+
+    it("handles ? character in basename correctly", () => {
+      window.history.replaceState(null, null, "/prefix?rest/pathname");
+      const history = createHistory({ basename: "/prefix?rest" });
+      expect(history.location.pathname).toEqual("/pathname");
+    });
   });
 });

@@ -1,3 +1,9 @@
+## HEAD
+
+- Allow ? character to be used in basename for browser history (see [#564])
+
+[#564]: https://github.com/ReactTraining/history/issues/564
+
 ## [v4.6.3]
 > Jun 20, 2017
 
