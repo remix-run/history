@@ -151,7 +151,7 @@ const createBrowserHistory = (props = {}) => {
 
   const createHref = location => basename + createPath(location);
 
-  const push = (path, state) => {
+  const push = (path, state, onPush = () => {}, onBlock = () => {}) => {
     warning(
       !(
         typeof path === "object" &&
@@ -170,7 +170,7 @@ const createBrowserHistory = (props = {}) => {
       action,
       getUserConfirmation,
       ok => {
-        if (!ok) return;
+        if (!ok) return onBlock();
 
         const href = createHref(location);
         const { key, state } = location;
@@ -192,6 +192,7 @@ const createBrowserHistory = (props = {}) => {
 
             setState({ action, location });
           }
+          onPush();
         } else {
           warning(
             state === undefined,

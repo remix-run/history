@@ -44,7 +44,7 @@ const createMemoryHistory = (props = {}) => {
 
   const createHref = createPath;
 
-  const push = (path, state) => {
+  const push = (path, state, onPush = () => {}, onBlock = () => {}) => {
     warning(
       !(
         typeof path === "object" &&
@@ -63,7 +63,7 @@ const createMemoryHistory = (props = {}) => {
       action,
       getUserConfirmation,
       ok => {
-        if (!ok) return;
+        if (!ok) return onBlock();
 
         const prevIndex = history.index;
         const nextIndex = prevIndex + 1;
@@ -85,6 +85,7 @@ const createMemoryHistory = (props = {}) => {
           index: nextIndex,
           entries: nextEntries
         });
+        onPush();
       }
     );
   };

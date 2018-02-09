@@ -176,7 +176,7 @@ const createHashHistory = (props = {}) => {
   const createHref = location =>
     "#" + encodePath(basename + createPath(location));
 
-  const push = (path, state) => {
+  const push = (path, state, onPush = () => {}, onBlock = () => {}) => {
     warning(
       state === undefined,
       "Hash history cannot push state; it is ignored"
@@ -195,7 +195,7 @@ const createHashHistory = (props = {}) => {
       action,
       getUserConfirmation,
       ok => {
-        if (!ok) return;
+        if (!ok) return onBlock();
 
         const path = createPath(location);
         const encodedPath = encodePath(basename + path);
@@ -226,6 +226,7 @@ const createHashHistory = (props = {}) => {
 
           setState();
         }
+        onPush();
       }
     );
   };
