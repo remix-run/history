@@ -1,7 +1,7 @@
 ## [v4.6.4]
 > Jun 20, 2017
 
-- Add `history.link` method to prevent same paths in a row (thanks @dabit1)
+- Add `history.link` which navigate and prevent same paths in the history stack (thanks @dabit1)
 
 [v4.6.4]: https://github.com/ReactTraining/history/compare/v4.6.3...v4.6.4
 
