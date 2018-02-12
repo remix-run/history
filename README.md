@@ -138,8 +138,10 @@ The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got
 * `history.goBack()`
 * `history.goForward()`
 * `history.canGo(n)` (only in `createMemoryHistory`)
+* `history.link(path, [state])`
 
 When using `push` or `replace` you can either specify both the URL path and state as separate arguments or include everything in a single location-like object as the first argument.
+You also could need to do push only when the current location is different from the next location and do replace when they are the same. To do that you have `link` method.
 
 1. A URL path _or_
 2. A location-like object with `{ pathname, search, hash, state }`
