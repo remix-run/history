@@ -1,6 +1,6 @@
 import warning from "warning";
 import invariant from "invariant";
-import { createLocation } from "./LocationUtils";
+import { createLocation, shouldReplace } from "./LocationUtils";
 import {
   addLeadingSlash,
   stripTrailingSlash,
@@ -308,6 +308,19 @@ const createBrowserHistory = (props = {}) => {
     };
   };
 
+  const link = (path, state) => {
+    const currentLocation = {
+      path: history.location.pathname + history.location.search + history.location.hash,
+      state: history.state || {}
+    };
+
+    if (shouldReplace(currentLocation, {path, state})) {
+      return replace(path, state);
+    } else {
+      return push(path, state);
+    }
+  };
+
   const history = {
     length: globalHistory.length,
     action: "POP",
@@ -319,7 +332,8 @@ const createBrowserHistory = (props = {}) => {
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    link
   };
 
   return history;

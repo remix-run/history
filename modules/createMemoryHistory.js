@@ -1,6 +1,6 @@
 import warning from "warning";
 import { createPath } from "./PathUtils";
-import { createLocation } from "./LocationUtils";
+import { createLocation, shouldReplace } from "./LocationUtils";
 import createTransitionManager from "./createTransitionManager";
 
 const clamp = (n, lowerBound, upperBound) =>
@@ -156,6 +156,19 @@ const createMemoryHistory = (props = {}) => {
 
   const listen = listener => transitionManager.appendListener(listener);
 
+  const link = (path, state) => {
+    const currentLocation = {
+      path: window.location.pathname + window.location.search + window.location.hash,
+      state: window.history.state || {}
+    };
+
+    if (shouldReplace(currentLocation, {path, state})) {
+      return replace(path, state);
+    } else {
+      return push(path, state);
+    }
+  };
+
   const history = {
     length: entries.length,
     action: "POP",
@@ -170,7 +183,8 @@ const createMemoryHistory = (props = {}) => {
     goForward,
     canGo,
     block,
-    listen
+    listen,
+    link
   };
 
   return history;

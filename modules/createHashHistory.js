@@ -1,6 +1,6 @@
 import warning from "warning";
 import invariant from "invariant";
-import { createLocation, locationsAreEqual } from "./LocationUtils";
+import { createLocation, locationsAreEqual, shouldReplace } from "./LocationUtils";
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -327,6 +327,19 @@ const createHashHistory = (props = {}) => {
     };
   };
 
+  const link = (path, state) => {
+    const currentLocation = {
+      path: history.location.pathname + history.location.search + history.location.hash,
+      state: history.state || {}
+    };
+
+    if (shouldReplace(currentLocation, {path})) {
+      return replace(path, state);
+    } else {
+      return push(path, state);
+    }
+  };
+
   const history = {
     length: globalHistory.length,
     action: "POP",
@@ -338,7 +351,8 @@ const createHashHistory = (props = {}) => {
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    link
   };
 
   return history;
