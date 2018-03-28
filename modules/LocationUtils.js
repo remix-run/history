@@ -79,5 +79,5 @@ export const shouldReplace = (location, newPath, history, newState) => {
   const currentPath = location.pathname + location.search + location.hash;
   const hasState = history && history.state;
 
-  return currentPath === newPath && !hasState || valueEqual(history.state, newState));
+  return currentPath === newPath && !hasState || valueEqual(history.state, newState);
 }
