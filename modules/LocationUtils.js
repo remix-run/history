@@ -75,6 +75,9 @@ export const locationsAreEqual = (a, b) =>
   a.key === b.key &&
   valueEqual(a.state, b.state);
 
-export const shouldReplace = (location, nextPath, history, nextState) => 
-  location.pathname + location.search + location.hash === nextPath &&
-  (!history || !history.state || valueEqual(history.state, nextState));
+export const shouldReplace = (location, newPath, history, newState) => {
+  const currentPath = location.pathname + location.search + location.hash;
+  const hasState = history && history.state;
+
+  return currentPath === newPath && !hasState || valueEqual(history.state, newState));
+}

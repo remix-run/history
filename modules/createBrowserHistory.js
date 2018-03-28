@@ -317,13 +317,13 @@ const createBrowserHistory = (props = {}) => {
     location: initialLocation,
     createHref,
     push,
+    link,
     replace,
     go,
     goBack,
     goForward,
     block,
-    listen,
-    link
+    listen
   };
 
   return history;

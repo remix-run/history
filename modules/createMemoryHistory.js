@@ -167,14 +167,14 @@ const createMemoryHistory = (props = {}) => {
     entries,
     createHref,
     push,
+    link,
     replace,
     go,
     goBack,
     goForward,
     canGo,
     block,
-    listen,
-    link
+    listen
   };
 
   return history;
