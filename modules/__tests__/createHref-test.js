@@ -95,6 +95,13 @@ describe("a browser history", () => {
 });
 
 describe("a hash history", () => {
+  beforeEach(() => {
+    let base = document.querySelector("base");
+    if (base) {
+      base.removeAttribute("href");
+    }
+  });
+
   describe("with default encoding", () => {
     let history;
     beforeEach(() => {
@@ -191,6 +198,36 @@ describe("a hash history", () => {
       });
 
       expect(href).toEqual("#/the/path?the=query");
+    });
+  });
+
+  describe("with a <base> tag present in the page", () => {
+    let history;
+    beforeEach(() => {
+      let base = document.querySelector("base");
+      if (!base) {
+        base = document.createElement("base");
+        document.head.appendChild(base);
+      }
+      base.setAttribute("href", "/the/base/");
+
+      history = createHashHistory();
+    });
+
+    it("knows how to create hrefs", () => {
+      const hashIndex = window.location.href.indexOf("#");
+      const upToHash =
+        hashIndex === -1
+          ? window.location.href
+          : window.location.href.slice(0, hashIndex);
+
+      const href = history.createHref({
+        pathname: "/the/path",
+        search: "?the=query",
+        hash: "#the-hash"
+      });
+
+      expect(href).toEqual(upToHash + "#/the/path?the=query#the-hash");
     });
   });
 

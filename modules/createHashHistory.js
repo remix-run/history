@@ -34,6 +34,11 @@ const HashPathCoders = {
   }
 };
 
+const stripHash = url => {
+  const hashIndex = url.indexOf("#");
+  return hashIndex === -1 ? url : url.slice(0, hashIndex);
+};
+
 const getHashPath = () => {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
@@ -45,11 +50,7 @@ const getHashPath = () => {
 const pushHashPath = path => (window.location.hash = path);
 
 const replaceHashPath = path => {
-  let href = window.location.href;
-  const hashIndex = href.indexOf("#");
-  if (hashIndex !== -1) href = href.slice(0, hashIndex);
-
-  window.location.replace(href + "#" + path);
+  window.location.replace(stripHash(window.location.href) + "#" + path);
 };
 
 const createHashHistory = (props = {}) => {
@@ -173,8 +174,14 @@ const createHashHistory = (props = {}) => {
 
   // Public interface
 
-  const createHref = location =>
-    "#" + encodePath(basename + createPath(location));
+  const createHref = location => {
+    const baseTag = document.querySelector("base");
+    let href = "";
+    if (baseTag && baseTag.getAttribute("href")) {
+      href = stripHash(window.location.href);
+    }
+    return href + "#" + encodePath(basename + createPath(location));
+  };
 
   const push = (path, state) => {
     warning(
