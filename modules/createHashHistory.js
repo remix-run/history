@@ -45,11 +45,11 @@ const getHashPath = () => {
 const pushHashPath = path => (window.location.hash = path);
 
 const replaceHashPath = path => {
-  const hashIndex = window.location.href.indexOf("#");
+  let href = window.location.href;
+  const hashIndex = href.indexOf("#");
+  if (hashIndex !== -1) href = href.slice(0, hashIndex);
 
-  window.location.replace(
-    window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + "#" + path
-  );
+  window.location.replace(href + "#" + path);
 };
 
 const createHashHistory = (props = {}) => {
