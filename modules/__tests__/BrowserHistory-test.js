@@ -231,4 +231,24 @@ describeHistory("a browser history", () => {
       expect(history.location.pathname).toEqual("/");
     });
   });
+
+  describe("params", () => {
+    it("returns all params as object when called with no args", () => {
+      const history = createHistory();
+      history.replace("/?a=foo&b=bar&c=1234");
+      expect(history.params()).toEqual({
+        a: 'foo',
+        b: 'bar',
+        c: '1234',
+      });
+    });
+
+    it("returns param as a string from location search", () => {
+      const history = createHistory();
+      history.replace("/?a=foo&b=bar&c=1234");
+      expect(history.params('a')).toEqual('foo');
+      expect(history.params('b')).toEqual('bar');
+      expect(history.params('c')).toEqual('1234');
+    });
+  });
 });

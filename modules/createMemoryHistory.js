@@ -1,4 +1,5 @@
 import warning from "warning";
+import qs from "qs";
 import { createPath } from "./PathUtils";
 import { createLocation } from "./LocationUtils";
 import createTransitionManager from "./createTransitionManager";
@@ -156,6 +157,13 @@ const createMemoryHistory = (props = {}) => {
 
   const listen = listener => transitionManager.appendListener(listener);
 
+  const params = (param = null) => {
+    const obj = qs.parse(history.location.search.replace('?', ''));
+    if (param)
+      return obj[param];
+    return obj;
+  }
+
   const history = {
     length: entries.length,
     action: "POP",
@@ -170,7 +178,8 @@ const createMemoryHistory = (props = {}) => {
     goForward,
     canGo,
     block,
-    listen
+    listen,
+    params
   };
 
   return history;

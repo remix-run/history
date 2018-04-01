@@ -31,6 +31,7 @@
   "dependencies": {
     "invariant": "^2.2.1",
     "loose-envify": "^1.2.0",
+    "qs": "^6.5.1",
     "resolve-pathname": "^2.2.0",
     "value-equal": "^0.4.0",
     "warning": "^3.0.0"

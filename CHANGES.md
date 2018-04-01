@@ -1,3 +1,12 @@
+## [v4.6.4]
+> Jun 20, 2017
+
+- Add params function to browser & memory history
+
+This feature allows developers to easily access URL params on the current location by calling `history.params(‘foo’)` or `history.params()`. 
+
+[v4.6.4]: https://github.com/ReactTraining/history/compare/v4.6.3...v4.6.4
+
 ## [v4.6.3]
 > Jun 20, 2017
 

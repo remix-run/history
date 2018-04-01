@@ -1,5 +1,6 @@
 import warning from "warning";
 import invariant from "invariant";
+import qs from "qs";
 import { createLocation } from "./LocationUtils";
 import {
   addLeadingSlash,
@@ -308,6 +309,13 @@ const createBrowserHistory = (props = {}) => {
     };
   };
 
+  const params = (param = null) => {
+    const obj = qs.parse(history.location.search.replace('?', ''));
+    if (param)
+      return obj[param];
+    return obj;
+  }
+
   const history = {
     length: globalHistory.length,
     action: "POP",
@@ -319,7 +327,8 @@ const createBrowserHistory = (props = {}) => {
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    params
   };
 
   return history;

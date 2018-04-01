@@ -1,3 +1,4 @@
+import expect from "expect";
 import createHistory from "../createMemoryHistory";
 import * as TestSequences from "./TestSequences";
 
@@ -174,6 +175,26 @@ describe("a memory history", () => {
 
     it("cancels the transition when it returns false", done => {
       TestSequences.ReturnFalseTransitionHook(history, done);
+    });
+  });
+
+  describe("params", () => {
+    it("returns all params as object when called with no args", () => {
+      const history = createHistory();
+      history.replace("/?a=foo&b=bar&c=1234");
+      expect(history.params()).toEqual({
+        a: 'foo',
+        b: 'bar',
+        c: '1234',
+      });
+    });
+
+    it("returns param as a string from location search", () => {
+      const history = createHistory();
+      history.replace("/?a=foo&b=bar&c=1234");
+      expect(history.params('a')).toEqual('foo');
+      expect(history.params('b')).toEqual('bar');
+      expect(history.params('c')).toEqual('1234');
     });
   });
 });
