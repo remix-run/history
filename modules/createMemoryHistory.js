@@ -2,6 +2,11 @@ import warning from "warning";
 import { createPath } from "./PathUtils";
 import { createLocation } from "./LocationUtils";
 import createTransitionManager from "./createTransitionManager";
+import {
+  POP,
+  PUSH,
+  REPLACE
+} from "./constants";
 
 const clamp = (n, lowerBound, upperBound) =>
   Math.min(Math.max(n, lowerBound), upperBound);
@@ -55,7 +60,7 @@ const createMemoryHistory = (props = {}) => {
         "argument is a location-like object that already has state; it is ignored"
     );
 
-    const action = "PUSH";
+    const action = PUSH;
     const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
@@ -100,7 +105,7 @@ const createMemoryHistory = (props = {}) => {
         "argument is a location-like object that already has state; it is ignored"
     );
 
-    const action = "REPLACE";
+    const action = REPLACE;
     const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
@@ -120,7 +125,7 @@ const createMemoryHistory = (props = {}) => {
   const go = n => {
     const nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
 
-    const action = "POP";
+    const action = POP;
     const location = history.entries[nextIndex];
 
     transitionManager.confirmTransitionTo(
@@ -158,7 +163,7 @@ const createMemoryHistory = (props = {}) => {
 
   const history = {
     length: entries.length,
-    action: "POP",
+    action: POP,
     location: entries[index],
     index,
     entries,
