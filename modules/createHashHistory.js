@@ -15,6 +15,11 @@ import {
   getConfirmation,
   supportsGoWithoutReloadUsingHash
 } from "./DOMUtils";
+import {
+  POP,
+  PUSH,
+  REPLACE
+} from "./constants";
 
 const HashChangeEvent = "hashchange";
 
@@ -122,7 +127,7 @@ const createHashHistory = (props = {}) => {
       forceNextPop = false;
       setState();
     } else {
-      const action = "POP";
+      const action = POP;
 
       transitionManager.confirmTransitionTo(
         location,
@@ -182,7 +187,7 @@ const createHashHistory = (props = {}) => {
       "Hash history cannot push state; it is ignored"
     );
 
-    const action = "PUSH";
+    const action = PUSH;
     const location = createLocation(
       path,
       undefined,
@@ -236,7 +241,7 @@ const createHashHistory = (props = {}) => {
       "Hash history cannot replace state; it is ignored"
     );
 
-    const action = "REPLACE";
+    const action = REPLACE;
     const location = createLocation(
       path,
       undefined,
@@ -329,7 +334,7 @@ const createHashHistory = (props = {}) => {
 
   const history = {
     length: globalHistory.length,
-    action: "POP",
+    action: POP,
     location: initialLocation,
     createHref,
     push,
