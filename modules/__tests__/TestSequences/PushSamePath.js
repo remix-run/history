@@ -1,5 +1,6 @@
 import expect from "expect";
 import execSteps from "./execSteps";
+import { POP, PUSH } from "../../constants";
 
 export default (history, done) => {
   const steps = [
@@ -11,7 +12,7 @@ export default (history, done) => {
       history.push("/home");
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe(PUSH);
       expect(location).toMatchObject({
         pathname: "/home"
       });
@@ -19,7 +20,7 @@ export default (history, done) => {
       history.push("/home");
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe(PUSH);
       expect(location).toMatchObject({
         pathname: "/home"
       });
@@ -27,7 +28,7 @@ export default (history, done) => {
       history.goBack();
     },
     (location, action) => {
-      expect(action).toBe("POP");
+      expect(action).toBe(POP);
       expect(location).toMatchObject({
         pathname: "/home"
       });

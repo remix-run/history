@@ -1,5 +1,6 @@
 import expect from "expect";
 import execSteps from "./execSteps";
+import { REPLACE } from "../../constants";
 
 export default (history, done) => {
   let prevLocation;
@@ -13,7 +14,7 @@ export default (history, done) => {
       history.replace("/home");
     },
     (location, action) => {
-      expect(action).toBe("REPLACE");
+      expect(action).toBe(REPLACE);
       expect(location).toMatchObject({
         pathname: "/home"
       });
@@ -23,7 +24,7 @@ export default (history, done) => {
       history.replace("/home");
     },
     (location, action) => {
-      expect(action).toBe("REPLACE");
+      expect(action).toBe(REPLACE);
       expect(location).toMatchObject({
         pathname: "/home"
       });

@@ -1,5 +1,6 @@
 import expect from "expect";
 import execSteps from "./execSteps";
+import { PUSH } from "../../constants";
 
 export default (history, done) => {
   const steps = [
@@ -11,7 +12,7 @@ export default (history, done) => {
       history.push("/the/path?the=query#the-hash");
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe(PUSH);
       expect(location).toMatchObject({
         pathname: "/the/path",
         search: "?the=query",
@@ -21,7 +22,7 @@ export default (history, done) => {
       history.push("../other/path?another=query#another-hash");
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe(PUSH);
       expect(location).toMatchObject({
         pathname: "/other/path",
         search: "?another=query",
