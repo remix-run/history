@@ -16,6 +16,11 @@ import {
   supportsPopStateOnHashChange,
   isExtraneousPopstateEvent
 } from "./DOMUtils";
+import {
+  POP,
+  PUSH,
+  REPLACE
+} from "./constants";
 
 const PopStateEvent = "popstate";
 const HashChangeEvent = "hashchange";
@@ -104,7 +109,7 @@ const createBrowserHistory = (props = {}) => {
       forceNextPop = false;
       setState();
     } else {
-      const action = "POP";
+      const action = POP;
 
       transitionManager.confirmTransitionTo(
         location,
@@ -162,7 +167,7 @@ const createBrowserHistory = (props = {}) => {
         "argument is a location-like object that already has state; it is ignored"
     );
 
-    const action = "PUSH";
+    const action = PUSH;
     const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
@@ -215,7 +220,7 @@ const createBrowserHistory = (props = {}) => {
         "argument is a location-like object that already has state; it is ignored"
     );
 
-    const action = "REPLACE";
+    const action = REPLACE;
     const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
@@ -310,7 +315,7 @@ const createBrowserHistory = (props = {}) => {
 
   const history = {
     length: globalHistory.length,
-    action: "POP",
+    action: POP,
     location: initialLocation,
     createHref,
     push,

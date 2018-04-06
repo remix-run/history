@@ -1,5 +1,6 @@
 import expect from "expect";
 import execSteps from "./execSteps";
+import { REPLACE } from "../../constants";
 
 export default (history, done) => {
   const steps = [
@@ -11,7 +12,7 @@ export default (history, done) => {
       history.replace("/home?the=query#the-hash", { the: "state" });
     },
     (location, action) => {
-      expect(action).toBe("REPLACE");
+      expect(action).toBe(REPLACE);
       expect(location).toMatchObject({
         pathname: "/home",
         search: "?the=query",
