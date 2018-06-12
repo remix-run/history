@@ -33,7 +33,7 @@
     "loose-envify": "^1.2.0",
     "resolve-pathname": "^2.2.0",
     "value-equal": "^0.4.0",
-    "warning": "^3.0.0"
+    "warning": "^4.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
