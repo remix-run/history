@@ -152,12 +152,12 @@ const createBrowserHistory = (props = {}) => {
 
   const createHref = location => {
     if (/^https?:\/\//.test(location.pathname)) {
-      const parsed = url.parse(location.pathname)
-      const origin = parsed.protocol + '//' + parsed.host
+      const parsed = url.parse(location.pathname);
+      const origin = parsed.protocol + '//' + parsed.host;
+      const pathname = parsed.pathname;
       return origin + createPath({
-        pathname: parsed.pathname,
-        search: location.search,
-        hash: location.hash
+        ...location,
+        pathname
       });
     }
     return basename + createPath(location);
