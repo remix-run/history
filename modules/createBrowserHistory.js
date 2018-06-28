@@ -1,3 +1,4 @@
+import url from 'url';
 import warning from "warning";
 import invariant from "invariant";
 import { createLocation } from "./LocationUtils";
@@ -149,7 +150,18 @@ const createBrowserHistory = (props = {}) => {
 
   // Public interface
 
-  const createHref = location => basename + createPath(location);
+  const createHref = location => {
+    if (/^https?:\/\//.test(location.pathname)) {
+      const parsed = url.parse(location.pathname)
+      const origin = parsed.protocol + '//' + parsed.host
+      return origin + basename + createPath({
+        pathname: parsed.pathname,
+        search: location.search,
+        hash: location.hash
+      });
+    }
+    return basename + createPath(location);
+  }
 
   const push = (path, state) => {
     warning(
