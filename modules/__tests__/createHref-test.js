@@ -39,12 +39,11 @@ describe("a browser history", () => {
 
     it("should work properly", () => {
       const href = history.createHref({
-        pathname: "http://origin.com:80/a/path",
+        pathname: "http://origin.com:80/the/path",
         search: "?the=query",
         hash: "#the-hash"
       });
-      const result = "http://origin.com:80/the/base/a/path?the=query#the-hash"
-      expect(href).toEqual(result);
+      expect(href).toEqual("http://origin.com:80/the/path?the=query#the-hash");
     });
   });
 
