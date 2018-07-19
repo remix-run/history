@@ -1,3 +1,5 @@
+import escapeStringRegexp from 'escape-string-regexp';
+
 export const addLeadingSlash = path =>
   path.charAt(0) === "/" ? path : "/" + path;
 
@@ -5,7 +7,7 @@ export const stripLeadingSlash = path =>
   path.charAt(0) === "/" ? path.substr(1) : path;
 
 export const hasBasename = (path, prefix) =>
-  new RegExp("^" + prefix + "(\\/|\\?|#|$)", "i").test(path);
+  new RegExp("^" + escapeStringRegexp(prefix) + "(\\/|\\?|#|$)", "i").test(path);
 
 export const stripBasename = (path, prefix) =>
   hasBasename(path, prefix) ? path.substr(prefix.length) : path;
