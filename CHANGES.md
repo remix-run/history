@@ -1,3 +1,7 @@
+## HEAD
+
+- Allow `getUserConfirmation` callback result to cater for any type of value ([#489])
+
 ## [v4.6.3]
 > Jun 20, 2017
 

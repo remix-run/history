@@ -26,24 +26,23 @@ const createTransitionManager = () => {
       const result =
         typeof prompt === "function" ? prompt(location, action) : prompt;
 
-      if (typeof result === "string") {
+      if (typeof result === "boolean") {
+        // Return false from a transition hook to cancel the transition.
+        callback(result);
+        return
+      } else if (result)  {
         if (typeof getUserConfirmation === "function") {
           getUserConfirmation(result, callback);
+          return
         } else {
           warning(
             false,
             "A history needs a getUserConfirmation function in order to use a prompt message"
           );
-
-          callback(true);
         }
-      } else {
-        // Return false from a transition hook to cancel the transition.
-        callback(result !== false);
       }
-    } else {
-      callback(true);
     }
+    callback(true);
   };
 
   let listeners = [];
