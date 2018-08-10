@@ -20,6 +20,7 @@
   ],
   "main": "index.js",
   "module": "es/index.js",
+  "sideEffects": false,
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
     "build": "node ./tools/build.js",
