@@ -273,6 +273,10 @@ function createHashHistory(props = {}) {
     );
   }
 
+  function link(path){
+    push(path);
+  }
+
   function go(n) {
     warning(
       canGoWithoutReload,
@@ -339,6 +343,7 @@ function createHashHistory(props = {}) {
     createHref,
     push,
     replace,
+    link,
     go,
     goBack,
     goForward,

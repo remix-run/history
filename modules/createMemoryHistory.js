@@ -1,7 +1,7 @@
 import warning from "tiny-warning";
 
 import { createPath } from "./PathUtils";
-import { createLocation } from "./LocationUtils";
+import { createLocation, shouldReplace } from "./LocationUtils";
 import createTransitionManager from "./createTransitionManager";
 
 function clamp(n, lowerBound, upperBound) {
@@ -118,6 +118,10 @@ function createMemoryHistory(props = {}) {
     );
   }
 
+  function link(path, state){
+    shouldReplace(history.location, path, state) ? replace(path, state) : push(path, state);
+  }
+
   function go(n) {
     const nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
 
@@ -174,6 +178,7 @@ function createMemoryHistory(props = {}) {
     createHref,
     push,
     replace,
+    link,
     go,
     goBack,
     goForward,

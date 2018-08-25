@@ -93,6 +93,12 @@ describe("a memory history", () => {
       });
     });
 
+    describe("navigate with link to the same path", () => {
+      it("does not add a new location onto the stack, unless the state has change", done => {
+        TestSequences.LinkSamePath(history, done);
+      });
+    });
+
     describe("location created by encoded and unencoded pathname", () => {
       it("produces the same location.pathname", done => {
         TestSequences.LocationPathnameAlwaysDecoded(history, done);

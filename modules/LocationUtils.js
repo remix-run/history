@@ -69,6 +69,16 @@ export function createLocation(path, state, key, currentLocation) {
   return location;
 }
 
+export function shouldReplace(location, newPath, newState) {
+  const nextLocation = createLocation(newPath, newState, null, location);
+
+  return (
+    location.pathname === nextLocation.pathname &&
+    location.search === nextLocation.search &&
+    location.hash === nextLocation.hash
+  );
+}
+
 export function locationsAreEqual(a, b) {
   return (
     a.pathname === b.pathname &&

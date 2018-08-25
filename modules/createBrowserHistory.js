@@ -1,7 +1,7 @@
 import warning from "tiny-warning";
 import invariant from "tiny-invariant";
 
-import { createLocation } from "./LocationUtils";
+import { createLocation, shouldReplace } from "./LocationUtils";
 import {
   addLeadingSlash,
   stripTrailingSlash,
@@ -253,6 +253,10 @@ function createBrowserHistory(props = {}) {
     );
   }
 
+  function link(path, state) {
+    shouldReplace(history.location, path, state) ? replace(path, state) : push(path, state);
+  }
+
   function go(n) {
     globalHistory.go(n);
   }
@@ -320,6 +324,7 @@ function createBrowserHistory(props = {}) {
     createHref,
     push,
     replace,
+    link,
     go,
     goBack,
     goForward,

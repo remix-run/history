@@ -1,3 +1,8 @@
+## HEAD
+> Nov 02, 2018
+
+- Add `history.link` which navigates and prevents same paths in the history stack 
+
 ## [v4.6.3]
 > Jun 20, 2017
 

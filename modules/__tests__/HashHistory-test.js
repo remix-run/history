@@ -102,6 +102,12 @@ describe("a hash history", () => {
       });
     });
 
+    describe("navigate with link to the same path", () => {
+      it("calls change listeners with the same location and emits a warning", done => {
+        TestSequences.LinkSamePathWarning(history, done);
+      });
+    });
+
     describe("location created by encoded and unencoded pathname", () => {
       it("produces the same location.pathname", done => {
         TestSequences.LocationPathnameAlwaysDecoded(history, done);

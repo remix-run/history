@@ -19,6 +19,8 @@ export {
 } from "./HashChangeTransitionHook";
 export { default as InitialLocationNoKey } from "./InitialLocationNoKey";
 export { default as InitialLocationHasKey } from "./InitialLocationHasKey";
+export { default as LinkSamePath } from "./LinkSamePath";
+export { default as LinkSamePathWarning } from "./LinkSamePathWarning";
 export { default as Listen } from "./Listen";
 export {
   default as LocationPathnameAlwaysDecoded

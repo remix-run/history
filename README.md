@@ -147,8 +147,10 @@ unlisten();
 - `history.goBack()`
 - `history.goForward()`
 - `history.canGo(n)` (only in `createMemoryHistory`)
+- `history.link(path, [state])`
 
 When using `push` or `replace` you can either specify both the URL path and state as separate arguments or include everything in a single location-like object as the first argument.
+When requiring an action to behave like a link (not pushing duplicate paths to the stack) you can use the `link` method.
 
 1. A URL path _or_
 2. A location-like object with `{ pathname, search, hash, state }`
