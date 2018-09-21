@@ -44,7 +44,8 @@ const createBrowserHistory = (props = {}) => {
   const {
     forceRefresh = false,
     getUserConfirmation = getConfirmation,
-    keyLength = 6
+    keyLength = 6,
+    decodePath,
   } = props;
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
@@ -68,7 +69,7 @@ const createBrowserHistory = (props = {}) => {
 
     if (basename) path = stripBasename(path, basename);
 
-    return createLocation(path, state, key);
+    return createLocation(path, state, key, null, decodePath);
   };
 
   const createKey = () =>
@@ -163,7 +164,7 @@ const createBrowserHistory = (props = {}) => {
     );
 
     const action = "PUSH";
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location, decodePath);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -216,7 +217,7 @@ const createBrowserHistory = (props = {}) => {
     );
 
     const action = "REPLACE";
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location, decodePath);
 
     transitionManager.confirmTransitionTo(
       location,

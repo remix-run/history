@@ -1,3 +1,4 @@
+import expect from "expect";
 import createHistory from "../createMemoryHistory";
 import * as TestSequences from "./TestSequences";
 
@@ -174,6 +175,90 @@ describe("a memory history", () => {
 
     it("cancels the transition when it returns false", done => {
       TestSequences.ReturnFalseTransitionHook(history, done);
+    });
+  });
+
+
+  describe("with specified decodePath", () => {
+    const decodePath = decodeURIComponent;
+    let history;
+    beforeEach(() => {
+      history = createHistory({
+        decodePath
+      });
+    });
+
+    it("decodes with provided function", () => {
+      const path = "/" + encodeURIComponent("abc ;,/?:@&=+$#");
+      history.push(path);
+      expect(history.location.pathname).not.toEqual(decodeURI(path));
+      expect(history.location.pathname).toEqual(decodePath(path));
+    });
+
+    describe("push a new path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.PushNewLocation(history, done);
+      });
+    });
+
+    describe("push the same path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.PushSamePath(history, done);
+      });
+    });
+
+    describe("push with no pathname", () => {
+      it("calls change listeners with the normalized location", done => {
+        TestSequences.PushMissingPathname(history, done);
+      });
+    });
+
+    describe("push with a relative pathname", () => {
+      it("calls change listeners with the normalized location", done => {
+        TestSequences.PushRelativePathname(history, done);
+      });
+    });
+
+    describe("push with a unicode path string", () => {
+      it("creates a location with decoded properties", done => {
+        TestSequences.PushUnicodeLocation(history, done);
+      });
+    });
+
+    describe("push with an encoded path string", () => {
+      it("creates a location object with decoded pathname", done => {
+        TestSequences.PushEncodedLocation(history, done);
+      });
+    });
+
+    describe("push with an invalid path string (bad percent-encoding)", () => {
+      it("throws an error", done => {
+        TestSequences.PushInvalidPathname(history, done);
+      });
+    });
+
+    describe("replace a new path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.ReplaceNewLocation(history, done);
+      });
+    });
+
+    describe("replace the same path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.ReplaceSamePath(history, done);
+      });
+    });
+
+    describe("replace  with an invalid path string (bad percent-encoding)", () => {
+      it("throws an error", done => {
+        TestSequences.ReplaceInvalidPathname(history, done);
+      });
+    });
+
+    describe("location created by encoded and unencoded pathname", () => {
+      it("produces the same location.pathname", done => {
+        TestSequences.LocationPathnameAlwaysDecoded(history, done);
+      });
     });
   });
 });

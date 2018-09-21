@@ -14,7 +14,8 @@ const createMemoryHistory = (props = {}) => {
     getUserConfirmation,
     initialEntries = ["/"],
     initialIndex = 0,
-    keyLength = 6
+    keyLength = 6,
+    decodePath,
   } = props;
 
   const transitionManager = createTransitionManager();
@@ -36,8 +37,8 @@ const createMemoryHistory = (props = {}) => {
   const entries = initialEntries.map(
     entry =>
       typeof entry === "string"
-        ? createLocation(entry, undefined, createKey())
-        : createLocation(entry, undefined, entry.key || createKey())
+        ? createLocation(entry, undefined, createKey(), undefined, decodePath)
+        : createLocation(entry, undefined, entry.key || createKey(), undefined, decodePath)
   );
 
   // Public interface
@@ -56,7 +57,7 @@ const createMemoryHistory = (props = {}) => {
     );
 
     const action = "PUSH";
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location, decodePath);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -101,7 +102,7 @@ const createMemoryHistory = (props = {}) => {
     );
 
     const action = "REPLACE";
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location, decodePath);
 
     transitionManager.confirmTransitionTo(
       location,
