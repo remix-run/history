@@ -323,7 +323,7 @@ describeHistory("a browser history", () => {
     });
 
     describe("pushState", () => {
-      it("passes original path prefixed with basename", () => {
+      it("passes original path string", () => {
         const pushState = window.history.pushState;
         window.history.pushState = jestMock.fn();
 
@@ -337,10 +337,28 @@ describeHistory("a browser history", () => {
 
         window.history.pushState = pushState;
       });
+
+      it("passes path derived from original path object", () => {
+        const pushState = window.history.pushState;
+        window.history.pushState = jestMock.fn();
+
+        const pathname = encodeURI("/abc %");
+        const search = "?some=query";
+        const hash = "#some=fragment";
+
+        history.push({ pathname, search, hash });
+        expect(window.history.pushState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + pathname + search + hash
+        );
+
+        window.history.pushState = pushState;
+      });
     });
 
     describe("replaceState", () => {
-      it("passes original path prefixed with basename", () => {
+      it("passes original path string", () => {
         const replaceState = window.history.replaceState;
         window.history.replaceState = jestMock.fn();
 
@@ -350,6 +368,24 @@ describeHistory("a browser history", () => {
           expect.anything(), /* state */
           null, /* title */
           "/prefix" + path
+        );
+
+        window.history.replaceState = replaceState;
+      });
+
+      it("passes path derived from original path object", () => {
+        const replaceState = window.history.replaceState;
+        window.history.replaceState = jestMock.fn();
+
+        const pathname = encodeURI("/abc %");
+        const search = "?some=query";
+        const hash = "#some=fragment";
+
+        history.replace({ pathname, search, hash });
+        expect(window.history.replaceState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + pathname + search + hash
         );
 
         window.history.replaceState = replaceState;
