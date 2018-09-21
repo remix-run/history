@@ -1,4 +1,5 @@
 import expect from "expect";
+import jestMock from "jest-mock";
 import createHistory from "../createBrowserHistory";
 import { canUseDOM, supportsHistory } from "../DOMUtils";
 import * as TestSequences from "./TestSequences";
@@ -311,6 +312,47 @@ describeHistory("a browser history", () => {
     describe("location created by encoded and unencoded pathname", () => {
       it("produces the same location.pathname", done => {
         TestSequences.LocationPathnameAlwaysDecoded(history, done);
+      });
+    });
+  });
+
+  describe("href passed to global history", () => {
+    let history;
+    beforeEach(() => {
+      history = createHistory({ basename: "/prefix" });
+    });
+
+    describe("pushState", () => {
+      it("passes original path prefixed with basename", () => {
+        const pushState = window.history.pushState;
+        window.history.pushState = jestMock.fn();
+
+        const path = encodeURI("/abc %");
+        history.push(path);
+        expect(window.history.pushState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + path
+        );
+
+        window.history.pushState = pushState;
+      });
+    });
+
+    describe("replaceState", () => {
+      it("passes original path prefixed with basename", () => {
+        const replaceState = window.history.replaceState;
+        window.history.replaceState = jestMock.fn();
+
+        const path = encodeURI("/abc %");
+        history.replace(path);
+        expect(window.history.replaceState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + path
+        );
+
+        window.history.replaceState = replaceState;
       });
     });
   });

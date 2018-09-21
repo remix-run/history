@@ -173,7 +173,7 @@ const createBrowserHistory = (props = {}) => {
       ok => {
         if (!ok) return;
 
-        const href = createHref(location);
+        const href = basename + path;
         const { key, state } = location;
 
         if (canUseHistory) {
@@ -226,7 +226,7 @@ const createBrowserHistory = (props = {}) => {
       ok => {
         if (!ok) return;
 
-        const href = createHref(location);
+        const href = basename + path;
         const { key, state } = location;
 
         if (canUseHistory) {
