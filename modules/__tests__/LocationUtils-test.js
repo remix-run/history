@@ -148,6 +148,21 @@ describe("createLocation", () => {
     });
   });
 
+  describe("decodePath", () => {
+    const path = encodeURI("/abc %");
+
+    it("decodes path defaulting to decodeURI", () => {  
+      expect(createLocation(path)).toHaveProperty("pathname", decodeURI(path));
+    })
+
+    it("decodes path with provided function", () => {
+      const decodePath = x => x;
+      expect(
+        createLocation(path, undefined, undefined, undefined, decodePath)
+      ).toHaveProperty("pathname",path)
+    })
+  })
+
   describe("key", () => {
     it("has a key property if a key is provided", () => {
       const location = createLocation("/the/path", undefined, "key");

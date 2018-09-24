@@ -2,7 +2,7 @@ import resolvePathname from "resolve-pathname";
 import valueEqual from "value-equal";
 import { parsePath } from "./PathUtils";
 
-export const createLocation = (path, state, key, currentLocation) => {
+export const createLocation = (path, state, key, currentLocation, decodePath = decodeURI) => {
   let location;
   if (typeof path === "string") {
     // Two-arg form: push(path, state)
@@ -32,7 +32,7 @@ export const createLocation = (path, state, key, currentLocation) => {
   }
 
   try {
-    location.pathname = decodeURI(location.pathname);
+    location.pathname = decodePath(location.pathname);
   } catch (e) {
     if (e instanceof URIError) {
       throw new URIError(

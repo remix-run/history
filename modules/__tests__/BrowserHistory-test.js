@@ -1,4 +1,5 @@
 import expect from "expect";
+import jestMock from "jest-mock";
 import createHistory from "../createBrowserHistory";
 import { canUseDOM, supportsHistory } from "../DOMUtils";
 import * as TestSequences from "./TestSequences";
@@ -229,6 +230,166 @@ describeHistory("a browser history", () => {
       window.history.replaceState(null, null, "/prefix#rest");
       const history = createHistory({ basename: "/prefix" });
       expect(history.location.pathname).toEqual("/");
+    });
+  });
+
+  describe("with specified decodePath", () => {
+    const decodePath = decodeURIComponent;
+    let history;
+    beforeEach(() => {
+      history = createHistory({
+        decodePath
+      });
+    });
+
+    it("decodes with provided function", () => {
+      const path = "/" + encodeURIComponent("abc ;,/?:@&=+$#");
+      history.push(path);
+      expect(history.location.pathname).not.toEqual(decodeURI(path));
+      expect(history.location.pathname).toEqual(decodePath(path));
+    });
+
+    describe("push a new path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.PushNewLocation(history, done);
+      });
+    });
+
+    describe("push the same path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.PushSamePath(history, done);
+      });
+    });
+
+    describe("push with no pathname", () => {
+      it("calls change listeners with the normalized location", done => {
+        TestSequences.PushMissingPathname(history, done);
+      });
+    });
+
+    describe("push with a relative pathname", () => {
+      it("calls change listeners with the normalized location", done => {
+        TestSequences.PushRelativePathname(history, done);
+      });
+    });
+
+    describe("push with a unicode path string", () => {
+      it("creates a location with decoded properties", done => {
+        TestSequences.PushUnicodeLocation(history, done);
+      });
+    });
+
+    describe("push with an encoded path string", () => {
+      it("creates a location object with decoded pathname", done => {
+        TestSequences.PushEncodedLocation(history, done);
+      });
+    });
+
+    describe("push with an invalid path string (bad percent-encoding)", () => {
+      it("throws an error", done => {
+        TestSequences.PushInvalidPathname(history, done);
+      });
+    });
+
+    describe("replace a new path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.ReplaceNewLocation(history, done);
+      });
+    });
+
+    describe("replace the same path", () => {
+      it("calls change listeners with the new location", done => {
+        TestSequences.ReplaceSamePath(history, done);
+      });
+    });
+
+    describe("replace  with an invalid path string (bad percent-encoding)", () => {
+      it("throws an error", done => {
+        TestSequences.ReplaceInvalidPathname(history, done);
+      });
+    });
+
+    describe("location created by encoded and unencoded pathname", () => {
+      it("produces the same location.pathname", done => {
+        TestSequences.LocationPathnameAlwaysDecoded(history, done);
+      });
+    });
+  });
+
+  describe("href passed to global history", () => {
+    let history;
+    beforeEach(() => {
+      history = createHistory({ basename: "/prefix" });
+    });
+
+    describe("pushState", () => {
+      it("passes original path string", () => {
+        const pushState = window.history.pushState;
+        window.history.pushState = jestMock.fn();
+
+        const path = encodeURI("/abc %");
+        history.push(path);
+        expect(window.history.pushState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + path
+        );
+
+        window.history.pushState = pushState;
+      });
+
+      it("passes path derived from original path object", () => {
+        const pushState = window.history.pushState;
+        window.history.pushState = jestMock.fn();
+
+        const pathname = encodeURI("/abc %");
+        const search = "?some=query";
+        const hash = "#some=fragment";
+
+        history.push({ pathname, search, hash });
+        expect(window.history.pushState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + pathname + search + hash
+        );
+
+        window.history.pushState = pushState;
+      });
+    });
+
+    describe("replaceState", () => {
+      it("passes original path string", () => {
+        const replaceState = window.history.replaceState;
+        window.history.replaceState = jestMock.fn();
+
+        const path = encodeURI("/abc %");
+        history.replace(path);
+        expect(window.history.replaceState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + path
+        );
+
+        window.history.replaceState = replaceState;
+      });
+
+      it("passes path derived from original path object", () => {
+        const replaceState = window.history.replaceState;
+        window.history.replaceState = jestMock.fn();
+
+        const pathname = encodeURI("/abc %");
+        const search = "?some=query";
+        const hash = "#some=fragment";
+
+        history.replace({ pathname, search, hash });
+        expect(window.history.replaceState).toHaveBeenCalledWith(
+          expect.anything(), /* state */
+          null, /* title */
+          "/prefix" + pathname + search + hash
+        );
+
+        window.history.replaceState = replaceState;
+      });
     });
   });
 });
