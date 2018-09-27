@@ -1,3 +1,8 @@
+## HEAD
+- Fix a bug causing DOM listeners to be attached multiple times
+
+[#623]: https://github.com/ReactTraining/history/pull/623 
+
 ## [v4.6.3]
 > Jun 20, 2017
 

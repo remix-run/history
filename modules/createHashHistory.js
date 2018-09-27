@@ -287,12 +287,18 @@ const createHashHistory = (props = {}) => {
 
   let listenerCount = 0;
 
-  const checkDOMListeners = delta => {
-    listenerCount += delta;
-
-    if (listenerCount === 1) {
+  const incrementDomListenerCount = () => {
+    if (listenerCount === 0) {
       window.addEventListener(HashChangeEvent, handleHashChange);
-    } else if (listenerCount === 0) {
+    }
+
+    listenerCount++;
+  };
+
+  const decrementDomListenerCount = () => {
+    listenerCount--;
+
+    if (listenerCount === 0) {
       window.removeEventListener(HashChangeEvent, handleHashChange);
     }
   };
@@ -303,14 +309,14 @@ const createHashHistory = (props = {}) => {
     const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {
-      checkDOMListeners(1);
+      incrementDomListenerCount();
       isBlocked = true;
     }
 
     return () => {
       if (isBlocked) {
         isBlocked = false;
-        checkDOMListeners(-1);
+        decrementDomListenerCount();
       }
 
       return unblock();
@@ -319,10 +325,10 @@ const createHashHistory = (props = {}) => {
 
   const listen = listener => {
     const unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
+    incrementDomListenerCount();
 
     return () => {
-      checkDOMListeners(-1);
+      decrementDomListenerCount();
       unlisten();
     };
   };

@@ -262,15 +262,21 @@ const createBrowserHistory = (props = {}) => {
 
   let listenerCount = 0;
 
-  const checkDOMListeners = delta => {
-    listenerCount += delta;
-
-    if (listenerCount === 1) {
-      window.addEventListener(PopStateEvent, handlePopState);
+  const incrementDomListenerCount = () => {
+    if (listenerCount === 0) {
+        window.addEventListener(PopStateEvent, handlePopState);
 
       if (needsHashChangeListener)
         window.addEventListener(HashChangeEvent, handleHashChange);
-    } else if (listenerCount === 0) {
+    }
+
+    listenerCount++;
+  };
+
+  const decrementDomListenerCount = () => {
+    listenerCount--;
+
+    if (listenerCount === 0) {
       window.removeEventListener(PopStateEvent, handlePopState);
 
       if (needsHashChangeListener)
@@ -284,14 +290,14 @@ const createBrowserHistory = (props = {}) => {
     const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {
-      checkDOMListeners(1);
+      incrementDomListenerCount();
       isBlocked = true;
     }
 
     return () => {
       if (isBlocked) {
         isBlocked = false;
-        checkDOMListeners(-1);
+        decrementDomListenerCount();
       }
 
       return unblock();
@@ -300,10 +306,10 @@ const createBrowserHistory = (props = {}) => {
 
   const listen = listener => {
     const unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
+    incrementDomListenerCount();
 
     return () => {
-      checkDOMListeners(-1);
+      decrementDomListenerCount();
       unlisten();
     };
   };
