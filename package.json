@@ -62,6 +62,13 @@
     "karma-webpack": "^2.0.1",
     "mocha": "^3.0.2",
     "pretty-bytes": "^4.0.2",
+    "rollup": "^0.66.6",
+    "rollup-plugin-babel": "3",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-size-snapshot": "^0.7.0",
+    "rollup-plugin-uglify": "^6.0.0",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },

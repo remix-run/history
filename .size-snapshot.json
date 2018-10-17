@@ -1,0 +1,12 @@
+{
+  "umd/history.js": {
+    "bundled": 68677,
+    "minified": 25820,
+    "gzipped": 9055
+  },
+  "umd/history.min.js": {
+    "bundled": 67540,
+    "minified": 25318,
+    "gzipped": 8904
+  }
+}
