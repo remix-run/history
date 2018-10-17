@@ -1,7 +1,4 @@
-const fs = require('fs')
 const execSync = require('child_process').execSync
-const prettyBytes = require('pretty-bytes')
-const gzipSize = require('gzip-size')
 
 const exec = (command, extraEnv) =>
   execSync(command, {
@@ -21,20 +18,8 @@ exec('babel modules -d es --ignore __tests__', {
   BABEL_ENV: 'es'
 })
 
-console.log('\nBuilding history.js ...')
+console.log('\nBuilding history.js and history.min.js ...')
 
-exec('webpack modules/index.js umd/history.js', {
-  NODE_ENV: 'production'
+exec('rollup -c', {
+  BABEL_ENV: 'es'
 })
-
-console.log('\nBuilding history.min.js ...')
-
-exec('webpack -p modules/index.js umd/history.min.js', {
-  NODE_ENV: 'production'
-})
-
-const size = gzipSize.sync(
-  fs.readFileSync('umd/history.min.js')
-)
-
-console.log('\ngzipped, the UMD build is %s', prettyBytes(size))
