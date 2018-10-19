@@ -128,6 +128,15 @@ Locations may also have the following properties:
 
 The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got to the current URL.
 
+#### Cleaning up
+When you attach a listener using `history.listen`, it returns a function that can be used to remove the listener, which can then be invoked in cleanup logic:
+
+```js
+const unlisten = history.listen(myListener);
+// ...
+unlisten();
+```
+
 ### Navigation
 
 `history` objects may be used to programmatically change the current location using the following methods:
