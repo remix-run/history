@@ -1,5 +1,5 @@
 import expect from "expect";
-import { createLocation } from "../LocationUtils";
+import { createLocation, shouldReplace } from "../LocationUtils";
 
 describe("createLocation", () => {
   describe("with a full path", () => {
@@ -158,5 +158,73 @@ describe("createLocation", () => {
       const location = createLocation("/the/path");
       expect(Object.keys(location)).not.toContain("key");
     });
+  });
+});
+
+describe("shouldReplace", () => {
+  it("should return true if current path is the same than new path", () => {
+    const currentLocation = {
+      pathname: "the/path",
+      search: "?the=query",
+      hash: "#the-hash"
+    };
+    expect(shouldReplace(currentLocation, 'the/path?the=query#the-hash')).toBeTruthy();
+  });
+
+  it("should return false if current path is not the same than new path", () => {
+    const currentLocation = {
+      pathname: "the/path",
+      search: "?the=query",
+      hash: "#the-hash"
+    };
+    expect(shouldReplace(currentLocation, 'the/path?the=query')).toBeFalsy();
+  });
+
+  it("should return true if current path is the same than new path and current state is the same than new state", () => {
+    const currentLocation = {
+      pathname: "the/path",
+      search: "?the=query",
+      hash: "#the-hash",
+      state: {
+        foo: 'bar',
+        obj: {
+          foo2: 'var2'
+        }
+      }
+    };
+    expect(shouldReplace(
+      currentLocation, 
+      'the/path?the=query#the-hash',
+      {
+        foo: 'bar',
+        obj: {
+          foo2: 'var2'
+        }
+      }
+    )).toBeTruthy();
+  });
+
+  it("should return false if current path is the same than new path and current state is not the same than new state", () => {
+    const currentLocation = {
+      pathname: "the/path",
+      search: "?the=query",
+      hash: "#the-hash",
+      state: {
+        foo: 'bar',
+        obj: {
+          foo2: 'var2'
+        }
+      }
+    };
+    expect(shouldReplace(
+      currentLocation, 
+      'the/path?the=query#the-hash',
+      {
+        foo: 'bar',
+        obj: {
+          foo2: 'var3'
+        }
+      }
+    )).toBeFalsy();
   });
 });

@@ -1,9 +1,4 @@
-## [v4.7.0]
-> Jun 20, 2017
-
 - Add `history.link` which navigates and prevents same paths in the history stack (thanks @dabit1)
-
-[v4.6.4]: https://github.com/ReactTraining/history/compare/v4.6.3...v4.7.0
 
 ## [v4.6.3]
 > Jun 20, 2017

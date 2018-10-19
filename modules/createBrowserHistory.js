@@ -309,7 +309,7 @@ const createBrowserHistory = (props = {}) => {
   };
 
   const link = (path, state) => 
-    shouldReplace(history.location, path, history, state) ? replace(path, state) : push(path, state);
+    shouldReplace(history.location, path, state) ? replace(path, state) : push(path, state);
 
   const history = {
     length: globalHistory.length,

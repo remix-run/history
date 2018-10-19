@@ -157,7 +157,7 @@ const createMemoryHistory = (props = {}) => {
   const listen = listener => transitionManager.appendListener(listener);
 
   const link = (path, state) => 
-    shouldReplace(window.location, path, window.history, state) ? replace(path, state) : push(path, state);
+    shouldReplace(window.location, path, state) ? replace(path, state) : push(path, state);
 
   const history = {
     length: entries.length,
