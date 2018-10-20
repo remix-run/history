@@ -15,7 +15,40 @@ const commonjsOptions = {
   include: /node_modules/
 }
 
+const external = id => !id.startsWith('.') && !id.startsWith('/');
+
 export default [
+  {
+    input,
+    output: { file: 'esm/history.js', format: 'esm' },
+    external,
+    plugins: [
+      babel(babelOptions),
+      sizeSnapshot()
+    ]
+  },
+
+  {
+    input,
+    output: { file: 'cjs/history.js', format: 'cjs' },
+    external,
+    plugins: [
+      babel(babelOptions),
+      replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+    ]
+  },
+
+  {
+    input,
+    output: { file: 'cjs/history.min.js', format: 'cjs' },
+    external,
+    plugins: [
+      babel(babelOptions),
+      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      uglify()
+    ]
+  },
+
   {
     input,
     output: { file: 'umd/history.js', format: 'umd', name },
