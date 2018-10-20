@@ -18,13 +18,13 @@
     "index.js",
     "umd"
   ],
-  "main": "index.js",
-  "module": "es/index.js",
+  "main": "cjs/history.js",
+  "module": "esm/history.js",
   "sideEffects": false,
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
-    "build": "node ./tools/build.js",
-    "prepublishOnly": "node ./tools/build.js",
+    "build": "BABEL_ENV=es rollup -c",
+    "prepublishOnly": "BABEL_ENV=es rollup -c",
     "clean": "git clean -fdX .",
     "lint": "eslint modules",
     "test": "karma start --single-run"
