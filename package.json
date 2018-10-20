@@ -5,21 +5,13 @@
   "repository": "ReactTraining/history",
   "license": "MIT",
   "author": "Michael Jackson",
-  "files": [
-    "DOMUtils.js",
-    "ExecutionEnvironment.js",
-    "LocationUtils.js",
-    "PathUtils.js",
-    "createBrowserHistory.js",
-    "createHashHistory.js",
-    "createMemoryHistory.js",
-    "createTransitionManager.js",
-    "es",
-    "index.js",
-    "umd"
-  ],
   "main": "cjs/history.js",
   "module": "esm/history.js",
+  "files": [
+    "esm",
+    "cjs",
+    "umd"
+  ],
   "sideEffects": false,
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
