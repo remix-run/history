@@ -162,7 +162,7 @@ describe("createLocation", () => {
 });
 
 describe("shouldReplace", () => {
-  it("should return true if current path is the same than new path", () => {
+  it("should return true if current path is the same as new path", () => {
     const currentLocation = {
       pathname: "the/path",
       search: "?the=query",
@@ -171,7 +171,7 @@ describe("shouldReplace", () => {
     expect(shouldReplace(currentLocation, 'the/path?the=query#the-hash')).toBeTruthy();
   });
 
-  it("should return false if current path is not the same than new path", () => {
+  it("should return false if current path is other than new path", () => {
     const currentLocation = {
       pathname: "the/path",
       search: "?the=query",
@@ -180,7 +180,7 @@ describe("shouldReplace", () => {
     expect(shouldReplace(currentLocation, 'the/path?the=query')).toBeFalsy();
   });
 
-  it("should return true if current path is the same than new path and current state is the same than new state", () => {
+  it("should return true if current path is the same as new path and current state is the same as new state", () => {
     const currentLocation = {
       pathname: "the/path",
       search: "?the=query",
@@ -204,7 +204,7 @@ describe("shouldReplace", () => {
     )).toBeTruthy();
   });
 
-  it("should return false if current path is the same than new path and current state is not the same than new state", () => {
+  it("should return false if current path is the same as new path and current state is other than new state", () => {
     const currentLocation = {
       pathname: "the/path",
       search: "?the=query",
