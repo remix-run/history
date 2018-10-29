@@ -8,9 +8,19 @@
   "main": "cjs/history.js",
   "module": "esm/history.js",
   "files": [
-    "esm",
+    "DOMUtils.js",
+    "ExecutionEnvironment.js",
+    "LocationUtils.js",
+    "PathUtils.js",
     "cjs",
-    "umd"
+    "createBrowserHistory.js",
+    "createHashHistory.js",
+    "createMemoryHistory.js",
+    "createTransitionManager.js",
+    "es",
+    "esm",
+    "umd",
+    "warnAboutDeprecatedCJSRequire.js"
   ],
   "sideEffects": false,
   "scripts": {
