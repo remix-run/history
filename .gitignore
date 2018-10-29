@@ -1,4 +1,4 @@
-node_modules
-esm
-cjs
-umd
+/node_modules/
+/esm/
+/cjs/
+/umd/
