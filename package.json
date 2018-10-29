@@ -32,11 +32,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "invariant": "^2.2.1",
     "loose-envify": "^1.2.0",
     "resolve-pathname": "^2.2.0",
-    "value-equal": "^0.4.0",
-    "warning": "^4.0.1"
+    "tiny-invariant": "^1.0.1",
+    "tiny-warning": "^0.0.3",
+    "value-equal": "^0.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

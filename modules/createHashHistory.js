@@ -1,5 +1,5 @@
-import warning from "warning";
-import invariant from "invariant";
+import warning from "tiny-warning";
+import invariant from "tiny-invariant";
 import { createLocation, locationsAreEqual } from "./LocationUtils";
 import {
   addLeadingSlash,
