@@ -11,6 +11,8 @@ env:
     - NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")
 install:
   - npm ci
+before_script:
+  - npm run build
 script:
   - npm run lint
   - npm test
