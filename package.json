@@ -5,7 +5,7 @@
   "repository": "ReactTraining/history",
   "license": "MIT",
   "author": "Michael Jackson",
-  "main": "cjs/history.js",
+  "main": "index.js",
   "module": "esm/history.js",
   "files": [
     "DOMUtils.js",
@@ -24,15 +24,14 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "start": "webpack-dev-server -d --content-base ./ --history-api-fallback --inline modules/index.js",
-    "build": "BABEL_ENV=es rollup -c",
-    "prepublishOnly": "BABEL_ENV=es rollup -c",
+    "build": "del cjs esm umd && rollup -c",
+    "prepublishOnly": "del cjs esm umd && rollup -c",
     "clean": "git clean -fdX .",
     "lint": "eslint modules",
     "test": "karma start --single-run"
   },
   "dependencies": {
-    "babel-runtime": "^6.26.0",
+    "@babel/runtime": "^7.1.2",
     "invariant": "^2.2.1",
     "loose-envify": "^1.2.0",
     "resolve-pathname": "^2.2.0",
@@ -40,15 +39,15 @@
     "warning": "^4.0.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.23.1",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-object-assign": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^7.0.0",
-    "babel-loader": "^6.2.10",
+    "babel-loader": "^6.4.1",
     "babel-plugin-dev-expression": "^0.2.1",
-    "babel-plugin-transform-object-assign": "^6.8.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-stage-1": "^6.5.0",
+    "del-cli": "^1.1.0",
     "eslint": "^3.3.0",
     "eslint-plugin-import": "^2.0.0",
     "expect": "^21.0.0",
@@ -63,14 +62,13 @@
     "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
     "rollup": "^0.66.6",
-    "rollup-plugin-babel": "3",
+    "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-size-snapshot": "^0.7.0",
     "rollup-plugin-uglify": "^6.0.0",
-    "webpack": "^1.13.1",
-    "webpack-dev-server": "^3.1.10"
+    "webpack": "^3.12.0"
   },
   "browserify": {
     "transform": [

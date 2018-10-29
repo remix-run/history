@@ -5,11 +5,17 @@ import replace from "rollup-plugin-replace";
 import { sizeSnapshot } from "rollup-plugin-size-snapshot";
 import { uglify } from "rollup-plugin-uglify";
 
+import pkg from "./package.json";
+
 const input = "./modules/index.js";
 const name = "History";
-const babelOptions = {
-  exclude: "**/node_modules/**",
-  runtimeHelpers: true
+const babelOptionsCJS = {
+  exclude: /node_modules/
+};
+const babelOptionsESM = {
+  exclude: /node_modules/,
+  runtimeHelpers: true,
+  plugins: [["@babel/plugin-transform-runtime", { useESModules: true }]]
 };
 const commonjsOptions = {
   include: /node_modules/
@@ -20,27 +26,20 @@ const external = id => !id.startsWith(".") && !id.startsWith("/");
 export default [
   {
     input,
-    output: { file: "esm/history.js", format: "esm" },
-    external,
-    plugins: [babel(babelOptions), sizeSnapshot()]
-  },
-
-  {
-    input,
-    output: { file: "cjs/history.js", format: "cjs" },
+    output: { file: `cjs/${pkg.name}.js`, format: "cjs" },
     external,
     plugins: [
-      babel(babelOptions),
+      babel(babelOptionsCJS),
       replace({ "process.env.NODE_ENV": JSON.stringify("development") })
     ]
   },
 
   {
     input,
-    output: { file: "cjs/history.min.js", format: "cjs" },
+    output: { file: `cjs/${pkg.name}.min.js`, format: "cjs" },
     external,
     plugins: [
-      babel(babelOptions),
+      babel(babelOptionsCJS),
       replace({ "process.env.NODE_ENV": JSON.stringify("production") }),
       uglify()
     ]
@@ -48,9 +47,16 @@ export default [
 
   {
     input,
-    output: { file: "umd/history.js", format: "umd", name },
+    output: { file: `esm/${pkg.name}.js`, format: "esm" },
+    external,
+    plugins: [babel(babelOptionsESM), sizeSnapshot()]
+  },
+
+  {
+    input,
+    output: { file: `umd/${pkg.name}.js`, format: "umd", name },
     plugins: [
-      babel(babelOptions),
+      babel(babelOptionsESM),
       nodeResolve(),
       commonjs(commonjsOptions),
       replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
@@ -60,9 +66,9 @@ export default [
 
   {
     input,
-    output: { file: "umd/history.min.js", format: "umd", name },
+    output: { file: `umd/${pkg.name}.min.js`, format: "umd", name },
     plugins: [
-      babel(babelOptions),
+      babel(babelOptionsESM),
       nodeResolve(),
       commonjs(commonjsOptions),
       replace({ "process.env.NODE_ENV": JSON.stringify("production") }),
