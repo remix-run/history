@@ -1,4 +1,5 @@
-import createHistory from "../createMemoryHistory";
+import { createMemoryHistory as createHistory } from "history";
+
 import * as TestSequences from "./TestSequences";
 
 describe("a memory history", () => {

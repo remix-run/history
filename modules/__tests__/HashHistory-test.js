@@ -1,14 +1,14 @@
 import expect from "expect";
-import createHistory from "../createHashHistory";
+
+import { createHashHistory as createHistory } from "history";
+
 import { canUseDOM, supportsGoWithoutReloadUsingHash } from "../DOMUtils";
 import * as TestSequences from "./TestSequences";
-
-const describeHistory = canUseDOM ? describe : describe.skip;
 
 const canGoWithoutReload = canUseDOM && supportsGoWithoutReloadUsingHash();
 const describeGo = canGoWithoutReload ? describe : describe.skip;
 
-describeHistory("a hash history", () => {
+describe("a hash history", () => {
   beforeEach(() => {
     if (window.location.hash !== "") window.location.hash = "";
   });
