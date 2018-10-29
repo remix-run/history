@@ -71,11 +71,13 @@ module.exports = config => {
     webpack: {
       devtool: "inline-source-map",
       module: {
-        loaders: [{ test: /\.js$/, exclude: /node_modules/, loader: "babel" }]
+        loaders: [
+          { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+        ]
       },
       resolve: {
         alias: {
-          history: path.resolve(__dirname, "cjs/history.js")
+          history$: path.resolve(__dirname, "cjs/history.js")
         }
       },
       plugins: [
