@@ -267,6 +267,6 @@ you're interested in learning more about what React can do for your company, ple
 
 ## Thanks
 
-Also, thanks to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to run our build in real browsers.
+A big thank-you to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to run our build in real browsers.
 
-A big thank-you to [Dan Shaw](https://www.npmjs.com/~dshaw) for letting us use the `history` npm package name! Thanks Dan!
+Also, thanks to [Dan Shaw](https://www.npmjs.com/~dshaw) for letting us use the `history` npm package name. Thanks Dan!
