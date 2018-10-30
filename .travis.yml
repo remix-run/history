@@ -1,27 +1,27 @@
 sudo: false
 language: node_js
 node_js:
-  - "10"
+- '10'
 cache:
   directories:
-    - node_modules
+  - node_modules
 env:
   global:
-    - secure: QsBlLieiye0ogp+d8EA5LO2pR/cUUWp8u7ZI3EL9itdnoJsLFCWhqG625qN7k7BvggHTAj1BaFNqHzroMMju7h5n2YfK/mKn6Nz0jhukU8LhHnwMDckP2JMVzgtZokbN26ZdqhzD7Y0lMhfNyKP2guhurVQxCphwhmgAq1y/VRcoPNViCYQFYSBaRnBIWL4MP8Sgi9kG+IoCQIUxRXv/uE0URAEnMk41Cn7d/slt+ov4HBzcF0gNjrx0zMFjGacKNtAReH5f8YujNz2UAXA3ClvU0GzxnnPj4RiwB4YNRFsJlihbzevjwAQhkpjUFi03LVY9fW3rN4Ppbdkr6MkdsE3dJepfWbaVgxjfYiru+53TEwTK2Yphjs4RdQkhp+Y8U/JdhgKSrQPCnCn0HyhiMZjIVU7kcpyXBNq8eBagtSyoHr+AaH02HIqzDD+1l9/RheJdlRlsW/g0leDPtOTyVQDAhHEbHO1lzFfbE/3C83u7VmH3LN5gXdjHPZBtEGWOezN7Zbtd/O4HNhqAqy1fEJiyedXi0Cx+r+d8xF/w2GxRKXVk5ZglsF+zC/xXKsQfMym7WFLGp3OTx4Yig522BDbvNEJklh2h2Iqmgxs5w3t5ms2sdCl/1MxC1cHLkCvqIegxLSVKgtY2G8kHpgIsKgWH/KIJ9WMVu1EeGC3g9bk=
-    - NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")
+  - NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")
 install:
-  - npm ci
+- npm ci
 before_script:
-  - npm run build
+- npm run build
 script:
-  - npm run lint
-  - npm test
+- npm run lint
+- npm test
 deploy:
   provider: npm
   email: npm@mjackson.me
-  api_key: "$NPM_TOKEN"
   tag: "$NPM_TAG"
   skip_cleanup: true
   on:
     all_branches: true
     condition: '"$TRAVIS_TAG" =~ ^v[0-9]'
+  api_key:
+    secure: fLbpTKucV+s1PxcOX5LSWDrmEPexh+HQCmBDq4XwImZhUFsa7yHy6fkx835mxy2OVg8GV8uz+NWtQszTw+yHsQY219bFUyFgNJKtRHw6qyNVtHQKjUcaXAszP2bofspS7285Ji2qc20wCYvtPRiMmAxhKrz8eF4GL4pvSjWxJc13jIawIgKQews3xNXncOTIr/UWsGFRzBQu3MbLaTPnUHoJC2s/RS9/x6i9Ry97VCnzlX3ppCUJFbYkGNVPeBACEcEk8ZYu1J4slRpJ9faxdWDDV9EYlXf/yM6mHdiDFTn5iYExNvayOkA5gzbrXR8qFdMXtrNlBwPhub0KZM1Wnfwniw/Vc1iEaoUKri/McFVFUkeD08l4vMq9r4dx4fhKwHGMdg6l8At1KrF4JDW7onJzm/CgZz+x7Z93MmFj+uBBLsTrPwd7bRdw6a/FYdZHE4N7ZtRSP2l4ugjmsyiAYYgequonPXNR4xdLc31PCI3xglNR6KBFqhHfIM7m89EXo1zYNTk0z3m3oz0cqL57d78fGPGaB9qIPYW6r8mN6/y+Etgfqrxeah+BDIQqf/URek3l4yABHkA02rfNFWD/Xo8LVhsqScban8yHIk0cH1s2MEGNOMCTOYpNYfsn8gCAHHxR8/9jhYk4g69X+VbxhGo0C0ASBHbiyE8/9lLSSE4=
