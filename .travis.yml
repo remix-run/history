@@ -23,4 +23,5 @@ deploy:
   tag: "$NPM_TAG"
   skip_cleanup: true
   on:
+    all_branches: true
     condition: '"$TRAVIS_TAG" =~ ^v[0-9]'
