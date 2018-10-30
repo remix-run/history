@@ -45,7 +45,7 @@
     "@babel/preset-env": "^7.1.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^7.0.0",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^8.0.4",
     "babel-plugin-dev-expression": "^0.2.1",
     "del-cli": "^1.1.0",
     "eslint": "^3.3.0",
