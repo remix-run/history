@@ -1,5 +1,6 @@
 import warning from "tiny-warning";
 import invariant from "tiny-invariant";
+
 import { createLocation, locationsAreEqual } from "./LocationUtils";
 import {
   addLeadingSlash,
@@ -34,25 +35,26 @@ const HashPathCoders = {
   }
 };
 
-const getHashPath = () => {
+function getHashPath() {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
   const href = window.location.href;
   const hashIndex = href.indexOf("#");
   return hashIndex === -1 ? "" : href.substring(hashIndex + 1);
-};
+}
 
-const pushHashPath = path => (window.location.hash = path);
+function pushHashPath(path) {
+  window.location.hash = path;
+}
 
-const replaceHashPath = path => {
+function replaceHashPath(path) {
   const hashIndex = window.location.href.indexOf("#");
-
   window.location.replace(
     window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + "#" + path
   );
-};
+}
 
-const createHashHistory = (props = {}) => {
+function createHashHistory(props = {}) {
   invariant(canUseDOM, "Hash history needs a DOM");
 
   const globalHistory = window.history;
@@ -65,7 +67,7 @@ const createHashHistory = (props = {}) => {
 
   const { encodePath, decodePath } = HashPathCoders[hashType];
 
-  const getDOMLocation = () => {
+  function getDOMLocation() {
     let path = decodePath(getHashPath());
 
     warning(
@@ -81,22 +83,20 @@ const createHashHistory = (props = {}) => {
     if (basename) path = stripBasename(path, basename);
 
     return createLocation(path);
-  };
+  }
 
   const transitionManager = createTransitionManager();
 
-  const setState = nextState => {
+  function setState(nextState) {
     Object.assign(history, nextState);
-
     history.length = globalHistory.length;
-
     transitionManager.notifyListeners(history.location, history.action);
-  };
+  }
 
   let forceNextPop = false;
   let ignorePath = null;
 
-  const handleHashChange = () => {
+  function handleHashChange() {
     const path = getHashPath();
     const encodedPath = encodePath(path);
 
@@ -115,9 +115,9 @@ const createHashHistory = (props = {}) => {
 
       handlePop(location);
     }
-  };
+  }
 
-  const handlePop = location => {
+  function handlePop(location) {
     if (forceNextPop) {
       forceNextPop = false;
       setState();
@@ -137,9 +137,9 @@ const createHashHistory = (props = {}) => {
         }
       );
     }
-  };
+  }
 
-  const revertPop = fromLocation => {
+  function revertPop(fromLocation) {
     const toLocation = history.location;
 
     // TODO: We could probably make this more reliable by
@@ -160,7 +160,7 @@ const createHashHistory = (props = {}) => {
       forceNextPop = true;
       go(delta);
     }
-  };
+  }
 
   // Ensure the hash is encoded properly before doing anything else.
   const path = getHashPath();
@@ -173,10 +173,11 @@ const createHashHistory = (props = {}) => {
 
   // Public interface
 
-  const createHref = location =>
-    "#" + encodePath(basename + createPath(location));
+  function createHref(location) {
+    return "#" + encodePath(basename + createPath(location));
+  }
 
-  const push = (path, state) => {
+  function push(path, state) {
     warning(
       state === undefined,
       "Hash history cannot push state; it is ignored"
@@ -228,9 +229,9 @@ const createHashHistory = (props = {}) => {
         }
       }
     );
-  };
+  }
 
-  const replace = (path, state) => {
+  function replace(path, state) {
     warning(
       state === undefined,
       "Hash history cannot replace state; it is ignored"
@@ -270,24 +271,28 @@ const createHashHistory = (props = {}) => {
         setState({ action, location });
       }
     );
-  };
+  }
 
-  const go = n => {
+  function go(n) {
     warning(
       canGoWithoutReload,
       "Hash history go(n) causes a full page reload in this browser"
     );
 
     globalHistory.go(n);
-  };
+  }
 
-  const goBack = () => go(-1);
+  function goBack() {
+    go(-1);
+  }
 
-  const goForward = () => go(1);
+  function goForward() {
+    go(1);
+  }
 
   let listenerCount = 0;
 
-  const checkDOMListeners = delta => {
+  function checkDOMListeners(delta) {
     listenerCount += delta;
 
     if (listenerCount === 1) {
@@ -295,11 +300,11 @@ const createHashHistory = (props = {}) => {
     } else if (listenerCount === 0) {
       window.removeEventListener(HashChangeEvent, handleHashChange);
     }
-  };
+  }
 
   let isBlocked = false;
 
-  const block = (prompt = false) => {
+  function block(prompt = false) {
     const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {
@@ -315,9 +320,9 @@ const createHashHistory = (props = {}) => {
 
       return unblock();
     };
-  };
+  }
 
-  const listen = listener => {
+  function listen(listener) {
     const unlisten = transitionManager.appendListener(listener);
     checkDOMListeners(1);
 
@@ -325,7 +330,7 @@ const createHashHistory = (props = {}) => {
       checkDOMListeners(-1);
       unlisten();
     };
-  };
+  }
 
   const history = {
     length: globalHistory.length,
@@ -342,6 +347,6 @@ const createHashHistory = (props = {}) => {
   };
 
   return history;
-};
+}
 
 export default createHashHistory;

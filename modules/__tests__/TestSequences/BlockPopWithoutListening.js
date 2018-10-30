@@ -1,6 +1,6 @@
 import expect from "expect";
 
-export default (history, done) => {
+export default function(history, done) {
   expect(history.location).toMatchObject({
     pathname: "/"
   });
@@ -30,4 +30,4 @@ export default (history, done) => {
       done();
     }, 100);
   }, 10);
-};
+}

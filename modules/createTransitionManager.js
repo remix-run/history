@@ -1,9 +1,9 @@
 import warning from "tiny-warning";
 
-const createTransitionManager = () => {
+function createTransitionManager() {
   let prompt = null;
 
-  const setPrompt = nextPrompt => {
+  function setPrompt(nextPrompt) {
     warning(prompt == null, "A history supports only one prompt at a time");
 
     prompt = nextPrompt;
@@ -11,14 +11,14 @@ const createTransitionManager = () => {
     return () => {
       if (prompt === nextPrompt) prompt = null;
     };
-  };
+  }
 
-  const confirmTransitionTo = (
+  function confirmTransitionTo(
     location,
     action,
     getUserConfirmation,
     callback
-  ) => {
+  ) {
     // TODO: If another transition starts while we're still confirming
     // the previous one, we may end up in a weird state. Figure out the
     // best way to handle this.
@@ -44,16 +44,16 @@ const createTransitionManager = () => {
     } else {
       callback(true);
     }
-  };
+  }
 
   let listeners = [];
 
-  const appendListener = fn => {
+  function appendListener(fn) {
     let isActive = true;
 
-    const listener = (...args) => {
+    function listener(...args) {
       if (isActive) fn(...args);
-    };
+    }
 
     listeners.push(listener);
 
@@ -61,11 +61,11 @@ const createTransitionManager = () => {
       isActive = false;
       listeners = listeners.filter(item => item !== listener);
     };
-  };
+  }
 
-  const notifyListeners = (...args) => {
+  function notifyListeners(...args) {
     listeners.forEach(listener => listener(...args));
-  };
+  }
 
   return {
     setPrompt,
@@ -73,6 +73,6 @@ const createTransitionManager = () => {
     appendListener,
     notifyListeners
   };
-};
+}
 
 export default createTransitionManager;

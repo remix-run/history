@@ -4,8 +4,9 @@ export const canUseDOM = !!(
   window.document.createElement
 );
 
-export const getConfirmation = (message, callback) =>
+export function getConfirmation(message, callback) {
   callback(window.confirm(message)); // eslint-disable-line no-alert
+}
 
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
@@ -14,7 +15,7 @@ export const getConfirmation = (message, callback) =>
  * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
  * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
  */
-export const supportsHistory = () => {
+export function supportsHistory() {
   const ua = window.navigator.userAgent;
 
   if (
@@ -26,25 +27,28 @@ export const supportsHistory = () => {
     return false;
 
   return window.history && "pushState" in window.history;
-};
+}
 
 /**
  * Returns true if browser fires popstate on hash change.
  * IE10 and IE11 do not.
  */
-export const supportsPopStateOnHashChange = () =>
-  window.navigator.userAgent.indexOf("Trident") === -1;
+export function supportsPopStateOnHashChange() {
+  return window.navigator.userAgent.indexOf("Trident") === -1;
+}
 
 /**
  * Returns false if using go(n) with hash history causes a full page reload.
  */
-export const supportsGoWithoutReloadUsingHash = () =>
-  window.navigator.userAgent.indexOf("Firefox") === -1;
+export function supportsGoWithoutReloadUsingHash() {
+  return window.navigator.userAgent.indexOf("Firefox") === -1;
+}
 
 /**
  * Returns true if a given popstate event is an extraneous WebKit event.
  * Accounts for the fact that Chrome on iOS fires real popstate events
  * containing undefined state when pressing the back button.
  */
-export const isExtraneousPopstateEvent = event =>
+export function isExtraneousPopstateEvent(event) {
   event.state === undefined && navigator.userAgent.indexOf("CriOS") === -1;
+}
