@@ -46,7 +46,7 @@ Basic usage looks like this:
 ```js
 import { createBrowserHistory } from "history";
 
-const history = createHistory();
+const history = createBrowserHistory();
 
 // Get the current location.
 const location = history.location;
