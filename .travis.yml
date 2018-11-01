@@ -6,12 +6,9 @@ cache:
 node_js:
 - '10'
 env:
-  global:
-  - NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")
-  matrix:
-  - TEST_ENV=cjs
-  - TEST_ENV=umd
-  - TEST_ENV=source
+- TEST_ENV=cjs
+- TEST_ENV=umd
+- TEST_ENV=source
 install:
 - npm ci
 before_script:
@@ -19,13 +16,3 @@ before_script:
 script:
 - npm run lint
 - npm test
-deploy:
-  provider: npm
-  email: npm@mjackson.me
-  tag: "$NPM_TAG"
-  skip_cleanup: true
-  on:
-    all_branches: true
-    condition: '"$TRAVIS_TAG" =~ ^v[0-9]'
-  api_key:
-    secure: fLbpTKucV+s1PxcOX5LSWDrmEPexh+HQCmBDq4XwImZhUFsa7yHy6fkx835mxy2OVg8GV8uz+NWtQszTw+yHsQY219bFUyFgNJKtRHw6qyNVtHQKjUcaXAszP2bofspS7285Ji2qc20wCYvtPRiMmAxhKrz8eF4GL4pvSjWxJc13jIawIgKQews3xNXncOTIr/UWsGFRzBQu3MbLaTPnUHoJC2s/RS9/x6i9Ry97VCnzlX3ppCUJFbYkGNVPeBACEcEk8ZYu1J4slRpJ9faxdWDDV9EYlXf/yM6mHdiDFTn5iYExNvayOkA5gzbrXR8qFdMXtrNlBwPhub0KZM1Wnfwniw/Vc1iEaoUKri/McFVFUkeD08l4vMq9r4dx4fhKwHGMdg6l8At1KrF4JDW7onJzm/CgZz+x7Z93MmFj+uBBLsTrPwd7bRdw6a/FYdZHE4N7ZtRSP2l4ugjmsyiAYYgequonPXNR4xdLc31PCI3xglNR6KBFqhHfIM7m89EXo1zYNTk0z3m3oz0cqL57d78fGPGaB9qIPYW6r8mN6/y+Etgfqrxeah+BDIQqf/URek3l4yABHkA02rfNFWD/Xo8LVhsqScban8yHIk0cH1s2MEGNOMCTOYpNYfsn8gCAHHxR8/9jhYk4g69X+VbxhGo0C0ASBHbiyE8/9lLSSE4=
