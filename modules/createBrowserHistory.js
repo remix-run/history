@@ -270,7 +270,7 @@ function createBrowserHistory(props = {}) {
   function checkDOMListeners(delta) {
     listenerCount += delta;
 
-    if (listenerCount === 1) {
+    if (listenerCount === 1 && delta === 1) {
       window.addEventListener(PopStateEvent, handlePopState);
 
       if (needsHashChangeListener)

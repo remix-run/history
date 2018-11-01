@@ -295,7 +295,7 @@ function createHashHistory(props = {}) {
   function checkDOMListeners(delta) {
     listenerCount += delta;
 
-    if (listenerCount === 1) {
+    if (listenerCount === 1 && delta === 1) {
       window.addEventListener(HashChangeEvent, handleHashChange);
     } else if (listenerCount === 0) {
       window.removeEventListener(HashChangeEvent, handleHashChange);
