@@ -55,6 +55,18 @@ module.exports = config => {
     }
   };
 
+  let historyAlias;
+  switch (process.env.TEST_ENV) {
+    case "cjs":
+      historyAlias = "cjs/history.js";
+      break;
+    case "umd":
+      historyAlias = "umd/history.js";
+      break;
+    default:
+      historyAlias = "modules/index.js";
+  }
+
   config.set({
     customLaunchers: customLaunchers,
 
@@ -73,7 +85,7 @@ module.exports = config => {
       module: {
         loaders: [
           {
-            test: /modules\/__tests__/,
+            test: /\.js$/,
             exclude: /node_modules/,
             loader: "babel-loader"
           }
@@ -81,7 +93,7 @@ module.exports = config => {
       },
       resolve: {
         alias: {
-          history$: path.resolve(__dirname, "cjs/history.js")
+          history$: path.resolve(__dirname, historyAlias)
         }
       },
       plugins: [

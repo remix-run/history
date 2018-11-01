@@ -15,7 +15,7 @@ const babelOptionsCJS = {
 const babelOptionsESM = {
   exclude: /node_modules/,
   runtimeHelpers: true,
-  plugins: [["@babel/plugin-transform-runtime", { useESModules: true }]]
+  plugins: [["@babel/transform-runtime", { useESModules: true }]]
 };
 const commonjsOptions = {
   include: /node_modules/
