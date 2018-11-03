@@ -1,3 +1,8 @@
+## HEAD
+> Nov 03, 2018
+
+- Browser back button now triggers a full page reload when forceRefresh is enabled
+
 ## [v4.6.3]
 > Jun 20, 2017
 
