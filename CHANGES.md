@@ -1,3 +1,5 @@
+## [HEAD]
+
 - Add `history.link` which navigates and prevents same paths in the history stack (thanks @dabit1)
 
 ## [v4.6.3]
