@@ -1,5 +1,5 @@
 import expect from "expect";
-import { createLocation, shouldReplace } from "../LocationUtils";
+import { createLocation, shouldReplace } from "history";
 
 describe("createLocation", () => {
   describe("with a full path", () => {

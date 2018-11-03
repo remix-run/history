@@ -1,7 +1,8 @@
 import expect from "expect";
+
 import execSteps from "./execSteps";
 
-export default (history, done) => {
+export default function(history, done) {
   const steps = [
     () => {
       // encoded string
@@ -34,4 +35,4 @@ export default (history, done) => {
   ];
 
   execSteps(steps, history, done);
-};
+}

@@ -1,4 +1,4 @@
-const execSteps = (steps, history, done) => {
+export default function execSteps(steps, history, done) {
   let index = 0,
     unlisten,
     cleanedUp = false;
@@ -31,6 +31,4 @@ const execSteps = (steps, history, done) => {
   } else {
     done();
   }
-};
-
-export default execSteps;
+}

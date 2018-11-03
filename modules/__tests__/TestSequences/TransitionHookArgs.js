@@ -1,7 +1,8 @@
 import expect from "expect";
+
 import execSteps from "./execSteps";
 
-export default (history, done) => {
+export default function(history, done) {
   let hookLocation, hookAction;
   const steps = [
     location => {
@@ -28,4 +29,4 @@ export default (history, done) => {
     unblock();
     done(...args);
   });
-};
+}

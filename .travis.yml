@@ -1,21 +1,18 @@
+sudo: false
 language: node_js
-node_js: node
 cache:
   directories:
-  - "$HOME/.cache/yarn"
   - node_modules
+node_js:
+- '10'
 env:
-  global:
-  - secure: QsBlLieiye0ogp+d8EA5LO2pR/cUUWp8u7ZI3EL9itdnoJsLFCWhqG625qN7k7BvggHTAj1BaFNqHzroMMju7h5n2YfK/mKn6Nz0jhukU8LhHnwMDckP2JMVzgtZokbN26ZdqhzD7Y0lMhfNyKP2guhurVQxCphwhmgAq1y/VRcoPNViCYQFYSBaRnBIWL4MP8Sgi9kG+IoCQIUxRXv/uE0URAEnMk41Cn7d/slt+ov4HBzcF0gNjrx0zMFjGacKNtAReH5f8YujNz2UAXA3ClvU0GzxnnPj4RiwB4YNRFsJlihbzevjwAQhkpjUFi03LVY9fW3rN4Ppbdkr6MkdsE3dJepfWbaVgxjfYiru+53TEwTK2Yphjs4RdQkhp+Y8U/JdhgKSrQPCnCn0HyhiMZjIVU7kcpyXBNq8eBagtSyoHr+AaH02HIqzDD+1l9/RheJdlRlsW/g0leDPtOTyVQDAhHEbHO1lzFfbE/3C83u7VmH3LN5gXdjHPZBtEGWOezN7Zbtd/O4HNhqAqy1fEJiyedXi0Cx+r+d8xF/w2GxRKXVk5ZglsF+zC/xXKsQfMym7WFLGp3OTx4Yig522BDbvNEJklh2h2Iqmgxs5w3t5ms2sdCl/1MxC1cHLkCvqIegxLSVKgtY2G8kHpgIsKgWH/KIJ9WMVu1EeGC3g9bk=
-  - NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")
+- TEST_ENV=cjs
+- TEST_ENV=umd
+- TEST_ENV=source
+install:
+- npm ci
+before_script:
+- npm run build
 script:
 - npm run lint
 - npm test
-deploy:
-  provider: npm
-  email: npm@mjackson.me
-  api_key: "$NPM_TOKEN"
-  tag: "$NPM_TAG"
-  skip_cleanup: true
-  on:
-    condition: '"$TRAVIS_TAG" =~ ^v[0-9]'
