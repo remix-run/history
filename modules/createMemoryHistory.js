@@ -1,15 +1,17 @@
-import warning from "warning";
+import warning from "tiny-warning";
+
 import { createPath } from "./PathUtils";
 import { createLocation } from "./LocationUtils";
 import createTransitionManager from "./createTransitionManager";
 
-const clamp = (n, lowerBound, upperBound) =>
-  Math.min(Math.max(n, lowerBound), upperBound);
+function clamp(n, lowerBound, upperBound) {
+  return Math.min(Math.max(n, lowerBound), upperBound);
+}
 
 /**
  * Creates a history object that stores locations in memory.
  */
-const createMemoryHistory = (props = {}) => {
+function createMemoryHistory(props = {}) {
   const {
     getUserConfirmation,
     initialEntries = ["/"],
@@ -19,18 +21,17 @@ const createMemoryHistory = (props = {}) => {
 
   const transitionManager = createTransitionManager();
 
-  const setState = nextState => {
+  function setState(nextState) {
     Object.assign(history, nextState);
-
     history.length = history.entries.length;
-
     transitionManager.notifyListeners(history.location, history.action);
-  };
+  }
 
-  const createKey = () =>
-    Math.random()
+  function createKey() {
+    return Math.random()
       .toString(36)
       .substr(2, keyLength);
+  }
 
   const index = clamp(initialIndex, 0, initialEntries.length - 1);
   const entries = initialEntries.map(
@@ -44,7 +45,7 @@ const createMemoryHistory = (props = {}) => {
 
   const createHref = createPath;
 
-  const push = (path, state) => {
+  function push(path, state) {
     warning(
       !(
         typeof path === "object" &&
@@ -87,9 +88,9 @@ const createMemoryHistory = (props = {}) => {
         });
       }
     );
-  };
+  }
 
-  const replace = (path, state) => {
+  function replace(path, state) {
     warning(
       !(
         typeof path === "object" &&
@@ -115,9 +116,9 @@ const createMemoryHistory = (props = {}) => {
         setState({ action, location });
       }
     );
-  };
+  }
 
-  const go = n => {
+  function go(n) {
     const nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
 
     const action = "POP";
@@ -141,20 +142,28 @@ const createMemoryHistory = (props = {}) => {
         }
       }
     );
-  };
+  }
 
-  const goBack = () => go(-1);
+  function goBack() {
+    go(-1);
+  }
 
-  const goForward = () => go(1);
+  function goForward() {
+    go(1);
+  }
 
-  const canGo = n => {
+  function canGo(n) {
     const nextIndex = history.index + n;
     return nextIndex >= 0 && nextIndex < history.entries.length;
-  };
+  }
 
-  const block = (prompt = false) => transitionManager.setPrompt(prompt);
+  function block(prompt = false) {
+    return transitionManager.setPrompt(prompt);
+  }
 
-  const listen = listener => transitionManager.appendListener(listener);
+  function listen(listener) {
+    return transitionManager.appendListener(listener);
+  }
 
   const history = {
     length: entries.length,
@@ -174,6 +183,6 @@ const createMemoryHistory = (props = {}) => {
   };
 
   return history;
-};
+}
 
 export default createMemoryHistory;

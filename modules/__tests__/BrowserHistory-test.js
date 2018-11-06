@@ -1,12 +1,10 @@
 import expect from "expect";
-import createHistory from "../createBrowserHistory";
-import { canUseDOM, supportsHistory } from "../DOMUtils";
+
+import { createBrowserHistory as createHistory } from "history";
+
 import * as TestSequences from "./TestSequences";
 
-const canUseHistory = canUseDOM && supportsHistory();
-const describeHistory = canUseHistory ? describe : describe.skip;
-
-describeHistory("a browser history", () => {
+describe("a browser history", () => {
   beforeEach(() => {
     window.history.replaceState(null, null, "/");
   });

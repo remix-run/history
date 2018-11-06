@@ -1,14 +1,13 @@
 import expect from "expect";
-import createHistory from "../createHashHistory";
-import { canUseDOM, supportsGoWithoutReloadUsingHash } from "../DOMUtils";
+
+import { createHashHistory as createHistory } from "history";
+
 import * as TestSequences from "./TestSequences";
 
-const describeHistory = canUseDOM ? describe : describe.skip;
-
-const canGoWithoutReload = canUseDOM && supportsGoWithoutReloadUsingHash();
+const canGoWithoutReload = window.navigator.userAgent.indexOf("Firefox") === -1;
 const describeGo = canGoWithoutReload ? describe : describe.skip;
 
-describeHistory("a hash history", () => {
+describe("a hash history", () => {
   beforeEach(() => {
     if (window.location.hash !== "") window.location.hash = "";
   });

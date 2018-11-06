@@ -1,19 +1,24 @@
-export const addLeadingSlash = path =>
-  path.charAt(0) === "/" ? path : "/" + path;
+export function addLeadingSlash(path) {
+  return path.charAt(0) === "/" ? path : "/" + path;
+}
 
-export const stripLeadingSlash = path =>
-  path.charAt(0) === "/" ? path.substr(1) : path;
+export function stripLeadingSlash(path) {
+  return path.charAt(0) === "/" ? path.substr(1) : path;
+}
 
-export const hasBasename = (path, prefix) =>
-  new RegExp("^" + prefix + "(\\/|\\?|#|$)", "i").test(path);
+export function hasBasename(path, prefix) {
+  return new RegExp("^" + prefix + "(\\/|\\?|#|$)", "i").test(path);
+}
 
-export const stripBasename = (path, prefix) =>
-  hasBasename(path, prefix) ? path.substr(prefix.length) : path;
+export function stripBasename(path, prefix) {
+  return hasBasename(path, prefix) ? path.substr(prefix.length) : path;
+}
 
-export const stripTrailingSlash = path =>
-  path.charAt(path.length - 1) === "/" ? path.slice(0, -1) : path;
+export function stripTrailingSlash(path) {
+  return path.charAt(path.length - 1) === "/" ? path.slice(0, -1) : path;
+}
 
-export const parsePath = path => {
+export function parsePath(path) {
   let pathname = path || "/";
   let search = "";
   let hash = "";
@@ -35,9 +40,9 @@ export const parsePath = path => {
     search: search === "?" ? "" : search,
     hash: hash === "#" ? "" : hash
   };
-};
+}
 
-export const createPath = location => {
+export function createPath(location) {
   const { pathname, search, hash } = location;
 
   let path = pathname || "/";
@@ -48,4 +53,4 @@ export const createPath = location => {
   if (hash && hash !== "#") path += hash.charAt(0) === "#" ? hash : `#${hash}`;
 
   return path;
-};
+}

@@ -1,7 +1,8 @@
 import expect from "expect";
+
 import execSteps from "./execSteps";
 
-export default (history, done) => {
+export default function(history, done) {
   const steps = [
     location => {
       expect(location).toMatchObject({
@@ -27,4 +28,4 @@ export default (history, done) => {
   ];
 
   execSteps(steps, history, done);
-};
+}

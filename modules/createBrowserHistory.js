@@ -1,5 +1,6 @@
-import warning from "warning";
-import invariant from "invariant";
+import warning from "tiny-warning";
+import invariant from "tiny-invariant";
+
 import { createLocation } from "./LocationUtils";
 import {
   addLeadingSlash,
@@ -20,7 +21,7 @@ import {
 const PopStateEvent = "popstate";
 const HashChangeEvent = "hashchange";
 
-const getHistoryState = () => {
+function getHistoryState() {
   try {
     return window.history.state || {};
   } catch (e) {
@@ -28,13 +29,13 @@ const getHistoryState = () => {
     // See https://github.com/ReactTraining/history/pull/289
     return {};
   }
-};
+}
 
 /**
  * Creates a history object that uses the HTML5 history API including
  * pushState, replaceState, and the popstate event.
  */
-const createBrowserHistory = (props = {}) => {
+function createBrowserHistory(props = {}) {
   invariant(canUseDOM, "Browser history needs a DOM");
 
   const globalHistory = window.history;
@@ -50,7 +51,7 @@ const createBrowserHistory = (props = {}) => {
     ? stripTrailingSlash(addLeadingSlash(props.basename))
     : "";
 
-  const getDOMLocation = historyState => {
+  function getDOMLocation(historyState) {
     const { key, state } = historyState || {};
     const { pathname, search, hash } = window.location;
 
@@ -69,37 +70,35 @@ const createBrowserHistory = (props = {}) => {
     if (basename) path = stripBasename(path, basename);
 
     return createLocation(path, state, key);
-  };
+  }
 
-  const createKey = () =>
-    Math.random()
+  function createKey() {
+    return Math.random()
       .toString(36)
       .substr(2, keyLength);
+  }
 
   const transitionManager = createTransitionManager();
 
-  const setState = nextState => {
+  function setState(nextState) {
     Object.assign(history, nextState);
-
     history.length = globalHistory.length;
-
     transitionManager.notifyListeners(history.location, history.action);
-  };
+  }
 
-  const handlePopState = event => {
+  function handlePopState(event) {
     // Ignore extraneous popstate events in WebKit.
     if (isExtraneousPopstateEvent(event)) return;
-
     handlePop(getDOMLocation(event.state));
-  };
+  }
 
-  const handleHashChange = () => {
+  function handleHashChange() {
     handlePop(getDOMLocation(getHistoryState()));
-  };
+  }
 
   let forceNextPop = false;
 
-  const handlePop = location => {
+  function handlePop(location) {
     if (forceNextPop) {
       forceNextPop = false;
       setState();
@@ -119,9 +118,9 @@ const createBrowserHistory = (props = {}) => {
         }
       );
     }
-  };
+  }
 
-  const revertPop = fromLocation => {
+  function revertPop(fromLocation) {
     const toLocation = history.location;
 
     // TODO: We could probably make this more reliable by
@@ -142,16 +141,18 @@ const createBrowserHistory = (props = {}) => {
       forceNextPop = true;
       go(delta);
     }
-  };
+  }
 
   const initialLocation = getDOMLocation(getHistoryState());
   let allKeys = [initialLocation.key];
 
   // Public interface
 
-  const createHref = location => basename + createPath(location);
+  function createHref(location) {
+    return basename + createPath(location);
+  }
 
-  const push = (path, state) => {
+  function push(path, state) {
     warning(
       !(
         typeof path === "object" &&
@@ -202,9 +203,9 @@ const createBrowserHistory = (props = {}) => {
         }
       }
     );
-  };
+  }
 
-  const replace = (path, state) => {
+  function replace(path, state) {
     warning(
       !(
         typeof path === "object" &&
@@ -250,22 +251,26 @@ const createBrowserHistory = (props = {}) => {
         }
       }
     );
-  };
+  }
 
-  const go = n => {
+  function go(n) {
     globalHistory.go(n);
-  };
+  }
 
-  const goBack = () => go(-1);
+  function goBack() {
+    go(-1);
+  }
 
-  const goForward = () => go(1);
+  function goForward() {
+    go(1);
+  }
 
   let listenerCount = 0;
 
-  const checkDOMListeners = delta => {
+  function checkDOMListeners(delta) {
     listenerCount += delta;
 
-    if (listenerCount === 1) {
+    if (listenerCount === 1 && delta === 1) {
       window.addEventListener(PopStateEvent, handlePopState);
 
       if (needsHashChangeListener)
@@ -276,11 +281,11 @@ const createBrowserHistory = (props = {}) => {
       if (needsHashChangeListener)
         window.removeEventListener(HashChangeEvent, handleHashChange);
     }
-  };
+  }
 
   let isBlocked = false;
 
-  const block = (prompt = false) => {
+  function block(prompt = false) {
     const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {
@@ -296,9 +301,9 @@ const createBrowserHistory = (props = {}) => {
 
       return unblock();
     };
-  };
+  }
 
-  const listen = listener => {
+  function listen(listener) {
     const unlisten = transitionManager.appendListener(listener);
     checkDOMListeners(1);
 
@@ -306,7 +311,7 @@ const createBrowserHistory = (props = {}) => {
       checkDOMListeners(-1);
       unlisten();
     };
-  };
+  }
 
   const history = {
     length: globalHistory.length,
@@ -323,6 +328,6 @@ const createBrowserHistory = (props = {}) => {
   };
 
   return history;
-};
+}
 
 export default createBrowserHistory;

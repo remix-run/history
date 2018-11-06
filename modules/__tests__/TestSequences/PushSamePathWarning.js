@@ -1,7 +1,8 @@
 import expect from "expect";
+
 import execSteps from "./execSteps";
 
-export default (history, done) => {
+export default function(history, done) {
   let prevLocation;
 
   const steps = [
@@ -39,16 +40,16 @@ export default (history, done) => {
     }
   ];
 
-  let consoleError = console.error; // eslint-disable-line no-console
+  let consoleWarn = console.error; // eslint-disable-line no-console
   let warningMessage;
 
   // eslint-disable-next-line no-console
-  console.error = message => {
+  console.warn = message => {
     warningMessage = message;
   };
 
   execSteps(steps, history, (...args) => {
-    console.error = consoleError; // eslint-disable-line no-console
+    console.warn = consoleWarn; // eslint-disable-line no-console
     done(...args);
   });
-};
+}

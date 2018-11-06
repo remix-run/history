@@ -1,7 +1,10 @@
 import expect from "expect";
-import createBrowserHistory from "../createBrowserHistory";
-import createHashHistory from "../createHashHistory";
-import createMemoryHistory from "../createMemoryHistory";
+
+import {
+  createBrowserHistory,
+  createHashHistory,
+  createMemoryHistory
+} from "history";
 
 describe("a browser history", () => {
   describe("with no basename", () => {

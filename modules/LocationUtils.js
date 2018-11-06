@@ -1,8 +1,9 @@
 import resolvePathname from "resolve-pathname";
 import valueEqual from "value-equal";
+
 import { parsePath } from "./PathUtils";
 
-export const createLocation = (path, state, key, currentLocation) => {
+export function createLocation(path, state, key, currentLocation) {
   let location;
   if (typeof path === "string") {
     // Two-arg form: push(path, state)
@@ -66,11 +67,14 @@ export const createLocation = (path, state, key, currentLocation) => {
   }
 
   return location;
-};
+}
 
-export const locationsAreEqual = (a, b) =>
-  a.pathname === b.pathname &&
-  a.search === b.search &&
-  a.hash === b.hash &&
-  a.key === b.key &&
-  valueEqual(a.state, b.state);
+export function locationsAreEqual(a, b) {
+  return (
+    a.pathname === b.pathname &&
+    a.search === b.search &&
+    a.hash === b.hash &&
+    a.key === b.key &&
+    valueEqual(a.state, b.state)
+  );
+}
