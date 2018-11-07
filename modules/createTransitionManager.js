@@ -43,7 +43,7 @@ function createTransitionManager() {
       }
     }
     callback(true);
-  };
+  }
 
   let listeners = [];
 
