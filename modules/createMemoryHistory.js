@@ -1,8 +1,8 @@
-import warning from "tiny-warning";
+import warning from 'tiny-warning';
 
-import { createPath } from "./PathUtils";
-import { createLocation } from "./LocationUtils";
-import createTransitionManager from "./createTransitionManager";
+import { createPath } from './PathUtils';
+import { createLocation } from './LocationUtils';
+import createTransitionManager from './createTransitionManager';
 
 function clamp(n, lowerBound, upperBound) {
   return Math.min(Math.max(n, lowerBound), upperBound);
@@ -14,7 +14,7 @@ function clamp(n, lowerBound, upperBound) {
 function createMemoryHistory(props = {}) {
   const {
     getUserConfirmation,
-    initialEntries = ["/"],
+    initialEntries = ['/'],
     initialIndex = 0,
     keyLength = 6
   } = props;
@@ -36,7 +36,7 @@ function createMemoryHistory(props = {}) {
   const index = clamp(initialIndex, 0, initialEntries.length - 1);
   const entries = initialEntries.map(
     entry =>
-      typeof entry === "string"
+      typeof entry === 'string'
         ? createLocation(entry, undefined, createKey())
         : createLocation(entry, undefined, entry.key || createKey())
   );
@@ -48,15 +48,15 @@ function createMemoryHistory(props = {}) {
   function push(path, state) {
     warning(
       !(
-        typeof path === "object" &&
+        typeof path === 'object' &&
         path.state !== undefined &&
         state !== undefined
       ),
-      "You should avoid providing a 2nd state argument to push when the 1st " +
-        "argument is a location-like object that already has state; it is ignored"
+      'You should avoid providing a 2nd state argument to push when the 1st ' +
+        'argument is a location-like object that already has state; it is ignored'
     );
 
-    const action = "PUSH";
+    const action = 'PUSH';
     const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
@@ -93,15 +93,15 @@ function createMemoryHistory(props = {}) {
   function replace(path, state) {
     warning(
       !(
-        typeof path === "object" &&
+        typeof path === 'object' &&
         path.state !== undefined &&
         state !== undefined
       ),
-      "You should avoid providing a 2nd state argument to replace when the 1st " +
-        "argument is a location-like object that already has state; it is ignored"
+      'You should avoid providing a 2nd state argument to replace when the 1st ' +
+        'argument is a location-like object that already has state; it is ignored'
     );
 
-    const action = "REPLACE";
+    const action = 'REPLACE';
     const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
@@ -121,7 +121,7 @@ function createMemoryHistory(props = {}) {
   function go(n) {
     const nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
 
-    const action = "POP";
+    const action = 'POP';
     const location = history.entries[nextIndex];
 
     transitionManager.confirmTransitionTo(
@@ -167,7 +167,7 @@ function createMemoryHistory(props = {}) {
 
   const history = {
     length: entries.length,
-    action: "POP",
+    action: 'POP',
     location: entries[index],
     index,
     entries,

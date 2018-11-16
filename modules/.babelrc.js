@@ -1,4 +1,0 @@
-module.exports = {
-  presets: [["@babel/env", { loose: true }]],
-  plugins: ["dev-expression", "@babel/transform-object-assign"]
-};

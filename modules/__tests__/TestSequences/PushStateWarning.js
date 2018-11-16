@@ -1,26 +1,26 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   const steps = [
     location => {
       expect(location).toMatchObject({
-        pathname: "/"
+        pathname: '/'
       });
 
-      history.push("/home", { the: "state" });
+      history.push('/home', { the: 'state' });
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe('PUSH');
       expect(location).toMatchObject({
-        pathname: "/home",
+        pathname: '/home',
         state: undefined
       });
 
       // We should see a warning message.
       expect(warningMessage).toMatch(
-        "Hash history cannot push state; it is ignored"
+        'Hash history cannot push state; it is ignored'
       );
     }
   ];

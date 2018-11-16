@@ -1,3 +1,3 @@
-"use strict";
-require("./warnAboutDeprecatedCJSRequire.js")("createHashHistory");
-module.exports = require("./index.js").createHashHistory;
+'use strict';
+require('./warnAboutDeprecatedCJSRequire.js')('createHashHistory');
+module.exports = require('./index.js').createHashHistory;

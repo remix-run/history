@@ -1,6 +1,6 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   let unblock,
@@ -8,19 +8,19 @@ export default function(history, done) {
   const steps = [
     location => {
       expect(location).toMatchObject({
-        pathname: "/"
+        pathname: '/'
       });
 
       unblock = history.block(() => {
         hookWasCalled = true;
       });
 
-      window.location.hash = "something-new";
+      window.location.hash = 'something-new';
     },
     location => {
       expect(location).toMatchObject({
-        pathname: "/",
-        hash: "#something-new"
+        pathname: '/',
+        hash: '#something-new'
       });
 
       expect(hookWasCalled).toBe(true);

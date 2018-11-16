@@ -1,6 +1,6 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   const steps = [
