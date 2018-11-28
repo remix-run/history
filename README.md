@@ -200,6 +200,21 @@ history.block((location, action) => {
 unblock();
 ```
 
+Also, you may block specific routes by returning true or false from the block function.
+
+```js
+const unblock = history.block((location, action) => {
+  if (action === 'POP' && location.pathname === '/hello') {
+    // Unblock route from transitioting without showing a popup.
+    return false;
+  }
+  // Let the route change.
+  return true;
+});
+
+unblock();
+```
+
 **Note:** You'll need to provide a `getUserConfirmation` function to use this feature with `createMemoryHistory` (see below).
 
 ### Customizing the Confirm Dialog
