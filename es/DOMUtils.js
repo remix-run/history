@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import warnAboutDeprecatedESMImport from "./warnAboutDeprecatedESMImport.js";
-warnAboutDeprecatedESMImport("DOMUtils");
+import warnAboutDeprecatedESMImport from './warnAboutDeprecatedESMImport.js';
+warnAboutDeprecatedESMImport('DOMUtils');
 
-import { DOMUtils } from "../esm/history.js";
+import { DOMUtils } from '../esm/history.js';
 export default DOMUtils;

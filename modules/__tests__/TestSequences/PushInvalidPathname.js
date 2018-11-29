@@ -1,12 +1,12 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   const steps = [
     () => {
       expect(() => {
-        history.push("/hello%");
+        history.push('/hello%');
       }).toThrow(
         'Pathname "/hello%" could not be decoded. This is likely caused by an invalid percent-encoding.'
       );

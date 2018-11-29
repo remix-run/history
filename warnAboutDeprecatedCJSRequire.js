@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
 var printWarning = function() {};
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   printWarning = function(format, subs) {
     var index = 0;
     var message =
-      "Warning: " +
+      'Warning: ' +
       (subs.length > 0
         ? format.replace(/%s/g, function() {
             return subs[index++];
           })
         : format);
 
-    if (typeof console !== "undefined") {
+    if (typeof console !== 'undefined') {
       console.error(message);
     }
 
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV !== "production") {
 module.exports = function(member) {
   printWarning(
     'Please use `require("history").%s` instead of `require("history/%s")`. ' +
-      "Support for the latter will be removed in the next major release.",
+      'Support for the latter will be removed in the next major release.',
     [member, member]
   );
 };

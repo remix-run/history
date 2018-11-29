@@ -15,7 +15,7 @@ export default function execSteps(steps, history, done) {
     try {
       const nextStep = steps[index++];
 
-      if (!nextStep) throw new Error("Test is missing step " + index);
+      if (!nextStep) throw new Error('Test is missing step ' + index);
 
       nextStep(...args);
 

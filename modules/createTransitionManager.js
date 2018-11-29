@@ -1,10 +1,10 @@
-import warning from "tiny-warning";
+import warning from 'tiny-warning';
 
 function createTransitionManager() {
   let prompt = null;
 
   function setPrompt(nextPrompt) {
-    warning(prompt == null, "A history supports only one prompt at a time");
+    warning(prompt == null, 'A history supports only one prompt at a time');
 
     prompt = nextPrompt;
 
@@ -24,20 +24,20 @@ function createTransitionManager() {
     // best way to handle this.
     if (prompt != null) {
       const result =
-        typeof prompt === "function" ? prompt(location, action) : prompt;
+        typeof prompt === 'function' ? prompt(location, action) : prompt;
 
       if (typeof result === "boolean") {
         // Return false from a transition hook to cancel the transition.
         callback(result);
         return
       } else if (result)  {
-        if (typeof getUserConfirmation === "function") {
+        if (typeof getUserConfirmation === 'function') {
           getUserConfirmation(result, callback);
           return
         } else {
           warning(
             false,
-            "A history needs a getUserConfirmation function in order to use a prompt message"
+            'A history needs a getUserConfirmation function in order to use a prompt message'
           );
         }
       }

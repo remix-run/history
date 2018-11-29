@@ -1,6 +1,6 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   let prevLocation;
@@ -8,25 +8,25 @@ export default function(history, done) {
   const steps = [
     location => {
       expect(location).toMatchObject({
-        pathname: "/"
+        pathname: '/'
       });
 
-      history.replace("/home");
+      history.replace('/home');
     },
     (location, action) => {
-      expect(action).toBe("REPLACE");
+      expect(action).toBe('REPLACE');
       expect(location).toMatchObject({
-        pathname: "/home"
+        pathname: '/home'
       });
 
       prevLocation = location;
 
-      history.replace("/home");
+      history.replace('/home');
     },
     (location, action) => {
-      expect(action).toBe("REPLACE");
+      expect(action).toBe('REPLACE');
       expect(location).toMatchObject({
-        pathname: "/home"
+        pathname: '/home'
       });
 
       expect(location).not.toBe(prevLocation);

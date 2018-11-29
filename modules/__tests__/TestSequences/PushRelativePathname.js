@@ -1,32 +1,32 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   const steps = [
     location => {
       expect(location).toMatchObject({
-        pathname: "/"
+        pathname: '/'
       });
 
-      history.push("/the/path?the=query#the-hash");
+      history.push('/the/path?the=query#the-hash');
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe('PUSH');
       expect(location).toMatchObject({
-        pathname: "/the/path",
-        search: "?the=query",
-        hash: "#the-hash"
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
       });
 
-      history.push("../other/path?another=query#another-hash");
+      history.push('../other/path?another=query#another-hash');
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe('PUSH');
       expect(location).toMatchObject({
-        pathname: "/other/path",
-        search: "?another=query",
-        hash: "#another-hash"
+        pathname: '/other/path',
+        search: '?another=query',
+        hash: '#another-hash'
       });
     }
   ];

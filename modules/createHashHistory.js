@@ -1,7 +1,7 @@
-import warning from "tiny-warning";
-import invariant from "tiny-invariant";
+import warning from 'tiny-warning';
+import invariant from 'tiny-invariant';
 
-import { createLocation, locationsAreEqual } from "./LocationUtils";
+import { createLocation, locationsAreEqual } from './LocationUtils';
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -9,21 +9,21 @@ import {
   hasBasename,
   stripBasename,
   createPath
-} from "./PathUtils";
-import createTransitionManager from "./createTransitionManager";
+} from './PathUtils';
+import createTransitionManager from './createTransitionManager';
 import {
   canUseDOM,
   getConfirmation,
   supportsGoWithoutReloadUsingHash
-} from "./DOMUtils";
+} from './DOMUtils';
 
-const HashChangeEvent = "hashchange";
+const HashChangeEvent = 'hashchange';
 
 const HashPathCoders = {
   hashbang: {
     encodePath: path =>
-      path.charAt(0) === "!" ? path : "!/" + stripLeadingSlash(path),
-    decodePath: path => (path.charAt(0) === "!" ? path.substr(1) : path)
+      path.charAt(0) === '!' ? path : '!/' + stripLeadingSlash(path),
+    decodePath: path => (path.charAt(0) === '!' ? path.substr(1) : path)
   },
   noslash: {
     encodePath: stripLeadingSlash,
@@ -39,8 +39,8 @@ function getHashPath() {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
   const href = window.location.href;
-  const hashIndex = href.indexOf("#");
-  return hashIndex === -1 ? "" : href.substring(hashIndex + 1);
+  const hashIndex = href.indexOf('#');
+  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
 }
 
 function pushHashPath(path) {
@@ -48,22 +48,22 @@ function pushHashPath(path) {
 }
 
 function replaceHashPath(path) {
-  const hashIndex = window.location.href.indexOf("#");
+  const hashIndex = window.location.href.indexOf('#');
   window.location.replace(
-    window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + "#" + path
+    window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
   );
 }
 
 function createHashHistory(props = {}) {
-  invariant(canUseDOM, "Hash history needs a DOM");
+  invariant(canUseDOM, 'Hash history needs a DOM');
 
   const globalHistory = window.history;
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash();
 
-  const { getUserConfirmation = getConfirmation, hashType = "slash" } = props;
+  const { getUserConfirmation = getConfirmation, hashType = 'slash' } = props;
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
-    : "";
+    : '';
 
   const { encodePath, decodePath } = HashPathCoders[hashType];
 
@@ -72,7 +72,7 @@ function createHashHistory(props = {}) {
 
     warning(
       !basename || hasBasename(path, basename),
-      "You are attempting to use a basename on a page whose URL path does not begin " +
+      'You are attempting to use a basename on a page whose URL path does not begin ' +
         'with the basename. Expected path "' +
         path +
         '" to begin with "' +
@@ -122,7 +122,7 @@ function createHashHistory(props = {}) {
       forceNextPop = false;
       setState();
     } else {
-      const action = "POP";
+      const action = 'POP';
 
       transitionManager.confirmTransitionTo(
         location,
@@ -174,16 +174,16 @@ function createHashHistory(props = {}) {
   // Public interface
 
   function createHref(location) {
-    return "#" + encodePath(basename + createPath(location));
+    return '#' + encodePath(basename + createPath(location));
   }
 
   function push(path, state) {
     warning(
       state === undefined,
-      "Hash history cannot push state; it is ignored"
+      'Hash history cannot push state; it is ignored'
     );
 
-    const action = "PUSH";
+    const action = 'PUSH';
     const location = createLocation(
       path,
       undefined,
@@ -222,7 +222,7 @@ function createHashHistory(props = {}) {
         } else {
           warning(
             false,
-            "Hash history cannot PUSH the same path; a new entry will not be added to the history stack"
+            'Hash history cannot PUSH the same path; a new entry will not be added to the history stack'
           );
 
           setState();
@@ -234,10 +234,10 @@ function createHashHistory(props = {}) {
   function replace(path, state) {
     warning(
       state === undefined,
-      "Hash history cannot replace state; it is ignored"
+      'Hash history cannot replace state; it is ignored'
     );
 
-    const action = "REPLACE";
+    const action = 'REPLACE';
     const location = createLocation(
       path,
       undefined,
@@ -276,7 +276,7 @@ function createHashHistory(props = {}) {
   function go(n) {
     warning(
       canGoWithoutReload,
-      "Hash history go(n) causes a full page reload in this browser"
+      'Hash history go(n) causes a full page reload in this browser'
     );
 
     globalHistory.go(n);
@@ -334,7 +334,7 @@ function createHashHistory(props = {}) {
 
   const history = {
     length: globalHistory.length,
-    action: "POP",
+    action: 'POP',
     location: initialLocation,
     createHref,
     push,

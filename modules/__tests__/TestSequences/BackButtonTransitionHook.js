@@ -1,6 +1,6 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   let unblock,
@@ -8,15 +8,15 @@ export default function(history, done) {
   const steps = [
     location => {
       expect(location).toMatchObject({
-        pathname: "/"
+        pathname: '/'
       });
 
-      history.push("/home");
+      history.push('/home');
     },
     (location, action) => {
-      expect(action).toBe("PUSH");
+      expect(action).toBe('PUSH');
       expect(location).toMatchObject({
-        pathname: "/home"
+        pathname: '/home'
       });
 
       unblock = history.block(() => {
@@ -26,9 +26,9 @@ export default function(history, done) {
       window.history.go(-1);
     },
     (location, action) => {
-      expect(action).toBe("POP");
+      expect(action).toBe('POP');
       expect(location).toMatchObject({
-        pathname: "/"
+        pathname: '/'
       });
 
       expect(hookWasCalled).toBe(true);

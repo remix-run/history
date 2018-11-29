@@ -1,26 +1,26 @@
-import expect from "expect";
+import expect from 'expect';
 
-import execSteps from "./execSteps";
+import execSteps from './execSteps';
 
 export default function(history, done) {
   const steps = [
     location => {
       expect(location).toMatchObject({
-        pathname: "/"
+        pathname: '/'
       });
 
-      history.replace("/home", { the: "state" });
+      history.replace('/home', { the: 'state' });
     },
     (location, action) => {
-      expect(action).toBe("REPLACE");
+      expect(action).toBe('REPLACE');
       expect(location).toMatchObject({
-        pathname: "/home",
+        pathname: '/home',
         state: undefined
       });
 
       // We should see a warning message.
       expect(warningMessage).toMatch(
-        "Hash history cannot replace state; it is ignored"
+        'Hash history cannot replace state; it is ignored'
       );
     }
   ];
