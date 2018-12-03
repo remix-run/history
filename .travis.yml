@@ -1,18 +1,13 @@
 sudo: false
 language: node_js
-cache:
-  directories:
-  - node_modules
-node_js:
-- '10'
+node_js: node
+cache: npm
 env:
-- TEST_ENV=cjs
-- TEST_ENV=umd
+- TEST_ENV=cjs BUILD_ENV=cjs
+- TEST_ENV=umd BUILD_ENV=umd
 - TEST_ENV=source
-install:
-- npm ci
 before_script:
-- npm run build
+- ([[ -z "$BUILD_ENV" ]] || npm run build)
 script:
 - npm run lint
 - npm test

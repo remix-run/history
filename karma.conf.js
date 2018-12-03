@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var projectName = require('./package').name;
 
-module.exports = config => {
+module.exports = function(config) {
   var customLaunchers = {
     BS_Chrome: {
       base: 'BrowserStack',
@@ -55,7 +55,7 @@ module.exports = config => {
     }
   };
 
-  let historyAlias;
+  var historyAlias;
   switch (process.env.TEST_ENV) {
     case 'cjs':
       historyAlias = 'cjs/history.js';
@@ -69,17 +69,13 @@ module.exports = config => {
 
   config.set({
     customLaunchers: customLaunchers,
-
     browsers: ['Chrome'],
     frameworks: ['mocha'],
     reporters: ['mocha'],
-
     files: ['tests.webpack.js'],
-
     preprocessors: {
       'tests.webpack.js': ['webpack', 'sourcemap']
     },
-
     webpack: {
       devtool: 'inline-source-map',
       module: {
@@ -102,7 +98,6 @@ module.exports = config => {
         })
       ]
     },
-
     webpackServer: {
       noInfo: true
     }
@@ -112,18 +107,16 @@ module.exports = config => {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = ['dots'];
     config.concurrency = 2;
-
     config.browserDisconnectTimeout = 10000;
     config.browserDisconnectTolerance = 3;
 
     if (process.env.TRAVIS) {
+      config.singleRun = true;
       config.browserStack = {
         project: projectName,
         build: process.env.TRAVIS_BUILD_NUMBER,
         name: process.env.TRAVIS_JOB_NUMBER
       };
-
-      config.singleRun = true;
     } else {
       config.browserStack = {
         project: projectName
