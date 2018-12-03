@@ -23,5 +23,5 @@ jobs:
       email: npm@mjackson.me
       api_key:
         secure: wWvhk1a1vBoPV259K9/rIdPD4rWoNrfO8ZVAKp/h6OQM43pBgDmBIkx+Ac9J4vfsva6evtaxFUr61QIH22dvJxvabUH7j8uTKMYbFa4rU/4fZ7+SLmTwwi6avEacHsv5Z0hBh9hhFCe+x8nIhhv2TZ5tc6ipVgCNxu+LK9nuhZdspAJ+/oVgqfU/Yd1V0ISKktgI+j6VKiaYFfW4xvn0qF/vSopa3I2arWZTctECwSwra1NST7CLG3XPIEWYyo19sEqtrRI2SAfY04M4wfFxpwRI7y36gurVjOpr7mEQAY9SqqnkCwLUKzOXBIOJN0w4OPCqBuuAtPkHjcIEaF3DnL/UmOpUXPVODas3g9Luu1RD9t+3Mkk4t/0Tgcv8Z02b7Vh4LRqodQ97hcp5xRqrKJvXlpgOnxxR+Aj4BGAlsx6rBrJVFoahYd7O8eHv8KVNrm6g23tCkkbz8L+n7ONgbwOWnqcgA00BcmDzeP4XoN29xBNVBDluOQmTQfQqE21QGOs9lYGVvRLs3VbA208hIGsJcFjbp65FFHGE+yRYIFdjWHcEXMzfwy9xptMr3o4I352adSJelrQIIilPsBjRN9eW4Ascdea+Sfq2VpZ06BnfzBx11cfCrgMuO28kIiVcfpNPwLrB1+QMvCXLDk99Czh+2+bK+4CtNSl4rsdl4SU=
-        on:
-          tags: true
+      on:
+        tags: true
