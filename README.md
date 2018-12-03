@@ -17,16 +17,16 @@ Then with a module bundler like [webpack](https://webpack.github.io/), use as yo
 
 ```js
 // using ES6 modules
-import { createBrowserHistory } from "history";
+import { createBrowserHistory } from 'history';
 
 // using CommonJS modules
-var createBrowserHistory = require("history").createBrowserHistory;
+var createBrowserHistory = require('history').createBrowserHistory;
 ```
 
 The UMD build is also available on [unpkg](https://unpkg.com):
 
 ```html
-<script src="https://unpkg.com/history/umd/history.min.js"></script>
+<script src="https://unpkg.com/history"></script>
 ```
 
 You can find the library on `window.History`.
@@ -44,7 +44,7 @@ Depending on the method you want to use to keep track of history, you'll `import
 Basic usage looks like this:
 
 ```js
-import { createBrowserHistory } from "history";
+import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory();
 
@@ -58,7 +58,7 @@ const unlisten = history.listen((location, action) => {
 });
 
 // Use push, replace, and go to navigate around.
-history.push("/home", { some: "state" });
+history.push('/home', { some: 'state' });
 
 // To stop listening, call the function returned from listen().
 unlisten();
@@ -68,7 +68,7 @@ The options that each `create` method takes, along with its default values, are:
 
 ```js
 createBrowserHistory({
-  basename: "", // The base URL of the app (see below)
+  basename: '', // The base URL of the app (see below)
   forceRefresh: false, // Set true to force full page refreshes
   keyLength: 6, // The length of location.key
   // A function to use to confirm navigation with the user (see below)
@@ -76,7 +76,7 @@ createBrowserHistory({
 });
 
 createMemoryHistory({
-  initialEntries: ["/"], // The initial URLs in the history stack
+  initialEntries: ['/'], // The initial URLs in the history stack
   initialIndex: 0, // The starting index in the history stack
   keyLength: 6, // The length of location.key
   // A function to use to confirm navigation with the user. Required
@@ -85,8 +85,8 @@ createMemoryHistory({
 });
 
 createHashHistory({
-  basename: "", // The base URL of the app (see below)
-  hashType: "slash", // The hash type to use (see below)
+  basename: '', // The base URL of the app (see below)
+  hashType: 'slash', // The hash type to use (see below)
   // A function to use to confirm navigation with the user (see below)
   getUserConfirmation: (message, callback) => callback(window.confirm(message))
 });
@@ -129,6 +129,7 @@ Locations may also have the following properties:
 The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got to the current URL.
 
 #### Cleaning up
+
 When you attach a listener using `history.listen`, it returns a function that can be used to remove the listener, which can then be invoked in cleanup logic:
 
 ```js
@@ -155,18 +156,18 @@ When using `push` or `replace` you can either specify both the URL path and stat
 
 ```js
 // Push a new entry onto the history stack.
-history.push("/home");
+history.push('/home');
 
 // Push a new entry onto the history stack with a query string
 // and some state. Location state does not appear in the URL.
-history.push("/home?the=query", { some: "state" });
+history.push('/home?the=query', { some: 'state' });
 
 // If you prefer, use a single location-like object to specify both
 // the URL and state. This is equivalent to the example above.
 history.push({
-  pathname: "/home",
-  search: "?the=query",
-  state: { some: "state" }
+  pathname: '/home',
+  search: '?the=query',
+  state: { some: 'state' }
 });
 
 // Go back to the previous history entry. The following
@@ -184,7 +185,7 @@ history.goBack();
 ```js
 // Register a simple prompt message that will be shown the
 // user before they navigate away from the current page.
-const unblock = history.block("Are you sure you want to leave this page?");
+const unblock = history.block('Are you sure you want to leave this page?');
 
 // Or use a function that returns the message when it's needed.
 history.block((location, action) => {
@@ -193,7 +194,7 @@ history.block((location, action) => {
 
   // A common use case is to prevent the user from leaving the
   // page if there's a form they haven't submitted yet.
-  if (input.value !== "") return "Are you sure you want to leave this page?";
+  if (input.value !== '') return 'Are you sure you want to leave this page?';
 });
 
 // To stop blocking transitions, call the function returned from block().
@@ -222,14 +223,14 @@ If all the URLs in your app are relative to some other "base" URL, use the `base
 
 ```js
 const history = createHistory({
-  basename: "/the/base"
+  basename: '/the/base'
 });
 
 history.listen(location => {
   console.log(location.pathname); // /home
 });
 
-history.push("/home"); // URL is now /the/base/home
+history.push('/home'); // URL is now /the/base/home
 ```
 
 **Note:** `basename` is not suppported in `createMemoryHistory`.
@@ -250,22 +251,22 @@ By default `createHashHistory` uses a leading slash in hash-based URLs. You can 
 
 ```js
 const history = createHashHistory({
-  hashType: "slash" // the default
+  hashType: 'slash' // the default
 });
 
-history.push("/home"); // window.location.hash is #/home
+history.push('/home'); // window.location.hash is #/home
 
 const history = createHashHistory({
-  hashType: "noslash" // Omit the leading slash
+  hashType: 'noslash' // Omit the leading slash
 });
 
-history.push("/home"); // window.location.hash is #home
+history.push('/home'); // window.location.hash is #home
 
 const history = createHashHistory({
-  hashType: "hashbang" // Google's legacy AJAX URL format
+  hashType: 'hashbang' // Google's legacy AJAX URL format
 });
 
-history.push("/home"); // window.location.hash is #!/home
+history.push('/home'); // window.location.hash is #!/home
 ```
 
 ## About

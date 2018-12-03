@@ -7,6 +7,7 @@
   "author": "Michael Jackson",
   "main": "index.js",
   "module": "esm/history.js",
+  "unpkg": "umd/history.js",
   "files": [
     "DOMUtils.js",
     "ExecutionEnvironment.js",
