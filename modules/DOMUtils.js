@@ -5,7 +5,7 @@ export const canUseDOM = !!(
 );
 
 export function getConfirmation(message, callback) {
-  callback(window.confirm(message)); // eslint-disable-line no-alert
+  return typeof callback === 'function' && callback(window.confirm(message)); // eslint-disable-line no-alert
 }
 
 /**
