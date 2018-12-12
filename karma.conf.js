@@ -63,6 +63,7 @@ module.exports = function(config) {
     case 'umd':
       historyAlias = 'umd/history.js';
       break;
+    case 'source':
     default:
       historyAlias = 'modules/index.js';
   }
