@@ -210,10 +210,7 @@ function createHashHistory(props = {}) {
           pushHashPath(encodedPath);
 
           const prevIndex = allPaths.lastIndexOf(createPath(history.location));
-          const nextPaths = allPaths.slice(
-            0,
-            prevIndex === -1 ? 0 : prevIndex + 1
-          );
+          const nextPaths = allPaths.slice( 0,  prevIndex + 1 );
 
           nextPaths.push(path);
           allPaths = nextPaths;
