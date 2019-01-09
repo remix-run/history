@@ -183,10 +183,7 @@ function createBrowserHistory(props = {}) {
             window.location.href = href;
           } else {
             const prevIndex = allKeys.indexOf(history.location.key);
-            const nextKeys = allKeys.slice(
-              0,
-              prevIndex === -1 ? 0 : prevIndex + 1
-            );
+            const nextKeys = allKeys.slice( 0,prevIndex + 1 );
 
             nextKeys.push(location.key);
             allKeys = nextKeys;
