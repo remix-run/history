@@ -131,24 +131,6 @@ describe('createLocation', () => {
     });
   });
 
-  describe('with a path that cannot be decoded', () => {
-    describe('given as a string', () => {
-      it('throws custom message when decodeURI throws a URIError', () => {
-        expect(() => {
-          createLocation('/test%');
-        }).toThrow('Pathname "/test%" could not be decoded.');
-      });
-    });
-
-    describe('given as an object', () => {
-      it('throws custom message when decodeURI throws a URIError', () => {
-        expect(() => {
-          createLocation({ pathname: '/test%' });
-        }).toThrow('Pathname "/test%" could not be decoded.');
-      });
-    });
-  });
-
   describe('key', () => {
     it('has a key property if a key is provided', () => {
       const location = createLocation('/the/path', undefined, 'key');

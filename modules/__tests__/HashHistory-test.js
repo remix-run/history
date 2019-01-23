@@ -67,14 +67,8 @@ describe('a hash history', () => {
     });
 
     describe('push with an encoded path string', () => {
-      it('creates a location object with decoded pathname', done => {
+      it('creates a location object with encoded pathname', done => {
         TestSequences.PushEncodedLocation(history, done);
-      });
-    });
-
-    describe('push with an invalid path string (bad percent-encoding)', () => {
-      it('throws an error', done => {
-        TestSequences.PushInvalidPathname(history, done);
       });
     });
 
@@ -96,15 +90,9 @@ describe('a hash history', () => {
       });
     });
 
-    describe('replace  with an invalid path string (bad percent-encoding)', () => {
-      it('throws an error', done => {
-        TestSequences.ReplaceInvalidPathname(history, done);
-      });
-    });
-
     describe('location created by encoded and unencoded pathname', () => {
       it('produces the same location.pathname', done => {
-        TestSequences.LocationPathnameAlwaysDecoded(history, done);
+        TestSequences.LocationPathnameAlwaysSame(history, done);
       });
     });
 
