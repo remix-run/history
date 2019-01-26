@@ -336,6 +336,7 @@ function createHashHistory(props = {}) {
     length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
+    basename,
     createHref,
     push,
     replace,

@@ -268,5 +268,10 @@ describe('a hash history', () => {
       const history = createHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
     });
+
+    it('is available as key on history', () => {
+      const history = createHistory({ basename: '/prefix' });
+      expect(history.basename).toEqual('/prefix');
+    });
   });
 });
