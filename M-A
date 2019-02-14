@@ -1,0 +1,98 @@
+JavaScript was created by Brendan Eich in 1995 during his time at 
+Netscape Communications. It was inspired by Java, Scheme and Self.
+Netscape, for a time, made the best browser in the world and enjoyed 
+market dominance.
+
+In late 1995, when Microsoft cottoned-on to the competitive threat the 
+Web posed, the Internet Explorer project was started in an all-out 
+attempt to wrestle control of the emerging platform from Netscape.
+
+In so doing Microsoft became a mortal threat, compelling Netscape to 
+respond. First, they started a standardization process to prevent 
+Microsoft gaining control of the JavaScript language. Second, they 
+partnered with Sun to leverage their shared interest in breaking the 
+Microsoft monopoly.
+
+Sun began development of Java in 1990 in an attempt to write a language 
+for “smart appliances”. This approach floundered and in 1994, Sun 
+regrouped and set sights on the Web as the delivery platform of choice.
+So the Netscape/Sun partnership meant Sun acquired the use of a 
+competitive browser and a delivery system for their strategic 
+technology.
+
+Netscape, on the other hand found a powerful ally against Microsoft. 
+They also aimed to out-manoeuvre Microsoft by being the official browser 
+of the highly anticipated platform that was Java.
+
+Brendan Eich has said that with Sun on board, they decided to surf the 
+tidal wave of hype surrounding Java and position JavaScript as the 
+companion language to Java, in the same way Visual Basic was to C++. So 
+the name was a straightforward marketing ploy to gain acceptance.
+
+Netscape’s Mocha (later JavaScript) aimed to turn the web into a 
+full-blown application platform. Furthermore, when used together with 
+their LiveWire application server product, it would enable isomorphic 
+development, with the same language used on both client and server.
+
+If this sounds familiar, it is because this was exactly what Sun was 
+attempting to pull off with Java. At the time however, the Web was very 
+limited when compared to Java; for example, drawing pixels was not 
+possible in JavaScript as it is now with canvas. So Sun (erroneously, I 
+believe) never saw the language as a competitor and the alliance held.
+
+Unfortunately for JavaScript, its early market positioning outlived its 
+usefulness and later became a brake on market acceptance as it emerged 
+as a viable technology in its own right.
+
+So JavaScript was conceived of as a scripting language for the Web for 
+both client and server side. It was then quickly re-positioned as a Web 
+“companion” for Java. Unfortunately, together with the speed of its 
+creation, this meant the inclusion of a number characteristics that 
+would later be ridiculed. Such as:
+
+automatic semicolon insertion (ASI)
+automatic type coercion when using common operators like ‘==’
+lack of block scoping
+lack of classes
+lack of dedicated modularisation capability
+unusual inheritance (prototypical)
+As we will see in later posts, many of these criticisms were often 
+expressions of unfamiliarity or syntactic “taste” by programmers more 
+familiar with other languages.
+
+Summary
+JavaScript has a rich and fascinating history. It continues to be one of 
+the most hated languages on the planet, often for reasons that have long 
+since faded into irrelevance.
+
+LiveWire and the powerful nature of the language betray the true 
+ambitions of Andreessen and the Netscape team, foreshadowing a possible 
+future beyond being just a Java companion.
+
+The huge companies that dominate the technical landscape have repeatedly 
+tried to supplant JavaScript. First Sun, then Microsoft (VBScript), then 
+Adobe, then Microsoft again (Silverlight), then Google, and then, 
+arguably with TypeScript, Microsoft yet again. And yet JavaScript 
+continues to thrive.
+
+JavaScript has become the de-facto standard programming language of the 
+Web, not only because of its first-mover advantage, but because it is 
+open, standardized, and, most importantly a very good language; 
+well-suited to the Web with its dynamic nature and tight integration 
+with the DOM.
+
+This series continues with Value types, reference types and scope in 
+JavaScript.
+
+My name is Ben Aston and thank you for reading my post today. I am a 
+London-based JavaScript consultant, available for short-term consultancy 
+globally. I can be contacted at ben@bj.ma.
+
+If you would like to further develop your knowledge of JavaScript you 
+might be interested in my hands-on training course. Full details can be 
+found online at www.learnjavascript.london.
+
+If you enjoyed this piece, please let me know by clicking the 
+“recommend” button below.
+
+You may also be interested in my post on closures in JavaScript.
