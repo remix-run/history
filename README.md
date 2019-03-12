@@ -269,6 +269,10 @@ const history = createHashHistory({
 history.push('/home'); // window.location.hash is #!/home
 ```
 
+## Known issues
+
+The percent character (%) is not properly handled by the `history` component, and there is no known workaround to handle URLs that include a correctly formed %25 escape sequence as of the latest version. See https://github.com/ReactTraining/history/issues/505 regarding this specific issue.
+
 ## About
 
 `history` is developed and maintained by [React Training](https://reacttraining.com). If
