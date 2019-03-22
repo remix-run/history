@@ -1,5 +1,6 @@
 import warning from 'tiny-warning';
 import invariant from 'tiny-invariant';
+import encodeURL from "encodeurl";
 
 import { createLocation, locationsAreEqual } from './LocationUtils';
 import {
@@ -14,8 +15,7 @@ import createTransitionManager from './createTransitionManager';
 import {
   canUseDOM,
   getConfirmation,
-  supportsGoWithoutReloadUsingHash,
-  encodedPathname
+  supportsGoWithoutReloadUsingHash
 } from './DOMUtils';
 
 const HashChangeEvent = 'hashchange';
@@ -61,7 +61,7 @@ function createHashHistory(props = {}) {
   const globalHistory = window.history;
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash();
 
-  const { getUserConfirmation = getConfirmation, hashType = 'slash', transformPathname = encodedPathname } = props;
+  const { getUserConfirmation = getConfirmation, hashType = 'slash', transformPathname = encodeURL } = props;
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
     : '';

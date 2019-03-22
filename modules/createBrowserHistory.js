@@ -1,5 +1,6 @@
 import warning from 'tiny-warning';
 import invariant from 'tiny-invariant';
+import encodeURL from "encodeurl";
 
 import { createLocation } from './LocationUtils';
 import {
@@ -15,8 +16,7 @@ import {
   getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
-  isExtraneousPopstateEvent,
-  encodedPathname
+  isExtraneousPopstateEvent
 } from './DOMUtils';
 
 const PopStateEvent = 'popstate';
@@ -47,7 +47,7 @@ function createBrowserHistory(props = {}) {
     forceRefresh = false,
     getUserConfirmation = getConfirmation,
     keyLength = 6,
-    transformPathname = encodedPathname
+    transformPathname = encodeURL
   } = props;
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
