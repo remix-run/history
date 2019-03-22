@@ -8,6 +8,10 @@ function clamp(n, lowerBound, upperBound) {
   return Math.min(Math.max(n, lowerBound), upperBound);
 }
 
+function DEFAULT_TRANSFORM_PATHNAME(pathname) {
+  return pathname;
+}
+
 /**
  * Creates a history object that stores locations in memory.
  */
@@ -16,7 +20,8 @@ function createMemoryHistory(props = {}) {
     getUserConfirmation,
     initialEntries = ['/'],
     initialIndex = 0,
-    keyLength = 6
+    keyLength = 6,
+    transformPathname = DEFAULT_TRANSFORM_PATHNAME
   } = props;
 
   const transitionManager = createTransitionManager();
@@ -37,8 +42,8 @@ function createMemoryHistory(props = {}) {
   const entries = initialEntries.map(
     entry =>
       typeof entry === 'string'
-        ? createLocation(entry, undefined, createKey())
-        : createLocation(entry, undefined, entry.key || createKey())
+        ? createLocation(entry, transformPathname, undefined, createKey())
+        : createLocation(entry, transformPathname, undefined, entry.key || createKey())
   );
 
   // Public interface
@@ -57,7 +62,7 @@ function createMemoryHistory(props = {}) {
     );
 
     const action = 'PUSH';
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, transformPathname, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -102,7 +107,7 @@ function createMemoryHistory(props = {}) {
     );
 
     const action = 'REPLACE';
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, transformPathname, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,

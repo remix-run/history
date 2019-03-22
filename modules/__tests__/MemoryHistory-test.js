@@ -1,3 +1,5 @@
+import expect from 'expect';
+
 import { createMemoryHistory as createHistory } from 'history';
 
 import * as TestSequences from './TestSequences';
@@ -51,24 +53,6 @@ describe('a memory history', () => {
       });
     });
 
-    describe('push with a unicode path string', () => {
-      it('creates a location with decoded properties', done => {
-        TestSequences.PushUnicodeLocation(history, done);
-      });
-    });
-
-    describe('push with an encoded path string', () => {
-      it('creates a location object with decoded pathname', done => {
-        TestSequences.PushEncodedLocation(history, done);
-      });
-    });
-
-    describe('push with an invalid path string (bad percent-encoding)', () => {
-      it('throws an error', done => {
-        TestSequences.PushInvalidPathname(history, done);
-      });
-    });
-
     describe('replace a new path', () => {
       it('calls change listeners with the new location', done => {
         TestSequences.ReplaceNewLocation(history, done);
@@ -84,24 +68,6 @@ describe('a memory history', () => {
     describe('replace state', () => {
       it('calls change listeners with the new location', done => {
         TestSequences.ReplaceState(history, done);
-      });
-    });
-
-    describe('replace  with an invalid path string (bad percent-encoding)', () => {
-      it('throws an error', done => {
-        TestSequences.ReplaceInvalidPathname(history, done);
-      });
-    });
-
-    describe('location created by encoded and unencoded pathname', () => {
-      it('produces the same location.pathname', done => {
-        TestSequences.LocationPathnameAlwaysDecoded(history, done);
-      });
-    });
-
-    describe('location created with encoded/unencoded reserved characters', () => {
-      it('produces different location objects', done => {
-        TestSequences.EncodedReservedCharacters(history, done);
       });
     });
 
@@ -130,6 +96,33 @@ describe('a memory history', () => {
     });
   });
 
+  describe('pathname encoding', () => {
+    describe('with a custom "transformPathname" function', () => {
+      it('creates a location whose pathname is transformed by the transformPathname function', done => {
+        const history = createHistory({
+          transformPathname: pathname => pathname.toUpperCase()
+        })
+        TestSequences.TransformPathname(history, done);
+      });
+    });
+
+    describe('default "transformPathname" function', () => {     
+      it('does not encode unicode characters', () => {
+        window.history.replaceState(null, null, '/');
+        const history = createHistory();
+        history.push('/歴史')
+        expect(history.location.pathname).toEqual('/歴史');
+      });
+      
+      it('does not decode encoded pathnames', () => {
+        window.history.replaceState(null, null, '/');
+        const history = createHistory();
+        history.push('/100%20%25')
+        expect(history.location.pathname).toEqual('/100%20%25');
+      });
+    });
+  });
+  
   describe('that denies all transitions', () => {
     const getUserConfirmation = (_, callback) => callback(false);
 

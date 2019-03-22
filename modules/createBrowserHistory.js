@@ -15,7 +15,8 @@ import {
   getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
-  isExtraneousPopstateEvent
+  isExtraneousPopstateEvent,
+  encodedPathname
 } from './DOMUtils';
 
 const PopStateEvent = 'popstate';
@@ -45,7 +46,8 @@ function createBrowserHistory(props = {}) {
   const {
     forceRefresh = false,
     getUserConfirmation = getConfirmation,
-    keyLength = 6
+    keyLength = 6,
+    transformPathname = encodedPathname
   } = props;
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
@@ -69,7 +71,7 @@ function createBrowserHistory(props = {}) {
 
     if (basename) path = stripBasename(path, basename);
 
-    return createLocation(path, state, key);
+    return createLocation(path, transformPathname, state, key);
   }
 
   function createKey() {
@@ -164,7 +166,7 @@ function createBrowserHistory(props = {}) {
     );
 
     const action = 'PUSH';
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, transformPathname, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -217,7 +219,7 @@ function createBrowserHistory(props = {}) {
     );
 
     const action = 'REPLACE';
-    const location = createLocation(path, state, createKey(), history.location);
+    const location = createLocation(path, transformPathname, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,

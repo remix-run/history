@@ -52,3 +52,14 @@ export function supportsGoWithoutReloadUsingHash() {
 export function isExtraneousPopstateEvent(event) {
   event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
 }
+
+export function encodedPathname(pathname) {
+  const a = document.createElement("a");
+  a.setAttribute("href", pathname);
+  const encoded = a.pathname;
+  if (encoded.charAt(0) !== "/") {
+    // IE11 fix
+    return "/" + encoded;
+  }
+  return encoded;
+}

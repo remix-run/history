@@ -14,7 +14,8 @@ import createTransitionManager from './createTransitionManager';
 import {
   canUseDOM,
   getConfirmation,
-  supportsGoWithoutReloadUsingHash
+  supportsGoWithoutReloadUsingHash,
+  encodedPathname
 } from './DOMUtils';
 
 const HashChangeEvent = 'hashchange';
@@ -60,7 +61,7 @@ function createHashHistory(props = {}) {
   const globalHistory = window.history;
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash();
 
-  const { getUserConfirmation = getConfirmation, hashType = 'slash' } = props;
+  const { getUserConfirmation = getConfirmation, hashType = 'slash', transformPathname = encodedPathname } = props;
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
     : '';
@@ -82,7 +83,7 @@ function createHashHistory(props = {}) {
 
     if (basename) path = stripBasename(path, basename);
 
-    return createLocation(path);
+    return createLocation(path, transformPathname);
   }
 
   const transitionManager = createTransitionManager();
@@ -186,6 +187,7 @@ function createHashHistory(props = {}) {
     const action = 'PUSH';
     const location = createLocation(
       path,
+      transformPathname,
       undefined,
       undefined,
       history.location
@@ -240,6 +242,7 @@ function createHashHistory(props = {}) {
     const action = 'REPLACE';
     const location = createLocation(
       path,
+      transformPathname,
       undefined,
       undefined,
       history.location

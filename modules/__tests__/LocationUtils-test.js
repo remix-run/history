@@ -2,11 +2,15 @@ import expect from 'expect';
 
 import { createLocation } from 'history';
 
+function DEFAULT_TRANSFORM_PATHNAME(pathname) {
+  return pathname;
+}
+
 describe('createLocation', () => {
   describe('with a full path', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('/the/path?the=query#the-hash')).toMatchObject({
+        expect(createLocation('/the/path?the=query#the-hash', DEFAULT_TRANSFORM_PATHNAME)).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
           hash: '#the-hash'
@@ -21,7 +25,7 @@ describe('createLocation', () => {
             pathname: '/the/path',
             search: '?the=query',
             hash: '#the-hash'
-          })
+          }, DEFAULT_TRANSFORM_PATHNAME)
         ).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
@@ -34,7 +38,7 @@ describe('createLocation', () => {
   describe('with a relative path', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('the/path?the=query#the-hash')).toMatchObject({
+        expect(createLocation('the/path?the=query#the-hash', DEFAULT_TRANSFORM_PATHNAME)).toMatchObject({
           pathname: 'the/path',
           search: '?the=query',
           hash: '#the-hash'
@@ -49,7 +53,7 @@ describe('createLocation', () => {
             pathname: 'the/path',
             search: '?the=query',
             hash: '#the-hash'
-          })
+          }, DEFAULT_TRANSFORM_PATHNAME)
         ).toMatchObject({
           pathname: 'the/path',
           search: '?the=query',
@@ -62,7 +66,7 @@ describe('createLocation', () => {
   describe('with a path with no pathname', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('?the=query#the-hash')).toMatchObject({
+        expect(createLocation('?the=query#the-hash', DEFAULT_TRANSFORM_PATHNAME)).toMatchObject({
           pathname: '/',
           search: '?the=query',
           hash: '#the-hash'
@@ -73,7 +77,7 @@ describe('createLocation', () => {
     describe('given as an object', () => {
       it('has the correct properties', () => {
         expect(
-          createLocation({ search: '?the=query', hash: '#the-hash' })
+          createLocation({ search: '?the=query', hash: '#the-hash' }, DEFAULT_TRANSFORM_PATHNAME)
         ).toMatchObject({
           pathname: '/',
           search: '?the=query',
@@ -86,7 +90,7 @@ describe('createLocation', () => {
   describe('with a path with no search', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('/the/path#the-hash')).toMatchObject({
+        expect(createLocation('/the/path#the-hash', DEFAULT_TRANSFORM_PATHNAME)).toMatchObject({
           pathname: '/the/path',
           search: '',
           hash: '#the-hash'
@@ -97,7 +101,7 @@ describe('createLocation', () => {
     describe('given as an object', () => {
       it('has the correct properties', () => {
         expect(
-          createLocation({ pathname: '/the/path', hash: '#the-hash' })
+          createLocation({ pathname: '/the/path', hash: '#the-hash' }, DEFAULT_TRANSFORM_PATHNAME)
         ).toMatchObject({
           pathname: '/the/path',
           search: '',
@@ -110,7 +114,7 @@ describe('createLocation', () => {
   describe('with a path with no hash', () => {
     describe('given as a string', () => {
       it('has the correct properties', () => {
-        expect(createLocation('/the/path?the=query')).toMatchObject({
+        expect(createLocation('/the/path?the=query', DEFAULT_TRANSFORM_PATHNAME)).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
           hash: ''
@@ -121,7 +125,7 @@ describe('createLocation', () => {
     describe('given as an object', () => {
       it('has the correct properties', () => {
         expect(
-          createLocation({ pathname: '/the/path', search: '?the=query' })
+          createLocation({ pathname: '/the/path', search: '?the=query' }, DEFAULT_TRANSFORM_PATHNAME)
         ).toMatchObject({
           pathname: '/the/path',
           search: '?the=query',
@@ -131,32 +135,14 @@ describe('createLocation', () => {
     });
   });
 
-  describe('with a path that cannot be decoded', () => {
-    describe('given as a string', () => {
-      it('throws custom message when decodeURI throws a URIError', () => {
-        expect(() => {
-          createLocation('/test%');
-        }).toThrow('Pathname "/test%" could not be decoded.');
-      });
-    });
-
-    describe('given as an object', () => {
-      it('throws custom message when decodeURI throws a URIError', () => {
-        expect(() => {
-          createLocation({ pathname: '/test%' });
-        }).toThrow('Pathname "/test%" could not be decoded.');
-      });
-    });
-  });
-
   describe('key', () => {
     it('has a key property if a key is provided', () => {
-      const location = createLocation('/the/path', undefined, 'key');
+      const location = createLocation('/the/path', DEFAULT_TRANSFORM_PATHNAME, undefined, 'key');
       expect(Object.keys(location)).toContain('key');
     });
 
     it('has no key property if no key is provided', () => {
-      const location = createLocation('/the/path');
+      const location = createLocation('/the/path', DEFAULT_TRANSFORM_PATHNAME);
       expect(Object.keys(location)).not.toContain('key');
     });
   });
