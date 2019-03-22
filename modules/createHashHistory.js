@@ -335,6 +335,10 @@ function createHashHistory(props = {}) {
     };
   }
 
+  function transformedCreateLocation(path, state, key, current) {
+    return createLocation(path, transformPathname, state, key, current)
+  }
+  
   const history = {
     length: globalHistory.length,
     action: 'POP',
@@ -346,7 +350,8 @@ function createHashHistory(props = {}) {
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    createLocation: transformedCreateLocation
   };
 
   return history;

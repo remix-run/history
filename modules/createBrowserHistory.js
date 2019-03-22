@@ -315,6 +315,10 @@ function createBrowserHistory(props = {}) {
     };
   }
 
+  function transformedCreateLocation(path, state, key, current) {
+    return createLocation(path, transformPathname, state, key, current)
+  }
+  
   const history = {
     length: globalHistory.length,
     action: 'POP',
@@ -326,7 +330,8 @@ function createBrowserHistory(props = {}) {
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    createLocation: transformedCreateLocation
   };
 
   return history;

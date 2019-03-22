@@ -169,6 +169,10 @@ function createMemoryHistory(props = {}) {
   function listen(listener) {
     return transitionManager.appendListener(listener);
   }
+  
+  function transformedCreateLocation(path, state, key, current) {
+    return createLocation(path, transformPathname, state, key, current)
+  }
 
   const history = {
     length: entries.length,
@@ -184,7 +188,8 @@ function createMemoryHistory(props = {}) {
     goForward,
     canGo,
     block,
-    listen
+    listen,
+    createLocation: transformedCreateLocation
   };
 
   return history;
