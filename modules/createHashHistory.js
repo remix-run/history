@@ -2,7 +2,7 @@ import warning from 'tiny-warning';
 import invariant from 'tiny-invariant';
 import encodeURL from "encodeurl";
 
-import { createLocation, locationsAreEqual } from './LocationUtils';
+import { createLocationFactory, locationsAreEqual } from './LocationUtils';
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -65,7 +65,7 @@ function createHashHistory(props = {}) {
   const basename = props.basename
     ? stripTrailingSlash(addLeadingSlash(props.basename))
     : '';
-
+  const createLocation = createLocationFactory(transformPathname);
   const { encodePath, decodePath } = HashPathCoders[hashType];
 
   function getDOMLocation() {
@@ -83,7 +83,7 @@ function createHashHistory(props = {}) {
 
     if (basename) path = stripBasename(path, basename);
 
-    return createLocation(path, transformPathname);
+    return createLocation(path);
   }
 
   const transitionManager = createTransitionManager();
@@ -187,7 +187,6 @@ function createHashHistory(props = {}) {
     const action = 'PUSH';
     const location = createLocation(
       path,
-      transformPathname,
       undefined,
       undefined,
       history.location
@@ -242,7 +241,6 @@ function createHashHistory(props = {}) {
     const action = 'REPLACE';
     const location = createLocation(
       path,
-      transformPathname,
       undefined,
       undefined,
       history.location
@@ -334,10 +332,6 @@ function createHashHistory(props = {}) {
       unlisten();
     };
   }
-
-  function transformedCreateLocation(path, state, key, current) {
-    return createLocation(path, transformPathname, state, key, current)
-  }
   
   const history = {
     length: globalHistory.length,
@@ -351,7 +345,7 @@ function createHashHistory(props = {}) {
     goForward,
     block,
     listen,
-    createLocation: transformedCreateLocation
+    createLocation
   };
 
   return history;

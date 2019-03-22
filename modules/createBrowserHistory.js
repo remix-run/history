@@ -2,7 +2,7 @@ import warning from 'tiny-warning';
 import invariant from 'tiny-invariant';
 import encodeURL from "encodeurl";
 
-import { createLocation } from './LocationUtils';
+import { createLocationFactory } from './LocationUtils';
 import {
   addLeadingSlash,
   stripTrailingSlash,
@@ -53,6 +53,8 @@ function createBrowserHistory(props = {}) {
     ? stripTrailingSlash(addLeadingSlash(props.basename))
     : '';
 
+  const createLocation = createLocationFactory(transformPathname);
+    
   function getDOMLocation(historyState) {
     const { key, state } = historyState || {};
     const { pathname, search, hash } = window.location;
@@ -71,7 +73,7 @@ function createBrowserHistory(props = {}) {
 
     if (basename) path = stripBasename(path, basename);
 
-    return createLocation(path, transformPathname, state, key);
+    return createLocation(path, state, key);
   }
 
   function createKey() {
@@ -166,7 +168,7 @@ function createBrowserHistory(props = {}) {
     );
 
     const action = 'PUSH';
-    const location = createLocation(path, transformPathname, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -219,7 +221,7 @@ function createBrowserHistory(props = {}) {
     );
 
     const action = 'REPLACE';
-    const location = createLocation(path, transformPathname, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -314,10 +316,6 @@ function createBrowserHistory(props = {}) {
       unlisten();
     };
   }
-
-  function transformedCreateLocation(path, state, key, current) {
-    return createLocation(path, transformPathname, state, key, current)
-  }
   
   const history = {
     length: globalHistory.length,
@@ -331,7 +329,7 @@ function createBrowserHistory(props = {}) {
     goForward,
     block,
     listen,
-    createLocation: transformedCreateLocation
+    createLocation
   };
 
   return history;

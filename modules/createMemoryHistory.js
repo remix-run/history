@@ -1,7 +1,7 @@
 import warning from 'tiny-warning';
 
 import { createPath } from './PathUtils';
-import { createLocation } from './LocationUtils';
+import { createLocationFactory } from './LocationUtils';
 import createTransitionManager from './createTransitionManager';
 
 function clamp(n, lowerBound, upperBound) {
@@ -23,7 +23,7 @@ function createMemoryHistory(props = {}) {
     keyLength = 6,
     transformPathname = DEFAULT_TRANSFORM_PATHNAME
   } = props;
-
+  const createLocation = createLocationFactory(transformPathname);
   const transitionManager = createTransitionManager();
 
   function setState(nextState) {
@@ -42,8 +42,8 @@ function createMemoryHistory(props = {}) {
   const entries = initialEntries.map(
     entry =>
       typeof entry === 'string'
-        ? createLocation(entry, transformPathname, undefined, createKey())
-        : createLocation(entry, transformPathname, undefined, entry.key || createKey())
+        ? createLocation(entry, undefined, createKey())
+        : createLocation(entry, undefined, entry.key || createKey())
   );
 
   // Public interface
@@ -62,7 +62,7 @@ function createMemoryHistory(props = {}) {
     );
 
     const action = 'PUSH';
-    const location = createLocation(path, transformPathname, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -107,7 +107,7 @@ function createMemoryHistory(props = {}) {
     );
 
     const action = 'REPLACE';
-    const location = createLocation(path, transformPathname, state, createKey(), history.location);
+    const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(
       location,
@@ -170,10 +170,6 @@ function createMemoryHistory(props = {}) {
     return transitionManager.appendListener(listener);
   }
   
-  function transformedCreateLocation(path, state, key, current) {
-    return createLocation(path, transformPathname, state, key, current)
-  }
-
   const history = {
     length: entries.length,
     action: 'POP',
@@ -189,7 +185,7 @@ function createMemoryHistory(props = {}) {
     canGo,
     block,
     listen,
-    createLocation: transformedCreateLocation
+    createLocation
   };
 
   return history;
