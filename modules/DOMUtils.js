@@ -1,5 +1,3 @@
-import encodeURL from "encodeurl";
-
 export const canUseDOM = !!(
   typeof window !== 'undefined' &&
   window.document &&
