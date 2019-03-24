@@ -58,7 +58,7 @@ describe('a browser history', () => {
     });
 
     describe('push with a unicode path string', () => {
-      it('creates a location with decoded properties', done => {
+      it('creates a location with encoded pathname', done => {
         TestSequences.PushUnicodeLocation(history, done);
       });
     });
@@ -88,8 +88,8 @@ describe('a browser history', () => {
     });
 
     describe('location created by encoded and unencoded pathname', () => {
-      it('produces the same location.pathname', done => {
-        TestSequences.LocationPathnameAlwaysSame(history, done);
+      it('produces an encoded pathname', done => {
+        TestSequences.LocationPathnameAlwaysEncoded(history, done);
       });
     });
 

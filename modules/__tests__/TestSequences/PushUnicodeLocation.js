@@ -17,7 +17,7 @@ export default function(history, done) {
     (location, action) => {
       expect(action).toBe('PUSH');
       expect(location).toMatchObject({
-        pathname: '/歴史',
+        pathname: '/%E6%AD%B4%E5%8F%B2',
         search: '?キー=値',
         hash: '#ハッシュ'
       });
