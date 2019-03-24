@@ -21,8 +21,8 @@ export { default as InitialLocationNoKey } from './InitialLocationNoKey';
 export { default as InitialLocationHasKey } from './InitialLocationHasKey';
 export { default as Listen } from './Listen';
 export {
-  default as LocationPathnameAlwaysSame
-} from './LocationPathnameAlwaysSame';
+  default as LocationPathnameAlwaysEncoded
+} from './LocationPathnameAlwaysEncoded';
 export { default as NoslashHashPathCoding } from './NoslashHashPathCoding';
 export { default as PushEncodedLocation } from './PushEncodedLocation';
 export { default as PushNewLocation } from './PushNewLocation';

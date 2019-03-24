@@ -1,5 +1,6 @@
 import resolvePathname from 'resolve-pathname';
 import valueEqual from 'value-equal';
+import encodeurl from 'encodeurl';
 
 import { parsePath } from './PathUtils';
 
@@ -50,6 +51,8 @@ export function createLocation(path, state, key, currentLocation) {
       location.pathname = '/';
     }
   }
+  
+  location.pathname = encodeurl(location.pathname);
 
   return location;
 }
