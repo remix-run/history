@@ -20,9 +20,6 @@ export {
 export { default as InitialLocationNoKey } from './InitialLocationNoKey';
 export { default as InitialLocationHasKey } from './InitialLocationHasKey';
 export { default as Listen } from './Listen';
-export {
-  default as LocationPathnameAlwaysEncoded
-} from './LocationPathnameAlwaysEncoded';
 export { default as NoslashHashPathCoding } from './NoslashHashPathCoding';
 export { default as PushEncodedLocation } from './PushEncodedLocation';
 export { default as PushNewLocation } from './PushNewLocation';
@@ -32,7 +29,6 @@ export { default as PushSamePathWarning } from './PushSamePathWarning';
 export { default as PushState } from './PushState';
 export { default as PushStateWarning } from './PushStateWarning';
 export { default as PushRelativePathname } from './PushRelativePathname';
-export { default as PushUnicodeLocation } from './PushUnicodeLocation';
 export { default as ReplaceNewLocation } from './ReplaceNewLocation';
 export { default as ReplaceSamePath } from './ReplaceSamePath';
 export { default as ReplaceState } from './ReplaceState';
@@ -41,4 +37,5 @@ export {
   default as ReturnFalseTransitionHook
 } from './ReturnFalseTransitionHook';
 export { default as SlashHashPathCoding } from './SlashHashPathCoding';
+export { default as WarnsForNonencodedPathname } from './WarnsForNonencodedPathname';
 export { default as TransitionHookArgs } from './TransitionHookArgs';
