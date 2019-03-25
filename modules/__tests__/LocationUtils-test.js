@@ -58,6 +58,25 @@ describe('createLocation', () => {
       });
     });
   });
+  
+  describe('pathname encoding', () => {
+    describe('with a non-encoded pathname', () => {
+      it('warns that it received an improperly encoded pathname', () => {
+        let consoleWarn = console.error; // eslint-disable-line no-console
+        let warningMessage;
+      
+        // eslint-disable-next-line no-console
+        console.warn = message => {
+          warningMessage = message;
+        };
+      
+        createLocation('/歴史');
+        expect(warningMessage).toBe('location.pathname is not fully encoded, which may result in bugs.');
+        
+        console.error = consoleWarn;
+      });
+    });
+  });
 
   describe('with a path with no pathname', () => {
     describe('given as a string', () => {
