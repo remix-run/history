@@ -12,7 +12,7 @@ export default function(history, done) {
       const pathname = '/歴史';
       history.push(pathname);
     },
-    location => {
+    () => {
       expect(warningMessage).toMatch(
         'location.pathname is not fully encoded, which may result in bugs.'
       );
