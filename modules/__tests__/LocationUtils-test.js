@@ -73,6 +73,7 @@ describe('createLocation', () => {
         createLocation('/歴史');
         expect(warningMessage).toBe('location.pathname is not fully encoded, which may result in bugs.');
         
+        // eslint-disable-next-line no-console
         console.error = consoleWarn;
       });
     });
