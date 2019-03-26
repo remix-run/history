@@ -1,7 +1,5 @@
 import resolvePathname from 'resolve-pathname';
 import valueEqual from 'value-equal';
-import encodeurl from 'encodeurl';
-import tinywarning from 'tiny-warning';
 
 import { parsePath } from './PathUtils';
 
@@ -52,11 +50,6 @@ export function createLocation(path, state, key, currentLocation) {
       location.pathname = '/';
     }
   }
-  
-  tinywarning(
-    location.pathname === encodeurl(location.pathname),
-    "location.pathname is not fully encoded, which may result in bugs."
-  );
 
   return location;
 }
