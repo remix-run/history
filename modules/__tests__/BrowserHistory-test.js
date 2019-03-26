@@ -57,9 +57,9 @@ describe('a browser history', () => {
       });
     });
 
-    describe('push with a non-encoded path string', () => {
-      it('logs a warning', done => {
-        TestSequences.WarnsForNonencodedPathname(history, done);
+    describe('push with a unicode path string', () => {
+      it('creates a location with decoded properties', done => {
+        TestSequences.PushUnicodeLocation(history, done);
       });
     });
 
@@ -84,6 +84,12 @@ describe('a browser history', () => {
     describe('replace state', () => {
       it('calls change listeners with the new location', done => {
         TestSequences.ReplaceState(history, done);
+      });
+    });
+
+    describe('location created by encoded and unencoded pathname', () => {
+      it('produces the same location.pathname', done => {
+        TestSequences.LocationPathnameAlwaysSame(history, done);
       });
     });
 
