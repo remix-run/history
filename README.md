@@ -269,6 +269,12 @@ const history = createHashHistory({
 history.push('/home'); // window.location.hash is #!/home
 ```
 
+## Changes
+
+To see the changes that were made in a given release, please lookup the tag on [the releases page](https://github.com/ReactTraining/history/releases).
+
+For changes released in version 4.6.3 and earlier, please see [the `CHANGES.md` file](https://github.com/ReactTraining/history/blob/845d690c5576c7f55ecbe14babe0092e8e5bc2bb/CHANGES.md).
+
 ## About
 
 `history` is developed and maintained by [React Training](https://reacttraining.com). If
