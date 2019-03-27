@@ -161,9 +161,7 @@ describe('a hash history', () => {
 
     let history;
     beforeEach(() => {
-      history = createHistory({
-        getUserConfirmation
-      });
+      history = createHistory({ getUserConfirmation });
     });
 
     it('receives the next location and action as arguments', done => {
@@ -184,9 +182,7 @@ describe('a hash history', () => {
   describe('"hashbang" hash path coding', () => {
     let history;
     beforeEach(() => {
-      history = createHistory({
-        hashType: 'hashbang'
-      });
+      history = createHistory({ hashType: 'hashbang' });
     });
 
     it('properly encodes and decodes window.location.hash', done => {
@@ -197,9 +193,7 @@ describe('a hash history', () => {
   describe('"noslash" hash path coding', () => {
     let history;
     beforeEach(() => {
-      history = createHistory({
-        hashType: 'noslash'
-      });
+      history = createHistory({ hashType: 'noslash' });
     });
 
     it('properly encodes and decodes window.location.hash', done => {
@@ -210,9 +204,7 @@ describe('a hash history', () => {
   describe('"slash" hash path coding', () => {
     let history;
     beforeEach(() => {
-      history = createHistory({
-        hashType: 'slash'
-      });
+      history = createHistory({ hashType: 'slash' });
     });
 
     it('properly encodes and decodes window.location.hash', done => {
@@ -255,6 +247,12 @@ describe('a hash history', () => {
       window.location.hash = '#/prefix#rest';
       const history = createHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
+    });
+
+    it('allows URL with regex special characters', () => {
+      window.location.hash = '/prefix$special/hello';
+      const history = createHistory({ basename: '/prefix$special' });
+      expect(history.location.pathname).toEqual('/hello');
     });
   });
 });

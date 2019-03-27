@@ -7,7 +7,10 @@ export function stripLeadingSlash(path) {
 }
 
 export function hasBasename(path, prefix) {
-  return new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i').test(path);
+  return (
+    path.toLowerCase().indexOf(prefix.toLowerCase()) === 0 &&
+    '/?#'.indexOf(path.charAt(prefix.length)) !== -1
+  );
 }
 
 export function stripBasename(path, prefix) {
