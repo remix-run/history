@@ -53,7 +53,7 @@ function createMemoryHistory(props = {}) {
         state !== undefined
       ),
       'You should avoid providing a 2nd state argument to push when the 1st ' +
-        'argument is a location-like object that already has state; it is ignored'
+      'argument is a location-like object that already has state; it is ignored'
     );
 
     const action = 'PUSH';
@@ -90,7 +90,7 @@ function createMemoryHistory(props = {}) {
     );
   }
 
-  function replace(path, state) {
+  function replace(path, state, stateTransition = null) {
     warning(
       !(
         typeof path === 'object' &&
@@ -98,10 +98,14 @@ function createMemoryHistory(props = {}) {
         state !== undefined
       ),
       'You should avoid providing a 2nd state argument to replace when the 1st ' +
-        'argument is a location-like object that already has state; it is ignored'
+      'argument is a location-like object that already has state; it is ignored'
     );
 
     const action = 'REPLACE';
+    if (stateTransition) {
+      state = stateTransition(state, history.location && history.location.state);
+    }
+
     const location = createLocation(path, state, createKey(), history.location);
 
     transitionManager.confirmTransitionTo(

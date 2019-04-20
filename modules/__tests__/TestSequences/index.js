@@ -42,3 +42,4 @@ export {
 } from './ReturnFalseTransitionHook';
 export { default as SlashHashPathCoding } from './SlashHashPathCoding';
 export { default as TransitionHookArgs } from './TransitionHookArgs';
+export { default as ReplaceCallback } from "./ReplaceCallback";

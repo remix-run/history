@@ -87,6 +87,12 @@ describe('a browser history', () => {
       });
     });
 
+    describe('replace state with callback', () => {
+      it('calls change listeners with the new location', done => {
+        TestSequences.ReplaceCallback(history, done);
+      });
+    });
+
     describe('location created by encoded and unencoded pathname', () => {
       it('produces the same location.pathname', done => {
         TestSequences.LocationPathnameAlwaysSame(history, done);
