@@ -233,7 +233,7 @@ history.listen(location => {
 history.push('/home'); // URL is now /the/base/home
 ```
 
-**Note:** `basename` is not suppported in `createMemoryHistory`.
+**Note:** `basename` is not supported in `createMemoryHistory`.
 
 ### Forcing Full Page Refreshes in createBrowserHistory
 
