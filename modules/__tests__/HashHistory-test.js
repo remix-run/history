@@ -1,6 +1,6 @@
 import expect from 'expect';
-
-import { createHashHistory as createHistory } from 'history';
+import mock from 'jest-mock';
+import { createHashHistory } from 'history';
 
 import * as TestSequences from './TestSequences';
 
@@ -9,13 +9,15 @@ const describeGo = canGoWithoutReload ? describe : describe.skip;
 
 describe('a hash history', () => {
   beforeEach(() => {
-    if (window.location.hash !== '') window.location.hash = '';
+    if (window.location.hash !== '#/') {
+      window.location.hash = '/';
+    }
   });
 
   describe('by default', () => {
     let history;
     beforeEach(() => {
-      history = createHistory();
+      history = createHashHistory();
     });
 
     describe('listen', () => {
@@ -128,12 +130,12 @@ describe('a hash history', () => {
   });
 
   describe('that denies all transitions', () => {
-    const getUserConfirmation = (_, callback) => callback(false);
-
     let history;
     beforeEach(() => {
-      history = createHistory({
-        getUserConfirmation
+      history = createHashHistory({
+        getUserConfirmation(_, callback) {
+          callback(false);
+        }
       });
     });
 
@@ -157,11 +159,13 @@ describe('a hash history', () => {
   });
 
   describe('a transition hook', () => {
-    const getUserConfirmation = (_, callback) => callback(true);
-
     let history;
     beforeEach(() => {
-      history = createHistory({ getUserConfirmation });
+      history = createHashHistory({
+        getUserConfirmation(_, callback) {
+          callback(true);
+        }
+      });
     });
 
     it('receives the next location and action as arguments', done => {
@@ -179,80 +183,186 @@ describe('a hash history', () => {
     });
   });
 
-  describe('"hashbang" hash path coding', () => {
-    let history;
-    beforeEach(() => {
-      history = createHistory({ hashType: 'hashbang' });
-    });
+  describe('with a basename', () => {
+    it('knows how to create hrefs', () => {
+      window.location.hash = '#/the/base';
+      const history = createHashHistory({ basename: '/the/base' });
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query'
+      });
 
-    it('properly encodes and decodes window.location.hash', done => {
-      TestSequences.HashbangHashPathCoding(history, done);
+      expect(href).toEqual('#/the/base/the/path?the=query');
     });
   });
 
-  describe('"noslash" hash path coding', () => {
-    let history;
-    beforeEach(() => {
-      history = createHistory({ hashType: 'noslash' });
-    });
+  describe('with a bad basename', () => {
+    it('knows how to create hrefs', () => {
+      window.location.hash = '#/the/bad/base/';
+      const history = createHashHistory({ basename: '/the/bad/base/' });
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query'
+      });
 
-    it('properly encodes and decodes window.location.hash', done => {
-      TestSequences.NoslashHashPathCoding(history, done);
+      expect(href).toEqual('#/the/bad/base/the/path?the=query');
     });
   });
 
-  describe('"slash" hash path coding', () => {
-    let history;
-    beforeEach(() => {
-      history = createHistory({ hashType: 'slash' });
-    });
+  describe('with a slash basename', () => {
+    it('knows how to create hrefs', () => {
+      const history = createHashHistory({ basename: '/' });
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query'
+      });
 
-    it('properly encodes and decodes window.location.hash', done => {
-      TestSequences.SlashHashPathCoding(history, done);
+      expect(href).toEqual('#/the/path?the=query');
     });
   });
 
-  describe('basename', () => {
-    it('strips the basename from the pathname', () => {
-      window.location.hash = '#/prefix/pathname';
-      const history = createHistory({ basename: '/prefix' });
-      expect(history.location.pathname).toEqual('/pathname');
+  describe('encoding', () => {
+    it('does not encode the generated path', () => {
+      const history = createHashHistory();
+
+      // encoded
+      const encodedHref = history.createHref({
+        pathname: '/%23abc'
+      });
+      // unencoded
+      const unencodedHref = history.createHref({
+        pathname: '/#abc'
+      });
+
+      expect(encodedHref).toEqual('#/%23abc');
+      expect(unencodedHref).toEqual('#/#abc');
+    });
+  });
+});
+
+describe('a hash history with "slash" path coding', () => {
+  beforeEach(() => {
+    if (window.location.hash !== '#/') {
+      window.location.hash = '/';
+    }
+  });
+
+  it('properly encodes and decodes window.location.hash', done => {
+    const history = createHashHistory({ hashType: 'slash' });
+    TestSequences.SlashHashPathCoding(history, done);
+  });
+
+  it('knows how to create hrefs', () => {
+    const history = createHashHistory({ hashType: 'slash' });
+    const href = history.createHref({
+      pathname: '/the/path',
+      search: '?the=query',
+      hash: '#the-hash'
     });
 
-    it('is not case-sensitive', () => {
-      window.location.hash = '#/PREFIX/pathname';
-      const history = createHistory({ basename: '/prefix' });
-      expect(history.location.pathname).toEqual('/pathname');
+    expect(href).toEqual('#/the/path?the=query#the-hash');
+  });
+});
+
+describe('a hash history with "hashbang" path coding', () => {
+  beforeEach(() => {
+    if (window.location.hash !== '#!/') {
+      window.location.hash = '!/';
+    }
+  });
+
+  it('properly encodes and decodes window.location.hash', done => {
+    const history = createHashHistory({ hashType: 'hashbang' });
+    TestSequences.HashbangHashPathCoding(history, done);
+  });
+
+  it('knows how to create hrefs', () => {
+    const history = createHashHistory({ hashType: 'hashbang' });
+    const href = history.createHref({
+      pathname: '/the/path',
+      search: '?the=query',
+      hash: '#the-hash'
     });
 
-    it('does not strip partial prefix matches', () => {
-      window.location.hash = '#/prefixed/pathname';
-      const history = createHistory({ basename: '/prefix' });
-      expect(history.location.pathname).toEqual('/prefixed/pathname');
+    expect(href).toEqual('#!/the/path?the=query#the-hash');
+  });
+});
+
+describe('a hash history with "noslash" path coding', () => {
+  beforeEach(() => {
+    if (window.location.hash !== '') {
+      window.location.hash = '';
+    }
+  });
+
+  it('properly encodes and decodes window.location.hash', done => {
+    const history = createHashHistory({ hashType: 'noslash' });
+    TestSequences.NoslashHashPathCoding(history, done);
+  });
+
+  it('knows how to create hrefs', () => {
+    const history = createHashHistory({ hashType: 'noslash' });
+    const href = history.createHref({
+      pathname: '/the/path',
+      search: '?the=query',
+      hash: '#the-hash'
     });
 
-    it('strips when path is only the prefix', () => {
-      window.location.hash = '#/prefix';
-      const history = createHistory({ basename: '/prefix' });
+    expect(href).toEqual('#the/path?the=query#the-hash');
+  });
+});
+
+describe('a hash history with a basename', () => {
+  it('strips the basename from the pathname', () => {
+    window.location.hash = '/prefix/hello';
+    const history = createHashHistory({ basename: '/prefix' });
+    expect(history.location.pathname).toEqual('/hello');
+  });
+
+  it('is not case-sensitive', () => {
+    window.location.hash = '/PREFIX/hello';
+    const history = createHashHistory({ basename: '/prefix' });
+    expect(history.location.pathname).toEqual('/hello');
+  });
+
+  it('does not strip partial prefix matches', () => {
+    window.location.hash = '/no-match/hello';
+
+    // A warning is issued when the prefix is not present.
+    const spy = mock.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const history = createHashHistory({ basename: '/prefix' });
+    expect(history.location.pathname).toEqual('/no-match/hello');
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
+  });
+
+  describe('when the pathname is only the prefix', () => {
+    it('strips the prefix', () => {
+      window.location.hash = '/prefix';
+      const history = createHashHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
     });
 
-    it('strips with no pathname, but with a search string', () => {
-      window.location.hash = '#/prefix?a=b';
-      const history = createHistory({ basename: '/prefix' });
+    it('strips the prefix when there is a search string', () => {
+      window.location.hash = '/prefix?a=b';
+      const history = createHashHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
     });
 
-    it('strips with no pathname, but with a hash string', () => {
-      window.location.hash = '#/prefix#rest';
-      const history = createHistory({ basename: '/prefix' });
+    it('strips the prefix when there is a hash', () => {
+      window.location.hash = '/prefix#hash';
+      const history = createHashHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
     });
+  });
 
-    it('allows URL with regex special characters', () => {
-      window.location.hash = '/prefix$special/hello';
-      const history = createHistory({ basename: '/prefix$special' });
-      expect(history.location.pathname).toEqual('/hello');
-    });
+  it('allows URL with regex special characters', () => {
+    window.location.hash = '/prefix$special/hello';
+    // console.log(window.location.href);
+    // expect(window.location.hash).toEqual('#/prefix$special/hello');
+    const history = createHashHistory({ basename: '/prefix$special' });
+    expect(history.location.pathname).toEqual('/hello');
   });
 });

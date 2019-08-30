@@ -1,5 +1,5 @@
-import mock from 'jest-mock';
 import expect from 'expect';
+import mock from 'jest-mock';
 
 export default function(history, done) {
   const spy = mock.fn();

@@ -1,5 +1,4 @@
 import expect from 'expect';
-
 import { createLocation } from 'history';
 
 describe('createLocation', () => {

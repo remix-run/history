@@ -1,6 +1,6 @@
 import expect from 'expect';
-
-import { createBrowserHistory as createHistory } from 'history';
+import mock from 'jest-mock';
+import { createBrowserHistory } from 'history';
 
 import * as TestSequences from './TestSequences';
 
@@ -12,7 +12,7 @@ describe('a browser history', () => {
   describe('by default', () => {
     let history;
     beforeEach(() => {
-      history = createHistory();
+      history = createBrowserHistory();
     });
 
     describe('listen', () => {
@@ -125,12 +125,12 @@ describe('a browser history', () => {
   });
 
   describe('that denies all transitions', () => {
-    const getUserConfirmation = (_, callback) => callback(false);
-
     let history;
     beforeEach(() => {
-      history = createHistory({
-        getUserConfirmation
+      history = createBrowserHistory({
+        getUserConfirmation(_, callback) {
+          callback(false);
+        }
       });
     });
 
@@ -154,12 +154,12 @@ describe('a browser history', () => {
   });
 
   describe('a transition hook', () => {
-    const getUserConfirmation = (_, callback) => callback(true);
-
     let history;
     beforeEach(() => {
-      history = createHistory({
-        getUserConfirmation
+      history = createBrowserHistory({
+        getUserConfirmation(_, callback) {
+          callback(true);
+        }
       });
     });
 
@@ -183,38 +183,117 @@ describe('a browser history', () => {
   describe('basename', () => {
     it('strips the basename from the pathname', () => {
       window.history.replaceState(null, null, '/prefix/pathname');
-      const history = createHistory({ basename: '/prefix' });
+      const history = createBrowserHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/pathname');
     });
 
     it('is not case-sensitive', () => {
       window.history.replaceState(null, null, '/PREFIX/pathname');
-      const history = createHistory({ basename: '/prefix' });
+      const history = createBrowserHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/pathname');
     });
 
     it('does not strip partial prefix matches', () => {
+      const spy = mock.spyOn(console, 'warn').mockImplementation(() => {});
+
       window.history.replaceState(null, null, '/prefixed/pathname');
-      const history = createHistory({ basename: '/prefix' });
+      const history = createBrowserHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/prefixed/pathname');
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      spy.mockRestore();
     });
 
     it('strips when path is only the prefix', () => {
       window.history.replaceState(null, null, '/prefix');
-      const history = createHistory({ basename: '/prefix' });
+      const history = createBrowserHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
     });
 
     it('strips with no pathname, but with a search string', () => {
       window.history.replaceState(null, null, '/prefix?a=b');
-      const history = createHistory({ basename: '/prefix' });
+      const history = createBrowserHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
     });
 
     it('strips with no pathname, but with a hash string', () => {
       window.history.replaceState(null, null, '/prefix#rest');
-      const history = createHistory({ basename: '/prefix' });
+      const history = createBrowserHistory({ basename: '/prefix' });
       expect(history.location.pathname).toEqual('/');
+    });
+  });
+
+  describe('with no basename', () => {
+    it('knows how to create hrefs', () => {
+      const history = createBrowserHistory();
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      });
+
+      expect(href).toEqual('/the/path?the=query#the-hash');
+    });
+  });
+
+  describe('with a basename', () => {
+    it('knows how to create hrefs', () => {
+      window.history.replaceState(null, null, '/the/base');
+
+      const history = createBrowserHistory({ basename: '/the/base' });
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      });
+
+      expect(href).toEqual('/the/base/the/path?the=query#the-hash');
+    });
+  });
+
+  describe('with a bad basename', () => {
+    it('knows how to create hrefs', () => {
+      window.history.replaceState(null, null, '/the/bad/base');
+
+      const history = createBrowserHistory({ basename: '/the/bad/base/' });
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      });
+
+      expect(href).toEqual('/the/bad/base/the/path?the=query#the-hash');
+    });
+  });
+
+  describe('with a slash basename', () => {
+    it('knows how to create hrefs', () => {
+      const history = createBrowserHistory({ basename: '/' });
+      const href = history.createHref({
+        pathname: '/the/path',
+        search: '?the=query',
+        hash: '#the-hash'
+      });
+
+      expect(href).toEqual('/the/path?the=query#the-hash');
+    });
+  });
+
+  describe('encoding', () => {
+    it('does not encode the generated path', () => {
+      const history = createBrowserHistory();
+
+      // encoded
+      const encodedHref = history.createHref({
+        pathname: '/%23abc'
+      });
+      // unencoded
+      const unencodedHref = history.createHref({
+        pathname: '/#abc'
+      });
+
+      expect(encodedHref).toEqual('/%23abc');
+      expect(unencodedHref).toEqual('/#abc');
     });
   });
 });
