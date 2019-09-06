@@ -7,5 +7,9 @@
   "extends": ["eslint:recommended", "plugin:import/errors"],
   "rules": {
     "prefer-arrow-callback": 2
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
   }
 }
