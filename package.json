@@ -18,7 +18,7 @@
     "build": "rollup -c",
     "clean": "git clean -fdX .",
     "lint": "eslint modules",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "yarn build",
     "test": "karma start --single-run"
   },
   "dependencies": {

@@ -1,15 +1,15 @@
 language: node_js
 node_js: node
-cache: npm
+cache: yarn
 env:
 - TEST_ENV=cjs BUILD_ENV=cjs
 - TEST_ENV=umd BUILD_ENV=umd
 - TEST_ENV=source
 before_script:
-- ([[ -z "$BUILD_ENV" ]] || npm run build)
+- ([[ -z "$BUILD_ENV" ]] || yarn build)
 script:
-- npm run lint
-- npm test
+- yarn lint
+- yarn test
 jobs:
   include:
   - stage: Release
