@@ -1,4 +1,4 @@
-import warning from 'tiny-warning';
+import warning from './warning.js';
 
 function createTransitionManager() {
   let prompt = null;

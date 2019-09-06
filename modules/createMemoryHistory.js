@@ -1,8 +1,7 @@
-import warning from 'tiny-warning';
-
-import { createPath } from './PathUtils';
-import { createLocation } from './LocationUtils';
-import createTransitionManager from './createTransitionManager';
+import { createPath } from './PathUtils.js';
+import { createLocation } from './LocationUtils.js';
+import createTransitionManager from './createTransitionManager.js';
+import warning from './warning.js';
 
 function clamp(n, lowerBound, upperBound) {
   return Math.min(Math.max(n, lowerBound), upperBound);
@@ -34,11 +33,10 @@ function createMemoryHistory(props = {}) {
   }
 
   const index = clamp(initialIndex, 0, initialEntries.length - 1);
-  const entries = initialEntries.map(
-    entry =>
-      typeof entry === 'string'
-        ? createLocation(entry, undefined, createKey())
-        : createLocation(entry, undefined, entry.key || createKey())
+  const entries = initialEntries.map(entry =>
+    typeof entry === 'string'
+      ? createLocation(entry, undefined, createKey())
+      : createLocation(entry, undefined, entry.key || createKey())
   );
 
   // Public interface

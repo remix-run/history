@@ -1,7 +1,7 @@
 import resolvePathname from 'resolve-pathname';
 import valueEqual from 'value-equal';
 
-import { parsePath } from './PathUtils';
+import { parsePath } from './PathUtils.js';
 
 export function createLocation(path, state, key, currentLocation) {
   let location;

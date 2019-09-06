@@ -1,22 +1,21 @@
-import warning from 'tiny-warning';
-import invariant from 'tiny-invariant';
-
-import { createLocation } from './LocationUtils';
+import { createLocation } from './LocationUtils.js';
 import {
   addLeadingSlash,
   stripTrailingSlash,
   hasBasename,
   stripBasename,
   createPath
-} from './PathUtils';
-import createTransitionManager from './createTransitionManager';
+} from './PathUtils.js';
+import createTransitionManager from './createTransitionManager.js';
 import {
   canUseDOM,
   getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
   isExtraneousPopstateEvent
-} from './DOMUtils';
+} from './DOMUtils.js';
+import invariant from './invariant.js';
+import warning from './warning.js';
 
 const PopStateEvent = 'popstate';
 const HashChangeEvent = 'hashchange';

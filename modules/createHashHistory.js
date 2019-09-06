@@ -1,7 +1,4 @@
-import warning from 'tiny-warning';
-import invariant from 'tiny-invariant';
-
-import { createLocation, locationsAreEqual } from './LocationUtils';
+import { createLocation } from './LocationUtils.js';
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -9,13 +6,15 @@ import {
   hasBasename,
   stripBasename,
   createPath
-} from './PathUtils';
-import createTransitionManager from './createTransitionManager';
+} from './PathUtils.js';
+import createTransitionManager from './createTransitionManager.js';
 import {
   canUseDOM,
   getConfirmation,
   supportsGoWithoutReloadUsingHash
-} from './DOMUtils';
+} from './DOMUtils.js';
+import invariant from './invariant.js';
+import warning from './warning.js';
 
 const HashChangeEvent = 'hashchange';
 
@@ -95,6 +94,12 @@ function createHashHistory(props = {}) {
 
   let forceNextPop = false;
   let ignorePath = null;
+
+  function locationsAreEqual(a, b) {
+    return (
+      a.pathname === b.pathname && a.search === b.search && a.hash === b.hash
+    );
+  }
 
   function handleHashChange() {
     const path = getHashPath();
