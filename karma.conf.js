@@ -8,51 +8,55 @@ module.exports = function(config) {
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '10',
-      browser: 'chrome',
-      browser_version: '47.0'
+      browser: 'Chrome',
+      browser_version: '73.0'
     },
+    // BS_ChromeAndroid: {
+    //   base: 'BrowserStack',
+    //   device: 'Samsung Galaxy S8',
+    //   os_version: '7.0',
+    //   real_mobile: true
+    // },
     BS_Firefox: {
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '10',
-      browser: 'firefox',
-      browser_version: '43.0'
+      browser: 'Firefox',
+      browser_version: '67.0'
+    },
+    BS_Edge: {
+      base: 'BrowserStack',
+      os: 'Windows',
+      os_version: '10',
+      browser: 'Edge',
+      browser_version: '17.0'
+    },
+    BS_IE11: {
+      base: 'BrowserStack',
+      os: 'Windows',
+      os_version: '10',
+      browser: 'IE',
+      browser_version: '11.0'
     },
     BS_Safari: {
       base: 'BrowserStack',
       os: 'OS X',
-      os_version: 'El Capitan',
-      browser: 'safari',
-      browser_version: '9.0'
-    },
-    BS_MobileSafari8: {
-      base: 'BrowserStack',
-      os: 'ios',
-      os_version: '8.3',
-      browser: 'iphone',
-      real_mobile: false
-    },
-    BS_MobileSafari9: {
-      base: 'BrowserStack',
-      os: 'ios',
-      os_version: '9.1',
-      browser: 'iphone',
-      real_mobile: false
-    },
-    BS_InternetExplorer10: {
-      base: 'BrowserStack',
-      os: 'Windows',
-      os_version: '8',
-      browser: 'ie',
-      browser_version: '10.0'
-    },
-    BS_InternetExplorer11: {
-      base: 'BrowserStack',
-      os: 'Windows',
-      os_version: '10',
-      browser: 'ie',
-      browser_version: '11.0'
+      os_version: 'Mojave',
+      browser: 'Safari',
+      browser_version: '12.1'
     }
+    // BS_iPhoneX: {
+    //   base: 'BrowserStack',
+    //   device: 'iPhone X',
+    //   os_version: '11',
+    //   real_mobile: true
+    // },
+    // BS_iPhoneXS: {
+    //   base: 'BrowserStack',
+    //   device: 'iPhone XS',
+    //   os_version: '12',
+    //   real_mobile: true
+    // },
   };
 
   var historyAlias;
