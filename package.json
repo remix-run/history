@@ -9,9 +9,19 @@
   "module": "esm/history.js",
   "unpkg": "umd/history.js",
   "files": [
+    "DOMUtils.js",
+    "ExecutionEnvironment.js",
+    "LocationUtils.js",
+    "PathUtils.js",
     "cjs",
+    "createBrowserHistory.js",
+    "createHashHistory.js",
+    "createMemoryHistory.js",
+    "createTransitionManager.js",
+    "es",
     "esm",
-    "umd"
+    "umd",
+    "warnAboutDeprecatedCJSRequire.js"
   ],
   "sideEffects": false,
   "scripts": {
