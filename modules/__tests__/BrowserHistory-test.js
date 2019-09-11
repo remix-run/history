@@ -78,6 +78,12 @@ describe('a browser history', () => {
     });
   });
 
+  describe('push with an invalid pathname (bad percent-encoding)', () => {
+    it('throws an error', done => {
+      TestSequences.PushInvalidPathname(history, done);
+    });
+  });
+
   describe('push with a unicode path string', () => {
     it('creates a location with decoded properties', done => {
       TestSequences.PushUnicodeLocation(history, done);
@@ -99,6 +105,12 @@ describe('a browser history', () => {
   describe('replace the same path', () => {
     it('calls change listeners with the new location', done => {
       TestSequences.ReplaceSamePath(history, done);
+    });
+  });
+
+  describe('replace with an invalid pathname (bad percent-encoding)', () => {
+    it('throws an error', done => {
+      TestSequences.ReplaceInvalidPathname(history, done);
     });
   });
 
