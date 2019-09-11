@@ -12,7 +12,7 @@ import {
   getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
-  shouldIgnorePopstateEvent
+  isExtraneousPopstateEvent
 } from './DOMUtils.js';
 import invariant from './invariant.js';
 import warning from './warning.js';
@@ -86,7 +86,8 @@ function createBrowserHistory(props = {}) {
   }
 
   function handlePopState(event) {
-    if (shouldIgnorePopstateEvent(event)) return;
+    // Ignore extraneous popstate events in WebKit.
+    if (isExtraneousPopstateEvent(event)) return;
     handlePop(getDOMLocation(event.state));
   }
 
