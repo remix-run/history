@@ -17,6 +17,14 @@ To see the changes that were made in a given release, please lookup the tag on [
 
 For changes released in version 4.6.3 and earlier, please see [the `CHANGES.md` file](https://github.com/ReactTraining/history/blob/845d690c5576c7f55ecbe14babe0092e8e5bc2bb/CHANGES.md).
 
+## Development
+
+Development of the current stable release, version 4, happens on [the `master` branch](https://github.com/ReactTraining/history/tree/master). Please keep in mind that this branch may include some work that has not yet been published as part of an official release. However, since `master` is always stable, you should feel free to build your own working release straight from master at any time.
+
+Development of the next major release, version 5, happens on [the `dev` branch](https://github.com/ReactTraining/history/tree/dev).
+
+If you're interested in helping out, please read [our contributing guidelines](CONTRIBUTING.md).
+
 ## About
 
 `history` is developed and maintained by [React Training](https://reacttraining.com). If
