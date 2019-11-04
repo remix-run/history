@@ -1,15 +1,9 @@
 {
-  "parser": "babel-eslint",
-  "plugins": ["import"],
   "env": {
-    "browser": true
+    "browser": true,
+    "node": false
   },
-  "extends": ["eslint:recommended", "plugin:import/errors"],
-  "rules": {
-    "prefer-arrow-callback": 2
-  },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
+  "globals": {
+    "__DEV__": true
   }
 }

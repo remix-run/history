@@ -1,0 +1,23 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "plugins": ["import"],
+  "env": {
+    "node": true
+  },
+  "extends": ["eslint:recommended", "plugin:import/errors"],
+  "rules": {
+    "prefer-arrow-callback": "error",
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "event"
+      }
+    ]
+  }
+}
