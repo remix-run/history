@@ -1,7 +1,7 @@
 import expect from 'expect';
 import mock from 'jest-mock';
 
-export default function(history, done) {
+export default (history, done) => {
   let spy = mock.fn();
   let unlisten = history.listen(spy);
 
@@ -9,4 +9,4 @@ export default function(history, done) {
 
   unlisten();
   done();
-}
+};
