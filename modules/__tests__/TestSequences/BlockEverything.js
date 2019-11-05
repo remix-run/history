@@ -3,13 +3,13 @@ import expect from 'expect';
 import execSteps from './execSteps.js';
 
 export default function(history, done) {
-  const steps = [
-    location => {
+  let steps = [
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/'
       });
 
-      const unblock = history.block();
+      let unblock = history.block();
 
       history.push('/home');
 

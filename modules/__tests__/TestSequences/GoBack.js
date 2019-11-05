@@ -3,23 +3,23 @@ import expect from 'expect';
 import execSteps from './execSteps.js';
 
 export default function(history, done) {
-  const steps = [
-    location => {
+  let steps = [
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/'
       });
 
       history.push('/home');
     },
-    (location, action) => {
+    ({ action, location }) => {
       expect(action).toEqual('PUSH');
       expect(location).toMatchObject({
         pathname: '/home'
       });
 
-      history.goBack();
+      history.back();
     },
-    (location, action) => {
+    ({ action, location }) => {
       expect(action).toEqual('POP');
       expect(location).toMatchObject({
         pathname: '/'

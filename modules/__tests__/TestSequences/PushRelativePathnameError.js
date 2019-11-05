@@ -9,16 +9,21 @@ export default function(history, done) {
         pathname: '/'
       });
 
-      history.push('/home?the=query#the-hash', { the: 'state' });
+      history.push('/the/path?the=query#the-hash');
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');
       expect(location).toMatchObject({
-        pathname: '/home',
+        pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash',
-        state: { the: 'state' }
+        hash: '#the-hash'
       });
+
+      try {
+        history.push('../other/path?another=query#another-hash');
+      } catch (error) {
+        expect(error.message).toMatch(/relative pathnames are not supported/i);
+      }
     }
   ];
 

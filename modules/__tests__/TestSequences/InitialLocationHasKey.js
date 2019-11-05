@@ -3,8 +3,8 @@ import expect from 'expect';
 import execSteps from './execSteps.js';
 
 export default function(history, done) {
-  const steps = [
-    location => {
+  let steps = [
+    ({ location }) => {
       expect(location.key).toBeTruthy();
     }
   ];

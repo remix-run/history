@@ -3,7 +3,7 @@ export default function execSteps(steps, history, done) {
     unlisten,
     cleanedUp = false;
 
-  const cleanup = (...args) => {
+  let cleanup = (...args) => {
     if (!cleanedUp) {
       cleanedUp = true;
       unlisten();
@@ -11,9 +11,9 @@ export default function execSteps(steps, history, done) {
     }
   };
 
-  const execNextStep = (...args) => {
+  let execNextStep = (...args) => {
     try {
-      const nextStep = steps[index++];
+      let nextStep = steps[index++];
 
       if (!nextStep) throw new Error('Test is missing step ' + index);
 
@@ -27,7 +27,11 @@ export default function execSteps(steps, history, done) {
 
   if (steps.length) {
     unlisten = history.listen(execNextStep);
-    execNextStep(history.location);
+
+    execNextStep({
+      action: history.action,
+      location: history.location
+    });
   } else {
     done();
   }

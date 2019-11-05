@@ -4,6 +4,10 @@ import { createHashHistory } from 'history';
 describe('a hash history on a page with a <base> tag', () => {
   let history, base;
   beforeEach(() => {
+    if (window.location.hash !== '#/') {
+      window.location.hash = '/';
+    }
+
     base = document.createElement('base');
     base.setAttribute('href', '/prefix');
 

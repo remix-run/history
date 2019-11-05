@@ -3,15 +3,15 @@ import expect from 'expect';
 import execSteps from './execSteps.js';
 
 export default function(history, done) {
-  const steps = [
-    location => {
+  let steps = [
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/'
       });
 
       history.push('/home?the=query#the-hash');
     },
-    (location, action) => {
+    ({ action, location }) => {
       expect(action).toBe('PUSH');
       expect(location).toMatchObject({
         pathname: '/home',
@@ -21,7 +21,7 @@ export default function(history, done) {
 
       history.push('?another=query#another-hash');
     },
-    (location, action) => {
+    ({ action, location }) => {
       expect(action).toBe('PUSH');
       expect(location).toMatchObject({
         pathname: '/home',

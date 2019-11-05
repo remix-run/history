@@ -8,7 +8,7 @@ export default function(history, done) {
   history.push('/home');
 
   let transitionHookWasCalled = false;
-  const unblock = history.block(() => {
+  let unblock = history.block(() => {
     transitionHookWasCalled = true;
   });
 
@@ -20,7 +20,7 @@ export default function(history, done) {
 
   // Allow some time for history to detect the PUSH.
   setTimeout(() => {
-    history.goBack();
+    history.back();
 
     // Allow some time for history to detect the POP.
     setTimeout(() => {

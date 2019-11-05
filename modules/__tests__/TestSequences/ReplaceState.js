@@ -3,15 +3,15 @@ import expect from 'expect';
 import execSteps from './execSteps.js';
 
 export default function(history, done) {
-  const steps = [
-    location => {
+  let steps = [
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/'
       });
 
       history.replace('/home?the=query#the-hash', { the: 'state' });
     },
-    (location, action) => {
+    ({ action, location }) => {
       expect(action).toBe('REPLACE');
       expect(location).toMatchObject({
         pathname: '/home',

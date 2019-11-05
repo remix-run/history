@@ -5,15 +5,15 @@ import execSteps from './execSteps.js';
 export default function(history, done) {
   let prevLocation;
 
-  const steps = [
-    location => {
+  let steps = [
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/'
       });
 
       history.replace('/home');
     },
-    (location, action) => {
+    ({ action, location }) => {
       expect(action).toBe('REPLACE');
       expect(location).toMatchObject({
         pathname: '/home'
@@ -23,7 +23,7 @@ export default function(history, done) {
 
       history.replace('/home');
     },
-    (location, action) => {
+    ({ action, location }) => {
       expect(action).toBe('REPLACE');
       expect(location).toMatchObject({
         pathname: '/home'
