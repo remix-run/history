@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Controls</h1>
+
+    <p>
+      <label><input type="checkbox" id="blocker" /> block</label>
+    </p>
+    <p>
+      <span>back &amp; forward: </span><br />
+      <button onclick="goBack()">back</button>
+      <button onclick="goForward()">forward</button>
+    </p>
+    <p>
+      <span>regular links: </span><br />
+      <a href="/unload">home</a>
+      <a href="/unload-one">one</a>
+      <a href="/unload-two">two</a>
+    </p>
+    <p>
+      <span>pushState &amp; replaceState: </span><br />
+      <a href="/unload" onclick="return pushLink(this)">pushState(home)</a>
+      <a href="/unload-one" onclick="return pushLink(this)">pushState(one)</a>
+      <a href="/unload-two" onclick="return pushLink(this)">pushState(two)</a>
+      <a href="/unload-three" onclick="return replaceLink(this)">replaceState(three)</a>
+    </p>
+
+    <h1>Test Scenarios</h1>
+
+    <p>
+      <ul>
+        <li>Click block - Click back - You should be prompted to stay</li>
+        <li>Click block - Click home - You should be prompted to stay</li>
+        <li>Click block - Click one - You should be prompted to stay</li>
+        <li>Click block - Close the tab - You should be prompted to stay</li>
+        <li>Click pushState(one) - Click block - Click back - You should still be at /unload-one</li>
+        <li>Click pushState(one) - Click block - Click pushState(two) - You should still be at /unload-one</li>
+        <li>Click pushState(one) - Click pushState(two) - Click back - Click block - Click back - You should still be at /unload-one</li>
+        <li>Click pushState(one) - Click pushState(two) - Click back - Click block - Click forward - You should still be at /unload-one</li>
+        <li>Click pushState(one) - Click pushState(two) - Click replaceState(three) - Click block - Click back - You should still be at /unload-three</li>
+      </ul>
+    </p>
+
+    <script>
+      console.log('length:', window.history.length);
+
+      // Blocking
+
+      var blocker = document.getElementById('blocker');
+
+      function isBlocked() {
+        return blocker.checked;
+      }
+
+      function handleBeforeUnload(event) {
+        console.log('beforeunload');
+        // Prevent navigation.
+        event.preventDefault();
+        event.returnValue = '';
+      }
+
+      function toggleBeforeUnloadHandler(on) {
+        if (on) {
+          window.addEventListener('beforeunload', handleBeforeUnload)
+        } else {
+          window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+      }
+
+      toggleBeforeUnloadHandler(isBlocked());
+      blocker.addEventListener('change', () => {
+        toggleBeforeUnloadHandler(isBlocked());
+      });
+
+      // Popstate
+
+      var index = (window.history.state && window.history.state.index) || 0;
+      console.log('index:', index)
+
+      function handlePopState(event) {
+        console.log('popstate');
+        var nextIndex = window.history.state && window.history.state.index;
+        if (isBlocked() && nextIndex != null) {
+          // Revert the POP
+          var prevIndex = index;
+          var n = prevIndex - nextIndex;
+          console.log('need to go:', n);
+          if (n) window.history.go(n);
+        } else {
+          index = nextIndex;
+          console.log('index:', index)
+        }
+      }
+
+      window.addEventListener('popstate', handlePopState)
+
+      // Init
+
+      window.history.replaceState({ index }, null);
+
+      // Navigation
+
+      function pushLink(link) {
+        if (!isBlocked()) {
+          index += 1;
+          window.history.pushState({ index }, null, link.getAttribute('href'));
+          console.log('index:', index)
+        }
+        return false; // preventDefault
+      }
+
+      function replaceLink(link) {
+        if (!isBlocked()) {
+          window.history.replaceState({ index }, null, link.getAttribute('href'));
+          console.log('index:', index)
+        }
+        return false; // preventDefault
+      }
+
+      function goBack() {
+        window.history.go(-1);
+      }
+
+      function goForward() {
+        window.history.go(1);
+      }
+    </script>
+  </body>
+</html>
