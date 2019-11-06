@@ -2,6 +2,7 @@ const PopAction = 'POP';
 const PushAction = 'PUSH';
 const ReplaceAction = 'REPLACE';
 
+const BeforeUnloadEvent = 'beforeunload';
 const PopStateEvent = 'popstate';
 const HashChangeEvent = 'hashchange';
 
@@ -9,6 +10,11 @@ const HashChangeEvent = 'hashchange';
 // should ever be used in a given web page, so it's best to just inline
 // everything for minification.
 
+/**
+ * Memory history stores the current location in memory. It is designed
+ * for use in stateful non-browser environments like headless tests (in
+ * node.js) and React Native.
+ */
 export const createMemoryHistory = ({
   initialEntries = ['/'],
   initialIndex = 0
@@ -19,10 +25,11 @@ export const createMemoryHistory = ({
     hash = '',
     state = null,
     // Auto-assign keys to entries that don't already have them.
-    key = createKey()
-  }) => createReadOnlyObject({ pathname, search, hash, state, key });
+    key = createKey(),
+    index
+  }) => createReadOnlyObject({ pathname, search, hash, state, key, index });
 
-  let handleNavigation = (nextIndex, nextAction, nextLocation) => {
+  let handleNavigation = (nextAction, nextLocation) => {
     if (__DEV__) {
       if (nextLocation && nextLocation.pathname.charAt(0) !== '/') {
         let arg = createPath(nextLocation);
@@ -36,119 +43,169 @@ export const createMemoryHistory = ({
     if (blockers.length) {
       blockers.call({ action: nextAction, location: nextLocation });
     } else {
-      index = nextIndex;
       if (nextAction === PushAction) {
-        entries.splice(index, entries.length, nextLocation);
+        entries.splice(nextLocation.index, entries.length, nextLocation);
       } else if (nextAction === ReplaceAction) {
-        entries[index] = nextLocation;
+        entries[nextLocation.index] = nextLocation;
       }
       action = nextAction;
-      location = nextLocation || entries[index];
+      location = nextLocation;
       listeners.call({ action, location });
     }
   };
 
-  let entries = initialEntries.map(entry =>
-    createLocation(typeof entry === 'string' ? parsePath(entry) : entry)
+  let entries = initialEntries.map((entry, index) =>
+    createLocation({
+      ...(typeof entry === 'string' ? parsePath(entry) : entry),
+      index
+    })
   );
-  let index = clamp(initialIndex, 0, entries.length - 1);
 
   let action = PopAction;
-  let location = entries[index];
+  let location = entries[clamp(initialIndex, 0, entries.length - 1)];
   let blockers = createEvents();
   let listeners = createEvents();
 
   let history = {
+    get action() {
+      return action;
+    },
+    get location() {
+      return location;
+    },
     createHref: createPath,
     block: fn => blockers.push(fn),
     listen: fn => listeners.push(fn),
     navigate: (to, { replace = false, state = null } = {}) =>
       handleNavigation(
-        replace ? index : index + 1,
         replace ? ReplaceAction : PushAction,
         createLocation({
           ...(typeof to === 'string' ? parsePath(to) : to),
           state,
-          key: createKey()
+          key: createKey(),
+          index: location.index + (replace ? 0 : 1)
         })
       ),
     go: n =>
-      handleNavigation(clamp(index + n, 0, entries.length - 1), PopAction),
+      handleNavigation(
+        PopAction,
+        entries[clamp(location.index + n, 0, entries.length - 1)]
+      ),
     back: () => history.go(-1),
     forward: () => history.go(1)
   };
 
-  Object.defineProperty(history, 'action', {
-    enumerable: true,
-    get: () => action
-  });
-
-  Object.defineProperty(history, 'location', {
-    enumerable: true,
-    get: () => location
-  });
-
   return history;
 };
 
+/**
+ * Browser history stores the location in regular URLs. This is the
+ * standard for most web apps, but it requires some configuration on
+ * the server to ensure you serve the same app at multiple URLs.
+ */
 export const createBrowserHistory = ({
   window = document.defaultView
 } = {}) => {
+  let globalHistory = window.history;
+
   let getLocation = () => {
     let { pathname, search, hash } = window.location;
-    let { state } = window.history;
+    let state = globalHistory.state || {};
     return createReadOnlyObject({
       pathname,
       search,
       hash,
-      state: (state && state.user) || null,
-      key: (state && state.key) || 'default'
+      state: state.usr || null,
+      key: state.key || 'default',
+      index: state.idx
     });
   };
 
-  // TODO: Support forceRefresh and do NOT notify listeners when used.
+  let ignoreNextPop = false;
+
+  // TODO: Add reload arg
   let handleNavigation = (nextAction, nextLocation) => {
+    if (nextAction === PopAction && ignoreNextPop) {
+      ignoreNextPop = false;
+      return;
+    }
+
     if (blockers.length) {
       blockers.call({ action: nextAction, location: nextLocation });
 
-      if (nextAction === PopAction) {
-        // TODO: revert the POP
+      if (nextAction === PopAction && nextLocation.index != null) {
+        // Revert the POP
+        let n = location.index - nextLocation.index;
+        if (n) {
+          ignoreNextPop = true;
+          globalHistory.go(n);
+        }
       }
     } else {
-      let state = { user: nextLocation.state, key: nextLocation.key };
+      let state = {
+        usr: nextLocation.state,
+        key: nextLocation.key,
+        idx: nextLocation.index
+      };
       let url = createPath(nextLocation);
 
       if (nextAction === PushAction) {
         // try...catch because iOS limits us to 100 pushState calls :/
         try {
-          window.history.pushState(state, null, url);
+          globalHistory.pushState(state, null, url);
         } catch (error) {
           // They are going to lose state here, but there is no real
           // way to warn them about it since the page will refresh...
           window.location.assign(url);
         }
       } else if (nextAction === ReplaceAction) {
-        window.history.replaceState(state, null, url);
+        globalHistory.replaceState(state, null, url);
       }
 
       action = nextAction;
+      // Get the location fresh so we can support relative paths.
       location = getLocation();
       listeners.call({ action, location });
     }
   };
+
+  let toggleBeforeUnloadBlocker = on =>
+    window[`${on ? 'add' : 'remove'}EventListener`](
+      BeforeUnloadEvent,
+      preventUnload
+    );
+
+  // Initialize the index for this document.
+  globalHistory.replaceState({ ...globalHistory.state, idx: 0 }, null);
+
+  window.addEventListener(PopStateEvent, event => {
+    handleNavigation(PopAction, getLocation());
+  });
 
   let action = PopAction;
   let location = getLocation();
   let blockers = createEvents();
   let listeners = createEvents();
 
-  window.addEventListener(PopStateEvent, event => {
-    handleNavigation(PopAction, getLocation());
-  });
-
   let history = {
+    get action() {
+      return action;
+    },
+    get location() {
+      return location;
+    },
     createHref: createPath,
-    block: fn => blockers.push(fn),
+    block: fn => {
+      let unblock = blockers.push(fn);
+      if (blockers.length === 1) toggleBeforeUnloadBlocker(1);
+      return () => {
+        unblock();
+        // Remove the beforeunload listener so the document may be
+        // salvageable in the pagehide event.
+        // See https://html.spec.whatwg.org/#unloading-documents
+        if (!blockers.length) toggleBeforeUnloadBlocker(0);
+      };
+    },
     listen: fn => listeners.push(fn),
     navigate: (to, { replace = false, state = null } = {}) =>
       handleNavigation(
@@ -158,46 +215,43 @@ export const createBrowserHistory = ({
             ? parsePath(to)
             : { pathname: '/', search: '', hash: '', ...to }),
           state,
-          key: createKey()
+          key: createKey(),
+          index: location.index + (replace ? 0 : 1)
         })
       ),
-    go: n => window.history.go(n),
+    go: n => globalHistory.go(n),
     back: () => history.go(-1),
     forward: () => history.go(1)
   };
 
-  Object.defineProperty(history, 'action', {
-    enumerable: true,
-    get: () => action
-  });
-
-  Object.defineProperty(history, 'location', {
-    enumerable: true,
-    get: () => location
-  });
-
   return history;
 };
 
+/**
+ * Hash history stores the location in window.location.hash. This makes
+ * it ideal for situations where you don't want to send the location to
+ * the server for some reason, either because you do cannot configure it
+ * or the URL space is reserved for something else.
+ */
 export const createHashHistory = ({ window = document.defaultView } = {}) => {
+  let globalHistory = window.history;
+
   let getLocation = () => {
     let { pathname, search, hash } = parsePath(window.location.hash.substr(1));
-    let { state } = window.history;
+    let state = globalHistory.state || {};
     return createReadOnlyObject({
       pathname,
       search,
       hash,
-      state: (state && state.user) || null,
-      key: (state && state.key) || 'default'
+      state: state.usr || null,
+      key: state.key || 'default',
+      index: state.idx
     });
   };
 
-  let action = PopAction;
-  let location = getLocation();
-  let blockers = createEvents();
-  let listeners = createEvents();
+  let ignoreNextPop = false;
 
-  // TODO: Support forceRefresh and do NOT notify listeners when used.
+  // TODO: Add reload arg
   let handleNavigation = (nextAction, nextLocation) => {
     if (__DEV__) {
       if (nextLocation.pathname.charAt(0) !== '/') {
@@ -209,29 +263,42 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
       }
     }
 
+    if (nextAction === PopAction && ignoreNextPop) {
+      ignoreNextPop = false;
+      return;
+    }
+
     if (blockers.length) {
       blockers.call({ action: nextAction, location: nextLocation });
 
-      if (nextAction === PopAction) {
-        // TODO: revert the POP
+      if (nextAction === PopAction && nextLocation.index != null) {
+        // Revert the POP
+        let n = location.index - nextLocation.index;
+        if (n) {
+          ignoreNextPop = true;
+          globalHistory.go(n);
+        }
       }
     } else {
-      let state = { user: nextLocation.state, key: nextLocation.key };
-      // TODO: Handle relative paths? Or just warn about them?
+      let state = {
+        usr: nextLocation.state,
+        key: nextLocation.key,
+        idx: nextLocation.index
+      };
       // TODO: Support different "hash types"?
       let url = '#' + createPath(nextLocation);
 
       if (nextAction === PushAction) {
         // try...catch because iOS limits us to 100 pushState calls :/
         try {
-          window.history.pushState(state, null, url);
+          globalHistory.pushState(state, null, url);
         } catch (error) {
           // They are going to lose state here, but there is no real
           // way to warn them about it since the page will refresh...
           window.location.assign(url);
         }
       } else if (nextAction === ReplaceAction) {
-        window.history.replaceState(state, null, url);
+        globalHistory.replaceState(state, null, url);
       }
 
       action = nextAction;
@@ -239,6 +306,15 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
       listeners.call({ action, location });
     }
   };
+
+  let toggleBeforeUnloadBlocker = on =>
+    window[`${on ? 'add' : 'remove'}EventListener`](
+      BeforeUnloadEvent,
+      preventUnload
+    );
+
+  // Initialize the index for this document.
+  globalHistory.replaceState({ ...globalHistory.state, idx: 0 }, null);
 
   window.addEventListener(PopStateEvent, event => {
     handleNavigation(PopAction, getLocation());
@@ -253,7 +329,18 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     }
   });
 
+  let action = PopAction;
+  let location = getLocation();
+  let blockers = createEvents();
+  let listeners = createEvents();
+
   let history = {
+    get action() {
+      return action;
+    },
+    get location() {
+      return location;
+    },
     createHref: location => {
       let base = document.querySelector('base');
       let href = '';
@@ -262,7 +349,17 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
       }
       return href + '#' + createPath(location);
     },
-    block: fn => blockers.push(fn),
+    block: fn => {
+      let unblock = blockers.push(fn);
+      if (blockers.length === 1) toggleBeforeUnloadBlocker(1);
+      return () => {
+        unblock();
+        // Remove the beforeunload listener so the document may be
+        // salvageable in the pagehide event.
+        // See https://html.spec.whatwg.org/#unloading-documents
+        if (!blockers.length) toggleBeforeUnloadBlocker(0);
+      };
+    },
     listen: fn => listeners.push(fn),
     navigate: (to, { replace = false, state = null } = {}) =>
       handleNavigation(
@@ -272,23 +369,14 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
             ? parsePath(to)
             : { pathname: '/', search: '', hash: '', ...to }),
           state,
-          key: createKey()
+          key: createKey(),
+          index: location.index + (replace ? 0 : 1)
         })
       ),
-    go: n => window.history.go(n),
+    go: n => globalHistory.go(n),
     back: () => history.go(-1),
     forward: () => history.go(1)
   };
-
-  Object.defineProperty(history, 'action', {
-    enumerable: true,
-    get: () => action
-  });
-
-  Object.defineProperty(history, 'location', {
-    enumerable: true,
-    get: () => location
-  });
 
   return history;
 };
@@ -354,3 +442,10 @@ const createEvents = () => {
 
 const clamp = (n, lowerBound, upperBound) =>
   Math.min(Math.max(n, lowerBound), upperBound);
+
+const preventUnload = event => {
+  // Cancel the event.
+  event.preventDefault();
+  // Chrome (and legacy IE) requires returnValue to be set.
+  event.returnValue = '';
+};

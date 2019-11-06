@@ -13,16 +13,16 @@
     </p>
     <p>
       <span>regular links: </span><br />
-      <a href="/unload">home</a>
-      <a href="/unload-one">one</a>
-      <a href="/unload-two">two</a>
+      <a href="/unload-plain">home</a>
+      <a href="/unload-plain-one">one</a>
+      <a href="/unload-plain-two">two</a>
     </p>
     <p>
       <span>pushState &amp; replaceState: </span><br />
-      <a href="/unload" onclick="return pushLink(this)">pushState(home)</a>
-      <a href="/unload-one" onclick="return pushLink(this)">pushState(one)</a>
-      <a href="/unload-two" onclick="return pushLink(this)">pushState(two)</a>
-      <a href="/unload-three" onclick="return replaceLink(this)">replaceState(three)</a>
+      <a href="/unload-plain" onclick="return pushLink(this)">pushState(home)</a>
+      <a href="/unload-plain-one" onclick="return pushLink(this)">pushState(one)</a>
+      <a href="/unload-plain-two" onclick="return pushLink(this)">pushState(two)</a>
+      <a href="/unload-plain-three" onclick="return replaceLink(this)">replaceState(three)</a>
     </p>
 
     <h1>Test Scenarios</h1>
@@ -33,11 +33,11 @@
         <li>Click block - Click home - You should be prompted to stay</li>
         <li>Click block - Click one - You should be prompted to stay</li>
         <li>Click block - Close the tab - You should be prompted to stay</li>
-        <li>Click pushState(one) - Click block - Click back - You should still be at /unload-one</li>
-        <li>Click pushState(one) - Click block - Click pushState(two) - You should still be at /unload-one</li>
-        <li>Click pushState(one) - Click pushState(two) - Click back - Click block - Click back - You should still be at /unload-one</li>
-        <li>Click pushState(one) - Click pushState(two) - Click back - Click block - Click forward - You should still be at /unload-one</li>
-        <li>Click pushState(one) - Click pushState(two) - Click replaceState(three) - Click block - Click back - You should still be at /unload-three</li>
+        <li>Click pushState(one) - Click block - Click back - You should still be at /unload-plain-one</li>
+        <li>Click pushState(one) - Click block - Click pushState(two) - You should still be at /unload-plain-one</li>
+        <li>Click pushState(one) - Click pushState(two) - Click back - Click block - Click back - You should still be at /unload-plain-one</li>
+        <li>Click pushState(one) - Click pushState(two) - Click back - Click block - Click forward - You should still be at /unload-plain-one</li>
+        <li>Click pushState(one) - Click pushState(two) - Click replaceState(three) - Click block - Click back - You should still be at /unload-plain-three</li>
       </ul>
     </p>
 

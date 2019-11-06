@@ -1,5 +1,5 @@
-/node_modules/
 /esm/
+/fixtures/history.js
 /cjs/
+/node_modules/
 /umd/
-/local.log
