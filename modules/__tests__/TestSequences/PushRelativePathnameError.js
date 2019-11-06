@@ -9,7 +9,7 @@ export default (history, done) => {
         pathname: '/'
       });
 
-      history.push('/the/path?the=query#the-hash');
+      history.navigate('/the/path?the=query#the-hash');
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');
@@ -20,7 +20,7 @@ export default (history, done) => {
       });
 
       try {
-        history.push('../other/path?another=query#another-hash');
+        history.navigate('../other/path?another=query#another-hash');
       } catch (error) {
         expect(error.message).toMatch(/relative pathnames are not supported/i);
       }

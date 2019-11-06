@@ -9,7 +9,7 @@ export default (history, done) => {
         pathname: '/'
       });
 
-      history.push('/home');
+      history.navigate('/home');
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');
@@ -17,7 +17,7 @@ export default (history, done) => {
         pathname: '/home'
       });
 
-      history.push('/home');
+      history.navigate('/home');
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');

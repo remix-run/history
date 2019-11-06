@@ -11,7 +11,7 @@ export default (history, done) => {
 
       let unblock = history.block();
 
-      history.push('/home');
+      history.navigate('/home');
 
       expect(history.location).toMatchObject({
         pathname: '/'

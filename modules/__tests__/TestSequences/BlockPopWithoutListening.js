@@ -5,7 +5,7 @@ export default (history, done) => {
     pathname: '/'
   });
 
-  history.push('/home');
+  history.navigate('/home');
 
   let transitionHookWasCalled = false;
   let unblock = history.block(() => {

@@ -22,14 +22,7 @@ export const createMemoryHistory = ({
     key = createKey()
   }) => createReadOnlyObject({ pathname, search, hash, state, key });
 
-  let createNextLocation = (to, state) =>
-    createLocation({
-      ...(typeof to === 'string' ? parsePath(to) : to),
-      state,
-      key: createKey()
-    });
-
-  let handleAction = (nextIndex, nextAction, nextLocation) => {
+  let handleNavigation = (nextIndex, nextAction, nextLocation) => {
     if (__DEV__) {
       if (nextLocation && nextLocation.pathname.charAt(0) !== '/') {
         let arg = createPath(nextLocation);
@@ -69,11 +62,18 @@ export const createMemoryHistory = ({
     createHref: createPath,
     block: fn => blockers.push(fn),
     listen: fn => listeners.push(fn),
-    push: (to, state) =>
-      handleAction(index + 1, PushAction, createNextLocation(to, state)),
-    replace: (to, state) =>
-      handleAction(index, ReplaceAction, createNextLocation(to, state)),
-    go: n => handleAction(clamp(index + n, 0, entries.length - 1), PopAction),
+    navigate: (to, { replace = false, state = null } = {}) =>
+      handleNavigation(
+        replace ? index : index + 1,
+        replace ? ReplaceAction : PushAction,
+        createLocation({
+          ...(typeof to === 'string' ? parsePath(to) : to),
+          state,
+          key: createKey()
+        })
+      ),
+    go: n =>
+      handleNavigation(clamp(index + n, 0, entries.length - 1), PopAction),
     back: () => history.go(-1),
     forward: () => history.go(1)
   };
@@ -106,17 +106,8 @@ export const createBrowserHistory = ({
     });
   };
 
-  let createNextLocation = (to, state) =>
-    createReadOnlyObject({
-      ...(typeof to === 'string'
-        ? parsePath(to)
-        : { pathname: '/', search: '', hash: '', ...to }),
-      state,
-      key: createKey()
-    });
-
   // TODO: Support forceRefresh and do NOT notify listeners when used.
-  let handleAction = (nextAction, nextLocation) => {
+  let handleNavigation = (nextAction, nextLocation) => {
     if (blockers.length) {
       blockers.call({ action: nextAction, location: nextLocation });
 
@@ -152,17 +143,24 @@ export const createBrowserHistory = ({
   let listeners = createEvents();
 
   window.addEventListener(PopStateEvent, event => {
-    handleAction(PopAction, getLocation());
+    handleNavigation(PopAction, getLocation());
   });
 
   let history = {
     createHref: createPath,
     block: fn => blockers.push(fn),
     listen: fn => listeners.push(fn),
-    push: (to, state) =>
-      handleAction(PushAction, createNextLocation(to, state)),
-    replace: (to, state) =>
-      handleAction(ReplaceAction, createNextLocation(to, state)),
+    navigate: (to, { replace = false, state = null } = {}) =>
+      handleNavigation(
+        replace ? ReplaceAction : PushAction,
+        createReadOnlyObject({
+          ...(typeof to === 'string'
+            ? parsePath(to)
+            : { pathname: '/', search: '', hash: '', ...to }),
+          state,
+          key: createKey()
+        })
+      ),
     go: n => window.history.go(n),
     back: () => history.go(-1),
     forward: () => history.go(1)
@@ -194,22 +192,13 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     });
   };
 
-  let createNextLocation = (to, state) =>
-    createReadOnlyObject({
-      ...(typeof to === 'string'
-        ? parsePath(to)
-        : { pathname: '/', search: '', hash: '', ...to }),
-      state,
-      key: createKey()
-    });
-
   let action = PopAction;
   let location = getLocation();
   let blockers = createEvents();
   let listeners = createEvents();
 
   // TODO: Support forceRefresh and do NOT notify listeners when used.
-  let handleAction = (nextAction, nextLocation) => {
+  let handleNavigation = (nextAction, nextLocation) => {
     if (__DEV__) {
       if (nextLocation.pathname.charAt(0) !== '/') {
         let arg = createPath(nextLocation);
@@ -252,7 +241,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   };
 
   window.addEventListener(PopStateEvent, event => {
-    handleAction(PopAction, getLocation());
+    handleNavigation(PopAction, getLocation());
   });
 
   window.addEventListener(HashChangeEvent, event => {
@@ -260,7 +249,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
 
     // Ignore extraneous hashchange events.
     if (createPath(nextLocation) !== createPath(location)) {
-      handleAction(PopAction, getLocation());
+      handleNavigation(PopAction, getLocation());
     }
   });
 
@@ -275,10 +264,17 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     },
     block: fn => blockers.push(fn),
     listen: fn => listeners.push(fn),
-    push: (to, state) =>
-      handleAction(PushAction, createNextLocation(to, state)),
-    replace: (to, state) =>
-      handleAction(ReplaceAction, createNextLocation(to, state)),
+    navigate: (to, { replace = false, state = null } = {}) =>
+      handleNavigation(
+        replace ? ReplaceAction : PushAction,
+        createReadOnlyObject({
+          ...(typeof to === 'string'
+            ? parsePath(to)
+            : { pathname: '/', search: '', hash: '', ...to }),
+          state,
+          key: createKey()
+        })
+      ),
     go: n => window.history.go(n),
     back: () => history.go(-1),
     forward: () => history.go(1)
@@ -347,15 +343,12 @@ const createEvents = () => {
     get length() {
       return handlers.length;
     },
-    push(fn) {
-      handlers.push(fn);
-      return () => {
+    push: fn =>
+      handlers.push(fn) &&
+      (() => {
         handlers = handlers.filter(handler => handler !== fn);
-      };
-    },
-    call(...args) {
-      handlers.forEach(fn => fn && fn(...args));
-    }
+      }),
+    call: arg => handlers.map(fn => fn && fn(arg))
   };
 };
 

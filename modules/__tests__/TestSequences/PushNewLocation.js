@@ -9,7 +9,7 @@ export default (history, done) => {
         pathname: '/'
       });
 
-      history.push('/home?the=query#the-hash');
+      history.navigate('/home?the=query#the-hash');
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');

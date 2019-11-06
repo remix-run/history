@@ -9,7 +9,7 @@ export default (history, done) => {
         pathname: '/'
       });
 
-      history.replace('/home?the=query#the-hash');
+      history.navigate('/home?the=query#the-hash', { replace: true });
     },
     ({ action, location }) => {
       expect(action).toBe('REPLACE');

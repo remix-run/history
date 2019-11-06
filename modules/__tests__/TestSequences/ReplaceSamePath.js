@@ -11,7 +11,7 @@ export default (history, done) => {
         pathname: '/'
       });
 
-      history.replace('/home');
+      history.navigate('/home', { replace: true });
     },
     ({ action, location }) => {
       expect(action).toBe('REPLACE');
@@ -21,7 +21,7 @@ export default (history, done) => {
 
       prevLocation = location;
 
-      history.replace('/home');
+      history.navigate('/home', { replace: true });
     },
     ({ action, location }) => {
       expect(action).toBe('REPLACE');
