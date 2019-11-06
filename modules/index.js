@@ -7,8 +7,8 @@ const PopStateEvent = 'popstate';
 const HashChangeEvent = 'hashchange';
 
 // There's some duplication in this code, but only one create* method
-// should ever be used in a given web page, so it's best to just inline
-// everything for minification.
+// should ever be used in a given web page, so it's best for minifying
+// to just inline everything.
 
 /**
  * Memory history stores the current location in memory. It is designed
@@ -86,6 +86,11 @@ export const createMemoryHistory = ({
           index: location.index + (replace ? 0 : 1)
         })
       ),
+    retry: tx =>
+      history.navigate(createPath(tx.location), {
+        replace: tx.action === ReplaceAction,
+        state: tx.location.state
+      }),
     go: n =>
       handleNavigation(
         PopAction,
@@ -121,25 +126,43 @@ export const createBrowserHistory = ({
     });
   };
 
-  let ignoreNextPop = false;
+  let blockedPopTx = null;
 
-  // TODO: Add reload arg
+  // TODO: Add reload arg to force page refresh
   let handleNavigation = (nextAction, nextLocation) => {
-    if (nextAction === PopAction && ignoreNextPop) {
-      ignoreNextPop = false;
-      return;
-    }
+    if (nextAction === PopAction && blockedPopTx) {
+      blockers.call(blockedPopTx);
+      blockedPopTx = null;
+    } else if (blockers.length) {
+      let tx = { action: nextAction, location: nextLocation };
 
-    if (blockers.length) {
-      blockers.call({ action: nextAction, location: nextLocation });
-
-      if (nextAction === PopAction && nextLocation.index != null) {
-        // Revert the POP
-        let n = location.index - nextLocation.index;
-        if (n) {
-          ignoreNextPop = true;
-          globalHistory.go(n);
+      if (nextAction === PopAction) {
+        if (nextLocation.index != null) {
+          let n = location.index - nextLocation.index;
+          if (n) {
+            // Revert the POP
+            tx.delta = n * -1;
+            blockedPopTx = tx;
+            history.go(n);
+          }
+        } else {
+          // Trying to POP to a location with no index. We did not create
+          // this location, so we can't effectively block the navigation.
+          if (__DEV__) {
+            // TODO: Write up a doc that explains our blocking strategy in
+            // detail and link to it here so people can understand better
+            // what is going on and how to avoid it.
+            throw new Error(
+              `You are trying to block a POP navigation to a location that was not ` +
+                `created by the history library. The block will fail silently in ` +
+                `production, but in general you should do all navigation with the ` +
+                `history library (instead of using window.history.pushState directly) ` +
+                `to avoid this situation.`
+            );
+          }
         }
+      } else {
+        blockers.call(tx);
       }
     } else {
       let state = {
@@ -200,8 +223,8 @@ export const createBrowserHistory = ({
       if (blockers.length === 1) toggleBeforeUnloadBlocker(1);
       return () => {
         unblock();
-        // Remove the beforeunload listener so the document may be
-        // salvageable in the pagehide event.
+        // Remove the beforeunload listener so the document may
+        // still be salvageable in the pagehide event.
         // See https://html.spec.whatwg.org/#unloading-documents
         if (!blockers.length) toggleBeforeUnloadBlocker(0);
       };
@@ -219,6 +242,13 @@ export const createBrowserHistory = ({
           index: location.index + (replace ? 0 : 1)
         })
       ),
+    retry: tx =>
+      tx.delta
+        ? history.go(tx.delta)
+        : history.navigate(createPath(tx.location), {
+            replace: tx.action === ReplaceAction,
+            state: tx.location.state
+          }),
     go: n => globalHistory.go(n),
     back: () => history.go(-1),
     forward: () => history.go(1)
@@ -249,7 +279,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     });
   };
 
-  let ignoreNextPop = false;
+  let blockedPopTx = null;
 
   // TODO: Add reload arg
   let handleNavigation = (nextAction, nextLocation) => {
@@ -263,21 +293,41 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
       }
     }
 
-    if (nextAction === PopAction && ignoreNextPop) {
-      ignoreNextPop = false;
-      return;
-    }
+    if (nextAction === PopAction && blockedPopTx) {
+      // Now that we are back at the original URL,
+      // call blockers with the transition we blocked.
+      blockers.call(blockedPopTx);
+      blockedPopTx = null;
+    } else if (blockers.length) {
+      let tx = { action: nextAction, location: nextLocation };
 
-    if (blockers.length) {
-      blockers.call({ action: nextAction, location: nextLocation });
-
-      if (nextAction === PopAction && nextLocation.index != null) {
-        // Revert the POP
-        let n = location.index - nextLocation.index;
-        if (n) {
-          ignoreNextPop = true;
-          globalHistory.go(n);
+      if (nextAction === PopAction) {
+        if (nextLocation.index != null) {
+          let n = location.index - nextLocation.index;
+          if (n) {
+            // Revert the POP
+            tx.delta = n * -1;
+            blockedPopTx = tx;
+            history.go(n);
+          }
+        } else {
+          // Trying to POP to a location with no index. We did not create
+          // this location, so we can't effectively block the navigation.
+          if (__DEV__) {
+            // TODO: Write up a doc that explains our blocking strategy in
+            // detail and link to it here so people can understand better
+            // what is going on and how to avoid it.
+            throw new Error(
+              `You are trying to block a POP navigation to a location that was not ` +
+                `created by the history library. The block will fail silently in ` +
+                `production, but in general you should do all navigation with the ` +
+                `history library (instead of using window.history.pushState directly) ` +
+                `to avoid this situation.`
+            );
+          }
         }
+      } else {
+        blockers.call(tx);
       }
     } else {
       let state = {
@@ -320,12 +370,14 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     handleNavigation(PopAction, getLocation());
   });
 
+  // TODO: Is this still necessary? Which browsers do
+  // not trigger popstate when the hash changes?
   window.addEventListener(HashChangeEvent, event => {
     let nextLocation = getLocation();
 
     // Ignore extraneous hashchange events.
     if (createPath(nextLocation) !== createPath(location)) {
-      handleNavigation(PopAction, getLocation());
+      handleNavigation(PopAction, nextLocation);
     }
   });
 
@@ -354,8 +406,8 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
       if (blockers.length === 1) toggleBeforeUnloadBlocker(1);
       return () => {
         unblock();
-        // Remove the beforeunload listener so the document may be
-        // salvageable in the pagehide event.
+        // Remove the beforeunload listener so the document may
+        // still be salvageable in the pagehide event.
         // See https://html.spec.whatwg.org/#unloading-documents
         if (!blockers.length) toggleBeforeUnloadBlocker(0);
       };
@@ -373,6 +425,13 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
           index: location.index + (replace ? 0 : 1)
         })
       ),
+    retry: tx =>
+      tx.delta
+        ? history.go(tx.delta)
+        : history.navigate(createPath(tx.location), {
+            replace: tx.action === ReplaceAction,
+            state: tx.location.state
+          }),
     go: n => globalHistory.go(n),
     back: () => history.go(-1),
     forward: () => history.go(1)

@@ -12,17 +12,15 @@
       <button onclick="goForward()">forward</button>
     </p>
     <p>
-      <span>regular links: </span><br />
-      <a href="/unload-history">home</a>
-      <a href="/unload-history-one">one</a>
-      <a href="/unload-history-two">two</a>
-    </p>
-    <p>
       <span>pushState &amp; replaceState: </span><br />
       <a href="/unload-history" onclick="return pushLink(this)">pushState(home)</a>
       <a href="/unload-history-one" onclick="return pushLink(this)">pushState(one)</a>
       <a href="/unload-history-two" onclick="return pushLink(this)">pushState(two)</a>
       <a href="/unload-history-three" onclick="return replaceLink(this)">replaceState(three)</a>
+    </p>
+    <p>
+      <span>regular link: </span><br />
+      <a href="/unload-history">home</a>
     </p>
 
     <h1>Test Scenarios</h1>
@@ -31,7 +29,6 @@
       <ul>
         <li>Click block - Click back - You should be prompted to stay</li>
         <li>Click block - Click home - You should be prompted to stay</li>
-        <li>Click block - Click one - You should be prompted to stay</li>
         <li>Click block - Close the tab - You should be prompted to stay</li>
         <li>Click pushState(one) - Click block - Click back - You should still be at /unload-history-one</li>
         <li>Click pushState(one) - Click block - Click pushState(two) - You should still be at /unload-history-one</li>
@@ -49,22 +46,17 @@
 
       var blocker = document.getElementById('blocker');
       var unblock;
+
       blocker.addEventListener('change', () => {
         if (blocker.checked) {
-          unblock = h.block(({ action, location }) => {
-            console.log(`blocked ${action} to ${location.pathname}`)
-
-            // Use a setTimeout here to give the router time to reset
-            // the URL back to what it was before we blocked the tx.
-            setTimeout(() => {
-              if (window.confirm(`Are you sure you want to go to ${location.pathname}?`)) {
-                // Reset the blocker so the next tx is allowed.
-                blocker.checked = false;
-                unblock();
-                // Replay the previous tx.
-                h.navigate(location, { replace: action === 'REPLACE' });
-              }
-            }, 100);
+          unblock = h.block(tx => {
+            if (window.confirm(`Are you sure you want to go to ${tx.location.pathname}?`)) {
+              // Reset the blocker so the next transition is allowed.
+              blocker.checked = false;
+              unblock();
+              // Retry the transition.
+              h.retry(tx);
+            }
           });
         } else if (unblock) {
           unblock();
