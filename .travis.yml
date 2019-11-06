@@ -1,17 +1,17 @@
 language: node_js
 node_js: node
 cache: yarn
-env:
-- TEST_ENV=cjs BUILD_ENV=cjs
-- TEST_ENV=umd BUILD_ENV=umd
-- TEST_ENV=source
-before_script:
-- ([[ -z "$BUILD_ENV" ]] || yarn build)
-script:
-- yarn lint
-- yarn test
 jobs:
   include:
+  - stage: Test
+    env: TEST_ENV=cjs BUILD_ENV=cjs
+    before_script: yarn build
+    script: yarn test
+  - env: TEST_ENV=umd BUILD_ENV=umd
+    before_script: yarn build
+    script: yarn test
+  - env: TEST_ENV=source
+    script: yarn test
   - stage: Release
     if: tag =~ ^v[0-9]
     env: NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")
