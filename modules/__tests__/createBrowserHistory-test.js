@@ -8,12 +8,9 @@ import PushSamePath from './TestSequences/PushSamePath.js';
 import PushState from './TestSequences/PushState.js';
 import PushMissingPathname from './TestSequences/PushMissingPathname.js';
 import PushRelativePathname from './TestSequences/PushRelativePathname.js';
-import PushUnicodeLocation from './TestSequences/PushUnicodeLocation.js';
-import PushEncodedLocation from './TestSequences/PushEncodedLocation.js';
 import ReplaceNewLocation from './TestSequences/ReplaceNewLocation.js';
 import ReplaceSamePath from './TestSequences/ReplaceSamePath.js';
 import ReplaceState from './TestSequences/ReplaceState.js';
-import LocationPathnameAlwaysSame from './TestSequences/LocationPathnameAlwaysSame.js';
 import EncodedReservedCharacters from './TestSequences/EncodedReservedCharacters.js';
 import GoBack from './TestSequences/GoBack.js';
 import GoForward from './TestSequences/GoForward.js';
@@ -93,20 +90,6 @@ describe('a browser history', () => {
     });
   });
 
-  // Currently broken in IE 11 and Edge
-  describe.skip('push with a unicode path string', () => {
-    it('creates a location with encoded properties', done => {
-      PushUnicodeLocation(history, done);
-    });
-  });
-
-  // Currently broken in IE 11 and Edge
-  describe.skip('push with an encoded path string', () => {
-    it('creates a location with encoded pathname', done => {
-      PushEncodedLocation(history, done);
-    });
-  });
-
   describe('replace a new path', () => {
     it('calls change listeners with the new location', done => {
       ReplaceNewLocation(history, done);
@@ -122,13 +105,6 @@ describe('a browser history', () => {
   describe('replace state', () => {
     it('calls change listeners with the new location', done => {
       ReplaceState(history, done);
-    });
-  });
-
-  // Currently broken in IE 11 and Edge
-  describe.skip('location created by encoded and unencoded pathname', () => {
-    it('produces the same location.pathname', done => {
-      LocationPathnameAlwaysSame(history, done);
     });
   });
 
