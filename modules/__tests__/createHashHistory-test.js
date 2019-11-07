@@ -27,9 +27,7 @@ import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.j
 describe('a hash history', () => {
   let history;
   beforeEach(() => {
-    if (window.location.hash !== '#/') {
-      window.location.hash = '/';
-    }
+    window.history.replaceState(null, null, '#/');
     history = createHashHistory();
   });
 

@@ -488,17 +488,17 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     let nextLocation = getNextLocation(to, state);
     let retry = () => push(to, state);
 
+    if (__DEV__) {
+      if (nextLocation.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(to);
+        throw new Error(
+          `Relative pathnames are not supported in createHashHistory().push(${arg})`
+        );
+      }
+    }
+
     if (allowTx(nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
-
-      if (__DEV__) {
-        if (nextLocation.pathname.charAt(0) !== '/') {
-          let arg = JSON.stringify(to);
-          throw new Error(
-            `Relative pathnames are not supported in createHashHistory().push(${arg})`
-          );
-        }
-      }
 
       // TODO: Support forced reloading
       // try...catch because iOS limits us to 100 pushState calls :/

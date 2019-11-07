@@ -23,9 +23,7 @@ import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.j
 describe('a browser history', () => {
   let history;
   beforeEach(() => {
-    if (window.location.pathname !== '/') {
-      window.history.replaceState(null, null, '/');
-    }
+    window.history.replaceState(null, null, '/');
     history = createBrowserHistory();
   });
 
