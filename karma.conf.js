@@ -37,14 +37,17 @@ module.exports = function(config) {
       os_version: '10',
       browser: 'IE',
       browser_version: '11.0'
-    },
-    BS_Safari: {
-      base: 'BrowserStack',
-      os: 'OS X',
-      os_version: 'Mojave',
-      browser: 'Safari',
-      browser_version: '12.1'
     }
+    // Safari throws an error if you use replaceState more
+    // than 100 times in 30 seconds :/
+    // See https://travis-ci.com/ReactTraining/history/jobs/254197476
+    // BS_Safari: {
+    //   base: 'BrowserStack',
+    //   os: 'OS X',
+    //   os_version: 'Mojave',
+    //   browser: 'Safari',
+    //   browser_version: '12.1'
+    // }
     // BS_iPhoneX: {
     //   base: 'BrowserStack',
     //   device: 'iPhone X',
