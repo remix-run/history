@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Navigation Blocking (library version)</h1>
+
+    <p>
+      <label><input type="checkbox" id="blocker" /> block</label>
+    </p>
+    <p>
+      <span>back &amp; forward: </span><br />
+      <button onclick="goBack()">back</button>
+      <button onclick="goForward()">forward</button>
+    </p>
+    <p>
+      <span>pushState &amp; replaceState: </span><br />
+      <a href="/" onclick="return pushLink(this)">push /</a>
+      <a href="/one" onclick="return pushLink(this)">push /one</a>
+      <a href="/two" onclick="return pushLink(this)">push /two</a>
+      <a href="/three" onclick="return replaceLink(this)">replace /three</a>
+    </p>
+    <p>
+      <span>regular links: </span><br />
+      <a href="/">/</a>
+      <a href="/one">/one</a>
+    </p>
+
+    <script src="history.js"></script>
+    <script>
+      var h = History.createBrowserHistory();
+
+      // Blocker
+
+      var blocker = document.getElementById('blocker');
+      var unblock;
+
+      blocker.addEventListener('change', () => {
+        if (blocker.checked) {
+          unblock = h.block(onBlock);
+        } else if (unblock) {
+          unblock();
+          unblock = undefined;
+        }
+      });
+
+      function onBlock(tx) {
+        if (
+          window.confirm(
+            `Are you sure you want to go to ${tx.location.pathname +
+              tx.location.hash}?`
+          )
+        ) {
+          // Reset the blocker so the next transition is allowed.
+          blocker.checked = false;
+          unblock();
+          // Retry the transition.
+          tx.retry();
+        }
+      }
+
+      // Navigation
+
+      function pushLink(link) {
+        h.push(link.getAttribute('href'));
+        return false; // preventDefault
+      }
+
+      function replaceLink(link) {
+        h.replace(link.getAttribute('href'));
+        return false; // preventDefault
+      }
+
+      function goBack() {
+        h.back();
+      }
+
+      function goForward() {
+        h.forward();
+      }
+    </script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 /esm/
-/fixtures/history.js
+/fixtures/*/history.js
 /cjs/
 /node_modules/
 /umd/

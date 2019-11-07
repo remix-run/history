@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Navigation Blocking (vanilla JS version)</h1>
+
+    <p>
+      <label><input type="checkbox" id="blocker" /> block</label>
+    </p>
+    <p>
+      <span>back &amp; forward: </span><br />
+      <button onclick="goBack()">back</button>
+      <button onclick="goForward()">forward</button>
+    </p>
+    <p>
+      <span>pushState &amp; replaceState: </span><br />
+      <a href="/" onclick="return pushLink(this)">push /</a>
+      <a href="/one" onclick="return pushLink(this)">push /one</a>
+      <a href="/two" onclick="return pushLink(this)">push /two</a>
+      <a href="/three" onclick="return replaceLink(this)">replace /three</a>
+    </p>
+    <p>
+      <span>regular links: </span><br />
+      <a href="/">/</a>
+      <a href="/one">/one</a>
+    </p>
+
+    <script>
+      // Blocking
+
+      var blocker = document.getElementById('blocker');
+
+      function isBlocked() {
+        return blocker.checked;
+      }
+
+      function promptBeforeUnload(event) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+
+      function toggleBeforeUnloadPrompt() {
+        if (isBlocked()) {
+          window.addEventListener('beforeunload', promptBeforeUnload);
+        } else {
+          window.removeEventListener('beforeunload', promptBeforeUnload);
+        }
+      }
+
+      toggleBeforeUnloadPrompt();
+      blocker.addEventListener('change', () => {
+        toggleBeforeUnloadPrompt();
+      });
+
+      function onBlock(tx) {
+        if (confirm(`Are you sure you want to go to ${tx.href}?`)) {
+          blocker.checked = false;
+          toggleBeforeUnloadPrompt();
+          tx.retry();
+        }
+      }
+
+      // Popstate
+
+      var index = window.history.state && window.history.state.index;
+
+      if (index == null) {
+        index = 0;
+        window.history.replaceState(
+          Object.assign({}, window.history.state, { index }),
+          null
+        );
+      }
+
+      var blockedPopTx = null;
+
+      window.addEventListener('popstate', () => {
+        if (blockedPopTx) {
+          onBlock(blockedPopTx);
+          blockedPopTx = null;
+          return;
+        }
+
+        var nextIndex = window.history.state && window.history.state.index;
+
+        if (isBlocked()) {
+          if (nextIndex != null) {
+            var n = index - nextIndex;
+            if (n) {
+              // Revert the POP
+              blockedPopTx = {
+                href: window.location.href,
+                retry: () => {
+                  window.history.go(n * -1);
+                }
+              };
+
+              window.history.go(n);
+            }
+          } else {
+            // We did not generate this location, so we can't revert the POP.
+          }
+        } else {
+          index = nextIndex;
+        }
+      });
+
+      // Navigation
+
+      function pushLink(link) {
+        var href = link.getAttribute('href');
+
+        if (isBlocked()) {
+          onBlock({ href, retry: () => pushLink(link) });
+        } else {
+          index += 1;
+          window.history.pushState({ index }, null, href);
+        }
+
+        return false; // preventDefault
+      }
+
+      function replaceLink(link) {
+        var href = link.getAttribute('href');
+
+        if (isBlocked()) {
+          onBlock({ href, retry: () => replaceLink(link) });
+        } else {
+          window.history.replaceState({ index }, null, href);
+        }
+
+        return false; // preventDefault
+      }
+
+      function goBack() {
+        window.history.go(-1);
+      }
+
+      function goForward() {
+        window.history.go(1);
+      }
+    </script>
+  </body>
+</html>
