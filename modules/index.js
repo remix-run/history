@@ -19,21 +19,27 @@ export const createMemoryHistory = ({
   initialEntries = ['/'],
   initialIndex = 0
 } = {}) => {
-  let createLocation = ({
-    pathname = '/',
-    search = '',
-    hash = '',
-    state = null,
-    // Auto-assign keys to entries that don't already have them.
-    key = createKey()
-  }) => createReadOnlyObject({ pathname, search, hash, state, key });
+  let entries = initialEntries.map(entry => {
+    let location = createReadOnlyObject({
+      pathname: '/',
+      search: '',
+      hash: '',
+      state: null,
+      key: createKey(),
+      ...(typeof entry === 'string' ? parsePath(entry) : entry)
+    });
 
-  let entries = initialEntries.map((entry, index) =>
-    createLocation({
-      ...(typeof entry === 'string' ? parsePath(entry) : entry),
-      index
-    })
-  );
+    if (__DEV__) {
+      if (location.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(entry);
+        throw new Error(
+          `Relative pathnames are not supported in createMemoryHistory({ initialEntries }) (invalid entry: ${arg})`
+        );
+      }
+    }
+
+    return location;
+  });
   let index = clamp(initialIndex, 0, entries.length - 1);
 
   let action = PopAction;
@@ -43,11 +49,10 @@ export const createMemoryHistory = ({
 
   let createHref = createPath;
 
-  let getNextLocation = (to, state) =>
-    createLocation({
-      ...(typeof to === 'string'
-        ? parsePath(to)
-        : { pathname: '/', search: '', hash: '', ...to }),
+  let getNextLocation = (to, state = null) =>
+    createReadOnlyObject({
+      ...location,
+      ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
     });
@@ -233,11 +238,10 @@ export const createBrowserHistory = ({
 
   let createHref = createPath;
 
-  let getNextLocation = (to, state) =>
+  let getNextLocation = (to, state = null) =>
     createReadOnlyObject({
-      ...(typeof to === 'string'
-        ? parsePath(to)
-        : { pathname: '/', search: '', hash: '', ...to }),
+      ...location,
+      ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
     });
@@ -360,7 +364,9 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   let globalHistory = window.history;
 
   let getIndexAndLocation = () => {
-    let { pathname, search, hash } = parsePath(window.location.hash.substr(1));
+    let { pathname = '/', search = '', hash = '' } = parsePath(
+      window.location.hash.substr(1)
+    );
     let state = globalHistory.state || {};
     return [
       state.idx,
@@ -456,11 +462,10 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     return href + '#' + createPath(location);
   };
 
-  let getNextLocation = (to, state) =>
+  let getNextLocation = (to, state = null) =>
     createReadOnlyObject({
-      ...(typeof to === 'string'
-        ? parsePath(to)
-        : { pathname: '/', search: '', hash: '', ...to }),
+      ...location,
+      ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
     });
@@ -616,24 +621,28 @@ const createReadOnlyObject = props =>
 const createPath = ({ pathname = '/', search = '', hash = '' }) =>
   pathname + search + hash;
 
-const parsePath = path => {
-  let pathname = path || '/';
-  let search = '';
-  let hash = '';
+let parsePath = path => {
+  let pieces = {};
 
-  let hashIndex = pathname.indexOf('#');
-  if (hashIndex >= 0) {
-    hash = pathname.substr(hashIndex);
-    pathname = pathname.substr(0, hashIndex);
+  if (path) {
+    let hashIndex = path.indexOf('#');
+    if (hashIndex >= 0) {
+      pieces.hash = path.substr(hashIndex);
+      path = path.substr(0, hashIndex);
+    }
+
+    let searchIndex = path.indexOf('?');
+    if (searchIndex >= 0) {
+      pieces.search = path.substr(searchIndex);
+      path = path.substr(0, searchIndex);
+    }
+
+    if (path) {
+      pieces.pathname = path;
+    }
   }
 
-  let searchIndex = pathname.indexOf('?');
-  if (searchIndex >= 0) {
-    search = pathname.substr(searchIndex);
-    pathname = pathname.substr(0, searchIndex);
-  }
-
-  return { pathname, search, hash };
+  return pieces;
 };
 
 const createEvents = () => {

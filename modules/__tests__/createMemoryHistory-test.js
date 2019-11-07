@@ -77,8 +77,8 @@ describe('a memory history', () => {
     });
   });
 
-  describe.skip('push with no pathname', () => {
-    it('calls change listeners with the normalized location', done => {
+  describe('push with no pathname', () => {
+    it('reuses the current location pathname', done => {
       PushMissingPathname(history, done);
     });
   });

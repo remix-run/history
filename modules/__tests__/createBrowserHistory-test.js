@@ -78,14 +78,14 @@ describe('a browser history', () => {
     });
   });
 
-  describe.skip('push with no pathname', () => {
-    it('calls change listeners with the normalized location', done => {
+  describe('push with no pathname', () => {
+    it('reuses the current location pathname', done => {
       PushMissingPathname(history, done);
     });
   });
 
   describe('push with a relative pathname', () => {
-    it('calls change listeners with the normalized location', done => {
+    it('normalizes the pathname relative to the current location', done => {
       PushRelativePathname(history, done);
     });
   });
