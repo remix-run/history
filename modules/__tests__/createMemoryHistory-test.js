@@ -34,16 +34,14 @@ describe('a memory history', () => {
   });
 
   it('does not encode the generated path', () => {
-    // encoded
     const encodedHref = history.createHref({
       pathname: '/%23abc'
     });
-    // unencoded
+    expect(encodedHref).toEqual('/%23abc');
+
     const unencodedHref = history.createHref({
       pathname: '/#abc'
     });
-
-    expect(encodedHref).toEqual('/%23abc');
     expect(unencodedHref).toEqual('/#abc');
   });
 
