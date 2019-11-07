@@ -9,7 +9,7 @@ export default (history, done) => {
         pathname: '/'
       });
 
-      history.navigate('/home?the=query#the-hash');
+      history.push('/home?the=query#the-hash');
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');
@@ -19,7 +19,7 @@ export default (history, done) => {
         hash: '#the-hash'
       });
 
-      history.navigate('?another=query#another-hash');
+      history.push('?another=query#another-hash');
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');

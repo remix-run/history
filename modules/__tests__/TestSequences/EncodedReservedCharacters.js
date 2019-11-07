@@ -7,16 +7,15 @@ export default (history, done) => {
     () => {
       // encoded string
       let pathname = '/view/%23abc';
-      history.navigate(pathname, { replace: true });
+      history.replace(pathname);
     },
     ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/view/%23abc'
       });
-
       // encoded object
       let pathname = '/view/%23abc';
-      history.navigate({ pathname }, { replace: true });
+      history.replace({ pathname });
     },
     ({ location }) => {
       expect(location).toMatchObject({
@@ -24,7 +23,7 @@ export default (history, done) => {
       });
       // unencoded string
       let pathname = '/view/#abc';
-      history.navigate(pathname, { replace: true });
+      history.replace(pathname);
     },
     ({ location }) => {
       expect(location).toMatchObject({

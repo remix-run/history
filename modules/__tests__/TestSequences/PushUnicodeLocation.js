@@ -12,7 +12,7 @@ export default (history, done) => {
       let pathname = '/歴史';
       let search = '?キー=値';
       let hash = '#ハッシュ';
-      history.navigate(pathname + search + hash);
+      history.push(pathname + search + hash);
     },
     ({ action, location }) => {
       expect(action).toBe('PUSH');

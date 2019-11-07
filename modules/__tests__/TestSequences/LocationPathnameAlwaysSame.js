@@ -7,7 +7,7 @@ export default (history, done) => {
     () => {
       // encoded string
       let pathname = '/%E6%AD%B4%E5%8F%B2';
-      history.navigate(pathname, { replace: true });
+      history.replace(pathname);
     },
     ({ location }) => {
       expect(location).toMatchObject({
@@ -15,7 +15,7 @@ export default (history, done) => {
       });
       // encoded object
       let pathname = '/%E6%AD%B4%E5%8F%B2';
-      history.navigate({ pathname }, { replace: true });
+      history.replace({ pathname });
     },
     ({ location }) => {
       expect(location).toMatchObject({
@@ -23,7 +23,7 @@ export default (history, done) => {
       });
       // unencoded string
       let pathname = '/歴史';
-      history.navigate(pathname, { replace: true });
+      history.replace(pathname);
     },
     ({ location }) => {
       expect(location).toMatchObject({
@@ -31,7 +31,7 @@ export default (history, done) => {
       });
       // unencoded object
       let pathname = '/歴史';
-      history.navigate({ pathname }, { replace: true });
+      history.replace({ pathname });
     },
     ({ location }) => {
       expect(location).toMatchObject({

@@ -25,34 +25,8 @@ export const createMemoryHistory = ({
     hash = '',
     state = null,
     // Auto-assign keys to entries that don't already have them.
-    key = createKey(),
-    index
-  }) => createReadOnlyObject({ pathname, search, hash, state, key, index });
-
-  let handleNavigation = (nextAction, nextLocation) => {
-    if (__DEV__) {
-      if (nextLocation && nextLocation.pathname.charAt(0) !== '/') {
-        let arg = createPath(nextLocation);
-        let fnCall = `${nextAction.toLowerCase()}("${arg}")`;
-        throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory().${fnCall}`
-        );
-      }
-    }
-
-    if (blockers.length) {
-      blockers.call({ action: nextAction, location: nextLocation });
-    } else {
-      if (nextAction === PushAction) {
-        entries.splice(nextLocation.index, entries.length, nextLocation);
-      } else if (nextAction === ReplaceAction) {
-        entries[nextLocation.index] = nextLocation;
-      }
-      action = nextAction;
-      location = nextLocation;
-      listeners.call({ action, location });
-    }
-  };
+    key = createKey()
+  }) => createReadOnlyObject({ pathname, search, hash, state, key });
 
   let entries = initialEntries.map((entry, index) =>
     createLocation({
@@ -60,11 +34,99 @@ export const createMemoryHistory = ({
       index
     })
   );
+  let index = clamp(initialIndex, 0, entries.length - 1);
 
   let action = PopAction;
-  let location = entries[clamp(initialIndex, 0, entries.length - 1)];
+  let location = entries[index];
   let blockers = createEvents();
   let listeners = createEvents();
+
+  let createHref = createPath;
+
+  let getNextLocation = (to, state) =>
+    createLocation({
+      ...(typeof to === 'string'
+        ? parsePath(to)
+        : { pathname: '/', search: '', hash: '', ...to }),
+      state,
+      key: createKey()
+    });
+
+  let allowTx = (action, location, retry) =>
+    !blockers.length || (blockers.call({ action, location, retry }), false);
+
+  let applyTx = (nextAction, nextLocation) => {
+    action = nextAction;
+    location = nextLocation;
+    listeners.call({ action, location });
+  };
+
+  let push = (to, state) => {
+    let nextAction = PushAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => push(to, state);
+
+    if (__DEV__) {
+      if (nextLocation.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(to);
+        throw new Error(
+          `Relative pathnames are not supported in createMemoryHistory().push(${arg})`
+        );
+      }
+    }
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      index += 1;
+      entries.splice(index, entries.length, nextLocation);
+      applyTx(nextAction, nextLocation);
+    }
+  };
+
+  let replace = (to, state) => {
+    let nextAction = ReplaceAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => replace(to, state);
+
+    if (__DEV__) {
+      if (nextLocation.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(to);
+        throw new Error(
+          `Relative pathnames are not supported in createMemoryHistory().replace(${arg})`
+        );
+      }
+    }
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      entries[index] = nextLocation;
+      applyTx(nextAction, nextLocation);
+    }
+  };
+
+  let go = n => {
+    let nextIndex = clamp(index + n, 0, entries.length - 1);
+    let nextAction = PopAction;
+    let nextLocation = entries[nextIndex];
+    let retry = () => {
+      go(n);
+    };
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      index = nextIndex;
+      applyTx(nextAction, nextLocation);
+    }
+  };
+
+  let back = () => {
+    go(-1);
+  };
+
+  let forward = () => {
+    go(1);
+  };
+
+  let listen = fn => listeners.push(fn);
+
+  let block = fn => blockers.push(fn);
 
   let history = {
     get action() {
@@ -73,31 +135,14 @@ export const createMemoryHistory = ({
     get location() {
       return location;
     },
-    createHref: createPath,
-    block: fn => blockers.push(fn),
-    listen: fn => listeners.push(fn),
-    navigate: (to, { replace = false, state = null } = {}) =>
-      handleNavigation(
-        replace ? ReplaceAction : PushAction,
-        createLocation({
-          ...(typeof to === 'string' ? parsePath(to) : to),
-          state,
-          key: createKey(),
-          index: location.index + (replace ? 0 : 1)
-        })
-      ),
-    retry: tx =>
-      history.navigate(createPath(tx.location), {
-        replace: tx.action === ReplaceAction,
-        state: tx.location.state
-      }),
-    go: n =>
-      handleNavigation(
-        PopAction,
-        entries[clamp(location.index + n, 0, entries.length - 1)]
-      ),
-    back: () => history.go(-1),
-    forward: () => history.go(1)
+    createHref,
+    push,
+    replace,
+    go,
+    back,
+    forward,
+    listen,
+    block
   };
 
   return history;
@@ -113,37 +158,44 @@ export const createBrowserHistory = ({
 } = {}) => {
   let globalHistory = window.history;
 
-  let getLocation = () => {
+  let getIndexAndLocation = () => {
     let { pathname, search, hash } = window.location;
     let state = globalHistory.state || {};
-    return createReadOnlyObject({
-      pathname,
-      search,
-      hash,
-      state: state.usr || null,
-      key: state.key || 'default',
-      index: state.idx
-    });
+    return [
+      state.idx,
+      createReadOnlyObject({
+        pathname,
+        search,
+        hash,
+        state: state.usr || null,
+        key: state.key || 'default'
+      })
+    ];
   };
 
   let blockedPopTx = null;
-
-  // TODO: Add reload arg to force page refresh
-  let handleNavigation = (nextAction, nextLocation) => {
-    if (nextAction === PopAction && blockedPopTx) {
+  let handlePop = () => {
+    if (blockedPopTx) {
       blockers.call(blockedPopTx);
       blockedPopTx = null;
-    } else if (blockers.length) {
-      let tx = { action: nextAction, location: nextLocation };
+    } else {
+      let nextAction = PopAction;
+      let [nextIndex, nextLocation] = getIndexAndLocation();
 
-      if (nextAction === PopAction) {
-        if (nextLocation.index != null) {
-          let n = location.index - nextLocation.index;
+      if (blockers.length) {
+        if (nextIndex != null) {
+          let n = index - nextIndex;
           if (n) {
             // Revert the POP
-            tx.delta = n * -1;
-            blockedPopTx = tx;
-            history.go(n);
+            blockedPopTx = {
+              action: nextAction,
+              location: nextLocation,
+              retry: () => {
+                go(n * -1);
+              }
+            };
+
+            go(n);
           }
         } else {
           // Trying to POP to a location with no index. We did not create
@@ -162,53 +214,121 @@ export const createBrowserHistory = ({
           }
         }
       } else {
-        blockers.call(tx);
+        applyTx(nextAction);
       }
-    } else {
-      let state = {
-        usr: nextLocation.state,
-        key: nextLocation.key,
-        idx: nextLocation.index
-      };
-      let url = createPath(nextLocation);
-
-      if (nextAction === PushAction) {
-        // try...catch because iOS limits us to 100 pushState calls :/
-        try {
-          globalHistory.pushState(state, null, url);
-        } catch (error) {
-          // They are going to lose state here, but there is no real
-          // way to warn them about it since the page will refresh...
-          window.location.assign(url);
-        }
-      } else if (nextAction === ReplaceAction) {
-        globalHistory.replaceState(state, null, url);
-      }
-
-      action = nextAction;
-      // Get the location fresh so we can support relative paths.
-      location = getLocation();
-      listeners.call({ action, location });
     }
   };
 
-  let toggleBeforeUnloadBlocker = on =>
-    window[`${on ? 'add' : 'remove'}EventListener`](
-      BeforeUnloadEvent,
-      preventUnload
-    );
-
-  // Initialize the index for this document.
-  globalHistory.replaceState({ ...globalHistory.state, idx: 0 }, null);
-
-  window.addEventListener(PopStateEvent, event => {
-    handleNavigation(PopAction, getLocation());
-  });
+  window.addEventListener(PopStateEvent, handlePop);
 
   let action = PopAction;
-  let location = getLocation();
+  let [index, location] = getIndexAndLocation();
   let blockers = createEvents();
   let listeners = createEvents();
+
+  if (index == null) {
+    index = 0;
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
+  }
+
+  let createHref = createPath;
+
+  let getNextLocation = (to, state) =>
+    createReadOnlyObject({
+      ...(typeof to === 'string'
+        ? parsePath(to)
+        : { pathname: '/', search: '', hash: '', ...to }),
+      state,
+      key: createKey()
+    });
+
+  let getHistoryStateAndUrl = (nextLocation, index) => [
+    {
+      usr: nextLocation.state,
+      key: nextLocation.key,
+      idx: index
+    },
+    createHref(nextLocation)
+  ];
+
+  let allowTx = (action, location, retry) =>
+    !blockers.length || (blockers.call({ action, location, retry }), false);
+
+  let applyTx = nextAction => {
+    action = nextAction;
+    [index, location] = getIndexAndLocation();
+    listeners.call({ action, location });
+  };
+
+  let push = (to, state) => {
+    let nextAction = PushAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => push(to, state);
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
+
+      // TODO: Support forced reloading
+      // try...catch because iOS limits us to 100 pushState calls :/
+      try {
+        globalHistory.pushState(historyState, null, url);
+      } catch (error) {
+        // They are going to lose state here, but there is no real
+        // way to warn them about it since the page will refresh...
+        window.location.assign(url);
+      }
+
+      applyTx(nextAction);
+    }
+  };
+
+  let replace = (to, state) => {
+    let nextAction = ReplaceAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => replace(to, state);
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
+
+      // TODO: Support forced reloading
+      globalHistory.replaceState(historyState, null, url);
+
+      applyTx(nextAction);
+    }
+  };
+
+  let go = n => {
+    globalHistory.go(n);
+  };
+
+  let back = () => {
+    go(-1);
+  };
+
+  let forward = () => {
+    go(1);
+  };
+
+  let listen = fn => listeners.push(fn);
+
+  let block = fn => {
+    let unblock = blockers.push(fn);
+
+    if (blockers.length === 1) {
+      window.addEventListener(BeforeUnloadEvent, promptBeforeUnload);
+    }
+
+    return () => {
+      unblock();
+
+      // Remove the beforeunload listener so the document may
+      // still be salvageable in the pagehide event.
+      // See https://html.spec.whatwg.org/#unloading-documents
+      if (!blockers.length) {
+        window.removeEventListener(BeforeUnloadEvent, promptBeforeUnload);
+      }
+    };
+  };
 
   let history = {
     get action() {
@@ -217,41 +337,14 @@ export const createBrowserHistory = ({
     get location() {
       return location;
     },
-    createHref: createPath,
-    block: fn => {
-      let unblock = blockers.push(fn);
-      if (blockers.length === 1) toggleBeforeUnloadBlocker(1);
-      return () => {
-        unblock();
-        // Remove the beforeunload listener so the document may
-        // still be salvageable in the pagehide event.
-        // See https://html.spec.whatwg.org/#unloading-documents
-        if (!blockers.length) toggleBeforeUnloadBlocker(0);
-      };
-    },
-    listen: fn => listeners.push(fn),
-    navigate: (to, { replace = false, state = null } = {}) =>
-      handleNavigation(
-        replace ? ReplaceAction : PushAction,
-        createReadOnlyObject({
-          ...(typeof to === 'string'
-            ? parsePath(to)
-            : { pathname: '/', search: '', hash: '', ...to }),
-          state,
-          key: createKey(),
-          index: location.index + (replace ? 0 : 1)
-        })
-      ),
-    retry: tx =>
-      tx.delta
-        ? history.go(tx.delta)
-        : history.navigate(createPath(tx.location), {
-            replace: tx.action === ReplaceAction,
-            state: tx.location.state
-          }),
-    go: n => globalHistory.go(n),
-    back: () => history.go(-1),
-    forward: () => history.go(1)
+    createHref,
+    push,
+    replace,
+    go,
+    back,
+    forward,
+    listen,
+    block
   };
 
   return history;
@@ -266,49 +359,44 @@ export const createBrowserHistory = ({
 export const createHashHistory = ({ window = document.defaultView } = {}) => {
   let globalHistory = window.history;
 
-  let getLocation = () => {
+  let getIndexAndLocation = () => {
     let { pathname, search, hash } = parsePath(window.location.hash.substr(1));
     let state = globalHistory.state || {};
-    return createReadOnlyObject({
-      pathname,
-      search,
-      hash,
-      state: state.usr || null,
-      key: state.key || 'default',
-      index: state.idx
-    });
+    return [
+      state.idx,
+      createReadOnlyObject({
+        pathname,
+        search,
+        hash,
+        state: state.usr || null,
+        key: state.key || 'default'
+      })
+    ];
   };
 
   let blockedPopTx = null;
-
-  // TODO: Add reload arg
-  let handleNavigation = (nextAction, nextLocation) => {
-    if (__DEV__) {
-      if (nextLocation.pathname.charAt(0) !== '/') {
-        let arg = createPath(nextLocation);
-        let fnCall = `${nextAction.toLowerCase()}("${arg}")`;
-        throw new Error(
-          `Relative pathnames are not supported in createHashHistory().${fnCall}`
-        );
-      }
-    }
-
-    if (nextAction === PopAction && blockedPopTx) {
-      // Now that we are back at the original URL,
-      // call blockers with the transition we blocked.
+  let handlePop = () => {
+    if (blockedPopTx) {
       blockers.call(blockedPopTx);
       blockedPopTx = null;
-    } else if (blockers.length) {
-      let tx = { action: nextAction, location: nextLocation };
+    } else {
+      let nextAction = PopAction;
+      let [nextIndex, nextLocation] = getIndexAndLocation();
 
-      if (nextAction === PopAction) {
-        if (nextLocation.index != null) {
-          let n = location.index - nextLocation.index;
+      if (blockers.length) {
+        if (nextIndex != null) {
+          let n = index - nextIndex;
           if (n) {
             // Revert the POP
-            tx.delta = n * -1;
-            blockedPopTx = tx;
-            history.go(n);
+            blockedPopTx = {
+              action: nextAction,
+              location: nextLocation,
+              retry: () => {
+                go(n * -1);
+              }
+            };
+
+            go(n);
           }
         } else {
           // Trying to POP to a location with no index. We did not create
@@ -327,64 +415,161 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
           }
         }
       } else {
-        blockers.call(tx);
+        applyTx(nextAction);
       }
-    } else {
-      let state = {
-        usr: nextLocation.state,
-        key: nextLocation.key,
-        idx: nextLocation.index
-      };
-      // TODO: Support different "hash types"?
-      let url = '#' + createPath(nextLocation);
-
-      if (nextAction === PushAction) {
-        // try...catch because iOS limits us to 100 pushState calls :/
-        try {
-          globalHistory.pushState(state, null, url);
-        } catch (error) {
-          // They are going to lose state here, but there is no real
-          // way to warn them about it since the page will refresh...
-          window.location.assign(url);
-        }
-      } else if (nextAction === ReplaceAction) {
-        globalHistory.replaceState(state, null, url);
-      }
-
-      action = nextAction;
-      location = getLocation();
-      listeners.call({ action, location });
     }
   };
 
-  let toggleBeforeUnloadBlocker = on =>
-    window[`${on ? 'add' : 'remove'}EventListener`](
-      BeforeUnloadEvent,
-      preventUnload
-    );
-
-  // Initialize the index for this document.
-  globalHistory.replaceState({ ...globalHistory.state, idx: 0 }, null);
-
-  window.addEventListener(PopStateEvent, event => {
-    handleNavigation(PopAction, getLocation());
-  });
+  window.addEventListener(PopStateEvent, handlePop);
 
   // TODO: Is this still necessary? Which browsers do
   // not trigger popstate when the hash changes?
   window.addEventListener(HashChangeEvent, event => {
-    let nextLocation = getLocation();
+    let [, nextLocation] = getIndexAndLocation();
 
     // Ignore extraneous hashchange events.
     if (createPath(nextLocation) !== createPath(location)) {
-      handleNavigation(PopAction, nextLocation);
+      handlePop();
     }
   });
 
   let action = PopAction;
-  let location = getLocation();
+  let [index, location] = getIndexAndLocation();
   let blockers = createEvents();
   let listeners = createEvents();
+
+  if (index == null) {
+    index = 0;
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
+  }
+
+  let createHref = location => {
+    let base = document.querySelector('base');
+    let href = '';
+
+    if (base && base.getAttribute('href')) {
+      let url = window.location.href;
+      let hashIndex = url.indexOf('#');
+      href = hashIndex === -1 ? url : url.slice(0, hashIndex);
+    }
+
+    return href + '#' + createPath(location);
+  };
+
+  let getNextLocation = (to, state) =>
+    createReadOnlyObject({
+      ...(typeof to === 'string'
+        ? parsePath(to)
+        : { pathname: '/', search: '', hash: '', ...to }),
+      state,
+      key: createKey()
+    });
+
+  let getHistoryStateAndUrl = (nextLocation, index) => [
+    {
+      usr: nextLocation.state,
+      key: nextLocation.key,
+      idx: index
+    },
+    createHref(nextLocation)
+  ];
+
+  let allowTx = (action, location, retry) =>
+    !blockers.length || (blockers.call({ action, location, retry }), false);
+
+  let applyTx = nextAction => {
+    action = nextAction;
+    [index, location] = getIndexAndLocation();
+    listeners.call({ action, location });
+  };
+
+  let push = (to, state) => {
+    let nextAction = PushAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => push(to, state);
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
+
+      if (__DEV__) {
+        if (nextLocation.pathname.charAt(0) !== '/') {
+          let arg = JSON.stringify(to);
+          throw new Error(
+            `Relative pathnames are not supported in createHashHistory().push(${arg})`
+          );
+        }
+      }
+
+      // TODO: Support forced reloading
+      // try...catch because iOS limits us to 100 pushState calls :/
+      try {
+        globalHistory.pushState(historyState, null, url);
+      } catch (error) {
+        // They are going to lose state here, but there is no real
+        // way to warn them about it since the page will refresh...
+        window.location.assign(url);
+      }
+
+      applyTx(nextAction);
+    }
+  };
+
+  let replace = (to, state) => {
+    let nextAction = ReplaceAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => replace(to, state);
+
+    if (__DEV__) {
+      if (nextLocation.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(to);
+        throw new Error(
+          `Relative pathnames are not supported in createHashHistory().replace(${arg})`
+        );
+      }
+    }
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
+
+      // TODO: Support forced reloading
+      globalHistory.replaceState(historyState, null, url);
+
+      applyTx(nextAction);
+    }
+  };
+
+  let go = n => {
+    globalHistory.go(n);
+  };
+
+  let back = () => {
+    go(-1);
+  };
+
+  let forward = () => {
+    go(1);
+  };
+
+  let listen = fn => listeners.push(fn);
+
+  let block = fn => {
+    let unblock = blockers.push(fn);
+
+    if (blockers.length === 1) {
+      window.addEventListener(BeforeUnloadEvent, promptBeforeUnload);
+    }
+
+    return () => {
+      unblock();
+
+      // Remove the beforeunload listener so the document may
+      // still be salvageable in the pagehide event.
+      // See https://html.spec.whatwg.org/#unloading-documents
+      if (!blockers.length) {
+        window.removeEventListener(BeforeUnloadEvent, promptBeforeUnload);
+      }
+    };
+  };
 
   let history = {
     get action() {
@@ -393,54 +578,27 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     get location() {
       return location;
     },
-    createHref: location => {
-      let base = document.querySelector('base');
-      let href = '';
-      if (base && base.getAttribute('href')) {
-        href = stripHash(window.location.href);
-      }
-      return href + '#' + createPath(location);
-    },
-    block: fn => {
-      let unblock = blockers.push(fn);
-      if (blockers.length === 1) toggleBeforeUnloadBlocker(1);
-      return () => {
-        unblock();
-        // Remove the beforeunload listener so the document may
-        // still be salvageable in the pagehide event.
-        // See https://html.spec.whatwg.org/#unloading-documents
-        if (!blockers.length) toggleBeforeUnloadBlocker(0);
-      };
-    },
-    listen: fn => listeners.push(fn),
-    navigate: (to, { replace = false, state = null } = {}) =>
-      handleNavigation(
-        replace ? ReplaceAction : PushAction,
-        createReadOnlyObject({
-          ...(typeof to === 'string'
-            ? parsePath(to)
-            : { pathname: '/', search: '', hash: '', ...to }),
-          state,
-          key: createKey(),
-          index: location.index + (replace ? 0 : 1)
-        })
-      ),
-    retry: tx =>
-      tx.delta
-        ? history.go(tx.delta)
-        : history.navigate(createPath(tx.location), {
-            replace: tx.action === ReplaceAction,
-            state: tx.location.state
-          }),
-    go: n => globalHistory.go(n),
-    back: () => history.go(-1),
-    forward: () => history.go(1)
+    createHref,
+    push,
+    replace,
+    go,
+    back,
+    forward,
+    listen,
+    block
   };
 
   return history;
 };
 
 // Utils
+
+const promptBeforeUnload = event => {
+  // Cancel the event.
+  event.preventDefault();
+  // Chrome (and legacy IE) requires returnValue to be set.
+  event.returnValue = '';
+};
 
 const createKey = () =>
   Math.random()
@@ -454,11 +612,6 @@ const createReadOnlyObject = props =>
       Object.defineProperty(obj, key, { enumerable: true, value: props[key] }),
     Object.create(null)
   );
-
-const stripHash = url => {
-  let hashIndex = url.indexOf('#');
-  return hashIndex === -1 ? url : url.slice(0, hashIndex);
-};
 
 const createPath = ({ pathname = '/', search = '', hash = '' }) =>
   pathname + search + hash;
@@ -495,16 +648,11 @@ const createEvents = () => {
       (() => {
         handlers = handlers.filter(handler => handler !== fn);
       }),
-    call: arg => handlers.map(fn => fn && fn(arg))
+    call: arg => {
+      handlers.forEach(fn => fn && fn(arg));
+    }
   };
 };
 
 const clamp = (n, lowerBound, upperBound) =>
   Math.min(Math.max(n, lowerBound), upperBound);
-
-const preventUnload = event => {
-  // Cancel the event.
-  event.preventDefault();
-  // Chrome (and legacy IE) requires returnValue to be set.
-  event.returnValue = '';
-};
