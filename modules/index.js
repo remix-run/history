@@ -2,9 +2,9 @@ const PopAction = 'POP';
 const PushAction = 'PUSH';
 const ReplaceAction = 'REPLACE';
 
-const BeforeUnloadEvent = 'beforeunload';
-const PopStateEvent = 'popstate';
-const HashChangeEvent = 'hashchange';
+const BeforeUnloadEventType = 'beforeunload';
+const PopStateEventType = 'popstate';
+const HashChangeEventType = 'hashchange';
 
 // There's some duplication in this code, but only one create* method
 // should ever be used in a given web page, so it's best for minifying
@@ -224,7 +224,7 @@ export const createBrowserHistory = ({
     }
   };
 
-  window.addEventListener(PopStateEvent, handlePop);
+  window.addEventListener(PopStateEventType, handlePop);
 
   let action = PopAction;
   let [index, location] = getIndexAndLocation();
@@ -319,7 +319,7 @@ export const createBrowserHistory = ({
     let unblock = blockers.push(fn);
 
     if (blockers.length === 1) {
-      window.addEventListener(BeforeUnloadEvent, promptBeforeUnload);
+      window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
     }
 
     return () => {
@@ -329,7 +329,7 @@ export const createBrowserHistory = ({
       // still be salvageable in the pagehide event.
       // See https://html.spec.whatwg.org/#unloading-documents
       if (!blockers.length) {
-        window.removeEventListener(BeforeUnloadEvent, promptBeforeUnload);
+        window.removeEventListener(BeforeUnloadEventType, promptBeforeUnload);
       }
     };
   };
@@ -426,11 +426,11 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     }
   };
 
-  window.addEventListener(PopStateEvent, handlePop);
+  window.addEventListener(PopStateEventType, handlePop);
 
   // TODO: Is this still necessary? Which browsers do
   // not trigger popstate when the hash changes?
-  window.addEventListener(HashChangeEvent, event => {
+  window.addEventListener(HashChangeEventType, event => {
     let [, nextLocation] = getIndexAndLocation();
 
     // Ignore extraneous hashchange events.
@@ -561,7 +561,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     let unblock = blockers.push(fn);
 
     if (blockers.length === 1) {
-      window.addEventListener(BeforeUnloadEvent, promptBeforeUnload);
+      window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
     }
 
     return () => {
@@ -571,7 +571,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
       // still be salvageable in the pagehide event.
       // See https://html.spec.whatwg.org/#unloading-documents
       if (!blockers.length) {
-        window.removeEventListener(BeforeUnloadEvent, promptBeforeUnload);
+        window.removeEventListener(BeforeUnloadEventType, promptBeforeUnload);
       }
     };
   };
