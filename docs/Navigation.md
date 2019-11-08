@@ -5,9 +5,8 @@
 - `history.push(path, [state])`
 - `history.replace(path, [state])`
 - `history.go(n)`
-- `history.goBack()`
-- `history.goForward()`
-- `history.canGo(n)` (only in `createMemoryHistory`)
+- `history.back()`
+- `history.forward()`
 
 When using `push` or `replace` you can either specify both the URL path and state as separate arguments or include everything in a single location-like object as the first argument.
 
@@ -33,7 +32,5 @@ history.push({
 // Go back to the previous history entry. The following
 // two lines are synonymous.
 history.go(-1);
-history.goBack();
+history.back();
 ```
-
-**Note:** Location state is only supported in `createBrowserHistory` and `createMemoryHistory`.

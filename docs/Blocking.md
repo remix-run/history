@@ -1,38 +1,31 @@
 # Blocking Transitions
 
-`history` lets you register a prompt message that will be shown to the user before location listeners are notified. This allows you to make sure the user wants to leave the current page before they navigate away.
+`history` lets you block navigation away from the current page so you can make sure e.g. the user wants to leave before they go to another page and possibly lose some changes they've made in the current page.
 
 ```js
-// Register a simple prompt message that will be shown the
-// user before they navigate away from the current page.
-const unblock = history.block('Are you sure you want to leave this page?');
+// Block navigation and register a callback that
+// fires when a navigation attempt is blocked.
+let unblock = history.block(tx => {
+  // Navigation was blocked! Let's show a confirmation dialog
+  // so the user can decide if they actually want to navigate
+  // away and discard changes they've made in the current page.
+  let url = tx.location.pathnanme;
+  if (window.confirm(`Are you sure you want to go to ${url}?`)) {
+    // Unblock the navigation.
+    unblock();
 
-// Or use a function that returns the message when it's needed.
-history.block((location, action) => {
-  // The location and action arguments indicate the location
-  // we're transitioning to and how we're getting there.
-
-  // A common use case is to prevent the user from leaving the
-  // page if there's a form they haven't submitted yet.
-  if (input.value !== '') return 'Are you sure you want to leave this page?';
-});
-
-// To stop blocking transitions, call the function returned from block().
-unblock();
-```
-
-**Note:** You'll need to provide a `getUserConfirmation` function to use this feature with `createMemoryHistory` (see below).
-
-## Customizing the Confirm Dialog
-
-By default, [`window.confirm`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm) is used to show prompt messages to the user. If you need to override this behavior (or if you're using `createMemoryHistory`, which doesn't assume a DOM environment), provide a `getUserConfirmation` function when you create your history object.
-
-```js
-const history = createHistory({
-  getUserConfirmation(message, callback) {
-    // Show some custom dialog to the user and call
-    // callback(true) to continue the transiton, or
-    // callback(false) to abort it.
+    // Retry the transition.
+    tx.retry();
   }
 });
 ```
+
+This example uses `window.confirm`, but you could also use your own custom confirm dialog if you'd rather.
+
+## Caveats
+
+`history.block` will call your callback for all in-page navigation attempts, but for navigation that reloads the page (e.g. the refresh button or a link that doesn't use `history.push`) it registers [a `beforeunload` handler](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event) to prevent the navigation. In modern browsers you are not able to customize this dialog. Instead, you'll see something like this (Chrome):
+
+![Chrome navigation confirm dialog](images/block.png)
+
+One subtle side effect of registering a `beforeunload` handler is that the page will not be [salvageable](https://html.spec.whatwg.org/#unloading-documents) in [the `pagehide` event](https://developer.mozilla.org/en-US/docs/Web/API/Window/pagehide_event).

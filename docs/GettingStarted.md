@@ -5,7 +5,7 @@ The history library is a lightweight layer over browsers' built-in [History](htt
 We provide 3 different methods for creating a `history` object, depending on the needs of your environment:
 
 - `createBrowserHistory` is for use in modern web browsers that support the [HTML5 history API](http://diveintohtml5.info/history.html) (see [cross-browser compatibility](http://caniuse.com/#feat=history))
-- `createHashHistory` is for use in situations where you want to store the location in the [hash](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/hash) of the current URL to avoid sending it to the server when the page reloads
+- `createHashHistory` is for use in situations where you want to store the location in the [hash](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/hash) portion of the current URL to avoid sending it to the server when the page reloads
 - `createMemoryHistory` is used as a reference implementation and may also be used in non-DOM environments, like [React Native](https://facebook.github.io/react-native/) or tests
 
 Depending on the method you want to use to keep track of history, you'll `import` (or `require`, if you're using CommonJS) only one of these methods.
@@ -17,13 +17,13 @@ Basic usage looks like this:
 ```js
 import { createBrowserHistory } from 'history';
 
-const history = createBrowserHistory();
+let history = createBrowserHistory();
 
 // Get the current location.
-const location = history.location;
+let location = history.location;
 
 // Listen for changes to the current location.
-const unlisten = history.listen((location, action) => {
+let unlisten = history.listen((location, action) => {
   // location is an object like window.location
   console.log(action, location.pathname, location.state);
 });
@@ -78,7 +78,7 @@ Additionally, `createMemoryHistory` provides `history.index` and `history.entrie
 You can listen for changes to the current location using `history.listen`:
 
 ```js
-history.listen((location, action) => {
+history.listen(({ action, location }) => {
   console.log(
     `The current URL is ${location.pathname}${location.search}${location.hash}`
   );
@@ -94,17 +94,22 @@ The `location` object implements a subset of [the `window.location` interface](h
 
 Locations may also have the following properties:
 
-- `location.state` - Some extra state for this location that does not reside in the URL (supported in `createBrowserHistory` and `createMemoryHistory`)
-- `location.key` - A unique string representing this location (supported in `createBrowserHistory` and `createMemoryHistory`)
+- `location.state` - Some extra state for this location that does not reside in the URL
+- `location.key` - A unique string representing this location
 
 The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got to the current URL.
+
+- A `PUSH` means one more entry was added to the history stack
+- A `REPLACE` means the current entry in the stack was replaced
+- A `POP` means we went to some other location already in the stack
 
 ## Cleaning up
 
 When you attach a listener using `history.listen`, it returns a function that can be used to remove the listener, which can then be invoked in cleanup logic:
 
 ```js
-const unlisten = history.listen(myListener);
-// ...
+let unlisten = history.listen(myListener);
+
+// Later, when you're done...
 unlisten();
 ```
