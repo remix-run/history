@@ -622,13 +622,7 @@ const createKey = () =>
     .toString(36)
     .substr(2, 8);
 
-// TODO: Probably only do this in dev?
-const createReadOnlyObject = props =>
-  Object.keys(props).reduce(
-    (obj, key) =>
-      Object.defineProperty(obj, key, { enumerable: true, value: props[key] }),
-    Object.create(null)
-  );
+const createReadOnlyObject = obj => (__DEV__ ? Object.freeze(obj) : obj);
 
 const createPath = ({ pathname = '/', search = '', hash = '' }) =>
   pathname + search + hash;
