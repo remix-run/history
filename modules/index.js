@@ -6,9 +6,15 @@ const BeforeUnloadEventType = 'beforeunload';
 const PopStateEventType = 'popstate';
 const HashChangeEventType = 'hashchange';
 
+const readOnly = obj => (__DEV__ ? Object.freeze(obj) : obj);
+
 // There's some duplication in this code, but only one create* method
 // should ever be used in a given web page, so it's best for minifying
 // to just inline everything.
+
+///////////////////////////////////////////////////////////////////////////////
+// MEMORY HISTORY
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Memory history stores the current location in memory. It is designed
@@ -20,7 +26,7 @@ export const createMemoryHistory = ({
   initialIndex = 0
 } = {}) => {
   let entries = initialEntries.map(entry => {
-    let location = createReadOnlyObject({
+    let location = readOnly({
       pathname: '/',
       search: '',
       hash: '',
@@ -50,7 +56,7 @@ export const createMemoryHistory = ({
   let createHref = createPath;
 
   let getNextLocation = (to, state = null) =>
-    createReadOnlyObject({
+    readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
@@ -157,6 +163,10 @@ export const createMemoryHistory = ({
   return history;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// BROWSER HISTORY
+///////////////////////////////////////////////////////////////////////////////
+
 /**
  * Browser history stores the location in regular URLs. This is the
  * standard for most web apps, but it requires some configuration on
@@ -172,7 +182,7 @@ export const createBrowserHistory = ({
     let state = globalHistory.state || {};
     return [
       state.idx,
-      createReadOnlyObject({
+      readOnly({
         pathname,
         search,
         hash,
@@ -243,7 +253,7 @@ export const createBrowserHistory = ({
   let createHref = createPath;
 
   let getNextLocation = (to, state = null) =>
-    createReadOnlyObject({
+    readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
@@ -362,6 +372,10 @@ export const createBrowserHistory = ({
   return history;
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// HASH HISTORY
+///////////////////////////////////////////////////////////////////////////////
+
 /**
  * Hash history stores the location in window.location.hash. This makes
  * it ideal for situations where you don't want to send the location to
@@ -378,7 +392,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
     let state = globalHistory.state || {};
     return [
       state.idx,
-      createReadOnlyObject({
+      readOnly({
         pathname,
         search,
         hash,
@@ -471,7 +485,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   };
 
   let getNextLocation = (to, state = null) =>
-    createReadOnlyObject({
+    readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
@@ -621,8 +635,6 @@ const createKey = () =>
   Math.random()
     .toString(36)
     .substr(2, 8);
-
-const createReadOnlyObject = obj => (__DEV__ ? Object.freeze(obj) : obj);
 
 const createPath = ({ pathname = '/', search = '', hash = '' }) =>
   pathname + search + hash;
