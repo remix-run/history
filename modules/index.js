@@ -69,7 +69,9 @@ export const createMemoryHistory = ({
   let push = (to, state) => {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
-    let retry = () => push(to, state);
+    let retry = () => {
+      push(to, state);
+    };
 
     if (__DEV__) {
       if (nextLocation.pathname.charAt(0) !== '/') {
@@ -90,7 +92,9 @@ export const createMemoryHistory = ({
   let replace = (to, state) => {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
-    let retry = () => replace(to, state);
+    let retry = () => {
+      replace(to, state);
+    };
 
     if (__DEV__) {
       if (nextLocation.pathname.charAt(0) !== '/') {
@@ -267,7 +271,9 @@ export const createBrowserHistory = ({
   let push = (to, state) => {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
-    let retry = () => push(to, state);
+    let retry = () => {
+      push(to, state);
+    };
 
     if (allowTx(nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
@@ -289,7 +295,9 @@ export const createBrowserHistory = ({
   let replace = (to, state) => {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
-    let retry = () => replace(to, state);
+    let retry = () => {
+      replace(to, state);
+    };
 
     if (allowTx(nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
@@ -491,7 +499,9 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   let push = (to, state) => {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
-    let retry = () => push(to, state);
+    let retry = () => {
+      push(to, state);
+    };
 
     if (__DEV__) {
       if (nextLocation.pathname.charAt(0) !== '/') {
@@ -522,7 +532,9 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   let replace = (to, state) => {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
-    let retry = () => replace(to, state);
+    let retry = () => {
+      replace(to, state);
+    };
 
     if (__DEV__) {
       if (nextLocation.pathname.charAt(0) !== '/') {
