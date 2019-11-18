@@ -71,24 +71,34 @@
   ],
   "filesize": [
     {
+      "path": "cjs/history.js",
+      "compression": "none",
+      "maxSize": "22 kB"
+    },
+    {
+      "path": "cjs/history.min.js",
+      "compression": "none",
+      "maxSize": "6.5 kB"
+    },
+    {
       "path": "esm/history.js",
       "compression": "none",
-      "maxSize": "22000 bytes"
+      "maxSize": "22 kB"
     },
     {
       "path": "esm/history.min.js",
       "compression": "none",
-      "maxSize": "5 KB"
+      "maxSize": "5 kB"
     },
     {
       "path": "umd/history.js",
       "compression": "none",
-      "maxSize": "24000 bytes"
+      "maxSize": "24 kB"
     },
     {
       "path": "umd/history.min.js",
       "compression": "none",
-      "maxSize": "6 KB"
+      "maxSize": "6 kB"
     }
   ]
 }

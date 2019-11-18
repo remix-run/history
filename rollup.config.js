@@ -2,7 +2,7 @@ import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
-import {terser} from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 
 import pkg from './package.json';
@@ -14,27 +14,24 @@ function external(id) {
   return !id.startsWith('.') && !id.startsWith('/');
 }
 
-// const cjs = [
-//   {
-//     input,
-//     output: { file: `cjs/${pkg.name}.js`, format: 'cjs' },
-//     external,
-//     plugins: [
-//       babel({ exclude: /node_modules/ }),
-//       replace({ 'process.env.NODE_ENV': JSON.stringify('development') })
-//     ]
-//   },
-//   {
-//     input,
-//     output: { file: `cjs/${pkg.name}.min.js`, format: 'cjs' },
-//     external,
-//     plugins: [
-//       babel({ exclude: /node_modules/ }),
-//       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-//       terser()
-//     ]
-//   }
-// ];
+const cjs = [
+  {
+    input,
+    output: { file: `cjs/${pkg.name}.js`, format: 'cjs' },
+    external,
+    plugins: [babel({ exclude: /node_modules/ }), replace({ 'process.env.NODE_ENV': JSON.stringify('development') })],
+  },
+  {
+    input,
+    output: { file: `cjs/${pkg.name}.min.js`, format: 'cjs' },
+    external,
+    plugins: [
+      babel({ exclude: /node_modules/ }),
+      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      terser(),
+    ],
+  },
+];
 
 const esm = [
   {
@@ -45,9 +42,9 @@ const esm = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]]
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
-    ]
+    ],
   },
   {
     input,
@@ -57,15 +54,15 @@ const esm = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]]
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
       compiler({
-        compilation_level: "ADVANCED_OPTIMIZATIONS"
+        compilation_level: 'ADVANCED_OPTIMIZATIONS',
       }),
-      terser()
-    ]
-  }
+      terser(),
+    ],
+  },
 ];
 
 const umd = [
@@ -76,12 +73,12 @@ const umd = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]]
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
       nodeResolve(),
       commonjs({ include: /node_modules/ }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
-    ]
+    ],
   },
   {
     input,
@@ -90,24 +87,24 @@ const umd = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]]
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
       nodeResolve(),
       commonjs({ include: /node_modules/ }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
       compiler({
-        compilation_level: "ADVANCED_OPTIMIZATIONS"
+        compilation_level: 'ADVANCED_OPTIMIZATIONS',
       }),
-      terser()
-    ]
-  }
+      terser(),
+    ],
+  },
 ];
 
 let config;
 switch (process.env.BUILD_ENV) {
-  // case 'cjs':
-  //   config = cjs;
-  //   break;
+  case 'cjs':
+    config = cjs;
+    break;
   case 'esm':
     config = esm;
     break;
@@ -115,7 +112,7 @@ switch (process.env.BUILD_ENV) {
     config = umd;
     break;
   default:
-    config = esm.concat(umd);
+    config = cjs.concat(esm).concat(umd);
 }
 
 export default config;
