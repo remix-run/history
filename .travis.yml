@@ -12,6 +12,9 @@ jobs:
     script: yarn test
   - env: TEST_ENV=source
     script: yarn test
+  - stage: Size
+    before_script: yarn build
+    script: yarn size
   - stage: Release
     if: tag =~ ^v[0-9]
     env: NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")

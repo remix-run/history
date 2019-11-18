@@ -16,7 +16,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "rollup -c",
-    "postbuild": "filesize",
+    "size": "filesize",
     "clean": "git clean -fdX .",
     "lint": "eslint .",
     "prepublishOnly": "yarn build",
@@ -71,29 +71,14 @@
   ],
   "filesize": [
     {
-      "path": "cjs/history.js",
-      "compression": "none",
-      "maxSize": "22 kB"
-    },
-    {
       "path": "cjs/history.min.js",
       "compression": "none",
       "maxSize": "6.5 kB"
     },
     {
-      "path": "esm/history.js",
-      "compression": "none",
-      "maxSize": "22 kB"
-    },
-    {
       "path": "esm/history.min.js",
       "compression": "none",
       "maxSize": "5 kB"
-    },
-    {
-      "path": "umd/history.js",
-      "compression": "none",
-      "maxSize": "24 kB"
     },
     {
       "path": "umd/history.min.js",
