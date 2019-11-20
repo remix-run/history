@@ -2,8 +2,8 @@ import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
-import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
-import { uglify } from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
+import compiler from '@ampproject/rollup-plugin-closure-compiler';
 
 import pkg from './package.json';
 
@@ -19,10 +19,7 @@ const cjs = [
     input,
     output: { file: `cjs/${pkg.name}.js`, format: 'cjs' },
     external,
-    plugins: [
-      babel({ exclude: /node_modules/ }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('development') })
-    ]
+    plugins: [babel({ exclude: /node_modules/ }), replace({ 'process.env.NODE_ENV': JSON.stringify('development') })],
   },
   {
     input,
@@ -31,9 +28,9 @@ const cjs = [
     plugins: [
       babel({ exclude: /node_modules/ }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-      uglify()
-    ]
-  }
+      terser(),
+    ],
+  },
 ];
 
 const esm = [
@@ -45,11 +42,27 @@ const esm = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]]
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
-      sizeSnapshot()
-    ]
-  }
+    ],
+  },
+  {
+    input,
+    output: { file: `esm/${pkg.name}.min.js`, format: 'esm' },
+    external,
+    plugins: [
+      babel({
+        exclude: /node_modules/,
+        runtimeHelpers: true,
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
+      }),
+      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      compiler({
+        compilation_level: 'ADVANCED_OPTIMIZATIONS',
+      }),
+      terser(),
+    ],
+  },
 ];
 
 const umd = [
@@ -60,13 +73,12 @@ const umd = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]]
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
       nodeResolve(),
       commonjs({ include: /node_modules/ }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
-      sizeSnapshot()
-    ]
+    ],
   },
   {
     input,
@@ -75,15 +87,17 @@ const umd = [
       babel({
         exclude: /node_modules/,
         runtimeHelpers: true,
-        plugins: [['@babel/transform-runtime', { useESModules: true }]]
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
       }),
       nodeResolve(),
       commonjs({ include: /node_modules/ }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-      sizeSnapshot(),
-      uglify()
-    ]
-  }
+      compiler({
+        compilation_level: 'ADVANCED_OPTIMIZATIONS',
+      }),
+      terser(),
+    ],
+  },
 ];
 
 let config;
