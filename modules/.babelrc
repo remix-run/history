@@ -1,4 +1,4 @@
 {
-  "presets": [["@babel/env", { "loose": true }]],
-  "plugins": ["dev-expression", "@babel/transform-object-assign"]
+  "presets": [["@babel/preset-env", { "loose": true }]],
+  "plugins": ["babel-plugin-dev-expression"]
 }
