@@ -5,19 +5,14 @@ import replace from 'rollup-plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 
-import pkg from './package.json';
+import { name } from './package.json';
 
-const input = './modules/index.js';
-const globalName = 'History';
-
-function external(id) {
-  return !id.startsWith('.') && !id.startsWith('/');
-}
+const external = id => !id.startsWith('.') && !id.startsWith('/');
 
 const esm = [
   {
-    input,
-    output: { file: `esm/${pkg.name}.js`, format: 'esm' },
+    input: 'modules/index.js',
+    output: { file: `esm/${name}.js`, format: 'esm' },
     external,
     plugins: [
       babel({
@@ -28,8 +23,8 @@ const esm = [
     ]
   },
   {
-    input,
-    output: { file: `esm/${pkg.name}.min.js`, format: 'esm' },
+    input: 'modules/index.js',
+    output: { file: `esm/${name}.min.js`, format: 'esm' },
     external,
     plugins: [
       babel({
@@ -48,8 +43,8 @@ const esm = [
 
 const umd = [
   {
-    input,
-    output: { file: `umd/${pkg.name}.js`, format: 'umd', name: globalName },
+    input: 'modules/index.js',
+    output: { file: `umd/${name}.js`, format: 'umd', name: 'HistoryLib' },
     plugins: [
       babel({
         exclude: /node_modules/,
@@ -62,8 +57,8 @@ const umd = [
     ]
   },
   {
-    input,
-    output: { file: `umd/${pkg.name}.min.js`, format: 'umd', name: globalName },
+    input: 'modules/index.js',
+    output: { file: `umd/${name}.min.js`, format: 'umd', name: 'HistoryLib' },
     plugins: [
       babel({
         exclude: /node_modules/,

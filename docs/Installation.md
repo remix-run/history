@@ -22,4 +22,4 @@ If you really just want a `<script>` tag, the UMD build is available on [unpkg](
 <script src="https://unpkg.com/history"></script>
 ```
 
-You can find the library on `window.History`.
+You can find the library on `window.HistoryLib`.
