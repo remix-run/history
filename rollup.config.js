@@ -7,13 +7,11 @@ import compiler from '@ampproject/rollup-plugin-closure-compiler';
 
 import { name } from './package.json';
 
-const external = id => !id.startsWith('.') && !id.startsWith('/');
-
 const esm = [
   {
     input: 'modules/index.js',
     output: { file: `esm/${name}.js`, format: 'esm' },
-    external,
+    external: ['@babel/runtime/helpers/esm/extends'],
     plugins: [
       babel({
         exclude: /node_modules/,
@@ -25,7 +23,7 @@ const esm = [
   {
     input: 'modules/index.js',
     output: { file: `esm/${name}.min.js`, format: 'esm' },
-    external,
+    external: ['@babel/runtime/helpers/esm/extends'],
     plugins: [
       babel({
         exclude: /node_modules/,
