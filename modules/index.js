@@ -6,7 +6,13 @@ const BeforeUnloadEventType = 'beforeunload';
 const PopStateEventType = 'popstate';
 const HashChangeEventType = 'hashchange';
 
+const MemoryHistoryType = Symbol('history.memory');
+const BrowserHistoryType = Symbol('history.browser');
+const HashHistoryType = Symbol('history.hash');
+
 const readOnly = obj => (__DEV__ ? Object.freeze(obj) : obj);
+
+const createTypeChecker = type => obj => obj.$$typeof === type;
 
 // There's some duplication in this code, but only one create* method
 // should ever be used in a given web page, so it's best for minifying
@@ -144,6 +150,7 @@ export const createMemoryHistory = ({
   let block = fn => blockers.push(fn);
 
   let history = {
+    $$typeof: MemoryHistoryType,
     get action() {
       return action;
     },
@@ -162,6 +169,8 @@ export const createMemoryHistory = ({
 
   return history;
 };
+
+export const isMemoryHistory = createTypeChecker(MemoryHistoryType);
 
 ///////////////////////////////////////////////////////////////////////////////
 // BROWSER HISTORY
@@ -353,6 +362,7 @@ export const createBrowserHistory = ({
   };
 
   let history = {
+    $$typeof: BrowserHistoryType,
     get action() {
       return action;
     },
@@ -371,6 +381,8 @@ export const createBrowserHistory = ({
 
   return history;
 };
+
+export const isBrowserHistory = createTypeChecker(BrowserHistoryType);
 
 ///////////////////////////////////////////////////////////////////////////////
 // HASH HISTORY
@@ -603,6 +615,7 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   };
 
   let history = {
+    $$typeof: HashHistoryType,
     get action() {
       return action;
     },
@@ -621,6 +634,8 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
 
   return history;
 };
+
+export const isHashHistory = createTypeChecker(HashHistoryType);
 
 // Utils
 

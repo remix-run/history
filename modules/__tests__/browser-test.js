@@ -1,13 +1,13 @@
 import expect from 'expect';
-import { createHashHistory } from 'history';
+import { createBrowserHistory, isBrowserHistory } from 'history';
 
-import Listen from './TestSequences/Listen.js';
 import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey.js';
+import Listen from './TestSequences/Listen.js';
 import PushNewLocation from './TestSequences/PushNewLocation.js';
 import PushSamePath from './TestSequences/PushSamePath.js';
 import PushState from './TestSequences/PushState.js';
 import PushMissingPathname from './TestSequences/PushMissingPathname.js';
-import PushRelativePathnameError from './TestSequences/PushRelativePathnameError.js';
+import PushRelativePathname from './TestSequences/PushRelativePathname.js';
 import ReplaceNewLocation from './TestSequences/ReplaceNewLocation.js';
 import ReplaceSamePath from './TestSequences/ReplaceSamePath.js';
 import ReplaceState from './TestSequences/ReplaceState.js';
@@ -17,15 +17,15 @@ import GoForward from './TestSequences/GoForward.js';
 import BlockEverything from './TestSequences/BlockEverything.js';
 import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.js';
 
-// TODO: Do we still need this?
-// const canGoWithoutReload = window.navigator.userAgent.indexOf('Firefox') === -1;
-// const describeGo = canGoWithoutReload ? describe : describe.skip;
-
-describe('a hash history', () => {
+describe('a browser history', () => {
   let history;
   beforeEach(() => {
-    window.history.replaceState(null, null, '#/');
-    history = createHashHistory();
+    window.history.replaceState(null, null, '/');
+    history = createBrowserHistory();
+  });
+
+  it('is a browser history', () => {
+    expect(isBrowserHistory(history)).toBe(true);
   });
 
   it('knows how to create hrefs', () => {
@@ -35,19 +35,19 @@ describe('a hash history', () => {
       hash: '#the-hash'
     });
 
-    expect(href).toEqual('#/the/path?the=query#the-hash');
+    expect(href).toEqual('/the/path?the=query#the-hash');
   });
 
   it('does not encode the generated path', () => {
     const encodedHref = history.createHref({
       pathname: '/%23abc'
     });
-    expect(encodedHref).toEqual('#/%23abc');
+    expect(encodedHref).toEqual('/%23abc');
 
     const unencodedHref = history.createHref({
       pathname: '/#abc'
     });
-    expect(unencodedHref).toEqual('#/#abc');
+    expect(unencodedHref).toEqual('/#abc');
   });
 
   describe('listen', () => {
@@ -87,8 +87,8 @@ describe('a hash history', () => {
   });
 
   describe('push with a relative pathname', () => {
-    it('throws an error', done => {
-      PushRelativePathnameError(history, done);
+    it('normalizes the pathname relative to the current location', done => {
+      PushRelativePathname(history, done);
     });
   });
 
@@ -135,7 +135,7 @@ describe('a hash history', () => {
   });
 
   describe('block a POP without listening', () => {
-    it('receives the next location and action as arguments', done => {
+    it('receives the next ({ action, location })', done => {
       BlockPopWithoutListening(history, done);
     });
   });

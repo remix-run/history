@@ -71,7 +71,7 @@
     {
       "path": "esm/history.min.js",
       "compression": "none",
-      "maxSize": "5 kB"
+      "maxSize": "5.3 kB"
     },
     {
       "path": "umd/history.min.js",

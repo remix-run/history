@@ -1,13 +1,13 @@
 import expect from 'expect';
-import { createBrowserHistory } from 'history';
+import { createMemoryHistory, isMemoryHistory } from 'history';
 
-import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey.js';
 import Listen from './TestSequences/Listen.js';
+import InitialLocationHasKey from './TestSequences/InitialLocationHasKey.js';
 import PushNewLocation from './TestSequences/PushNewLocation.js';
 import PushSamePath from './TestSequences/PushSamePath.js';
 import PushState from './TestSequences/PushState.js';
 import PushMissingPathname from './TestSequences/PushMissingPathname.js';
-import PushRelativePathname from './TestSequences/PushRelativePathname.js';
+import PushRelativePathnameError from './TestSequences/PushRelativePathnameError.js';
 import ReplaceNewLocation from './TestSequences/ReplaceNewLocation.js';
 import ReplaceSamePath from './TestSequences/ReplaceSamePath.js';
 import ReplaceState from './TestSequences/ReplaceState.js';
@@ -17,11 +17,14 @@ import GoForward from './TestSequences/GoForward.js';
 import BlockEverything from './TestSequences/BlockEverything.js';
 import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.js';
 
-describe('a browser history', () => {
+describe('a memory history', () => {
   let history;
   beforeEach(() => {
-    window.history.replaceState(null, null, '/');
-    history = createBrowserHistory();
+    history = createMemoryHistory();
+  });
+
+  it('is a memory history', () => {
+    expect(isMemoryHistory(history)).toBe(true);
   });
 
   it('knows how to create hrefs', () => {
@@ -53,8 +56,8 @@ describe('a browser history', () => {
   });
 
   describe('the initial location', () => {
-    it('has the "default" key', done => {
-      InitialLocationDefaultKey(history, done);
+    it('has a key', done => {
+      InitialLocationHasKey(history, done);
     });
   });
 
@@ -83,8 +86,8 @@ describe('a browser history', () => {
   });
 
   describe('push with a relative pathname', () => {
-    it('normalizes the pathname relative to the current location', done => {
-      PushRelativePathname(history, done);
+    it('throws an error', done => {
+      PushRelativePathnameError(history, done);
     });
   });
 
@@ -131,7 +134,7 @@ describe('a browser history', () => {
   });
 
   describe('block a POP without listening', () => {
-    it('receives the next ({ action, location })', done => {
+    it('receives the next location and action as arguments', done => {
       BlockPopWithoutListening(history, done);
     });
   });

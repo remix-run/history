@@ -1,8 +1,8 @@
 import expect from 'expect';
-import { createMemoryHistory } from 'history';
+import { createHashHistory, isHashHistory } from 'history';
 
 import Listen from './TestSequences/Listen.js';
-import InitialLocationHasKey from './TestSequences/InitialLocationHasKey.js';
+import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey.js';
 import PushNewLocation from './TestSequences/PushNewLocation.js';
 import PushSamePath from './TestSequences/PushSamePath.js';
 import PushState from './TestSequences/PushState.js';
@@ -17,10 +17,19 @@ import GoForward from './TestSequences/GoForward.js';
 import BlockEverything from './TestSequences/BlockEverything.js';
 import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.js';
 
-describe('a memory history', () => {
+// TODO: Do we still need this?
+// const canGoWithoutReload = window.navigator.userAgent.indexOf('Firefox') === -1;
+// const describeGo = canGoWithoutReload ? describe : describe.skip;
+
+describe('a hash history', () => {
   let history;
   beforeEach(() => {
-    history = createMemoryHistory();
+    window.history.replaceState(null, null, '#/');
+    history = createHashHistory();
+  });
+
+  it('is a hash history', () => {
+    expect(isHashHistory(history)).toBe(true);
   });
 
   it('knows how to create hrefs', () => {
@@ -30,19 +39,19 @@ describe('a memory history', () => {
       hash: '#the-hash'
     });
 
-    expect(href).toEqual('/the/path?the=query#the-hash');
+    expect(href).toEqual('#/the/path?the=query#the-hash');
   });
 
   it('does not encode the generated path', () => {
     const encodedHref = history.createHref({
       pathname: '/%23abc'
     });
-    expect(encodedHref).toEqual('/%23abc');
+    expect(encodedHref).toEqual('#/%23abc');
 
     const unencodedHref = history.createHref({
       pathname: '/#abc'
     });
-    expect(unencodedHref).toEqual('/#abc');
+    expect(unencodedHref).toEqual('#/#abc');
   });
 
   describe('listen', () => {
@@ -52,8 +61,8 @@ describe('a memory history', () => {
   });
 
   describe('the initial location', () => {
-    it('has a key', done => {
-      InitialLocationHasKey(history, done);
+    it('has the "default" key', done => {
+      InitialLocationDefaultKey(history, done);
     });
   });
 
