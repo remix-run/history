@@ -6,175 +6,18 @@ const BeforeUnloadEventType = 'beforeunload';
 const PopStateEventType = 'popstate';
 const HashChangeEventType = 'hashchange';
 
-const MemoryHistoryType = Symbol('history.memory');
-const BrowserHistoryType = Symbol('history.browser');
-const HashHistoryType = Symbol('history.hash');
-
-const readOnly = obj => (__DEV__ ? Object.freeze(obj) : obj);
-
-const createTypeChecker = type => obj => obj.$$typeof === type;
+const readOnly = __DEV__ ? obj => Object.freeze(obj) : obj => obj;
+const createTypeChecker = type => obj => obj && obj.$$typeof === type;
 
 // There's some duplication in this code, but only one create* method
 // should ever be used in a given web page, so it's best for minifying
 // to just inline everything.
 
 ///////////////////////////////////////////////////////////////////////////////
-// MEMORY HISTORY
-///////////////////////////////////////////////////////////////////////////////
-
-/**
- * Memory history stores the current location in memory. It is designed
- * for use in stateful non-browser environments like headless tests (in
- * node.js) and React Native.
- */
-export const createMemoryHistory = ({
-  initialEntries = ['/'],
-  initialIndex = 0
-} = {}) => {
-  let entries = initialEntries.map(entry => {
-    let location = readOnly({
-      pathname: '/',
-      search: '',
-      hash: '',
-      state: null,
-      key: createKey(),
-      ...(typeof entry === 'string' ? parsePath(entry) : entry)
-    });
-
-    if (__DEV__) {
-      if (location.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(entry);
-        throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory({ initialEntries }) (invalid entry: ${arg})`
-        );
-      }
-    }
-
-    return location;
-  });
-  let index = clamp(initialIndex, 0, entries.length - 1);
-
-  let action = PopAction;
-  let location = entries[index];
-  let blockers = createEvents();
-  let listeners = createEvents();
-
-  let createHref = createPath;
-
-  let getNextLocation = (to, state = null) =>
-    readOnly({
-      ...location,
-      ...(typeof to === 'string' ? parsePath(to) : to),
-      state,
-      key: createKey()
-    });
-
-  let allowTx = (action, location, retry) =>
-    !blockers.length || (blockers.call({ action, location, retry }), false);
-
-  let applyTx = (nextAction, nextLocation) => {
-    action = nextAction;
-    location = nextLocation;
-    listeners.call({ action, location });
-  };
-
-  let push = (to, state) => {
-    let nextAction = PushAction;
-    let nextLocation = getNextLocation(to, state);
-    let retry = () => {
-      push(to, state);
-    };
-
-    if (__DEV__) {
-      if (nextLocation.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(to);
-        throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory().push(${arg})`
-        );
-      }
-    }
-
-    if (allowTx(nextAction, nextLocation, retry)) {
-      index += 1;
-      entries.splice(index, entries.length, nextLocation);
-      applyTx(nextAction, nextLocation);
-    }
-  };
-
-  let replace = (to, state) => {
-    let nextAction = ReplaceAction;
-    let nextLocation = getNextLocation(to, state);
-    let retry = () => {
-      replace(to, state);
-    };
-
-    if (__DEV__) {
-      if (nextLocation.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(to);
-        throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory().replace(${arg})`
-        );
-      }
-    }
-
-    if (allowTx(nextAction, nextLocation, retry)) {
-      entries[index] = nextLocation;
-      applyTx(nextAction, nextLocation);
-    }
-  };
-
-  let go = n => {
-    let nextIndex = clamp(index + n, 0, entries.length - 1);
-    let nextAction = PopAction;
-    let nextLocation = entries[nextIndex];
-    let retry = () => {
-      go(n);
-    };
-
-    if (allowTx(nextAction, nextLocation, retry)) {
-      index = nextIndex;
-      applyTx(nextAction, nextLocation);
-    }
-  };
-
-  let back = () => {
-    go(-1);
-  };
-
-  let forward = () => {
-    go(1);
-  };
-
-  let listen = fn => listeners.push(fn);
-
-  let block = fn => blockers.push(fn);
-
-  let history = {
-    $$typeof: MemoryHistoryType,
-    get action() {
-      return action;
-    },
-    get location() {
-      return location;
-    },
-    createHref,
-    push,
-    replace,
-    go,
-    back,
-    forward,
-    listen,
-    block
-  };
-
-  return history;
-};
-
-export const isMemoryHistory = createTypeChecker(MemoryHistoryType);
-
-///////////////////////////////////////////////////////////////////////////////
 // BROWSER HISTORY
 ///////////////////////////////////////////////////////////////////////////////
+
+const BrowserHistoryType = Symbol('history.browser');
 
 /**
  * Browser history stores the location in regular URLs. This is the
@@ -387,6 +230,8 @@ export const isBrowserHistory = createTypeChecker(BrowserHistoryType);
 ///////////////////////////////////////////////////////////////////////////////
 // HASH HISTORY
 ///////////////////////////////////////////////////////////////////////////////
+
+const HashHistoryType = Symbol('history.hash');
 
 /**
  * Hash history stores the location in window.location.hash. This makes
@@ -637,7 +482,165 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
 
 export const isHashHistory = createTypeChecker(HashHistoryType);
 
-// Utils
+///////////////////////////////////////////////////////////////////////////////
+// MEMORY HISTORY
+///////////////////////////////////////////////////////////////////////////////
+
+const MemoryHistoryType = Symbol('history.memory');
+
+/**
+ * Memory history stores the current location in memory. It is designed
+ * for use in stateful non-browser environments like headless tests (in
+ * node.js) and React Native.
+ */
+export const createMemoryHistory = ({
+  initialEntries = ['/'],
+  initialIndex = 0
+} = {}) => {
+  let entries = initialEntries.map(entry => {
+    let location = readOnly({
+      pathname: '/',
+      search: '',
+      hash: '',
+      state: null,
+      key: createKey(),
+      ...(typeof entry === 'string' ? parsePath(entry) : entry)
+    });
+
+    if (__DEV__) {
+      if (location.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(entry);
+        throw new Error(
+          `Relative pathnames are not supported in createMemoryHistory({ initialEntries }) (invalid entry: ${arg})`
+        );
+      }
+    }
+
+    return location;
+  });
+  let index = clamp(initialIndex, 0, entries.length - 1);
+
+  let action = PopAction;
+  let location = entries[index];
+  let blockers = createEvents();
+  let listeners = createEvents();
+
+  let createHref = createPath;
+
+  let getNextLocation = (to, state = null) =>
+    readOnly({
+      ...location,
+      ...(typeof to === 'string' ? parsePath(to) : to),
+      state,
+      key: createKey()
+    });
+
+  let allowTx = (action, location, retry) =>
+    !blockers.length || (blockers.call({ action, location, retry }), false);
+
+  let applyTx = (nextAction, nextLocation) => {
+    action = nextAction;
+    location = nextLocation;
+    listeners.call({ action, location });
+  };
+
+  let push = (to, state) => {
+    let nextAction = PushAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => {
+      push(to, state);
+    };
+
+    if (__DEV__) {
+      if (nextLocation.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(to);
+        throw new Error(
+          `Relative pathnames are not supported in createMemoryHistory().push(${arg})`
+        );
+      }
+    }
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      index += 1;
+      entries.splice(index, entries.length, nextLocation);
+      applyTx(nextAction, nextLocation);
+    }
+  };
+
+  let replace = (to, state) => {
+    let nextAction = ReplaceAction;
+    let nextLocation = getNextLocation(to, state);
+    let retry = () => {
+      replace(to, state);
+    };
+
+    if (__DEV__) {
+      if (nextLocation.pathname.charAt(0) !== '/') {
+        let arg = JSON.stringify(to);
+        throw new Error(
+          `Relative pathnames are not supported in createMemoryHistory().replace(${arg})`
+        );
+      }
+    }
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      entries[index] = nextLocation;
+      applyTx(nextAction, nextLocation);
+    }
+  };
+
+  let go = n => {
+    let nextIndex = clamp(index + n, 0, entries.length - 1);
+    let nextAction = PopAction;
+    let nextLocation = entries[nextIndex];
+    let retry = () => {
+      go(n);
+    };
+
+    if (allowTx(nextAction, nextLocation, retry)) {
+      index = nextIndex;
+      applyTx(nextAction, nextLocation);
+    }
+  };
+
+  let back = () => {
+    go(-1);
+  };
+
+  let forward = () => {
+    go(1);
+  };
+
+  let listen = fn => listeners.push(fn);
+
+  let block = fn => blockers.push(fn);
+
+  let history = {
+    $$typeof: MemoryHistoryType,
+    get action() {
+      return action;
+    },
+    get location() {
+      return location;
+    },
+    createHref,
+    push,
+    replace,
+    go,
+    back,
+    forward,
+    listen,
+    block
+  };
+
+  return history;
+};
+
+export const isMemoryHistory = createTypeChecker(MemoryHistoryType);
+
+///////////////////////////////////////////////////////////////////////////////
+// UTILS
+///////////////////////////////////////////////////////////////////////////////
 
 const promptBeforeUnload = event => {
   // Cancel the event.
