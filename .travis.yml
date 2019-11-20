@@ -6,7 +6,7 @@ jobs:
   - stage: Test
     env: TEST_ENV=source
     script: yarn test
-  - env: TEST_ENV=umd BUILD_ENV=umd
+  - env: TEST_ENV=umd
     before_script: yarn build
     script: yarn test
   - stage: Size

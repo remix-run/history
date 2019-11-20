@@ -76,16 +76,6 @@ const umd = [
   }
 ];
 
-let config;
-switch (process.env.BUILD_ENV) {
-  case 'esm':
-    config = esm;
-    break;
-  case 'umd':
-    config = umd;
-    break;
-  default:
-    config = esm.concat(umd);
-}
+let config = esm.concat(umd);
 
 export default config;
