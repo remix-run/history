@@ -64,9 +64,6 @@ module.exports = function(config) {
 
   var historyAlias;
   switch (process.env.TEST_ENV) {
-    case 'cjs':
-      historyAlias = 'cjs/history.js';
-      break;
     case 'umd':
       historyAlias = 'umd/history.js';
       break;

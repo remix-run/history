@@ -9,7 +9,6 @@
   "module": "esm/history.js",
   "unpkg": "umd/history.js",
   "files": [
-    "cjs",
     "esm",
     "umd"
   ],
@@ -69,11 +68,6 @@
     "location"
   ],
   "filesize": [
-    {
-      "path": "cjs/history.min.js",
-      "compression": "none",
-      "maxSize": "6.5 kB"
-    },
     {
       "path": "esm/history.min.js",
       "compression": "none",

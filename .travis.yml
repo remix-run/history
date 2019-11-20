@@ -4,13 +4,10 @@ cache: yarn
 jobs:
   include:
   - stage: Test
-    env: TEST_ENV=cjs BUILD_ENV=cjs
-    before_script: yarn build
+    env: TEST_ENV=source
     script: yarn test
   - env: TEST_ENV=umd BUILD_ENV=umd
     before_script: yarn build
-    script: yarn test
-  - env: TEST_ENV=source
     script: yarn test
   - stage: Size
     before_script: yarn build
