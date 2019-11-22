@@ -5,13 +5,10 @@
   "repository": "ReactTraining/history",
   "license": "MIT",
   "author": "Michael Jackson",
-  "main": "index.js",
-  "module": "esm/history.js",
-  "unpkg": "umd/history.js",
-  "files": [
-    "esm",
-    "umd"
-  ],
+  "main": "build/umd/history.production.js",
+  "module": "build/history.production.js",
+  "unpkg": "build/umd/history.production.js",
+  "files": ["build"],
   "sideEffects": false,
   "scripts": {
     "build": "rollup -c",

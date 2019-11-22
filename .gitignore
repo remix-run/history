@@ -1,4 +1,3 @@
-/esm/
+/build/
 /fixtures/*/history.js
 /node_modules/
-/umd/
