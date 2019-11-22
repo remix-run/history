@@ -54,7 +54,7 @@ export default [
       file: `build/umd/${name}.development.js`,
       format: 'umd',
       sourcemap: true,
-      name: 'history-package'
+      name: 'HistoryPackage'
     },
     plugins: [
       babel({
@@ -73,7 +73,7 @@ export default [
       file: `build/umd/${name}.production.js`,
       format: 'umd',
       sourcemap: true,
-      name: 'history-package'
+      name: 'HistoryPackage'
     },
     plugins: [
       babel({
