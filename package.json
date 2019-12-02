@@ -5,7 +5,7 @@
   "repository": "ReactTraining/history",
   "license": "MIT",
   "author": "Michael Jackson",
-  "main": "build/umd/history.production.js",
+  "main": "index.js",
   "module": "build/history.production.js",
   "unpkg": "build/umd/history.production.js",
   "files": ["build"],
