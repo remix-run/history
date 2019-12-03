@@ -9,7 +9,8 @@
   "module": "build/history.production.js",
   "unpkg": "build/umd/history.production.js",
   "files": [
-    "build"
+    "build",
+    "index.js"
   ],
   "sideEffects": false,
   "scripts": {
