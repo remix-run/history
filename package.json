@@ -65,12 +65,12 @@
   ],
   "filesize": [
     {
-      "path": "esm/history.min.js",
+      "path": "build/history.production.js",
       "compression": "none",
-      "maxSize": "5.3 kB"
+      "maxSize": "5 kB"
     },
     {
-      "path": "umd/history.min.js",
+      "path": "build/umd/history.production.js",
       "compression": "none",
       "maxSize": "5.5 kB"
     }
