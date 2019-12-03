@@ -62,16 +62,6 @@ module.exports = function(config) {
     // },
   };
 
-  var historyAlias;
-  switch (process.env.TEST_ENV) {
-    case 'umd':
-      historyAlias = 'umd/history.js';
-      break;
-    case 'source':
-    default:
-      historyAlias = 'modules/index.js';
-  }
-
   config.set({
     customLaunchers: customLaunchers,
     browsers: ['Chrome' /*, 'Firefox'*/],
@@ -94,7 +84,7 @@ module.exports = function(config) {
       },
       resolve: {
         alias: {
-          history$: path.resolve(__dirname, historyAlias)
+          history$: path.resolve(__dirname, 'modules/index.js')
         }
       },
       plugins: [
