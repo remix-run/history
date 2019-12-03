@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { createMemoryHistory, isMemoryHistory } from 'history';
+import { createMemoryHistory } from 'history';
 
 import Listen from './TestSequences/Listen.js';
 import InitialLocationHasKey from './TestSequences/InitialLocationHasKey.js';
@@ -21,10 +21,6 @@ describe('a memory history', () => {
   let history;
   beforeEach(() => {
     history = createMemoryHistory();
-  });
-
-  it('is a memory history', () => {
-    expect(isMemoryHistory(history)).toBe(true);
   });
 
   it('knows how to create hrefs', () => {

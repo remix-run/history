@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { createHashHistory, isHashHistory } from 'history';
+import { createHashHistory } from 'history';
 
 import Listen from './TestSequences/Listen.js';
 import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey.js';
@@ -26,10 +26,6 @@ describe('a hash history', () => {
   beforeEach(() => {
     window.history.replaceState(null, null, '#/');
     history = createHashHistory();
-  });
-
-  it('is a hash history', () => {
-    expect(isHashHistory(history)).toBe(true);
   });
 
   it('knows how to create hrefs', () => {

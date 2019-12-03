@@ -7,7 +7,6 @@ const PopStateEventType = 'popstate';
 const HashChangeEventType = 'hashchange';
 
 const readOnly = __DEV__ ? obj => Object.freeze(obj) : obj => obj;
-const createTypeChecker = type => obj => obj && obj.$$typeof === type;
 
 // There's some duplication in this code, but only one create* method
 // should ever be used in a given web page, so it's best for minifying
@@ -16,8 +15,6 @@ const createTypeChecker = type => obj => obj && obj.$$typeof === type;
 ///////////////////////////////////////////////////////////////////////////////
 // BROWSER HISTORY
 ///////////////////////////////////////////////////////////////////////////////
-
-const BrowserHistoryType = Symbol('history.browser');
 
 /**
  * Browser history stores the location in regular URLs. This is the
@@ -205,7 +202,6 @@ export const createBrowserHistory = ({
   };
 
   let history = {
-    $$typeof: BrowserHistoryType,
     get action() {
       return action;
     },
@@ -225,13 +221,9 @@ export const createBrowserHistory = ({
   return history;
 };
 
-export const isBrowserHistory = createTypeChecker(BrowserHistoryType);
-
 ///////////////////////////////////////////////////////////////////////////////
 // HASH HISTORY
 ///////////////////////////////////////////////////////////////////////////////
-
-const HashHistoryType = Symbol('history.hash');
 
 /**
  * Hash history stores the location in window.location.hash. This makes
@@ -460,7 +452,6 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   };
 
   let history = {
-    $$typeof: HashHistoryType,
     get action() {
       return action;
     },
@@ -480,13 +471,9 @@ export const createHashHistory = ({ window = document.defaultView } = {}) => {
   return history;
 };
 
-export const isHashHistory = createTypeChecker(HashHistoryType);
-
 ///////////////////////////////////////////////////////////////////////////////
 // MEMORY HISTORY
 ///////////////////////////////////////////////////////////////////////////////
-
-const MemoryHistoryType = Symbol('history.memory');
 
 /**
  * Memory history stores the current location in memory. It is designed
@@ -616,7 +603,6 @@ export const createMemoryHistory = ({
   let block = fn => blockers.push(fn);
 
   let history = {
-    $$typeof: MemoryHistoryType,
     get action() {
       return action;
     },
@@ -635,8 +621,6 @@ export const createMemoryHistory = ({
 
   return history;
 };
-
-export const isMemoryHistory = createTypeChecker(MemoryHistoryType);
 
 ///////////////////////////////////////////////////////////////////////////////
 // UTILS
