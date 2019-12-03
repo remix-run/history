@@ -85,7 +85,7 @@ export default [
       commonjs({ include: /node_modules/ }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
       compiler({
-        compilation_level: 'ADVANCED_OPTIMIZATIONS'
+        compilation_level: 'SIMPLE_OPTIMIZATIONS'
       }),
       terser()
     ]
