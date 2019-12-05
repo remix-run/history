@@ -176,11 +176,10 @@ function createBrowserHistory(props = {}) {
         const { key, state } = location;
 
         if (canUseHistory) {
-          globalHistory.pushState({ key, state }, null, href);
-
           if (forceRefresh) {
             window.location.href = href;
           } else {
+            globalHistory.pushState({ key, state }, null, href);
             const prevIndex = allKeys.indexOf(history.location.key);
             const nextKeys = allKeys.slice(0, prevIndex + 1);
 
@@ -226,11 +225,10 @@ function createBrowserHistory(props = {}) {
         const { key, state } = location;
 
         if (canUseHistory) {
-          globalHistory.replaceState({ key, state }, null, href);
-
           if (forceRefresh) {
             window.location.replace(href);
           } else {
+            globalHistory.replaceState({ key, state }, null, href);
             const prevIndex = allKeys.indexOf(history.location.key);
 
             if (prevIndex !== -1) allKeys[prevIndex] = location.key;
