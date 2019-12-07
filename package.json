@@ -1,18 +1,6 @@
 {
-  "name": "history",
-  "version": "5.0.0-beta.1",
-  "description": "Manage session history with JavaScript",
-  "repository": "ReactTraining/history",
-  "license": "MIT",
-  "author": "Michael Jackson",
-  "main": "index.js",
-  "module": "build/history.production.js",
-  "unpkg": "build/umd/history.production.js",
-  "files": [
-    "build",
-    "index.js"
-  ],
-  "sideEffects": false,
+  "name": "history-packages",
+  "private": true,
   "scripts": {
     "build": "rollup -c",
     "size": "filesize",
@@ -22,15 +10,12 @@
     "test": "karma start --single-run"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
-    "loose-envify": "^1.2.0"
-  },
-  "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.12.1",
     "@babel/core": "^7.1.2",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@kristoferbaxter/filesize": "0.2.0",
+    "@rollup/plugin-replace": "^2.2.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^8.0.4",
@@ -51,31 +36,37 @@
     "mocha": "^5.2.0",
     "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-terser": "5.1.2",
+    "rollup-plugin-copy": "^3.1.0",
+    "rollup-plugin-node-resolve": "3",
+    "rollup-plugin-prettier": "^0.6.0",
+    "rollup-plugin-terser": "^5.1.2",
     "webpack": "^3.12.0"
   },
-  "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
-  },
-  "keywords": [
-    "history",
-    "location"
-  ],
   "filesize": [
     {
-      "path": "build/history.production.js",
+      "path": "build/history/browser.js",
       "compression": "none",
-      "maxSize": "5 kB"
+      "maxSize": "3 kB"
     },
     {
-      "path": "build/umd/history.production.js",
+      "path": "build/history/hash.js",
       "compression": "none",
-      "maxSize": "5.5 kB"
+      "maxSize": "3 kB"
+    },
+    {
+      "path": "build/history/memory.js",
+      "compression": "none",
+      "maxSize": "2 kB"
+    },
+    {
+      "path": "build/history/umd/history.production.min.js",
+      "compression": "none",
+      "maxSize": "7 kB"
     }
-  ]
+  ],
+  "workspaces": {
+    "packages": [
+      "packages/history"
+    ]
+  }
 }

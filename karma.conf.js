@@ -78,13 +78,20 @@ module.exports = function(config) {
           {
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: 'babel-loader'
+            loader: 'babel-loader',
+            options: {
+              presets: [['@babel/preset-env', { loose: true }]],
+              plugins: ['babel-plugin-dev-expression']
+            }
           }
         ]
       },
       resolve: {
         alias: {
-          history$: path.resolve(__dirname, 'modules/index.js')
+          history$: path.resolve(
+            __dirname,
+            'packages/history/modules/history.js'
+          )
         }
       },
       plugins: [

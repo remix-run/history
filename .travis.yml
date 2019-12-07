@@ -14,9 +14,11 @@ jobs:
     script: echo "Releasing $TRAVIS_TAG to npm with tag \"$NPM_TAG\" ..."
     deploy:
       provider: npm
-      skip_cleanup: true
-      tag: "$NPM_TAG"
+      edge: true
+      cleanup: false
       email: npm@mjackson.me
-      api_key: "$NPM_TOKEN"
+      api_token: "$NPM_TOKEN"
+      src: "build/history"
+      tag: "$NPM_TAG"
       on:
         tags: true

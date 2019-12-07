@@ -1,3 +1,4 @@
 /build/
 /fixtures/*/history.js
-/node_modules/
+
+node_modules/
