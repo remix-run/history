@@ -4,9 +4,9 @@ cache: yarn
 jobs:
   include:
   - stage: Test
+    before_script: yarn build
     script: yarn test
   - stage: Size
-    before_script: yarn build
     script: yarn size
   - stage: Release
     if: tag =~ ^v[0-9]
