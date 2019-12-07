@@ -90,6 +90,11 @@ const node = [
         exclude: /node_modules/,
         presets: [['@babel/preset-env', { loose: true }]],
         plugins: ['babel-plugin-dev-expression']
+      }),
+      compiler({
+        compilation_level: 'SIMPLE_OPTIMIZATIONS',
+        language_in: 'ECMASCRIPT5_STRICT',
+        language_out: 'ECMASCRIPT5_STRICT'
       })
     ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   }
