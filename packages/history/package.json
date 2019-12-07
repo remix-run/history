@@ -10,13 +10,7 @@
   "unpkg": "history.production.min.js",
   "sideEffects": false,
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
-    "loose-envify": "^1.2.0"
-  },
-  "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
+    "@babel/runtime": "^7.1.2"
   },
   "keywords": [
     "history",
