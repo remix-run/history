@@ -6,7 +6,7 @@ import prettier from 'rollup-plugin-prettier';
 import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 
-const dev = process.env.NODE_ENV === 'development';
+const pretty = !!process.env.PRETTY;
 
 const modules = [
   {
@@ -14,7 +14,7 @@ const modules = [
     output: {
       file: 'build/history/history.js',
       format: 'esm',
-      sourcemap: !dev
+      sourcemap: !pretty
     },
     external: ['./browser.js', './hash.js', './memory.js'],
     plugins: [
@@ -46,7 +46,7 @@ const modules = [
         ],
         verbose: true
       })
-    ].concat(dev ? prettier({ parser: 'babel' }) : [])
+    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   },
   ...['browser', 'hash', 'memory'].map(env => {
     return {
@@ -54,7 +54,7 @@ const modules = [
       output: {
         file: `build/history/${env}.js`,
         format: 'esm',
-        sourcemap: !dev
+        sourcemap: !pretty
       },
       external: ['@babel/runtime/helpers/esm/extends'],
       plugins: [
@@ -73,7 +73,7 @@ const modules = [
           language_in: 'ECMASCRIPT5_STRICT',
           language_out: 'ECMASCRIPT5_STRICT'
         })
-      ].concat(dev ? prettier({ parser: 'babel' }) : [])
+      ].concat(pretty ? prettier({ parser: 'babel' }) : [])
     };
   })
 ];
@@ -91,7 +91,7 @@ const node = [
         presets: [['@babel/preset-env', { loose: true }]],
         plugins: ['babel-plugin-dev-expression']
       })
-    ].concat(dev ? prettier({ parser: 'babel' }) : [])
+    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
@@ -101,7 +101,7 @@ const globals = [
     output: {
       file: 'build/history/history.development.js',
       format: 'umd',
-      sourcemap: !dev,
+      sourcemap: !pretty,
       name: 'HistoryLibrary'
     },
     plugins: [
@@ -116,14 +116,14 @@ const globals = [
         language_in: 'ECMASCRIPT5_STRICT',
         language_out: 'ECMASCRIPT5_STRICT'
       })
-    ].concat(dev ? prettier({ parser: 'babel' }) : [])
+    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   },
   {
     input: 'packages/history/modules/history.js',
     output: {
       file: 'build/history/history.production.min.js',
       format: 'umd',
-      sourcemap: !dev,
+      sourcemap: !pretty,
       name: 'HistoryLibrary'
     },
     plugins: [
@@ -139,7 +139,7 @@ const globals = [
         language_out: 'ECMASCRIPT5_STRICT'
       }),
       terser()
-    ].concat(dev ? prettier({ parser: 'babel' }) : [])
+    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
