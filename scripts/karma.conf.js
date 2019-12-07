@@ -78,6 +78,18 @@ module.exports = function(config) {
       resolve: {
         modules: [path.resolve(__dirname, '../build'), 'node_modules']
       },
+      module: {
+        loaders: [
+          {
+            test: /__tests__\/.*\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
+          }
+        ]
+      },
       plugins: [
         new webpack.DefinePlugin({
           'process.env.NODE_ENV': JSON.stringify('test')
