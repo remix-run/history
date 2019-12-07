@@ -33,7 +33,7 @@ export function createHistory({
       if (location.pathname.charAt(0) !== '/') {
         let arg = JSON.stringify(entry);
         throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory({ initialEntries }) (invalid entry: ${arg})`
+          `Relative pathnames are not supported in createHistory({ initialEntries }) (invalid entry: ${arg})`
         );
       }
     }
@@ -81,7 +81,7 @@ export function createHistory({
       if (nextLocation.pathname.charAt(0) !== '/') {
         let arg = JSON.stringify(to);
         throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory().push(${arg})`
+          `Relative pathnames are not supported in memory history.push(${arg})`
         );
       }
     }
@@ -104,7 +104,7 @@ export function createHistory({
       if (nextLocation.pathname.charAt(0) !== '/') {
         let arg = JSON.stringify(to);
         throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory().replace(${arg})`
+          `Relative pathnames are not supported in memory history.replace(${arg})`
         );
       }
     }
@@ -130,6 +130,9 @@ export function createHistory({
   }
 
   let history = {
+    get index() {
+      return index;
+    },
     get action() {
       return action;
     },

@@ -8,7 +8,7 @@ import { terser } from 'rollup-plugin-terser';
 
 const dev = process.env.NODE_ENV === 'development';
 
-const esm = [
+const modules = [
   {
     input: 'packages/history/modules/history.js',
     output: {
@@ -61,64 +61,86 @@ const esm = [
         babel({
           exclude: /node_modules/,
           runtimeHelpers: true,
-          plugins: [['@babel/transform-runtime', { useESModules: true }]]
+          presets: [['@babel/preset-env', { loose: true }]],
+          plugins: [
+            'babel-plugin-dev-expression',
+            ['@babel/transform-runtime', { useESModules: true }]
+          ]
         }),
         nodeResolve(),
         compiler({
-          compilation_level: 'SIMPLE_OPTIMIZATIONS'
+          compilation_level: 'SIMPLE_OPTIMIZATIONS',
+          language_in: 'ECMASCRIPT5_STRICT',
+          language_out: 'ECMASCRIPT5_STRICT'
         })
       ].concat(dev ? prettier({ parser: 'babel' }) : [])
     };
   })
 ];
 
-const cjs = [
+const node = [
   {
     input: 'packages/history/modules/node.js',
     output: {
       file: 'build/history/index.js',
       format: 'cjs'
     },
-    plugins: [babel({ exclude: /node_modules/ })].concat(
-      dev ? prettier({ parser: 'babel' }) : []
-    )
+    plugins: [
+      babel({
+        exclude: /node_modules/,
+        presets: [['@babel/preset-env', { loose: true }]],
+        plugins: ['babel-plugin-dev-expression']
+      })
+    ].concat(dev ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
-const umd = [
+const globals = [
   {
     input: 'packages/history/modules/history.js',
     output: {
-      file: 'build/history/umd/history.development.js',
+      file: 'build/history/history.development.js',
       format: 'umd',
       sourcemap: !dev,
       name: 'HistoryLibrary'
     },
     plugins: [
-      babel({ exclude: /node_modules/ }),
+      babel({
+        exclude: /node_modules/,
+        presets: [['@babel/preset-env', { loose: true }]],
+        plugins: ['babel-plugin-dev-expression']
+      }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
       compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS'
+        compilation_level: 'SIMPLE_OPTIMIZATIONS',
+        language_in: 'ECMASCRIPT5_STRICT',
+        language_out: 'ECMASCRIPT5_STRICT'
       })
     ].concat(dev ? prettier({ parser: 'babel' }) : [])
   },
   {
     input: 'packages/history/modules/history.js',
     output: {
-      file: 'build/history/umd/history.production.min.js',
+      file: 'build/history/history.production.min.js',
       format: 'umd',
       sourcemap: !dev,
       name: 'HistoryLibrary'
     },
     plugins: [
-      babel({ exclude: /node_modules/ }),
+      babel({
+        exclude: /node_modules/,
+        presets: [['@babel/preset-env', { loose: true }]],
+        plugins: ['babel-plugin-dev-expression']
+      }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
       compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS'
+        compilation_level: 'SIMPLE_OPTIMIZATIONS',
+        language_in: 'ECMASCRIPT5_STRICT',
+        language_out: 'ECMASCRIPT5_STRICT'
       }),
       terser()
     ].concat(dev ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
-export default [...esm, ...cjs, ...umd];
+export default [...modules, ...node, ...globals];

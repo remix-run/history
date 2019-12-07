@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var projectName = require('./package').name;
+
+var projectName = require('../package.json').name;
 
 module.exports = function(config) {
   var customLaunchers = {
@@ -63,6 +64,7 @@ module.exports = function(config) {
   };
 
   config.set({
+    singleRun: true,
     customLaunchers: customLaunchers,
     browsers: ['Chrome' /*, 'Firefox'*/],
     frameworks: ['mocha'],
@@ -73,26 +75,8 @@ module.exports = function(config) {
     },
     webpack: {
       devtool: 'inline-source-map',
-      module: {
-        loaders: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            options: {
-              presets: [['@babel/preset-env', { loose: true }]],
-              plugins: ['babel-plugin-dev-expression']
-            }
-          }
-        ]
-      },
       resolve: {
-        alias: {
-          history$: path.resolve(
-            __dirname,
-            'packages/history/modules/history.js'
-          )
-        }
+        modules: [path.resolve(__dirname, '../build'), 'node_modules']
       },
       plugins: [
         new webpack.DefinePlugin({
@@ -113,7 +97,6 @@ module.exports = function(config) {
     config.browserDisconnectTolerance = 3;
 
     if (process.env.TRAVIS) {
-      config.singleRun = true;
       config.browserStack = {
         project: projectName,
         build: process.env.TRAVIS_BUILD_NUMBER,

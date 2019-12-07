@@ -8,10 +8,10 @@ Then, use as you would anything else:
 
 ```js
 // using ES6 modules
-import { createBrowserHistory } from 'history';
+import history from 'history/browser';
 
 // using CommonJS modules
-var createBrowserHistory = require('history').createBrowserHistory;
+var history = require('history/browser');
 ```
 
 ## Using Globals
@@ -22,4 +22,10 @@ If you really just want a `<script>` tag, the UMD build is available on [unpkg](
 <script src="https://unpkg.com/history"></script>
 ```
 
-You can find the library on `window.HistoryLibrary`.
+You can find the library on `window.HistoryLibrary`, which is an object with the following properties:
+
+- `browserHistory` - The browser history singleton
+- `hashHistory` - The hash history singleton
+- `createBrowserHistory`
+- `createHashHistory`
+- `createMemoryHistory`

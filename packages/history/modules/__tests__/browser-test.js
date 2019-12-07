@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { createBrowserHistory } from 'history';
+import { createHistory } from 'history/browser';
 
 import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey.js';
 import Listen from './TestSequences/Listen.js';
@@ -21,7 +21,7 @@ describe('a browser history', () => {
   let history;
   beforeEach(() => {
     window.history.replaceState(null, null, '/');
-    history = createBrowserHistory();
+    history = createHistory();
   });
 
   it('knows how to create hrefs', () => {

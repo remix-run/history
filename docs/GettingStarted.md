@@ -1,65 +1,66 @@
 # Intro
 
-The history library is a lightweight layer over browsers' built-in [History](https://developer.mozilla.org/en-US/docs/Web/API/History) and [Location](https://developer.mozilla.org/en-US/docs/Web/API/Location) APIs. The goal is not to provide a full implementation of these APIs, but rather to make it easy for users to opt-in to different methods of navigation.
+The history library provides history tracking and navigation primitives for JavaScript applications that run in browsers and other stateful environments.
 
-We provide 3 different methods for creating a `history` object, depending on the needs of your environment:
+We provide 3 different methods for working with history, depending on your environment:
 
-- `createBrowserHistory` is for use in modern web browsers that support the [HTML5 history API](http://diveintohtml5.info/history.html) (see [cross-browser compatibility](http://caniuse.com/#feat=history))
-- `createHashHistory` is for use in situations where you want to store the location in the [hash](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/hash) portion of the current URL to avoid sending it to the server when the page reloads
-- `createMemoryHistory` is used as a reference implementation and may also be used in non-DOM environments, like [React Native](https://facebook.github.io/react-native/) or tests
+- A "browser history" is for use in modern web browsers that support the [HTML5 history API](http://diveintohtml5.info/history.html) (see [cross-browser compatibility](http://caniuse.com/#feat=history))
+- A "hash history" is for use in web browsers where you want to store the location in the [hash](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/hash) portion of the current URL to avoid sending it to the server when the page reloads
+- A "memory history" is used as a reference implementation that may be used in non-browser environments, like [React Native](https://facebook.github.io/react-native/) or tests
 
-Depending on the method you want to use to keep track of history, you'll `import` (or `require`, if you're using CommonJS) only one of these methods.
+Since you'll only ever need to use one in a given app, we provide environment-specific bundles. You'll need to `import` one of these bundles:
+
+- `history/browser`
+- `history/hash`
+- `history/memory`
+
+Each bundle exports a `createHistory` method you can use to create your own history object. In addition, `history/browser` and `history/hash` export a singleton instance you can use which reflects the state of [the current `document`](https://developer.mozilla.org/en-US/docs/Web/API/Window/document).
 
 ## Basic Usage
 
 Basic usage looks like this:
 
 ```js
-import { createBrowserHistory } from 'history';
-
-let history = createBrowserHistory();
+// Import the browser history singleton instance.
+import history from 'history/browser';
+// Alternatively, if you're using hash history import
+// the hash history singleton instance.
+// import history from 'history/hash';
 
 // Get the current location.
 let location = history.location;
 
 // Listen for changes to the current location.
-let unlisten = history.listen((location, action) => {
-  // location is an object like window.location
+let unlisten = history.listen(({ location, action }) => {
   console.log(action, location.pathname, location.state);
 });
 
-// Use push, replace, and go to navigate around.
+// Use push to push a new entry onto the history stack.
 history.push('/home', { some: 'state' });
+
+// Use replace to replace the current entry in the stack.
+history.replace('/logged-in');
+
+// Use back/forward to navigate one entry back or forward.
+history.back();
 
 // To stop listening, call the function returned from listen().
 unlisten();
 ```
 
-The options that each `create` method takes, along with its default values, are:
+If you're using `history/memory` you'll need to create your own `history` object before you can use it.
 
 ```js
-createBrowserHistory({
-  basename: '', // The base URL of the app (see below)
-  forceRefresh: false, // Set true to force full page refreshes
-  keyLength: 6, // The length of location.key
-  // A function to use to confirm navigation with the user (see below)
-  getUserConfirmation: (message, callback) => callback(window.confirm(message))
-});
+import { createHistory } from 'history/memory';
+let history = createHistory();
+```
 
-createHashHistory({
-  basename: '', // The base URL of the app (see below)
-  hashType: 'slash', // The hash type to use (see below)
-  // A function to use to confirm navigation with the user (see below)
-  getUserConfirmation: (message, callback) => callback(window.confirm(message))
-});
+If you're using browser or hash history with a `window` other than that of the current `document` (like an iframe), you'll need to create your own browser/hash history:
 
-createMemoryHistory({
-  initialEntries: ['/'], // The initial URLs in the history stack
-  initialIndex: 0, // The starting index in the history stack
-  keyLength: 6, // The length of location.key
-  // A function to use to confirm navigation with the user. Required
-  // if you return string prompts from transition hooks (see below)
-  getUserConfirmation: null
+```js
+import { createHistory } from 'history/browser';
+let history = createHistory({
+  window: iframe.contentWindow
 });
 ```
 
@@ -67,11 +68,10 @@ createMemoryHistory({
 
 Each `history` object has the following properties:
 
-- `history.length` - The number of entries in the history stack
 - `history.location` - The current location (see below)
 - `history.action` - The current navigation action (see below)
 
-Additionally, `createMemoryHistory` provides `history.index` and `history.entries` properties that let you inspect the history stack.
+Additionally, memory history provides `history.index` that tells you the current index in the history stack.
 
 ## Listening
 

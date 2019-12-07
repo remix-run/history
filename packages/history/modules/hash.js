@@ -173,7 +173,7 @@ export function createHistory({ window = document.defaultView } = {}) {
       if (nextLocation.pathname.charAt(0) !== '/') {
         let arg = JSON.stringify(to);
         throw new Error(
-          `Relative pathnames are not supported in createHashHistory().push(${arg})`
+          `Relative pathnames are not supported in hash history.push(${arg})`
         );
       }
     }
@@ -206,7 +206,7 @@ export function createHistory({ window = document.defaultView } = {}) {
       if (nextLocation.pathname.charAt(0) !== '/') {
         let arg = JSON.stringify(to);
         throw new Error(
-          `Relative pathnames are not supported in createHashHistory().replace(${arg})`
+          `Relative pathnames are not supported in hash history.replace(${arg})`
         );
       }
     }

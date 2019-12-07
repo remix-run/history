@@ -2,12 +2,12 @@
   "name": "history-packages",
   "private": true,
   "scripts": {
-    "build": "rollup -c",
+    "build": "node ./scripts/build.js",
     "size": "filesize",
     "clean": "git clean -fdX .",
     "lint": "eslint .",
     "prepublishOnly": "yarn build",
-    "test": "karma start --single-run"
+    "test": "node ./scripts/test.js"
   },
   "dependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.12.1",
@@ -51,17 +51,17 @@
     {
       "path": "build/history/hash.js",
       "compression": "none",
-      "maxSize": "3 kB"
+      "maxSize": "4 kB"
     },
     {
       "path": "build/history/memory.js",
       "compression": "none",
-      "maxSize": "2 kB"
+      "maxSize": "3 kB"
     },
     {
-      "path": "build/history/umd/history.production.min.js",
+      "path": "build/history/history.production.min.js",
       "compression": "none",
-      "maxSize": "7 kB"
+      "maxSize": "6 kB"
     }
   ],
   "workspaces": {
