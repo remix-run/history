@@ -12,6 +12,7 @@ jobs:
   - stage: Release
     if: tag =~ ^v[0-9]
     env: NPM_TAG=$([[ "$TRAVIS_TAG" == *-* ]] && echo "next" || echo "latest")
+    before_script: yarn build
     script: echo "Releasing $TRAVIS_TAG to npm with tag \"$NPM_TAG\" ..."
     deploy:
       provider: npm
@@ -19,7 +20,7 @@ jobs:
       cleanup: false
       email: npm@mjackson.me
       api_token: "$NPM_TOKEN"
-      src: "build/history"
+      src: "./build/history"
       tag: "$NPM_TAG"
       on:
         tags: true
