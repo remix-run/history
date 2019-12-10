@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { createHistory } from 'history/memory';
+import { createMemoryHistory } from 'history';
 
 import Listen from './TestSequences/Listen.js';
 import InitialLocationHasKey from './TestSequences/InitialLocationHasKey.js';
@@ -20,7 +20,7 @@ import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.j
 describe('a memory history', () => {
   let history;
   beforeEach(() => {
-    history = createHistory();
+    history = createMemoryHistory();
   });
 
   it('has an index property', () => {

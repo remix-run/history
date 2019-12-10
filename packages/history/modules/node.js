@@ -1,5 +1,5 @@
 /* eslint-env node */
 module.exports =
   process.env.NODE_ENV === 'production'
-    ? require('./history.production.min.js')
-    : require('./history.development.js');
+    ? require('./umd/history.production.min.js')
+    : require('./umd/history.development.js');

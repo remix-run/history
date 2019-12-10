@@ -12,8 +12,9 @@
   "dependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.12.1",
     "@babel/core": "^7.1.2",
-    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.1.0",
+    "@babel/preset-modules": "^0.1.1",
     "@kristoferbaxter/filesize": "0.2.0",
     "@rollup/plugin-replace": "^2.2.1",
     "babel-core": "^7.0.0-bridge.0",
@@ -37,31 +38,20 @@
     "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-copy": "^3.1.0",
-    "rollup-plugin-node-resolve": "3",
     "rollup-plugin-prettier": "^0.6.0",
     "rollup-plugin-terser": "^5.1.2",
     "webpack": "^3.12.0"
   },
   "filesize": [
     {
-      "path": "build/history/browser.js",
-      "compression": "none",
-      "maxSize": "3 kB"
-    },
-    {
-      "path": "build/history/hash.js",
-      "compression": "none",
-      "maxSize": "4 kB"
-    },
-    {
-      "path": "build/history/memory.js",
-      "compression": "none",
-      "maxSize": "3 kB"
-    },
-    {
       "path": "build/history/history.production.min.js",
       "compression": "none",
-      "maxSize": "6 kB"
+      "maxSize": "5 kB"
+    },
+    {
+      "path": "build/history/umd/history.production.min.js",
+      "compression": "none",
+      "maxSize": "5.5 kB"
     }
   ],
   "workspaces": {

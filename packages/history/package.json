@@ -7,10 +7,10 @@
   "author": "React Training <hello@reacttraining.com>",
   "main": "index.js",
   "module": "history.js",
-  "unpkg": "history.production.min.js",
+  "unpkg": "umd/history.production.min.js",
   "sideEffects": false,
   "dependencies": {
-    "@babel/runtime": "^7.1.2"
+    "@babel/runtime": "^7.7.6"
   },
   "keywords": [
     "history",

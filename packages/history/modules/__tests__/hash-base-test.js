@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { createHistory } from 'history/hash';
+import { createHashHistory } from 'history';
 
 describe('a hash history on a page with a <base> tag', () => {
   let history, base;
@@ -13,7 +13,7 @@ describe('a hash history on a page with a <base> tag', () => {
 
     document.head.appendChild(base);
 
-    history = createHistory();
+    history = createHashHistory();
   });
 
   afterEach(() => {
