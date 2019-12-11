@@ -35,7 +35,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
-    "rollup": "^0.66.6",
+    "rollup": "^1.27.9",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-copy": "^3.1.0",
     "rollup-plugin-prettier": "^0.6.0",
