@@ -89,7 +89,9 @@ const browserModules = [
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
       compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS'
+        compilation_level: 'SIMPLE_OPTIMIZATIONS',
+        language_in: 'ECMASCRIPT_2018',
+        language_out: 'ECMASCRIPT_2017'
       })
     ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   },
@@ -108,9 +110,11 @@ const browserModules = [
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
       compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS'
+        compilation_level: 'SIMPLE_OPTIMIZATIONS',
+        language_in: 'ECMASCRIPT_2018',
+        language_out: 'ECMASCRIPT_2017'
       }),
-      terser()
+      terser({ ecma: 8, safari10: true })
     ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   }
 ];
