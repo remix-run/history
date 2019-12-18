@@ -9,7 +9,7 @@ const pretty = !!process.env.PRETTY;
 
 const modules = [
   {
-    input: 'packages/history/modules/history.js',
+    input: 'packages/history/modules/index.js',
     output: {
       file: 'build/history/history.js',
       format: 'esm',
@@ -73,9 +73,9 @@ const modules = [
   })
 ];
 
-const browserModules = [
+const webModules = [
   {
-    input: 'packages/history/modules/history.js',
+    input: 'packages/history/modules/index.js',
     output: {
       file: 'build/history/history.development.js',
       format: 'esm',
@@ -96,7 +96,7 @@ const browserModules = [
     ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: 'packages/history/modules/history.js',
+    input: 'packages/history/modules/index.js',
     output: {
       file: 'build/history/history.production.min.js',
       format: 'esm',
@@ -121,7 +121,7 @@ const browserModules = [
 
 const globals = [
   {
-    input: 'packages/history/modules/history.js',
+    input: 'packages/history/modules/index.js',
     output: {
       file: 'build/history/umd/history.development.js',
       format: 'umd',
@@ -143,7 +143,7 @@ const globals = [
     ].concat(pretty ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: 'packages/history/modules/history.js',
+    input: 'packages/history/modules/index.js',
     output: {
       file: 'build/history/umd/history.production.min.js',
       format: 'umd',
@@ -169,9 +169,9 @@ const globals = [
 
 const node = [
   {
-    input: 'packages/history/modules/node.js',
+    input: 'packages/history/modules/node-main.js',
     output: {
-      file: 'build/history/index.js',
+      file: 'build/history/node-main.js',
       format: 'cjs'
     },
     plugins: [
@@ -184,4 +184,4 @@ const node = [
   }
 ];
 
-export default [...modules, ...browserModules, ...globals, ...node];
+export default [...modules, ...webModules, ...globals, ...node];

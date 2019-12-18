@@ -1,2 +1,2 @@
-import { createMemoryHistory } from './history.js';
+import { createMemoryHistory } from './index.js';
 export { createMemoryHistory };
