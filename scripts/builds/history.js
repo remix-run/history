@@ -170,8 +170,8 @@ const node = [
     plugins: [
       compiler({
         compilation_level: 'SIMPLE_OPTIMIZATIONS',
-        language_in: 'ECMASCRIPT5_STRICT',
-        language_out: 'ECMASCRIPT5_STRICT'
+        language_in: 'ECMASCRIPT6',
+        language_out: 'ECMASCRIPT5'
       })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
