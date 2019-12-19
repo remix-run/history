@@ -5,15 +5,17 @@ import prettier from 'rollup-plugin-prettier';
 import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 
-const pretty = !!process.env.PRETTY;
+const PRETTY = !!process.env.PRETTY;
+const SOURCE_DIR = 'packages/history';
+const OUTPUT_DIR = 'build/history';
 
 const modules = [
   {
-    input: 'packages/history/modules/index.js',
+    input: `${SOURCE_DIR}/modules/index.js`,
     output: {
-      file: 'build/history/history.js',
+      file: `${OUTPUT_DIR}/history.js`,
       format: 'esm',
-      sourcemap: !pretty
+      sourcemap: !PRETTY
     },
     external: ['@babel/runtime/helpers/esm/extends'],
     plugins: [
@@ -33,30 +35,21 @@ const modules = [
       }),
       copy({
         targets: [
-          {
-            src: 'packages/history/package.json',
-            dest: 'build/history'
-          },
-          {
-            src: 'README.md',
-            dest: 'build/history'
-          },
-          {
-            src: 'LICENSE',
-            dest: 'build/history'
-          }
+          { src: `${SOURCE_DIR}/package.json`, dest: OUTPUT_DIR },
+          { src: 'README.md', dest: OUTPUT_DIR },
+          { src: 'LICENSE', dest: OUTPUT_DIR }
         ],
         verbose: true
       })
-    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
+    ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   ...['browser', 'hash', 'memory'].map(env => {
     return {
-      input: `packages/history/modules/${env}.js`,
+      input: `${SOURCE_DIR}/modules/${env}.js`,
       output: {
-        file: `build/history/${env}.js`,
+        file: `${OUTPUT_DIR}/${env}.js`,
         format: 'esm',
-        sourcemap: !pretty
+        sourcemap: !PRETTY
       },
       plugins: [
         babel({
@@ -68,18 +61,18 @@ const modules = [
           language_in: 'ECMASCRIPT5_STRICT',
           language_out: 'ECMASCRIPT5_STRICT'
         })
-      ].concat(pretty ? prettier({ parser: 'babel' }) : [])
+      ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
     };
   })
 ];
 
 const webModules = [
   {
-    input: 'packages/history/modules/index.js',
+    input: `${SOURCE_DIR}/modules/index.js`,
     output: {
-      file: 'build/history/history.development.js',
+      file: `${OUTPUT_DIR}/history.development.js`,
       format: 'esm',
-      sourcemap: !pretty
+      sourcemap: !PRETTY
     },
     plugins: [
       babel({
@@ -93,14 +86,14 @@ const webModules = [
         language_in: 'ECMASCRIPT_2018',
         language_out: 'ECMASCRIPT_2017'
       })
-    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
+    ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: 'packages/history/modules/index.js',
+    input: `${SOURCE_DIR}/modules/index.js`,
     output: {
-      file: 'build/history/history.production.min.js',
+      file: `${OUTPUT_DIR}/history.production.min.js`,
       format: 'esm',
-      sourcemap: !pretty
+      sourcemap: !PRETTY
     },
     plugins: [
       babel({
@@ -115,17 +108,17 @@ const webModules = [
         language_out: 'ECMASCRIPT_2017'
       }),
       terser({ ecma: 8, safari10: true })
-    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
+    ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
 const globals = [
   {
-    input: 'packages/history/modules/index.js',
+    input: `${SOURCE_DIR}/modules/index.js`,
     output: {
-      file: 'build/history/umd/history.development.js',
+      file: `${OUTPUT_DIR}/umd/history.development.js`,
       format: 'umd',
-      sourcemap: !pretty,
+      sourcemap: !PRETTY,
       name: 'HistoryLibrary'
     },
     plugins: [
@@ -140,14 +133,14 @@ const globals = [
         language_in: 'ECMASCRIPT5_STRICT',
         language_out: 'ECMASCRIPT5_STRICT'
       })
-    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
+    ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: 'packages/history/modules/index.js',
+    input: `${SOURCE_DIR}/modules/index.js`,
     output: {
-      file: 'build/history/umd/history.production.min.js',
+      file: `${OUTPUT_DIR}/umd/history.production.min.js`,
       format: 'umd',
-      sourcemap: !pretty,
+      sourcemap: !PRETTY,
       name: 'HistoryLibrary'
     },
     plugins: [
@@ -163,15 +156,15 @@ const globals = [
         language_out: 'ECMASCRIPT5_STRICT'
       }),
       terser()
-    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
+    ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
 const node = [
   {
-    input: 'packages/history/modules/node-main.js',
+    input: `${SOURCE_DIR}/modules/node-main.js`,
     output: {
-      file: 'build/history/node-main.js',
+      file: `${OUTPUT_DIR}/node-main.js`,
       format: 'cjs'
     },
     plugins: [
@@ -180,7 +173,7 @@ const node = [
         language_in: 'ECMASCRIPT5_STRICT',
         language_out: 'ECMASCRIPT5_STRICT'
       })
-    ].concat(pretty ? prettier({ parser: 'babel' }) : [])
+    ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
