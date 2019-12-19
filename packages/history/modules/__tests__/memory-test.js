@@ -37,6 +37,11 @@ describe('a memory history', () => {
     expect(href).toEqual('/the/path?the=query#the-hash');
   });
 
+  it('knows how to create hrefs from strings', () => {
+    const href = history.createHref('/the/path?the=query#the-hash');
+    expect(href).toEqual('/the/path?the=query#the-hash');
+  });
+
   it('does not encode the generated path', () => {
     const encodedHref = history.createHref({
       pathname: '/%23abc'

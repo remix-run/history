@@ -28,13 +28,18 @@ describe('a hash history', () => {
     history = createHashHistory();
   });
 
-  it('knows how to create hrefs', () => {
+  it('knows how to create hrefs from location objects', () => {
     const href = history.createHref({
       pathname: '/the/path',
       search: '?the=query',
       hash: '#the-hash'
     });
 
+    expect(href).toEqual('#/the/path?the=query#the-hash');
+  });
+
+  it('knows how to create hrefs from strings', () => {
+    const href = history.createHref('/the/path?the=query#the-hash');
     expect(href).toEqual('#/the/path?the=query#the-hash');
   });
 

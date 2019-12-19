@@ -93,7 +93,9 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
     globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
   }
 
-  let createHref = createPath;
+  function createHref(to) {
+    return typeof to === 'string' ? to : createPath(to);
+  }
 
   function getNextLocation(to, state = null) {
     return readOnly({
@@ -314,7 +316,7 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
   }
 
-  function createHref(location) {
+  function getBaseHref() {
     let base = document.querySelector('base');
     let href = '';
 
@@ -324,7 +326,11 @@ export function createHashHistory({ window = document.defaultView } = {}) {
       href = hashIndex === -1 ? url : url.slice(0, hashIndex);
     }
 
-    return href + '#' + createPath(location);
+    return href;
+  }
+
+  function createHref(to) {
+    return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
   }
 
   function getNextLocation(to, state = null) {
@@ -506,7 +512,9 @@ export function createMemoryHistory({
   let blockers = createEvents();
   let listeners = createEvents();
 
-  let createHref = createPath;
+  function createHref(to) {
+    return typeof to === 'string' ? to : createPath(to);
+  }
 
   function getNextLocation(to, state = null) {
     return readOnly({
