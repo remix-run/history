@@ -10,7 +10,7 @@
     "test": "node ./scripts/test.js"
   },
   "dependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "0.12.1",
+    "@ampproject/rollup-plugin-closure-compiler": "0.14.0",
     "@babel/core": "^7.1.2",
     "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.1.0",
