@@ -1,6 +1,6 @@
 # Blocking Transitions
 
-`history` lets you block navigation away from the current page so you can make sure e.g. the user wants to leave before they go to another page and possibly lose some changes they've made in the current page.
+`history` lets you block navigation away from the current page. For example, you can make sure the user knows that if they leave the current page they will lose some unsaved changes they've made.
 
 ```js
 // Block navigation and register a callback that
@@ -9,7 +9,7 @@ let unblock = history.block(tx => {
   // Navigation was blocked! Let's show a confirmation dialog
   // so the user can decide if they actually want to navigate
   // away and discard changes they've made in the current page.
-  let url = tx.location.pathnanme;
+  let url = tx.location.pathname;
   if (window.confirm(`Are you sure you want to go to ${url}?`)) {
     // Unblock the navigation.
     unblock();
