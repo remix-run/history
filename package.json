@@ -51,7 +51,7 @@
     {
       "path": "build/history/umd/history.production.min.js",
       "compression": "none",
-      "maxSize": "5.5 kB"
+      "maxSize": "6 kB"
     }
   ],
   "workspaces": {
