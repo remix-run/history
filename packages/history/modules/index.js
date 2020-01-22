@@ -8,6 +8,18 @@ const PopStateEventType = 'popstate';
 
 const readOnly = __DEV__ ? obj => Object.freeze(obj) : obj => obj;
 
+function warning(cond, message) {
+  if (!cond) {
+    // eslint-disable-next-line no-console
+    if (typeof console !== 'undefined') console.warn(message);
+
+    try {
+      throw new Error(message);
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // BROWSER
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,18 +74,17 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
         } else {
           // Trying to POP to a location with no index. We did not create
           // this location, so we can't effectively block the navigation.
-          if (__DEV__) {
+          warning(
+            false,
             // TODO: Write up a doc that explains our blocking strategy in
             // detail and link to it here so people can understand better
             // what is going on and how to avoid it.
-            throw new Error(
-              `You are trying to block a POP navigation to a location that was not ` +
-                `created by the history library. The block will fail silently in ` +
-                `production, but in general you should do all navigation with the ` +
-                `history library (instead of using window.history.pushState directly) ` +
-                `to avoid this situation.`
-            );
-          }
+            `You are trying to block a POP navigation to a location that was not ` +
+              `created by the history library. The block will fail silently in ` +
+              `production, but in general you should do all navigation with the ` +
+              `history library (instead of using window.history.pushState directly) ` +
+              `to avoid this situation.`
+          );
         }
       } else {
         applyTx(nextAction);
@@ -274,18 +285,17 @@ export function createHashHistory({ window = document.defaultView } = {}) {
         } else {
           // Trying to POP to a location with no index. We did not create
           // this location, so we can't effectively block the navigation.
-          if (__DEV__) {
+          warning(
+            false,
             // TODO: Write up a doc that explains our blocking strategy in
             // detail and link to it here so people can understand better
             // what is going on and how to avoid it.
-            throw new Error(
-              `You are trying to block a POP navigation to a location that was not ` +
-                `created by the history library. The block will fail silently in ` +
-                `production, but in general you should do all navigation with the ` +
-                `history library (instead of using window.history.pushState directly) ` +
-                `to avoid this situation.`
-            );
-          }
+            `You are trying to block a POP navigation to a location that was not ` +
+              `created by the history library. The block will fail silently in ` +
+              `production, but in general you should do all navigation with the ` +
+              `history library (instead of using window.history.pushState directly) ` +
+              `to avoid this situation.`
+          );
         }
       } else {
         applyTx(nextAction);
@@ -372,14 +382,12 @@ export function createHashHistory({ window = document.defaultView } = {}) {
       push(to, state);
     }
 
-    if (__DEV__) {
-      if (nextLocation.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(to);
-        throw new Error(
-          `Relative pathnames are not supported in hash history.push(${arg})`
-        );
-      }
-    }
+    warning(
+      nextLocation.pathname.charAt(0) === '/',
+      `Relative pathnames are not supported in hash history.push(${JSON.stringify(
+        to
+      )})`
+    );
 
     if (allowTx(nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
@@ -405,14 +413,12 @@ export function createHashHistory({ window = document.defaultView } = {}) {
       replace(to, state);
     }
 
-    if (__DEV__) {
-      if (nextLocation.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(to);
-        throw new Error(
-          `Relative pathnames are not supported in hash history.replace(${arg})`
-        );
-      }
-    }
+    warning(
+      nextLocation.pathname.charAt(0) === '/',
+      `Relative pathnames are not supported in hash history.replace(${JSON.stringify(
+        to
+      )})`
+    );
 
     if (allowTx(nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
@@ -494,14 +500,12 @@ export function createMemoryHistory({
       ...(typeof entry === 'string' ? parsePath(entry) : entry)
     });
 
-    if (__DEV__) {
-      if (location.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(entry);
-        throw new Error(
-          `Relative pathnames are not supported in createMemoryHistory({ initialEntries }) (invalid entry: ${arg})`
-        );
-      }
-    }
+    warning(
+      location.pathname.charAt(0) === '/',
+      `Relative pathnames are not supported in createMemoryHistory({ initialEntries }) (invalid entry: ${JSON.stringify(
+        entry
+      )})`
+    );
 
     return location;
   });
@@ -544,14 +548,12 @@ export function createMemoryHistory({
       push(to, state);
     }
 
-    if (__DEV__) {
-      if (nextLocation.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(to);
-        throw new Error(
-          `Relative pathnames are not supported in memory history.push(${arg})`
-        );
-      }
-    }
+    warning(
+      location.pathname.charAt(0) === '/',
+      `Relative pathnames are not supported in memory history.push(${JSON.stringify(
+        to
+      )})`
+    );
 
     if (allowTx(nextAction, nextLocation, retry)) {
       index += 1;
@@ -567,14 +569,12 @@ export function createMemoryHistory({
       replace(to, state);
     }
 
-    if (__DEV__) {
-      if (nextLocation.pathname.charAt(0) !== '/') {
-        let arg = JSON.stringify(to);
-        throw new Error(
-          `Relative pathnames are not supported in memory history.replace(${arg})`
-        );
-      }
-    }
+    warning(
+      location.pathname.charAt(0) === '/',
+      `Relative pathnames are not supported in memory history.replace(${JSON.stringify(
+        to
+      )})`
+    );
 
     if (allowTx(nextAction, nextLocation, retry)) {
       entries[index] = nextLocation;

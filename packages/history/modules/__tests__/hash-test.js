@@ -7,7 +7,7 @@ import PushNewLocation from './TestSequences/PushNewLocation.js';
 import PushSamePath from './TestSequences/PushSamePath.js';
 import PushState from './TestSequences/PushState.js';
 import PushMissingPathname from './TestSequences/PushMissingPathname.js';
-import PushRelativePathnameError from './TestSequences/PushRelativePathnameError.js';
+import PushRelativePathnameWarning from './TestSequences/PushRelativePathnameWarning.js';
 import ReplaceNewLocation from './TestSequences/ReplaceNewLocation.js';
 import ReplaceSamePath from './TestSequences/ReplaceSamePath.js';
 import ReplaceState from './TestSequences/ReplaceState.js';
@@ -92,8 +92,8 @@ describe('a hash history', () => {
   });
 
   describe('push with a relative pathname', () => {
-    it('throws an error', done => {
-      PushRelativePathnameError(history, done);
+    it('issues a warning', done => {
+      PushRelativePathnameWarning(history, done);
     });
   });
 

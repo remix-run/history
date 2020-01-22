@@ -1,6 +1,7 @@
 import expect from 'expect';
 
 import execSteps from './execSteps.js';
+import spyOn from './spyOn.js';
 
 export default (history, done) => {
   let steps = [
@@ -19,11 +20,22 @@ export default (history, done) => {
         hash: '#the-hash'
       });
 
-      try {
-        history.push('../other/path?another=query#another-hash');
-      } catch (error) {
-        expect(error.message).toMatch(/relative pathnames are not supported/i);
-      }
+      let { spy, destroy } = spyOn(console, 'warn');
+
+      history.push('../other/path?another=query#another-hash');
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.stringContaining('relative pathnames are not supported')
+      );
+
+      destroy();
+    },
+    ({ location }) => {
+      expect(location).toMatchObject({
+        pathname: '../other/path',
+        search: '?another=query',
+        hash: '#another-hash'
+      });
     }
   ];
 
