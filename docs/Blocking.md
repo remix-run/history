@@ -17,6 +17,12 @@ history.block((location, action) => {
   if (input.value !== '') return 'Are you sure you want to leave this page?';
 });
 
+// Alternatively if you set getUserConfirmation with a custom function,
+// you can pass it a config object. It will then call getUserConfirmation
+// with this config object.
+const config = {key1:1,key2:'Hello'};
+history.block(config);
+
 // To stop blocking transitions, call the function returned from block().
 unblock();
 ```

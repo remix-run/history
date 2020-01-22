@@ -1,8 +1,8 @@
 {
   "esm/history.js": {
-    "bundled": 28076,
-    "minified": 12353,
-    "gzipped": 3575,
+    "bundled": 28727,
+    "minified": 12733,
+    "gzipped": 3739,
     "treeshaked": {
       "rollup": {
         "code": 208,
@@ -14,13 +14,13 @@
     }
   },
   "umd/history.js": {
-    "bundled": 33021,
-    "minified": 11943,
-    "gzipped": 3917
+    "bundled": 33414,
+    "minified": 12026,
+    "gzipped": 3985
   },
   "umd/history.min.js": {
-    "bundled": 30384,
-    "minified": 9993,
-    "gzipped": 3501
+    "bundled": 30777,
+    "minified": 10076,
+    "gzipped": 3592
   }
 }
