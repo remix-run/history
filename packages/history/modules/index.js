@@ -667,11 +667,11 @@ function createKey() {
     .substr(2, 8);
 }
 
-function createPath({ pathname = '/', search = '', hash = '' }) {
+export function createPath({ pathname = '/', search = '', hash = '' }) {
   return pathname + search + hash;
 }
 
-function parsePath(path) {
+export function parsePath(path) {
   let pieces = {};
 
   if (path) {
