@@ -1,6 +1,7 @@
 # Navigation
 
-`history` objects may be used to programmatically change the current location using the following methods:
+`history` objects may be used to programmatically change the current location
+using the following methods:
 
 - `history.push(path, [state])`
 - `history.replace(path, [state])`
@@ -8,7 +9,9 @@
 - `history.back()`
 - `history.forward()`
 
-When using `push` or `replace` you can either specify both the URL path and state as separate arguments or include everything in a single location-like object as the first argument.
+When using `push` or `replace` you can either specify both the URL path and
+state as separate arguments or include everything in a single location-like
+object as the first argument.
 
 1. A URL path _or_
 2. A location-like object with `{ pathname, search, hash, state }`
