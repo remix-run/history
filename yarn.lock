@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@ampproject/filesize@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@ampproject/filesize/-/filesize-2.1.1.tgz#572d8f22f8f9a8f9b6566305617e554d5192a5b3"
+  integrity sha512-ZzYHM1pPZhtlRkGFwRgQW2RJbPMkzqybN8Ewsc0W0EZYIPx/rK3hXkYB+OmcQGPumkMhFTsxwX7jEN52Jrxing==
+  dependencies:
+    bytes "3.1.0"
+    fast-glob "3.1.1"
+    kleur "3.0.3"
+    mri "1.1.4"
+
 "@ampproject/rollup-plugin-closure-compiler@0.12.1":
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/@ampproject/rollup-plugin-closure-compiler/-/rollup-plugin-closure-compiler-0.12.1.tgz#33a65bdc664f0bc3c472b47cf083d0a336af1cfa"
@@ -689,15 +699,6 @@
     esutils "^2.0.2"
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
-
-"@kristoferbaxter/filesize@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@kristoferbaxter/filesize/-/filesize-0.2.0.tgz#254b2f293d9ddc3a1700f6b9e1e264fbdc19ecd0"
-  integrity sha512-xzBMw70Tqa1vc/7MHNnUWhwvIBm9jc7dLBM1LN+0DxBI+HOw5f4h3xZdCpj5WhXg1Hmp1uU5gltFLPY3QSUUWg==
-  dependencies:
-    bytes "3.1.0"
-    kleur "3.0.3"
-    mri "1.1.4"
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -2572,7 +2573,7 @@ fast-deep-equal@^2.0.1:
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
   integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
 
-fast-glob@^3.0.3:
+fast-glob@3.1.1, fast-glob@^3.0.3:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.1.1.tgz#87ee30e9e9f3eb40d6f254a7997655da753d7c82"
   integrity sha512-nTCREpBY8w8r+boyFYAx21iL6faSsQynliPHM4Uf56SbkyohCNxpVPEH9xrF5TXKy+IsjkPUHDKiUkzBVRXn9g==
