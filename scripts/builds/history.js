@@ -28,11 +28,7 @@ const modules = [
         ],
         runtimeHelpers: true
       }),
-      compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS',
-        language_in: 'ECMASCRIPT5_STRICT',
-        language_out: 'ECMASCRIPT5_STRICT'
-      }),
+      compiler(),
       copy({
         targets: [
           { src: `${SOURCE_DIR}/package.json`, dest: OUTPUT_DIR },
@@ -56,11 +52,7 @@ const modules = [
           exclude: /node_modules/,
           presets: [['@babel/preset-env', { loose: true }]]
         }),
-        compiler({
-          compilation_level: 'SIMPLE_OPTIMIZATIONS',
-          language_in: 'ECMASCRIPT5_STRICT',
-          language_out: 'ECMASCRIPT5_STRICT'
-        })
+        compiler()
       ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
     };
   })
@@ -81,11 +73,7 @@ const webModules = [
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
-      compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS',
-        language_in: 'ECMASCRIPT_2018',
-        language_out: 'ECMASCRIPT_2017'
-      })
+      compiler()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
@@ -102,11 +90,7 @@ const webModules = [
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-      compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS',
-        language_in: 'ECMASCRIPT_2018',
-        language_out: 'ECMASCRIPT_2017'
-      }),
+      compiler(),
       terser({ ecma: 8, safari10: true })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
@@ -128,11 +112,7 @@ const globals = [
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
-      compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS',
-        language_in: 'ECMASCRIPT5_STRICT',
-        language_out: 'ECMASCRIPT5_STRICT'
-      })
+      compiler()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
@@ -150,11 +130,7 @@ const globals = [
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-      compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS',
-        language_in: 'ECMASCRIPT5_STRICT',
-        language_out: 'ECMASCRIPT5_STRICT'
-      }),
+      compiler(),
       terser()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
@@ -168,11 +144,7 @@ const node = [
       format: 'cjs'
     },
     plugins: [
-      compiler({
-        compilation_level: 'SIMPLE_OPTIMIZATIONS',
-        language_in: 'ECMASCRIPT6',
-        language_out: 'ECMASCRIPT5'
-      })
+      compiler()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
 ];
