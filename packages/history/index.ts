@@ -9,10 +9,10 @@ export type PathPieces = {
   pathname?: string;
   search?: string;
   hash?: string;
-}
+};
 
 export type State = object;
-export interface Location<S = State> extends PathPieces {
+export interface Location<S extends State> extends PathPieces {
   pathname: string;
   search: string;
   hash: string;
@@ -20,44 +20,44 @@ export interface Location<S = State> extends PathPieces {
   key?: string;
 }
 
-export interface Update<S = State> {
+export interface Update<S extends State> {
   action: Action;
   location: Location<S>;
 }
-export interface Listener<S = State> {
+export interface Listener<S extends State> {
   (update: Update<S>): void;
 }
 export type Unlistener = () => void;
 
-export interface Transaction<S = State> extends Update {
+export interface Transaction<S extends State> extends Update<S> {
   retry(): void;
 }
-export interface Blocker<S = State> {
+export interface Blocker<S extends State> {
   (tx: Transaction<S>): void;
 }
 export type Unblocker = () => void;
 
-export interface History {
+export interface History<S extends State> {
   action: Action;
-  location: Location;
+  location: Location<S>;
   createHref(to: Path | PathPieces): string;
-  push(to: Path | PathPieces, state?: State): void;
-  replace(to: Path | PathPieces, state?: State): void;
+  push(to: Path | PathPieces, state?: S): void;
+  replace(to: Path | PathPieces, state?: S): void;
   go(n: number): void;
   back(): void;
   forward(): void;
-  listen(listener: Listener): Unlistener;
-  block(blocker: Blocker): Unblocker;
+  listen(listener: Listener<S>): Unlistener;
+  block(blocker: Blocker<S>): Unblocker;
 }
-export interface MemoryHistory extends History {
+export interface MemoryHistory<S extends State> extends History<S> {
   index: number;
 }
 
-type HistoryState = {
-  usr: State | null,
-  key?: string,
-  idx?: number
-}
+type HistoryState<S extends State> = {
+  usr: S | null | undefined;
+  key?: string;
+  idx: number;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // CONSTANTS
@@ -100,14 +100,14 @@ function noop() {}
  * standard for most web apps, but it requires some configuration on
  * the server to ensure you serve the same app at multiple URLs.
  */
-export function createBrowserHistory(
-  { window = document.defaultView }: { window?: Window } = {}
-): History {
+export function createBrowserHistory<S extends State = {}>({
+  window = document.defaultView!
+}: { window?: Window } = {}): History<S> {
   let globalHistory = window.history;
 
-  function getIndexAndLocation(): [number, Location] {
+  function getIndexAndLocation(): [number, Location<S>] {
     let { pathname, search, hash } = window.location;
-    let state: HistoryState = globalHistory.state || {};
+    let state: HistoryState<S> = globalHistory.state || {};
     return [
       state.idx,
       readOnly({
@@ -120,7 +120,7 @@ export function createBrowserHistory(
     ];
   }
 
-  let blockedPopTx: Transaction = null;
+  let blockedPopTx: Transaction<S> | null = null;
   function handlePop(): void {
     if (blockedPopTx) {
       blockers.call(blockedPopTx);
@@ -174,14 +174,17 @@ export function createBrowserHistory(
 
   if (index == null) {
     index = 0;
-    globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, '');
   }
 
   function createHref(to: Path | PathPieces): string {
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: Path | PathPieces, state?: State): Location {
+  function getNextLocation<S extends State>(
+    to: Path | PathPieces,
+    state?: S
+  ): Location<S> {
     return readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
@@ -190,7 +193,10 @@ export function createBrowserHistory(
     });
   }
 
-  function getHistoryStateAndUrl(nextLocation: Location, index: number): [HistoryState, string] {
+  function getHistoryStateAndUrl<S extends State>(
+    nextLocation: Location<S>,
+    index: number
+  ): [HistoryState<S>, string] {
     return [
       {
         usr: nextLocation.state,
@@ -201,7 +207,11 @@ export function createBrowserHistory(
     ];
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void): boolean {
+  function allowTx<S extends State>(
+    action: Action,
+    location: Location<S>,
+    retry: () => void
+  ): boolean {
     return (
       !blockers.length || (blockers.call({ action, location, retry }), false)
     );
@@ -213,20 +223,23 @@ export function createBrowserHistory(
     listeners.call({ action, location });
   }
 
-  function push(to: Path | PathPieces, state?: State): void {
+  function push<S extends State>(to: Path | PathPieces, state?: S): void {
     let nextAction = PushAction;
-    let nextLocation = getNextLocation(to, state);
+    let nextLocation = getNextLocation<S>(to, state);
     function retry() {
       push(to, state);
     }
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
+    if (allowTx<S>(nextAction, nextLocation, retry)) {
+      let [historyState, url] = getHistoryStateAndUrl<S>(
+        nextLocation,
+        index + 1
+      );
 
       // TODO: Support forced reloading
       // try...catch because iOS limits us to 100 pushState calls :/
       try {
-        globalHistory.pushState(historyState, null, url);
+        globalHistory.pushState(historyState, '', url);
       } catch (error) {
         // They are going to lose state here, but there is no real
         // way to warn them about it since the page will refresh...
@@ -237,18 +250,18 @@ export function createBrowserHistory(
     }
   }
 
-  function replace(to: Path | PathPieces, state?: State): void {
+  function replace<S extends State>(to: Path | PathPieces, state?: S): void {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
       replace(to, state);
     }
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
+    if (allowTx<S>(nextAction, nextLocation, retry)) {
+      let [historyState, url] = getHistoryStateAndUrl<S>(nextLocation, index);
 
       // TODO: Support forced reloading
-      globalHistory.replaceState(historyState, null, url);
+      globalHistory.replaceState(historyState, '', url);
 
       applyTx(nextAction);
     }
@@ -262,7 +275,7 @@ export function createBrowserHistory(
     get action(): Action {
       return action;
     },
-    get location(): Location {
+    get location(): Location<S> {
       return location;
     },
     createHref,
@@ -275,10 +288,10 @@ export function createBrowserHistory(
     forward(): void {
       go(1);
     },
-    listen(listener: Listener): Unlistener {
+    listen(listener: Listener<S>): Unlistener {
       return listeners.push(listener);
     },
-    block(blocker: Blocker = noop): Unblocker {
+    block(blocker: Blocker<S> = noop): Unblocker {
       let unblock = blockers.push(blocker);
 
       if (blockers.length === 1) {
@@ -311,16 +324,16 @@ export function createBrowserHistory(
  * the server for some reason, either because you do cannot configure it
  * or the URL space is reserved for something else.
  */
-export function createHashHistory(
-  { window = document.defaultView }: { window?: Window } = {}
-): History {
+export function createHashHistory<S extends State = {}>({
+  window = document.defaultView!
+}: { window?: Window } = {}): History<S> {
   let globalHistory = window.history;
 
-  function getIndexAndLocation(): [number, Location] {
+  function getIndexAndLocation(): [number, Location<S>] {
     let { pathname = '/', search = '', hash = '' } = parsePath(
       window.location.hash.substr(1)
     );
-    let state: HistoryState = globalHistory.state || {};
+    let state: HistoryState<S> = globalHistory.state || {};
     return [
       state.idx,
       readOnly({
@@ -333,7 +346,7 @@ export function createHashHistory(
     ];
   }
 
-  let blockedPopTx: Transaction = null;
+  let blockedPopTx: Transaction<S> | null = null;
   function handlePop(): void {
     if (blockedPopTx) {
       blockers.call(blockedPopTx);
@@ -398,7 +411,7 @@ export function createHashHistory(
 
   if (index == null) {
     index = 0;
-    globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, '');
   }
 
   function getBaseHref(): string {
@@ -418,7 +431,7 @@ export function createHashHistory(
     return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
   }
 
-  function getNextLocation(to: Path | PathPieces, state?: State): Location {
+  function getNextLocation(to: Path | PathPieces, state?: S): Location<S> {
     return readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
@@ -427,7 +440,10 @@ export function createHashHistory(
     });
   }
 
-  function getHistoryStateAndUrl(nextLocation: Location, index: number): [HistoryState, string] {
+  function getHistoryStateAndUrl(
+    nextLocation: Location<S>,
+    index: number
+  ): [HistoryState<S>, string] {
     return [
       {
         usr: nextLocation.state,
@@ -438,7 +454,11 @@ export function createHashHistory(
     ];
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void): boolean {
+  function allowTx(
+    action: Action,
+    location: Location<S>,
+    retry: () => void
+  ): boolean {
     return (
       !blockers.length || (blockers.call({ action, location, retry }), false)
     );
@@ -450,7 +470,7 @@ export function createHashHistory(
     listeners.call({ action, location });
   }
 
-  function push(to: Path | PathPieces, state?: State): void {
+  function push(to: Path | PathPieces, state?: S): void {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -470,7 +490,7 @@ export function createHashHistory(
       // TODO: Support forced reloading
       // try...catch because iOS limits us to 100 pushState calls :/
       try {
-        globalHistory.pushState(historyState, null, url);
+        globalHistory.pushState(historyState, '', url);
       } catch (error) {
         // They are going to lose state here, but there is no real
         // way to warn them about it since the page will refresh...
@@ -481,7 +501,7 @@ export function createHashHistory(
     }
   }
 
-  function replace(to: Path | PathPieces, state?: State): void {
+  function replace(to: Path | PathPieces, state?: S): void {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -499,7 +519,7 @@ export function createHashHistory(
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
 
       // TODO: Support forced reloading
-      globalHistory.replaceState(historyState, null, url);
+      globalHistory.replaceState(historyState, '', url);
 
       applyTx(nextAction);
     }
@@ -513,7 +533,7 @@ export function createHashHistory(
     get action(): Action {
       return action;
     },
-    get location(): Location {
+    get location(): Location<S> {
       return location;
     },
     createHref,
@@ -526,10 +546,10 @@ export function createHashHistory(
     forward(): void {
       go(1);
     },
-    listen(listener: Listener): Unlistener {
+    listen(listener: Listener<S>): Unlistener {
       return listeners.push(listener);
     },
-    block(blocker: Blocker = noop): Unblocker {
+    block(blocker: Blocker<S> = noop): Unblocker {
       let unblock = blockers.push(blocker);
 
       if (blockers.length === 1) {
@@ -561,10 +581,10 @@ export function createHashHistory(
  * for use in stateful non-browser environments like headless tests (in
  * node.js) and React Native.
  */
-export function createMemoryHistory({
+export function createMemoryHistory<S extends State = {}>({
   initialEntries = ['/'],
   initialIndex = 0
-} = {}): MemoryHistory {
+} = {}): MemoryHistory<S> {
   let entries = initialEntries.map(entry => {
     let location = readOnly({
       pathname: '/',
@@ -595,7 +615,7 @@ export function createMemoryHistory({
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: Path | PathPieces, state?: State): Location {
+  function getNextLocation(to: Path | PathPieces, state?: S): Location<S> {
     return readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
@@ -604,19 +624,23 @@ export function createMemoryHistory({
     });
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void): boolean {
+  function allowTx(
+    action: Action,
+    location: Location<S>,
+    retry: () => void
+  ): boolean {
     return (
       !blockers.length || (blockers.call({ action, location, retry }), false)
     );
   }
 
-  function applyTx(nextAction: Action, nextLocation: Location): void {
+  function applyTx(nextAction: Action, nextLocation: Location<S>): void {
     action = nextAction;
     location = nextLocation;
     listeners.call({ action, location });
   }
 
-  function push(to: Path | PathPieces, state?: State): void {
+  function push(to: Path | PathPieces, state?: S): void {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -637,7 +661,7 @@ export function createMemoryHistory({
     }
   }
 
-  function replace(to: Path | PathPieces, state?: State): void {
+  function replace(to: Path | PathPieces, state?: S): void {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -678,7 +702,7 @@ export function createMemoryHistory({
     get action(): Action {
       return action;
     },
-    get location(): Location {
+    get location(): Location<S> {
       return location;
     },
     createHref,
@@ -691,10 +715,10 @@ export function createMemoryHistory({
     forward(): void {
       go(1);
     },
-    listen(listener: Listener) {
+    listen(listener: Listener<S>) {
       return listeners.push(listener);
     },
-    block(blocker: Blocker = noop): Unblocker {
+    block(blocker: Blocker<S> = noop): Unblocker {
       return blockers.push(blocker);
     }
   };
@@ -742,7 +766,11 @@ function createKey() {
     .substr(2, 8);
 }
 
-export function createPath({ pathname = '/', search = '', hash = '' }: PathPieces): Path {
+export function createPath({
+  pathname = '/',
+  search = '',
+  hash = ''
+}: PathPieces): Path {
   return pathname + search + hash;
 }
 
