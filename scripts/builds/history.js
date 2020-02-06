@@ -11,7 +11,7 @@ const OUTPUT_DIR = 'build/history';
 
 const modules = [
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/history.js`,
       format: 'esm',
@@ -21,7 +21,11 @@ const modules = [
     plugins: [
       babel({
         exclude: /node_modules/,
-        presets: [['@babel/preset-env', { loose: true }]],
+        extensions: ['.ts'],
+        presets: [
+          '@babel/preset-typescript',
+          ['@babel/preset-env', { loose: true }]
+        ],
         plugins: [
           'babel-plugin-dev-expression',
           ['@babel/plugin-transform-runtime', { useESModules: true }]
@@ -41,7 +45,7 @@ const modules = [
   },
   ...['browser', 'hash', 'memory'].map(env => {
     return {
-      input: `${SOURCE_DIR}/${env}.js`,
+      input: `${SOURCE_DIR}/${env}.ts`,
       output: {
         file: `${OUTPUT_DIR}/${env}.js`,
         format: 'esm',
@@ -50,7 +54,11 @@ const modules = [
       plugins: [
         babel({
           exclude: /node_modules/,
-          presets: [['@babel/preset-env', { loose: true }]]
+          extensions: ['.ts'],
+          presets: [
+            '@babel/preset-typescript',
+            ['@babel/preset-env', { loose: true }]
+          ]
         }),
         compiler()
       ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
@@ -60,7 +68,7 @@ const modules = [
 
 const webModules = [
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/history.development.js`,
       format: 'esm',
@@ -69,7 +77,8 @@ const webModules = [
     plugins: [
       babel({
         exclude: /node_modules/,
-        presets: ['@babel/preset-modules'],
+        extensions: ['.ts'],
+        presets: ['@babel/preset-typescript', '@babel/preset-modules'],
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
@@ -77,7 +86,7 @@ const webModules = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/history.production.min.js`,
       format: 'esm',
@@ -86,7 +95,8 @@ const webModules = [
     plugins: [
       babel({
         exclude: /node_modules/,
-        presets: ['@babel/preset-modules'],
+        extensions: ['.ts'],
+        presets: ['@babel/preset-typescript', '@babel/preset-modules'],
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
@@ -98,7 +108,7 @@ const webModules = [
 
 const globals = [
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.development.js`,
       format: 'umd',
@@ -108,7 +118,11 @@ const globals = [
     plugins: [
       babel({
         exclude: /node_modules/,
-        presets: [['@babel/preset-env', { loose: true }]],
+        extensions: ['.ts'],
+        presets: [
+          '@babel/preset-typescript',
+          ['@babel/preset-env', { loose: true }]
+        ],
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
@@ -116,7 +130,7 @@ const globals = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.production.min.js`,
       format: 'umd',
@@ -126,7 +140,11 @@ const globals = [
     plugins: [
       babel({
         exclude: /node_modules/,
-        presets: [['@babel/preset-env', { loose: true }]],
+        extensions: ['.ts'],
+        presets: [
+          '@babel/preset-typescript',
+          ['@babel/preset-env', { loose: true }]
+        ],
         plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),

@@ -1,4 +1,4 @@
-import { createHashHistory } from './index.js';
+import { createHashHistory } from './index.ts';
 export { createHashHistory };
 
 /**

@@ -1,24 +1,95 @@
-const PopAction = 'POP';
-const PushAction = 'PUSH';
-const ReplaceAction = 'REPLACE';
+////////////////////////////////////////////////////////////////////////////////
+// TYPES
+////////////////////////////////////////////////////////////////////////////////
+
+export type Action = 'POP' | 'PUSH' | 'REPLACE';
+
+export type Path = string;
+export type PathPieces = {
+  pathname?: string;
+  search?: string;
+  hash?: string;
+}
+
+export interface State {}
+export interface Location<S = State> extends PathPieces {
+  pathname: string;
+  search: string;
+  hash: string;
+  state?: S;
+  key?: string;
+}
+
+export interface Update<S = State> {
+  action: Action;
+  location: Location<S>;
+}
+export interface Listener<S = State> {
+  (update: Update<S>): void;
+}
+export type Unlistener = () => void;
+
+export interface Transaction<S = State> extends Update {
+  retry(): void;
+}
+export interface Blocker<S = State> {
+  (tx: Transaction<S>): void;
+}
+export type Unblocker = () => void;
+
+export interface History {
+  action: Action;
+  location: Location;
+  createHref(to: Path | PathPieces): string;
+  push(to: Path | PathPieces, state?: State): void;
+  replace(to: Path | PathPieces, state?: State): void;
+  go(n: number): void;
+  back(): void;
+  forward(): void;
+  listen(listener: Listener): Unlistener;
+  block(blocker: Blocker): Unblocker;
+}
+export interface MemoryHistory extends History {
+  index: number;
+}
+
+type HistoryState = {
+  usr: State | null,
+  key?: string,
+  idx?: number
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// CONSTANTS
+////////////////////////////////////////////////////////////////////////////////
+
+const PopAction: Action = 'POP';
+const PushAction: Action = 'PUSH';
+const ReplaceAction: Action = 'REPLACE';
 
 const BeforeUnloadEventType = 'beforeunload';
 const HashChangeEventType = 'hashchange';
 const PopStateEventType = 'popstate';
 
-const readOnly = __DEV__ ? obj => Object.freeze(obj) : obj => obj;
+const readOnly = __DEV__
+  ? (obj: any) => Object.freeze(obj)
+  : (obj: any) => obj;
 
-function warning(cond, message) {
+function warning(cond: boolean, message: string) {
   if (!cond) {
     // eslint-disable-next-line no-console
     if (typeof console !== 'undefined') console.warn(message);
 
+    // Throw an error so people can use the debugger's "pause on exceptions"
+    // function to find the source of warnings.
     try {
       throw new Error(message);
       // eslint-disable-next-line no-empty
     } catch (e) {}
   }
 }
+
+function noop() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 // BROWSER
@@ -29,12 +100,14 @@ function warning(cond, message) {
  * standard for most web apps, but it requires some configuration on
  * the server to ensure you serve the same app at multiple URLs.
  */
-export function createBrowserHistory({ window = document.defaultView } = {}) {
+export function createBrowserHistory(
+  { window = document.defaultView }: { window?: Window } = {}
+): History {
   let globalHistory = window.history;
 
-  function getIndexAndLocation() {
+  function getIndexAndLocation(): [number, Location] {
     let { pathname, search, hash } = window.location;
-    let state = globalHistory.state || {};
+    let state: HistoryState = globalHistory.state || {};
     return [
       state.idx,
       readOnly({
@@ -47,8 +120,8 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
     ];
   }
 
-  let blockedPopTx = null;
-  function handlePop() {
+  let blockedPopTx: Transaction = null;
+  function handlePop(): void {
     if (blockedPopTx) {
       blockers.call(blockedPopTx);
       blockedPopTx = null;
@@ -94,7 +167,7 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
 
   window.addEventListener(PopStateEventType, handlePop);
 
-  let action = PopAction;
+  let action: Action = PopAction;
   let [index, location] = getIndexAndLocation();
   let blockers = createEvents();
   let listeners = createEvents();
@@ -104,11 +177,11 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
     globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
   }
 
-  function createHref(to) {
+  function createHref(to: Path | PathPieces): string {
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to, state = null) {
+  function getNextLocation(to: Path | PathPieces, state?: State): Location {
     return readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
@@ -117,7 +190,7 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
     });
   }
 
-  function getHistoryStateAndUrl(nextLocation, index) {
+  function getHistoryStateAndUrl(nextLocation: Location, index: number): [HistoryState, string] {
     return [
       {
         usr: nextLocation.state,
@@ -128,19 +201,19 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
     ];
   }
 
-  function allowTx(action, location, retry) {
+  function allowTx(action: Action, location: Location, retry: () => void): boolean {
     return (
       !blockers.length || (blockers.call({ action, location, retry }), false)
     );
   }
 
-  function applyTx(nextAction) {
+  function applyTx(nextAction: Action): void {
     action = nextAction;
     [index, location] = getIndexAndLocation();
     listeners.call({ action, location });
   }
 
-  function push(to, state) {
+  function push(to: Path | PathPieces, state?: State): void {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -164,7 +237,7 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
     }
   }
 
-  function replace(to, state) {
+  function replace(to: Path | PathPieces, state?: State): void {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -181,32 +254,32 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
     }
   }
 
-  function go(n) {
+  function go(n: number): void {
     globalHistory.go(n);
   }
 
   let history = {
-    get action() {
+    get action(): Action {
       return action;
     },
-    get location() {
+    get location(): Location {
       return location;
     },
     createHref,
     push,
     replace,
     go,
-    back() {
+    back(): void {
       go(-1);
     },
-    forward() {
+    forward(): void {
       go(1);
     },
-    listen(fn) {
-      return listeners.push(fn);
+    listen(listener: Listener): Unlistener {
+      return listeners.push(listener);
     },
-    block(fn) {
-      let unblock = blockers.push(fn);
+    block(blocker: Blocker = noop): Unblocker {
+      let unblock = blockers.push(blocker);
 
       if (blockers.length === 1) {
         window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
@@ -238,14 +311,16 @@ export function createBrowserHistory({ window = document.defaultView } = {}) {
  * the server for some reason, either because you do cannot configure it
  * or the URL space is reserved for something else.
  */
-export function createHashHistory({ window = document.defaultView } = {}) {
+export function createHashHistory(
+  { window = document.defaultView }: { window?: Window } = {}
+): History {
   let globalHistory = window.history;
 
-  function getIndexAndLocation() {
+  function getIndexAndLocation(): [number, Location] {
     let { pathname = '/', search = '', hash = '' } = parsePath(
       window.location.hash.substr(1)
     );
-    let state = globalHistory.state || {};
+    let state: HistoryState = globalHistory.state || {};
     return [
       state.idx,
       readOnly({
@@ -258,8 +333,8 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     ];
   }
 
-  let blockedPopTx = null;
-  function handlePop() {
+  let blockedPopTx: Transaction = null;
+  function handlePop(): void {
     if (blockedPopTx) {
       blockers.call(blockedPopTx);
       blockedPopTx = null;
@@ -326,7 +401,7 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     globalHistory.replaceState({ ...globalHistory.state, idx: index }, null);
   }
 
-  function getBaseHref() {
+  function getBaseHref(): string {
     let base = document.querySelector('base');
     let href = '';
 
@@ -339,11 +414,11 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     return href;
   }
 
-  function createHref(to) {
+  function createHref(to: Path | PathPieces): string {
     return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
   }
 
-  function getNextLocation(to, state = null) {
+  function getNextLocation(to: Path | PathPieces, state?: State): Location {
     return readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
@@ -352,7 +427,7 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     });
   }
 
-  function getHistoryStateAndUrl(nextLocation, index) {
+  function getHistoryStateAndUrl(nextLocation: Location, index: number): [HistoryState, string] {
     return [
       {
         usr: nextLocation.state,
@@ -363,19 +438,19 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     ];
   }
 
-  function allowTx(action, location, retry) {
+  function allowTx(action: Action, location: Location, retry: () => void): boolean {
     return (
       !blockers.length || (blockers.call({ action, location, retry }), false)
     );
   }
 
-  function applyTx(nextAction) {
+  function applyTx(nextAction: Action): void {
     action = nextAction;
     [index, location] = getIndexAndLocation();
     listeners.call({ action, location });
   }
 
-  function push(to, state) {
+  function push(to: Path | PathPieces, state?: State): void {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -406,7 +481,7 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     }
   }
 
-  function replace(to, state) {
+  function replace(to: Path | PathPieces, state?: State): void {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -430,32 +505,32 @@ export function createHashHistory({ window = document.defaultView } = {}) {
     }
   }
 
-  function go(n) {
+  function go(n: number): void {
     globalHistory.go(n);
   }
 
   let history = {
-    get action() {
+    get action(): Action {
       return action;
     },
-    get location() {
+    get location(): Location {
       return location;
     },
     createHref,
     push,
     replace,
     go,
-    back() {
+    back(): void {
       go(-1);
     },
-    forward() {
+    forward(): void {
       go(1);
     },
-    listen(fn) {
-      return listeners.push(fn);
+    listen(listener: Listener): Unlistener {
+      return listeners.push(listener);
     },
-    block(fn) {
-      let unblock = blockers.push(fn);
+    block(blocker: Blocker = noop): Unblocker {
+      let unblock = blockers.push(blocker);
 
       if (blockers.length === 1) {
         window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
@@ -489,7 +564,7 @@ export function createHashHistory({ window = document.defaultView } = {}) {
 export function createMemoryHistory({
   initialEntries = ['/'],
   initialIndex = 0
-} = {}) {
+} = {}): MemoryHistory {
   let entries = initialEntries.map(entry => {
     let location = readOnly({
       pathname: '/',
@@ -516,11 +591,11 @@ export function createMemoryHistory({
   let blockers = createEvents();
   let listeners = createEvents();
 
-  function createHref(to) {
+  function createHref(to: Path | PathPieces): string {
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to, state = null) {
+  function getNextLocation(to: Path | PathPieces, state?: State): Location {
     return readOnly({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
@@ -529,19 +604,19 @@ export function createMemoryHistory({
     });
   }
 
-  function allowTx(action, location, retry) {
+  function allowTx(action: Action, location: Location, retry: () => void): boolean {
     return (
       !blockers.length || (blockers.call({ action, location, retry }), false)
     );
   }
 
-  function applyTx(nextAction, nextLocation) {
+  function applyTx(nextAction: Action, nextLocation: Location): void {
     action = nextAction;
     location = nextLocation;
     listeners.call({ action, location });
   }
 
-  function push(to, state) {
+  function push(to: Path | PathPieces, state?: State): void {
     let nextAction = PushAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -562,7 +637,7 @@ export function createMemoryHistory({
     }
   }
 
-  function replace(to, state) {
+  function replace(to: Path | PathPieces, state?: State): void {
     let nextAction = ReplaceAction;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -582,7 +657,7 @@ export function createMemoryHistory({
     }
   }
 
-  function go(n) {
+  function go(n: number): void {
     let nextIndex = clamp(index + n, 0, entries.length - 1);
     let nextAction = PopAction;
     let nextLocation = entries[nextIndex];
@@ -597,37 +672,37 @@ export function createMemoryHistory({
   }
 
   let history = {
-    get index() {
+    get index(): number {
       return index;
     },
-    get action() {
+    get action(): Action {
       return action;
     },
-    get location() {
+    get location(): Location {
       return location;
     },
     createHref,
     push,
     replace,
     go,
-    back() {
+    back(): void {
       go(-1);
     },
-    forward() {
+    forward(): void {
       go(1);
     },
-    listen(fn) {
-      return listeners.push(fn);
+    listen(listener: Listener) {
+      return listeners.push(listener);
     },
-    block(fn) {
-      return blockers.push(fn);
+    block(blocker: Blocker = noop): Unblocker {
+      return blockers.push(blocker);
     }
   };
 
   return history;
 }
 
-function clamp(n, lowerBound, upperBound) {
+function clamp(n: number, lowerBound: number, upperBound: number) {
   return Math.min(Math.max(n, lowerBound), upperBound);
 }
 
@@ -635,7 +710,7 @@ function clamp(n, lowerBound, upperBound) {
 // UTILS
 ////////////////////////////////////////////////////////////////////////////////
 
-function promptBeforeUnload(event) {
+function promptBeforeUnload(event: BeforeUnloadEvent) {
   // Cancel the event.
   event.preventDefault();
   // Chrome (and legacy IE) requires returnValue to be set.
@@ -643,19 +718,19 @@ function promptBeforeUnload(event) {
 }
 
 function createEvents() {
-  let handlers = [];
+  let handlers: ((arg: any) => void)[] = [];
 
   return {
     get length() {
       return handlers.length;
     },
-    push(fn) {
+    push(fn: (arg: any) => void) {
       handlers.push(fn);
       return function() {
         handlers = handlers.filter(handler => handler !== fn);
       };
     },
-    call(arg) {
+    call(arg: any) {
       handlers.forEach(fn => fn && fn(arg));
     }
   };
@@ -667,12 +742,12 @@ function createKey() {
     .substr(2, 8);
 }
 
-export function createPath({ pathname = '/', search = '', hash = '' }) {
+export function createPath({ pathname = '/', search = '', hash = '' }: PathPieces): Path {
   return pathname + search + hash;
 }
 
-export function parsePath(path) {
-  let pieces = {};
+export function parsePath(path: Path): PathPieces {
+  let pieces: PathPieces = {};
 
   if (path) {
     let hashIndex = path.indexOf('#');

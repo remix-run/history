@@ -1,4 +1,4 @@
-import { createBrowserHistory } from './index.js';
+import { createBrowserHistory } from './index.ts';
 export { createBrowserHistory };
 
 /**
