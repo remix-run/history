@@ -1,4 +1,5 @@
-import { createHashHistory } from './index.js';
+// @ts-ignore
+import { createHashHistory } from './index.ts';
 export { createHashHistory };
 
 /**
