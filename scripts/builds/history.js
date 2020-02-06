@@ -11,7 +11,7 @@ const OUTPUT_DIR = 'build/history';
 
 const modules = [
   {
-    input: `${SOURCE_DIR}/modules/index.js`,
+    input: `${SOURCE_DIR}/index.js`,
     output: {
       file: `${OUTPUT_DIR}/history.js`,
       format: 'esm',
@@ -41,7 +41,7 @@ const modules = [
   },
   ...['browser', 'hash', 'memory'].map(env => {
     return {
-      input: `${SOURCE_DIR}/modules/${env}.js`,
+      input: `${SOURCE_DIR}/${env}.js`,
       output: {
         file: `${OUTPUT_DIR}/${env}.js`,
         format: 'esm',
@@ -60,7 +60,7 @@ const modules = [
 
 const webModules = [
   {
-    input: `${SOURCE_DIR}/modules/index.js`,
+    input: `${SOURCE_DIR}/index.js`,
     output: {
       file: `${OUTPUT_DIR}/history.development.js`,
       format: 'esm',
@@ -77,7 +77,7 @@ const webModules = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/modules/index.js`,
+    input: `${SOURCE_DIR}/index.js`,
     output: {
       file: `${OUTPUT_DIR}/history.production.min.js`,
       format: 'esm',
@@ -98,7 +98,7 @@ const webModules = [
 
 const globals = [
   {
-    input: `${SOURCE_DIR}/modules/index.js`,
+    input: `${SOURCE_DIR}/index.js`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.development.js`,
       format: 'umd',
@@ -116,7 +116,7 @@ const globals = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/modules/index.js`,
+    input: `${SOURCE_DIR}/index.js`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.production.min.js`,
       format: 'umd',
@@ -138,14 +138,12 @@ const globals = [
 
 const node = [
   {
-    input: `${SOURCE_DIR}/modules/node-main.js`,
+    input: `${SOURCE_DIR}/node-main.js`,
     output: {
       file: `${OUTPUT_DIR}/node-main.js`,
       format: 'cjs'
     },
-    plugins: [
-      compiler()
-    ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
+    plugins: [compiler()].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
 ];
 
