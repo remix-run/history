@@ -11,7 +11,7 @@ export type PathPieces = {
   hash?: string;
 }
 
-export interface State {}
+export type State = object;
 export interface Location<S = State> extends PathPieces {
   pathname: string;
   search: string;
