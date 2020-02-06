@@ -4,7 +4,7 @@
     "ecmaVersion": 2015,
     "sourceType": "module"
   },
-  "plugins": ["import"],
+  "plugins": ["import", "@typescript-eslint/eslint-plugin"],
   "env": {
     "node": true
   },
