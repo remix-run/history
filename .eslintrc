@@ -1,7 +1,7 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2015,
     "sourceType": "module"
   },
   "plugins": ["import"],
