@@ -140,7 +140,7 @@ const node = [
   {
     input: `${SOURCE_DIR}/node-main.js`,
     output: {
-      file: `${OUTPUT_DIR}/node-main.js`,
+      file: `${OUTPUT_DIR}/main.js`,
       format: 'cjs'
     },
     plugins: [compiler()].concat(PRETTY ? prettier({ parser: 'babel' }) : [])

@@ -5,7 +5,7 @@
   "repository": "ReactTraining/history",
   "license": "MIT",
   "author": "React Training <hello@reacttraining.com>",
-  "main": "node-main.js",
+  "main": "main.js",
   "module": "history.js",
   "unpkg": "umd/history.production.min.js",
   "sideEffects": false,
