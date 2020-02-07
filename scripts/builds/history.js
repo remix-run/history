@@ -11,7 +11,7 @@ const OUTPUT_DIR = 'build/history';
 
 const modules = [
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/history.js`,
     output: {
       file: `${OUTPUT_DIR}/history.js`,
       format: 'esm',
@@ -31,15 +31,18 @@ const modules = [
       compiler(),
       copy({
         targets: [
-          { src: `${SOURCE_DIR}/package.json`, dest: OUTPUT_DIR },
           { src: 'README.md', dest: OUTPUT_DIR },
-          { src: 'LICENSE', dest: OUTPUT_DIR }
+          { src: 'LICENSE', dest: OUTPUT_DIR },
+          { src: `${SOURCE_DIR}/package.json`, dest: OUTPUT_DIR },
+          { src: `${SOURCE_DIR}/history.d.ts`, dest: OUTPUT_DIR },
+          { src: `${SOURCE_DIR}/browser.d.ts`, dest: OUTPUT_DIR },
+          { src: `${SOURCE_DIR}/hash.d.ts`, dest: OUTPUT_DIR }
         ],
         verbose: true
       })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
-  ...['browser', 'hash', 'memory'].map(env => {
+  ...['browser', 'hash'].map(env => {
     return {
       input: `${SOURCE_DIR}/${env}.js`,
       output: {
@@ -50,7 +53,8 @@ const modules = [
       plugins: [
         babel({
           exclude: /node_modules/,
-          presets: [['@babel/preset-env', { loose: true }]]
+          presets: [['@babel/preset-env', { loose: true }]],
+          plugins: ['babel-plugin-dev-expression']
         }),
         compiler()
       ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
@@ -60,7 +64,7 @@ const modules = [
 
 const webModules = [
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/history.js`,
     output: {
       file: `${OUTPUT_DIR}/history.development.js`,
       format: 'esm',
@@ -77,7 +81,7 @@ const webModules = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/history.js`,
     output: {
       file: `${OUTPUT_DIR}/history.production.min.js`,
       format: 'esm',
@@ -98,7 +102,7 @@ const webModules = [
 
 const globals = [
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/history.js`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.development.js`,
       format: 'umd',
@@ -116,7 +120,7 @@ const globals = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/index.js`,
+    input: `${SOURCE_DIR}/history.js`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.production.min.js`,
       format: 'umd',

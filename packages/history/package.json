@@ -8,6 +8,7 @@
   "main": "main.js",
   "module": "history.js",
   "unpkg": "umd/history.production.min.js",
+  "types": "history.d.ts",
   "sideEffects": false,
   "dependencies": {
     "@babel/runtime": "^7.7.6"

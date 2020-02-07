@@ -1,5 +1,4 @@
 {
-  "name": "history-packages",
   "private": true,
   "scripts": {
     "build": "node ./scripts/build.js",

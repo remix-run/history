@@ -18,17 +18,15 @@ environment:
   non-browser environments, like [React
   Native](https://facebook.github.io/react-native/) or tests
 
-Since you'll only ever need to use one in a given app, we provide
-environment-specific bundles. You'll need to `import` one of these bundles:
+The main bundle exports one method for each environment: `createBrowserHistory`
+for browsers, `createHashHistory` for using hash history in browsers,  and
+`createMemoryHistory` for creating an in-memory history.
 
-- `history/browser`
-- `history/hash`
-- `history/memory`
-
-Each bundle exports a `createHistory` method you can use to create your own
-history object. In addition, `history/browser` and `history/hash` export a
-singleton instance you can use which reflects the state of [the current
-`document`](https://developer.mozilla.org/en-US/docs/Web/API/Window/document).
+In addition to the main bundle, the library also includes `history/browser` and
+`history/hash` bundles that export singletons you can use to quickly get a
+history instance for [the current
+`document`](https://developer.mozilla.org/en-US/docs/Web/API/Window/document)
+(web page).
 
 ## Basic Usage
 
@@ -37,6 +35,7 @@ Basic usage looks like this:
 ```js
 // Import the browser history singleton instance.
 import history from 'history/browser';
+
 // Alternatively, if you're using hash history import
 // the hash history singleton instance.
 // import history from 'history/hash';
@@ -62,12 +61,12 @@ history.back();
 unlisten();
 ```
 
-If you're using `history/memory` you'll need to create your own `history` object
+If you're using memory history you'll need to create your own `history` object
 before you can use it.
 
 ```js
-import { createHistory } from 'history/memory';
-let history = createHistory();
+import { createMemoryHistory } from 'history';
+let history = createMemoryHistory();
 ```
 
 If you're using browser or hash history with a `window` other than that of the
@@ -75,8 +74,8 @@ current `document` (like an iframe), you'll need to create your own browser/hash
 history:
 
 ```js
-import { createHistory } from 'history/browser';
-let history = createHistory({
+import { createBrowserHistory } from 'history';
+let history = createBrowserHistory({
   window: iframe.contentWindow
 });
 ```
@@ -135,4 +134,21 @@ let unlisten = history.listen(myListener);
 
 // Later, when you're done...
 unlisten();
+```
+
+## Utilities
+
+The main history bundle also contains both `createPath` and `parsePath` methods
+that may be useful when working with URL paths.
+
+```js
+let pathPieces = parsePath('/the/path?the=query#the-hash');
+// pathPieces = {
+//   pathname: '/the/path',
+//   search: '?the=query',
+//   hash: '#the-hash'
+// }
+
+let path = createPath(pathPieces);
+// path = '/the/path?the=query#the-hash'
 ```

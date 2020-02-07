@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="/the/base" />
+    <script>
+      window.addEventListener('hashchange', () => {
+        console.log('hashchange', window.location.hash);
+      });
+
+      function handleClick(link) {
+        const href = link.getAttribute('href');
+        history.pushState(null, null, href);
+        return false; // preventDefault
+      }
+    </script>
+  </head>
+  <body>
+    <a href="/hash-click">home</a>
+    <a href="/hash-click#one">#one</a>
+    <a href="/hash-click#one" onclick="return handleClick(this)"
+      >#one w pushState</a
+    >
+    <a href="/hash-click#two">#two</a>
+    <a href="/hash-click#two" onclick="return handleClick(this)"
+      >#two w pushState</a
+    >
+  </body>
+</html>
