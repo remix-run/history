@@ -305,8 +305,8 @@ export function createHashHistory({ window = document.defaultView } = {}) {
 
   window.addEventListener(PopStateEventType, handlePop);
 
-  // TODO: Is this still necessary? Which browsers do
-  // not trigger popstate when the hash changes?
+  // popstate does not fire on hashchange in IE 11 and old (trident) Edge
+  // https://developer.mozilla.org/de/docs/Web/API/Window/popstate_event
   window.addEventListener(HashChangeEventType, event => {
     let [, nextLocation] = getIndexAndLocation();
 
