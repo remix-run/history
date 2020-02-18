@@ -2,11 +2,13 @@
   "private": true,
   "scripts": {
     "build": "node ./scripts/build.js",
-    "size": "filesize",
     "clean": "git clean -fdX .",
     "lint": "eslint .",
-    "prepublishOnly": "yarn build",
-    "test": "node ./scripts/test.js"
+    "publish": "node ./scripts/publish.js",
+    "size": "filesize",
+    "test": "node ./scripts/test.js",
+    "version": "node ./scripts/version.js",
+    "watch": "node ./scripts/watch.js"
   },
   "dependencies": {
     "@ampproject/filesize": "^2.1.1",
@@ -22,11 +24,13 @@
     "babel-eslint": "^7.0.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-dev-expression": "^0.2.1",
+    "chalk": "^3.0.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
     "expect": "^21.0.0",
     "express": "^4.17.1",
     "jest-mock": "^21.0.0",
+    "jsonfile": "^5.0.0",
     "karma": "^3.1.3",
     "karma-browserstack-launcher": "^1.3.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -36,13 +40,20 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
+    "prompt-confirm": "^2.0.4",
     "rollup": "^1.27.9",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-copy": "^3.1.0",
     "rollup-plugin-prettier": "^0.6.0",
     "rollup-plugin-terser": "^5.1.2",
+    "semver": "^7.1.3",
     "typescript": "^3.7.5",
     "webpack": "^3.12.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/history"
+    ]
   },
   "filesize": {
     "build/history/history.production.min.js": {
@@ -51,10 +62,5 @@
     "build/history/umd/history.production.min.js": {
       "none": "6 kB"
     }
-  },
-  "workspaces": {
-    "packages": [
-      "packages/history"
-    ]
   }
 }
