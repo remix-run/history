@@ -101,7 +101,7 @@ module.exports = function(config) {
     }
   });
 
-  if (process.env.USE_CLOUD) {
+  if (process.env.TRAVIS || process.env.CIRCLECI || process.env.USE_CLOUD) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = ['dots'];
     config.concurrency = 2;
@@ -113,6 +113,12 @@ module.exports = function(config) {
         project: projectName,
         build: process.env.TRAVIS_BUILD_NUMBER,
         name: process.env.TRAVIS_JOB_NUMBER
+      };
+    } else if (process.env.CIRCLECI) {
+      config.browserStack = {
+        project: projectName,
+        build: process.env.CIRCLE_BUILD_NUM,
+        name: process.env.CIRCLE_BUILD_URL
       };
     } else {
       config.browserStack = {
