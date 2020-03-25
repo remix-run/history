@@ -1,11 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
 
-var projectName = require('../package.json').name;
-
 module.exports = function(config) {
   var customLaunchers = {
     BS_Chrome: {
+      name: 'Chrome',
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '10',
@@ -19,6 +18,7 @@ module.exports = function(config) {
     //   real_mobile: true
     // },
     BS_Firefox: {
+      name: 'Firefox',
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '10',
@@ -26,6 +26,7 @@ module.exports = function(config) {
       browser_version: '67.0'
     },
     BS_Edge: {
+      name: 'Edge',
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '10',
@@ -33,6 +34,7 @@ module.exports = function(config) {
       browser_version: '17.0'
     },
     BS_IE11: {
+      name: 'IE 11',
       base: 'BrowserStack',
       os: 'Windows',
       os_version: '10',
@@ -101,28 +103,21 @@ module.exports = function(config) {
     }
   });
 
-  if (process.env.TRAVIS || process.env.CIRCLECI || process.env.USE_CLOUD) {
+  if (process.env.CIRCLECI || process.env.USE_CLOUD) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = ['dots'];
     config.concurrency = 2;
     config.browserDisconnectTimeout = 10000;
     config.browserDisconnectTolerance = 3;
 
-    if (process.env.TRAVIS) {
+    if (process.env.CIRCLECI) {
       config.browserStack = {
-        project: projectName,
-        build: process.env.TRAVIS_BUILD_NUMBER,
-        name: process.env.TRAVIS_JOB_NUMBER
-      };
-    } else if (process.env.CIRCLECI) {
-      config.browserStack = {
-        project: projectName,
-        build: process.env.CIRCLE_BUILD_NUM,
-        name: process.env.CIRCLE_BUILD_URL
+        project: 'history',
+        build: process.env.CIRCLE_BRANCH
       };
     } else {
       config.browserStack = {
-        project: projectName
+        project: 'history'
       };
     }
   }
