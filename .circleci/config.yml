@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  build-and-test:
+  build:
     executor:
       name: node/default
     steps:
@@ -13,7 +13,12 @@ jobs:
       - run: yarn build
       - run: yarn test
       - run: yarn size
-workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
+      - deploy:
+          name: Publish to NPM
+          command: |
+            if [[ "${CIRCLE_TAG}" =~ ^v ]]; then
+              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
+              yarn run publish
+            else
+              echo "Skipping publish step because there is no v* tag"
+            fi
