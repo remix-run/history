@@ -101,7 +101,7 @@ async function run() {
 
     // 4. Commit and tag
     exec(`git commit --all --message="Version ${version}"`);
-    exec(`git tag v${version}`);
+    exec(`git tag -a -m "Version ${version}" v${version}`);
     console.log(chalk.green(`  Committed and tagged version ${version}`));
   } catch (error) {
     console.log();
