@@ -1,6 +1,8 @@
 version: 2.1
+
 orbs:
   node: circleci/node@1.1.6
+
 jobs:
   build:
     executor:
@@ -13,12 +15,37 @@ jobs:
       - run: yarn build
       - run: yarn test
       - run: yarn size
-      - deploy:
+  build-and-publish:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn test
+      - run: yarn size
+      - run:
+          name: Setup NPM auth
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run:
           name: Publish to NPM
-          command: |
-            if [[ "${CIRCLE_TAG}" =~ ^v ]]; then
-              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
-              yarn run publish
-            else
-              echo "Skipping publish step because there is no v* tag"
-            fi
+          command: yarn run publish
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build:
+        filters:
+          tags:
+            ignore: /^v.*/
+  test-and-deploy:
+    jobs:
+      - build-and-publish:
+        filters:
+          tags:
+            only: /^v.*/
+          branches:
+            ignore: /.*/
