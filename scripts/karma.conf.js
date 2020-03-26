@@ -103,17 +103,17 @@ module.exports = function(config) {
     }
   });
 
-  if (process.env.CIRCLECI || process.env.USE_CLOUD) {
+  if (process.env.TRAVIS || process.env.USE_CLOUD) {
     config.browsers = Object.keys(customLaunchers);
     config.reporters = ['dots'];
     config.concurrency = 2;
     config.browserDisconnectTimeout = 10000;
     config.browserDisconnectTolerance = 3;
 
-    if (process.env.CIRCLECI) {
+    if (process.env.TRAVIS) {
       config.browserStack = {
         project: 'history',
-        build: process.env.CIRCLE_BRANCH
+        build: process.env.TRAVIS_BRANCH
       };
     } else {
       config.browserStack = {
