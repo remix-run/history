@@ -15,37 +15,30 @@ jobs:
       - run: yarn build
       - run: yarn test
       - run: yarn size
-  build-and-publish:
+  publish:
     executor:
       name: node/default
     steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: yarn install --frozen-lockfile
-      - run: yarn build
-      - run: yarn test
-      - run: yarn size
       - run:
-          name: Setup NPM auth
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          name: Setup npm auth
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
-          name: Publish to NPM
+          name: Publish to npm
           command: yarn run publish
 
 workflows:
   version: 2
-  test:
+  build-and-publish:
     jobs:
       - build:
-        filters:
-          tags:
-            ignore: /^v.*/
-  test-and-deploy:
-    jobs:
-      - build-and-publish:
-        filters:
-          tags:
-            only: /^v.*/
-          branches:
-            ignore: /.*/
+          filters: # required since `publish` has tag filters and requires `build`
+            tags:
+              only: /.*/
+      - publish:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
