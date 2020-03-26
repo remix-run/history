@@ -79,10 +79,8 @@ async function run() {
 
     // 1. Get the next version number
     let currentVersion = await getPackageVersion('history');
-    let version;
-    if (semver.valid(givenVersion)) {
-      version = givenVersion;
-    } else {
+    let version = semver.valid(givenVersion);
+    if (version == null) {
       version = getNextVersion(currentVersion, givenVersion, prereleaseId);
     }
 
