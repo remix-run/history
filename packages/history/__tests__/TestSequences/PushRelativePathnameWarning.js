@@ -1,7 +1,6 @@
 import expect from 'expect';
 
-import execSteps from './execSteps.js';
-import spyOn from './spyOn.js';
+import { execSteps, spyOn } from './utils.js';
 
 export default (history, done) => {
   let steps = [

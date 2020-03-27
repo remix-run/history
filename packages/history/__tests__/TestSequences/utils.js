@@ -1,4 +1,20 @@
-export default function execSteps(steps, history, done) {
+import mock from 'jest-mock';
+
+export function spyOn(object, method) {
+  let original = object[method];
+  let spy = mock.fn();
+
+  object[method] = spy;
+
+  return {
+    spy,
+    destroy() {
+      object[method] = original;
+    }
+  };
+}
+
+export function execSteps(steps, history, done) {
   let index = 0,
     unlisten,
     cleanedUp = false;

@@ -1,6 +1,6 @@
 import expect from 'expect';
 
-import execSteps from './execSteps.js';
+import { execSteps } from './utils.js';
 
 export default (history, done) => {
   let hookWasCalled = false;
