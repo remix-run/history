@@ -1,4 +1,4 @@
-import { createHashHistory } from './history.js';
+import { createHashHistory } from './history';
 
 /**
  * Create a default instance for the current document.

@@ -1,4 +1,4 @@
-import { createBrowserHistory } from './history.js';
+import { createBrowserHistory } from './history';
 
 /**
  * Create a default instance for the current document.

@@ -1,0 +1,14 @@
+{
+  "include": ["packages", "types"],
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "module": "esnext",
+    "target": "es5",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true
+  }
+}
