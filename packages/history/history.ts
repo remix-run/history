@@ -221,19 +221,19 @@ export interface History<S extends State = State> {
 
 /**
  * A browser history stores the current location in regular URLs in a
- * web browser environment. This is the standard for most web apps, but
- * it requires some configuration on the server to ensure you serve the
- * same app at multiple URLs.
+ * web browser environment. This is the standard for most web apps and
+ * provides the cleanest URLs the browser's address bar.
  */
 export interface BrowserHistory<S extends State = State> extends History<S> {}
 
 /**
  * A hash history stores the current location in the fragment identifier
- * portion of the URL in a web browser environment. This is ideal for apps
- * that do not control the server for some reason (because the fragment
- * identifier is never sent to the server), including some shared hosting
- * environments that do not provide fine-grained controls over which pages
- * are served at which URLs.
+ * portion of the URL in a web browser environment.
+ *
+ * This is ideal for apps that do not control the server for some reason
+ * (because the fragment identifier is never sent to the server), including
+ * some shared hosting environments that do not provide fine-grained controls
+ * over which pages are served at which URLs.
  */
 export interface HashHistory<S extends State = State> extends History<S> {}
 
