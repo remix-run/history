@@ -1,22 +1,25 @@
 import expect from 'expect';
+import { History, Action, Location } from 'history';
+import { Done } from 'mocha';
 
-import { execSteps } from './utils.js';
+import { execSteps } from './utils';
+import type { ExecSteps } from './utils';
 
-export default (history, done) => {
-  let prevLocation;
+export default (history: History, done: Done) => {
+  let prevLocation: Location;
 
-  let steps = [
+  let steps: ExecSteps = [
     ({ location }) => {
       expect(location).toMatchObject({
-        pathname: '/'
+        pathname: '/',
       });
 
       history.replace('/home');
     },
     ({ action, location }) => {
-      expect(action).toBe('REPLACE');
+      expect(action).toBe(Action.Replace);
       expect(location).toMatchObject({
-        pathname: '/home'
+        pathname: '/home',
       });
 
       prevLocation = location;
@@ -24,13 +27,13 @@ export default (history, done) => {
       history.replace('/home');
     },
     ({ action, location }) => {
-      expect(action).toBe('REPLACE');
+      expect(action).toBe(Action.Replace);
       expect(location).toMatchObject({
-        pathname: '/home'
+        pathname: '/home',
       });
 
       expect(location).not.toBe(prevLocation);
-    }
+    },
   ];
 
   execSteps(steps, history, done);

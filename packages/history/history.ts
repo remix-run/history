@@ -4,6 +4,9 @@
  */
 export type Path = string;
 
+type Writable<O> = {
+  -readonly [K in keyof O]: O[K]
+}
 /**
  * The pieces of a URL path.
  */
@@ -11,17 +14,17 @@ export type PathPieces = {
   /**
    * The URL pathname, beginning with a /.
    */
-  pathname?: string;
+  readonly pathname?: string;
 
   /**
    * The URL search string, beginning with a ?.
    */
-  search?: string;
+  readonly search?: string;
 
   /**
    * The URL fragment identifier, beginning with a #.
    */
-  hash?: string;
+  readonly hash?: string;
 };
 
 /**
@@ -51,22 +54,22 @@ export interface Location<S extends State = State> extends PathPieces {
   /**
    * The URL pathname, beginning with a /.
    */
-  pathname: string;
+  readonly pathname: string;
 
   /**
    * The URL search string, beginning with a ?.
    */
-  search: string;
+  readonly search: string;
 
   /**
    * The URL fragment identifier, beginning with a #.
    */
-  hash: string;
+  readonly hash: string;
 
   /**
    * Some state associated with this location.
    */
-  state?: S;
+  readonly state?: S;
 
   /**
    * A unique string associated with this location. May be used to
@@ -74,7 +77,7 @@ export interface Location<S extends State = State> extends PathPieces {
    * `localStorage`. This value is always "default" on the initial
    * location.
    */
-  key: string;
+  readonly key: string;
 }
 
 /**
@@ -86,12 +89,12 @@ export interface Update<S extends State = State> {
   /**
    * The action that triggered the change.
    */
-  action: Action;
+  readonly action: Action;
 
   /**
    * The new location.
    */
-  location: Location<S>;
+  readonly location: Location<S>;
 }
 
 /**
@@ -147,12 +150,12 @@ export interface History<S extends State = State> {
    * be Action.Pop when a history instance is first created. This value is
    * mutable.
    */
-  action: Action;
+  readonly action: Action;
 
   /**
    * The current location. This value is mutable.
    */
-  location: Location<S>;
+  readonly location: Location<S>;
 
   /**
    * Returns a valid href for the given `to` value that may be used as
@@ -243,22 +246,22 @@ export interface HashHistory<S extends State = State> extends History<S> {}
  * Native.
  */
 export interface MemoryHistory<S extends State = State> extends History<S> {
-  index: number;
+  readonly index: number;
 }
 
 type HistoryState = {
-  usr?: State;
-  key?: string;
-  idx: number;
+  readonly usr?: State;
+  readonly key?: string;
+  readonly idx: number;
 };
 
 const BeforeUnloadEventType = 'beforeunload';
 const HashChangeEventType = 'hashchange';
 const PopStateEventType = 'popstate';
 
-const readOnly: (obj: any) => any = __DEV__
-  ? obj => Object.freeze(obj)
-  : obj => obj;
+const readOnly: typeof Object.freeze = __DEV__
+  ? Object.freeze
+  : (obj: any) => obj;
 
 function warning(cond: boolean, message: string) {
   if (!cond) {
@@ -282,7 +285,7 @@ function warning(cond: boolean, message: string) {
  * the server to ensure you serve the same app at multiple URLs.
  */
 export function createBrowserHistory({
-  window = document.defaultView as Window
+  window = document.defaultView!
 }: { window?: Window } = {}): BrowserHistory {
   let globalHistory = window.history;
 
@@ -760,17 +763,17 @@ export function createMemoryHistory({
   initialEntries = ['/'],
   initialIndex = 0
 }: {
-  initialEntries?: InitialEntry[];
+  initialEntries?: ReadonlyArray<InitialEntry>;
   initialIndex?: number;
 } = {}): MemoryHistory {
-  let entries: Location[] = initialEntries.map(entry => {
+  let entries = initialEntries.map((entry): Location => {
     let location = readOnly(
       Object.assign(
         {
           pathname: '/',
           search: '',
           hash: '',
-          state: null,
+          state: undefined,
           key: createKey()
         },
         typeof entry === 'string' ? parsePath(entry) : entry
@@ -919,20 +922,20 @@ function promptBeforeUnload(event: BeforeUnloadEvent) {
   event.returnValue = '';
 }
 
-type Events<F> = {
-  length: number;
+type Events<F extends (arg:any) => void> = {
+  readonly length: number;
   push: (fn: F) => () => void;
-  call: (arg: any) => void;
+  call: (arg: Parameters<F>[0]) => void;
 };
 
-function createEvents<F extends Function>(): Events<F> {
+function createEvents<F extends (arg: any) => void>(): Events<F> {
   let handlers: F[] = [];
 
   return {
     get length() {
       return handlers.length;
     },
-    push(fn: F) {
+    push(fn) {
       handlers.push(fn);
       return function() {
         handlers = handlers.filter(handler => handler !== fn);
@@ -958,8 +961,8 @@ export function createPath({
   return pathname + search + hash;
 }
 
-export function parsePath(path: Path) {
-  let pieces: PathPieces = {};
+export function parsePath(path: Path): PathPieces {
+  let pieces: Writable<PathPieces> = {};
 
   if (path) {
     let hashIndex = path.indexOf('#');

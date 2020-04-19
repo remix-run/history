@@ -1,34 +1,38 @@
 import expect from 'expect';
+import { Action } from 'history';
+import type { History } from 'history';
+import type { Done } from 'mocha';
 
-import { execSteps } from './utils.js';
+import { execSteps } from './utils';
+import type { ExecSteps } from './utils';
 
-export default (history, done) => {
-  let steps = [
+export default (history: History, done: Done) => {
+  let steps: ExecSteps = [
     ({ location }) => {
       expect(location).toMatchObject({
-        pathname: '/'
+        pathname: '/',
       });
 
       history.push('/home?the=query#the-hash');
     },
     ({ action, location }) => {
-      expect(action).toBe('PUSH');
+      expect(action).toBe(Action.Push);
       expect(location).toMatchObject({
         pathname: '/home',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
       });
 
       history.push('?another=query#another-hash');
     },
     ({ action, location }) => {
-      expect(action).toBe('PUSH');
+      expect(action).toBe(Action.Push);
       expect(location).toMatchObject({
         pathname: '/home',
         search: '?another=query',
-        hash: '#another-hash'
+        hash: '#another-hash',
       });
-    }
+    },
   ];
 
   execSteps(steps, history, done);

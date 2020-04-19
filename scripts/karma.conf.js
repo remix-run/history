@@ -78,16 +78,17 @@ module.exports = function(config) {
     webpack: {
       devtool: 'inline-source-map',
       resolve: {
+        extensions: ['.ts', '.mjs', '.js', '.json'],
         modules: [path.resolve(__dirname, '../build'), 'node_modules']
       },
       module: {
         loaders: [
           {
-            test: /__tests__\/.*\.js$/,
+            test: /__tests__\/.*\.(js|ts)$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env']
+              presets: ['@babel/preset-typescript', '@babel/preset-env']
             }
           }
         ]
