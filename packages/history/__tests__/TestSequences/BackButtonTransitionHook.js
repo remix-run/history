@@ -1,6 +1,6 @@
 import expect from 'expect';
 
-import { execSteps } from './utils.js';
+import { execSteps } from './utils';
 
 export default (history, done) => {
   let hookWasCalled = false;
@@ -32,6 +32,7 @@ export default (history, done) => {
         pathname: '/'
       });
 
+      expect('action').toBe('POP');
       expect(hookWasCalled).toBe(true);
 
       unblock();

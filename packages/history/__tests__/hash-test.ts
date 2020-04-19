@@ -1,30 +1,32 @@
+/* eslint-disable import/no-unresolved */
 import expect from 'expect';
 import { createHashHistory } from 'history';
 
-import Listen from './TestSequences/Listen.js';
-import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey.js';
-import PushNewLocation from './TestSequences/PushNewLocation.js';
-import PushSamePath from './TestSequences/PushSamePath.js';
-import PushState from './TestSequences/PushState.js';
-import PushMissingPathname from './TestSequences/PushMissingPathname.js';
-import PushRelativePathnameWarning from './TestSequences/PushRelativePathnameWarning.js';
-import ReplaceNewLocation from './TestSequences/ReplaceNewLocation.js';
-import ReplaceSamePath from './TestSequences/ReplaceSamePath.js';
-import ReplaceState from './TestSequences/ReplaceState.js';
-import EncodedReservedCharacters from './TestSequences/EncodedReservedCharacters.js';
-import GoBack from './TestSequences/GoBack.js';
-import GoForward from './TestSequences/GoForward.js';
-import BlockEverything from './TestSequences/BlockEverything.js';
-import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.js';
+import Listen from './TestSequences/Listen';
+import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey';
+import PushNewLocation from './TestSequences/PushNewLocation';
+import PushSamePath from './TestSequences/PushSamePath';
+import PushState from './TestSequences/PushState';
+import PushMissingPathname from './TestSequences/PushMissingPathname';
+import PushRelativePathnameWarning from './TestSequences/PushRelativePathnameWarning';
+import ReplaceNewLocation from './TestSequences/ReplaceNewLocation';
+import ReplaceSamePath from './TestSequences/ReplaceSamePath';
+import ReplaceState from './TestSequences/ReplaceState';
+import EncodedReservedCharacters from './TestSequences/EncodedReservedCharacters';
+import GoBack from './TestSequences/GoBack';
+import GoForward from './TestSequences/GoForward';
+import BlockEverything from './TestSequences/BlockEverything';
+import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening';
+import type { HashHistory } from 'history';
 
 // TODO: Do we still need this?
 // const canGoWithoutReload = window.navigator.userAgent.indexOf('Firefox') === -1;
 // const describeGo = canGoWithoutReload ? describe : describe.skip;
 
 describe('a hash history', () => {
-  let history;
+  let history:HashHistory;
   beforeEach(() => {
-    window.history.replaceState(null, null, '#/');
+    window.history.replaceState(null, null as any as string, '#/'); // FIXME: type
     history = createHashHistory();
   });
 

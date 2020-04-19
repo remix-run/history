@@ -1,33 +1,31 @@
+/* eslint-disable import/no-unresolved */
 import expect from 'expect';
-import { createMemoryHistory } from 'history';
+import { createBrowserHistory } from 'history';
 
-import Listen from './TestSequences/Listen.js';
-import InitialLocationHasKey from './TestSequences/InitialLocationHasKey.js';
-import PushNewLocation from './TestSequences/PushNewLocation.js';
-import PushSamePath from './TestSequences/PushSamePath.js';
-import PushState from './TestSequences/PushState.js';
-import PushMissingPathname from './TestSequences/PushMissingPathname.js';
-import PushRelativePathnameWarning from './TestSequences/PushRelativePathnameWarning.js';
-import ReplaceNewLocation from './TestSequences/ReplaceNewLocation.js';
-import ReplaceSamePath from './TestSequences/ReplaceSamePath.js';
-import ReplaceState from './TestSequences/ReplaceState.js';
-import EncodedReservedCharacters from './TestSequences/EncodedReservedCharacters.js';
-import GoBack from './TestSequences/GoBack.js';
-import GoForward from './TestSequences/GoForward.js';
-import BlockEverything from './TestSequences/BlockEverything.js';
-import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.js';
+import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey';
+import Listen from './TestSequences/Listen';
+import PushNewLocation from './TestSequences/PushNewLocation';
+import PushSamePath from './TestSequences/PushSamePath';
+import PushState from './TestSequences/PushState';
+import PushMissingPathname from './TestSequences/PushMissingPathname';
+import PushRelativePathname from './TestSequences/PushRelativePathname';
+import ReplaceNewLocation from './TestSequences/ReplaceNewLocation';
+import ReplaceSamePath from './TestSequences/ReplaceSamePath';
+import ReplaceState from './TestSequences/ReplaceState';
+import EncodedReservedCharacters from './TestSequences/EncodedReservedCharacters';
+import GoBack from './TestSequences/GoBack';
+import GoForward from './TestSequences/GoForward';
+import BlockEverything from './TestSequences/BlockEverything';
+import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening';
 
-describe('a memory history', () => {
+describe('a browser history', () => {
   let history;
   beforeEach(() => {
-    history = createMemoryHistory();
+    window.history.replaceState(null, null, '/');
+    history = createBrowserHistory();
   });
 
-  it('has an index property', () => {
-    expect(typeof history.index).toBe('number');
-  });
-
-  it('knows how to create hrefs', () => {
+  it('knows how to create hrefs from location objects', () => {
     const href = history.createHref({
       pathname: '/the/path',
       search: '?the=query',
@@ -61,8 +59,8 @@ describe('a memory history', () => {
   });
 
   describe('the initial location', () => {
-    it('has a key', done => {
-      InitialLocationHasKey(history, done);
+    it('has the "default" key', done => {
+      InitialLocationDefaultKey(history, done);
     });
   });
 
@@ -91,8 +89,8 @@ describe('a memory history', () => {
   });
 
   describe('push with a relative pathname', () => {
-    it('issues a warning', done => {
-      PushRelativePathnameWarning(history, done);
+    it('normalizes the pathname relative to the current location', done => {
+      PushRelativePathname(history, done);
     });
   });
 
@@ -139,7 +137,7 @@ describe('a memory history', () => {
   });
 
   describe('block a POP without listening', () => {
-    it('receives the next location and action as arguments', done => {
+    it('receives the next ({ action, location })', done => {
       BlockPopWithoutListening(history, done);
     });
   });

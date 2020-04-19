@@ -1,8 +1,10 @@
 import expect from 'expect';
+import type { History } from 'history';
+import type { Done } from 'mocha';
 
-export default (history, done) => {
+export default (history: History, done: Done) => {
   expect(history.location).toMatchObject({
-    pathname: '/'
+    pathname: '/',
   });
 
   history.push('/home');

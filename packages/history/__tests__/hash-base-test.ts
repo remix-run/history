@@ -1,8 +1,9 @@
 import expect from 'expect';
 import { createHashHistory } from 'history';
+import type { HashHistory } from 'history';
 
 describe('a hash history on a page with a <base> tag', () => {
-  let history, base;
+  let history:HashHistory, base:HTMLBaseElement;
   beforeEach(() => {
     if (window.location.hash !== '#/') {
       window.location.hash = '/';
