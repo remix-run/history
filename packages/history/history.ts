@@ -365,7 +365,7 @@ export function createBrowserHistory({
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: To, state?: State): Location {
+  function getNextLocation(to: To, state: State | null = null): Location {
     return readOnly(
       Object.assign({}, location, typeof to === 'string' ? parsePath(to) : to, {
         state,
@@ -608,7 +608,7 @@ export function createHashHistory({
     return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
   }
 
-  function getNextLocation(to: To, state?: State): Location {
+  function getNextLocation(to: To, state: State | null = null): Location {
     return readOnly(
       Object.assign({}, location, typeof to === 'string' ? parsePath(to) : to, {
         state,
@@ -797,7 +797,7 @@ export function createMemoryHistory({
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: To, state?: State): Location {
+  function getNextLocation(to: To, state: State | null = null): Location {
     return readOnly(
       Object.assign({}, location, typeof to === 'string' ? parsePath(to) : to, {
         state,

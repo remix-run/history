@@ -16,7 +16,9 @@ export default (history, done) => {
       expect(location).toMatchObject({
         pathname: '/home',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        state: null,
+        key: expect.any(String)
       });
     }
   ];
