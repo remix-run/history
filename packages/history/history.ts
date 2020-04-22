@@ -350,8 +350,8 @@ export function createBrowserHistory({
 
   let action = Action.Pop;
   let [index, location] = getIndexAndLocation();
-  let blockers = createEvents();
-  let listeners = createEvents();
+  let listeners = createEvents<Listener>();
+  let blockers = createEvents<Blocker>();
 
   if (index == null) {
     index = 0;
@@ -580,8 +580,8 @@ export function createHashHistory({
 
   let action = Action.Pop;
   let [index, location] = getIndexAndLocation();
-  let blockers = createEvents();
-  let listeners = createEvents();
+  let listeners = createEvents<Listener>();
+  let blockers = createEvents<Blocker>();
 
   if (index == null) {
     index = 0;
@@ -790,8 +790,8 @@ export function createMemoryHistory({
 
   let action = Action.Pop;
   let location = entries[index];
-  let blockers = createEvents<Blocker>();
   let listeners = createEvents<Listener>();
+  let blockers = createEvents<Blocker>();
 
   function createHref(to: To) {
     return typeof to === 'string' ? to : createPath(to);
