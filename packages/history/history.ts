@@ -7,7 +7,7 @@ export type Path = string;
 /**
  * The pieces of a URL path.
  */
-export type PathPieces = {
+export interface PathPieces {
   /**
    * The URL pathname, beginning with a /.
    */
@@ -22,7 +22,7 @@ export type PathPieces = {
    * The URL fragment identifier, beginning with a #.
    */
   hash?: string;
-};
+}
 
 /**
  * An object that is used to associate some arbitrary data with a
@@ -147,12 +147,12 @@ export interface History<S extends State = State> {
    * be Action.Pop when a history instance is first created. This value is
    * mutable.
    */
-  action: Action;
+  readonly action: Action;
 
   /**
    * The current location. This value is mutable.
    */
-  location: Location<S>;
+  readonly location: Location<S>;
 
   /**
    * Returns a valid href for the given `to` value that may be used as
