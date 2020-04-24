@@ -1,8 +1,23 @@
 /**
+ * Actions represent the type of change to a location value.
+ */
+export enum Action {
+  Pop = 'POP',
+  Push = 'PUSH',
+  Replace = 'REPLACE'
+}
+
+/**
  * A URL path including the pathname, search string, and hash. No URL
  * protocol or domain information should be part of a path.
  */
 export type Path = string;
+
+/**
+ * An object that is used to associate some arbitrary data with a
+ * location, but that does not appear in the URL path.
+ */
+export type State = object;
 
 /**
  * The pieces of a URL path.
@@ -25,18 +40,20 @@ export interface PathPieces {
 }
 
 /**
- * An object that is used to associate some arbitrary data with a
- * location, but that does not appear in the URL path.
+ * The pieces of a Location object.
  */
-export type State = object;
+export interface LocationPieces<S extends State = State> extends PathPieces {
+  /**
+   * Additional state tied to this location.
+   */
+  state?: S | null;
 
-/**
- * Actions represent the type of change to a location value.
- */
-export enum Action {
-  Pop = 'POP',
-  Push = 'PUSH',
-  Replace = 'REPLACE'
+  /**
+   * A unique string associated with this location. May be used to safely store
+   * and retrieve data in some other storage API, like `localStorage`. This
+   * value is always "default" on the initial location.
+   */
+  key?: string;
 }
 
 /**
@@ -47,7 +64,7 @@ export enum Action {
  * @typeParam S - The type for the state object (optional)
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/location
  */
-export interface Location<S extends State = State> extends PathPieces {
+export interface Location<S extends State = State> extends LocationPieces<S> {
   /**
    * The URL pathname, beginning with a /.
    */
@@ -748,12 +765,12 @@ export function createHashHistory({
 // MEMORY
 ////////////////////////////////////////////////////////////////////////////////
 
-type InitialEntry = Path | PathPieces;
+export type InitialEntry = Path | LocationPieces;
 
 /**
- * Memory history stores the current location in memory. It is designed
- * for use in stateful non-browser environments like headless tests (in
- * node.js) and React Native.
+ * Memory history stores the current location in memory. It is designed for use
+ * in stateful non-browser environments like headless tests (in node.js) and
+ * React Native.
  */
 export function createMemoryHistory({
   initialEntries = ['/'],

@@ -1,14 +1,14 @@
 {
   "name": "history",
   "version": "5.0.0-beta.8",
+  "author": "React Training <hello@reacttraining.com>",
   "description": "Manage session history with JavaScript",
   "repository": "ReactTraining/history",
   "license": "MIT",
-  "author": "React Training <hello@reacttraining.com>",
   "main": "main.js",
-  "module": "history.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "unpkg": "umd/history.production.min.js",
-  "types": "history.d.ts",
   "sideEffects": false,
   "dependencies": {
     "@babel/runtime": "^7.7.6"

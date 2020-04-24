@@ -12,9 +12,9 @@ const OUTPUT_DIR = 'build/history';
 
 const modules = [
   {
-    input: `${SOURCE_DIR}/history.ts`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
-      file: `${OUTPUT_DIR}/history.js`,
+      file: `${OUTPUT_DIR}/index.js`,
       format: 'esm',
       sourcemap: !PRETTY
     },
@@ -79,7 +79,7 @@ const modules = [
 
 const webModules = [
   {
-    input: `${SOURCE_DIR}/history.ts`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/history.development.js`,
       format: 'esm',
@@ -104,7 +104,7 @@ const webModules = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/history.ts`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/history.production.min.js`,
       format: 'esm',
@@ -133,7 +133,7 @@ const webModules = [
 
 const globals = [
   {
-    input: `${SOURCE_DIR}/history.ts`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.development.js`,
       format: 'umd',
@@ -156,7 +156,7 @@ const globals = [
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
-    input: `${SOURCE_DIR}/history.ts`,
+    input: `${SOURCE_DIR}/index.ts`,
     output: {
       file: `${OUTPUT_DIR}/umd/history.production.min.js`,
       format: 'umd',
