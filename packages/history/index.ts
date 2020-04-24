@@ -148,20 +148,19 @@ export interface Blocker<S extends State = State> {
 export type To = Path | PathPieces;
 
 /**
- * A history is an interface to the navigation stack. The history serves
- * as the source of truth for the current location, as well as provides a
- * set of methods that may be used to change it.
+ * A history is an interface to the navigation stack. The history serves as the
+ * source of truth for the current location, as well as provides a set of
+ * methods that may be used to change it.
  *
- * It is analogous to the web's window.history object, but with a smaller,
- * more focused API.
+ * It is analogous to the web's window.history object, but with a smaller, more
+ * focused API.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/history
  */
 export interface History<S extends State = State> {
   /**
-   * The last action that modified the current location. This will always
-   * be Action.Pop when a history instance is first created. This value is
-   * mutable.
+   * The last action that modified the current location. This will always be
+   * Action.Pop when a history instance is first created. This value is mutable.
    */
   readonly action: Action;
 
@@ -179,9 +178,9 @@ export interface History<S extends State = State> {
   createHref(to: Path | PathPieces): string;
 
   /**
-   * Pushes a new location onto the history stack, increasing its length
-   * by one. If there were any entries in the stack after the current one,
-   * they are lost.
+   * Pushes a new location onto the history stack, increasing its length by one.
+   * If there were any entries in the stack after the current one, they are
+   * lost.
    *
    * @param to - The new URL
    * @param state - Data to associate with the new location
@@ -189,8 +188,8 @@ export interface History<S extends State = State> {
   push(to: To, state?: State): void;
 
   /**
-   * Replaces the current location in the history stack with a new one.
-   * The location that was replaced will no longer be available.
+   * Replaces the current location in the history stack with a new one.  The
+   * location that was replaced will no longer be available.
    *
    * @param to - The new URL
    * @param state - Data to associate with the new location
@@ -198,8 +197,8 @@ export interface History<S extends State = State> {
   replace(to: To, state?: State): void;
 
   /**
-   * Navigates `n` entries backward/forward in the history stack relative
-   * to the current index. For example, a "back" navigation would use go(-1).
+   * Navigates `n` entries backward/forward in the history stack relative to the
+   * current index. For example, a "back" navigation would use go(-1).
    *
    * @param n - The delta in the stack index
    */
@@ -208,8 +207,8 @@ export interface History<S extends State = State> {
   /**
    * Navigates to the previous entry in the stack. Identical to go(-1).
    *
-   * Warning: if the current location is the first location in the stack,
-   * this will unload the current document.
+   * Warning: if the current location is the first location in the stack, this
+   * will unload the current document.
    */
   back(): void;
 
@@ -227,8 +226,8 @@ export interface History<S extends State = State> {
   listen(listener: Listener<S>): () => void;
 
   /**
-   * Prevents the current location from changing and sets up a listener
-   * that will be called instead.
+   * Prevents the current location from changing and sets up a listener that
+   * will be called instead.
    *
    * @returns unblock - A function that may be used to stop blocking
    */
@@ -236,20 +235,20 @@ export interface History<S extends State = State> {
 }
 
 /**
- * A browser history stores the current location in regular URLs in a
- * web browser environment. This is the standard for most web apps and
- * provides the cleanest URLs the browser's address bar.
+ * A browser history stores the current location in regular URLs in a web
+ * browser environment. This is the standard for most web apps and provides the
+ * cleanest URLs the browser's address bar.
  */
 export interface BrowserHistory<S extends State = State> extends History<S> {}
 
 /**
- * A hash history stores the current location in the fragment identifier
- * portion of the URL in a web browser environment.
+ * A hash history stores the current location in the fragment identifier portion
+ * of the URL in a web browser environment.
  *
  * This is ideal for apps that do not control the server for some reason
- * (because the fragment identifier is never sent to the server), including
- * some shared hosting environments that do not provide fine-grained controls
- * over which pages are served at which URLs.
+ * (because the fragment identifier is never sent to the server), including some
+ * shared hosting environments that do not provide fine-grained controls over
+ * which pages are served at which URLs.
  */
 export interface HashHistory<S extends State = State> extends History<S> {}
 
@@ -293,9 +292,9 @@ function warning(cond: boolean, message: string) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Browser history stores the location in regular URLs. This is the
- * standard for most web apps, but it requires some configuration on
- * the server to ensure you serve the same app at multiple URLs.
+ * Browser history stores the location in regular URLs. This is the standard for
+ * most web apps, but it requires some configuration on the server to ensure you
+ * serve the same app at multiple URLs.
  */
 export function createBrowserHistory({
   window = document.defaultView as Window
@@ -347,8 +346,8 @@ export function createBrowserHistory({
           warning(
             false,
             // TODO: Write up a doc that explains our blocking strategy in
-            // detail and link to it here so people can understand better
-            // what is going on and how to avoid it.
+            // detail and link to it here so people can understand better what
+            // is going on and how to avoid it.
             `You are trying to block a POP navigation to a location that was not ` +
               `created by the history library. The block will fail silently in ` +
               `production, but in general you should do all navigation with the ` +
@@ -509,10 +508,10 @@ export function createBrowserHistory({
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Hash history stores the location in window.location.hash. This makes
- * it ideal for situations where you don't want to send the location to
- * the server for some reason, either because you do cannot configure it
- * or the URL space is reserved for something else.
+ * Hash history stores the location in window.location.hash. This makes it ideal
+ * for situations where you don't want to send the location to the server for
+ * some reason, either because you do cannot configure it or the URL space is
+ * reserved for something else.
  */
 export function createHashHistory({
   window = document.defaultView as Window
