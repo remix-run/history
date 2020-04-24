@@ -2,20 +2,40 @@
  * Actions represent the type of change to a location value.
  */
 export enum Action {
+  /**
+   * A POP indicates a change to an arbitrary index in the history stack, such
+   * as a back or forward navigation. It does not describe the direction of the
+   * navigation, only that the current index changed.
+   *
+   * Note: This is the default action for newly created history objects.
+   */
   Pop = 'POP',
+
+  /**
+   * A PUSH indicates a new entry being added to the history stack, such as when
+   * a link is clicked and a new page loads. When this happens, all subsequent
+   * entries in the stack are lost.
+   */
   Push = 'PUSH',
+
+  /**
+   * A REPLACE indicates the entry at the current index in the history stack
+   * being replaced by a new one.
+   */
   Replace = 'REPLACE'
 }
 
 /**
- * A URL path including the pathname, search string, and hash. No URL
- * protocol or domain information should be part of a path.
+ * A URL path including the pathname, search string, and hash. No URL protocol
+ * or domain information should be part of a path.
  */
 export type Path = string;
 
 /**
- * An object that is used to associate some arbitrary data with a
- * location, but that does not appear in the URL path.
+ * An object that is used to associate some arbitrary data with a location, but
+ * that does not appear in the URL path.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/History/state
  */
 export type State = object | null;
 
@@ -25,26 +45,36 @@ export type State = object | null;
 export interface PathPieces {
   /**
    * The URL pathname, beginning with a /.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
    */
   pathname?: string;
 
   /**
    * The URL search string, beginning with a ?.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
    */
   search?: string;
 
   /**
    * The URL fragment identifier, beginning with a #.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
    */
   hash?: string;
 }
 
 /**
  * The pieces of a Location object.
+ *
+ * @typeParam S - The type for the state object (optional)
  */
 export interface LocationPieces<S extends State = State> extends PathPieces {
   /**
    * Additional state tied to this location.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/History/state
    */
   state?: S;
 
@@ -67,21 +97,29 @@ export interface LocationPieces<S extends State = State> extends PathPieces {
 export interface Location<S extends State = State> extends LocationPieces<S> {
   /**
    * The URL pathname, beginning with a /.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
    */
   pathname: string;
 
   /**
    * The URL search string, beginning with a ?.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
    */
   search: string;
 
   /**
    * The URL fragment identifier, beginning with a #.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
    */
   hash: string;
 
   /**
    * Additional state tied to this location.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/History/state
    */
   state: S;
 
@@ -142,8 +180,7 @@ export interface Blocker<S extends State = State> {
 }
 
 /**
- * A `to` value is either a URL path or an object that contains the pieces
- * of a URL path.
+ * A URL path or an object that contains the pieces of a URL path.
  */
 export type To = Path | PathPieces;
 
