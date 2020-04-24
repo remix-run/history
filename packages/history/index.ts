@@ -17,7 +17,7 @@ export type Path = string;
  * An object that is used to associate some arbitrary data with a
  * location, but that does not appear in the URL path.
  */
-export type State = object;
+export type State = object | null;
 
 /**
  * The pieces of a URL path.
@@ -46,7 +46,7 @@ export interface LocationPieces<S extends State = State> extends PathPieces {
   /**
    * Additional state tied to this location.
    */
-  state?: S | null;
+  state?: S;
 
   /**
    * A unique string associated with this location. May be used to safely store
@@ -83,7 +83,7 @@ export interface Location<S extends State = State> extends LocationPieces<S> {
   /**
    * Additional state tied to this location.
    */
-  state: S | null;
+  state: S;
 
   /**
    * A unique string associated with this location. May be used to safely store
@@ -263,7 +263,7 @@ export interface MemoryHistory<S extends State = State> extends History<S> {
 }
 
 type HistoryState = {
-  usr: State | null;
+  usr: State;
   key?: string;
   idx: number;
 };
