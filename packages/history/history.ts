@@ -64,15 +64,14 @@ export interface Location<S extends State = State> extends PathPieces {
   hash: string;
 
   /**
-   * Some state associated with this location.
+   * Additional state tied to this location.
    */
-  state?: S;
+  state: S | null;
 
   /**
-   * A unique string associated with this location. May be used to
-   * safely store and retrieve data in some other storage API, like
-   * `localStorage`. This value is always "default" on the initial
-   * location.
+   * A unique string associated with this location. May be used to safely store
+   * and retrieve data in some other storage API, like `localStorage`. This
+   * value is always "default" on the initial location.
    */
   key: string;
 }
@@ -247,7 +246,7 @@ export interface MemoryHistory<S extends State = State> extends History<S> {
 }
 
 type HistoryState = {
-  usr?: State;
+  usr: State | null;
   key?: string;
   idx: number;
 };
