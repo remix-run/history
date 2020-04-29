@@ -1,8 +1,8 @@
 {
   "name": "history",
   "version": "5.0.0-beta.8",
-  "author": "React Training <hello@reacttraining.com>",
   "description": "Manage session history with JavaScript",
+  "author": "React Training <hello@reacttraining.com>",
   "repository": "ReactTraining/history",
   "license": "MIT",
   "main": "main.js",

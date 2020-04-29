@@ -407,10 +407,7 @@ export function createBrowserHistory({
 
   if (index == null) {
     index = 0;
-    globalHistory.replaceState(
-      Object.assign({}, globalHistory.state, { idx: index }),
-      ''
-    );
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, '');
   }
 
   function createHref(to: To) {
@@ -418,12 +415,12 @@ export function createBrowserHistory({
   }
 
   function getNextLocation(to: To, state: State | null = null): Location {
-    return readOnly(
-      Object.assign({}, location, typeof to === 'string' ? parsePath(to) : to, {
-        state,
-        key: createKey()
-      })
-    );
+    return readOnly({
+      ...location,
+      ...(typeof to === 'string' ? parsePath(to) : to),
+      state,
+      key: createKey()
+    });
   }
 
   function getHistoryStateAndUrl(
@@ -637,10 +634,7 @@ export function createHashHistory({
 
   if (index == null) {
     index = 0;
-    globalHistory.replaceState(
-      Object.assign({}, globalHistory.state, { idx: index }),
-      ''
-    );
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, '');
   }
 
   function getBaseHref() {
@@ -661,12 +655,12 @@ export function createHashHistory({
   }
 
   function getNextLocation(to: To, state: State | null = null): Location {
-    return readOnly(
-      Object.assign({}, location, typeof to === 'string' ? parsePath(to) : to, {
-        state,
-        key: createKey()
-      })
-    );
+    return readOnly({
+      ...location,
+      ...(typeof to === 'string' ? parsePath(to) : to),
+      state,
+      key: createKey()
+    });
   }
 
   function getHistoryStateAndUrl(
@@ -816,18 +810,14 @@ export function createMemoryHistory({
   initialIndex?: number;
 } = {}): MemoryHistory {
   let entries: Location[] = initialEntries.map(entry => {
-    let location = readOnly(
-      Object.assign(
-        {
-          pathname: '/',
-          search: '',
-          hash: '',
-          state: null,
-          key: createKey()
-        },
-        typeof entry === 'string' ? parsePath(entry) : entry
-      )
-    );
+    let location = readOnly({
+      pathname: '/',
+      search: '',
+      hash: '',
+      state: null,
+      key: createKey(),
+      ...(typeof entry === 'string' ? parsePath(entry) : entry)
+    });
 
     warning(
       location.pathname.charAt(0) === '/',
@@ -850,12 +840,12 @@ export function createMemoryHistory({
   }
 
   function getNextLocation(to: To, state: State | null = null): Location {
-    return readOnly(
-      Object.assign({}, location, typeof to === 'string' ? parsePath(to) : to, {
-        state,
-        key: createKey()
-      })
-    );
+    return readOnly({
+      ...location,
+      ...(typeof to === 'string' ? parsePath(to) : to),
+      state,
+      key: createKey()
+    });
   }
 
   function allowTx(action: Action, location: Location, retry: () => void) {

@@ -33,7 +33,6 @@ const modules = [
         presets: [['@babel/preset-env', { loose: true }]],
         plugins: [
           'babel-plugin-dev-expression',
-          '@babel/plugin-transform-object-assign',
           ['@babel/plugin-transform-runtime', { useESModules: true }]
         ],
         runtimeHelpers: true
@@ -146,10 +145,7 @@ const globals = [
         exclude: /node_modules/,
         extensions: ['.ts'],
         presets: [['@babel/preset-env', { loose: true }]],
-        plugins: [
-          'babel-plugin-dev-expression',
-          '@babel/plugin-transform-object-assign'
-        ]
+        plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
       compiler()
@@ -169,10 +165,7 @@ const globals = [
         exclude: /node_modules/,
         extensions: ['.ts'],
         presets: [['@babel/preset-env', { loose: true }]],
-        plugins: [
-          'babel-plugin-dev-expression',
-          '@babel/plugin-transform-object-assign'
-        ]
+        plugins: ['babel-plugin-dev-expression']
       }),
       replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
       compiler(),
