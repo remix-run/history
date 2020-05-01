@@ -32,12 +32,39 @@ export enum Action {
 export type Path = string;
 
 /**
+ * A URL pathname, beginning with a /.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
+ */
+export type Pathname = string;
+
+/**
+ * A URL search string, beginning with a ?.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
+ */
+export type Search = string;
+
+/**
+ * A URL fragment identifier, beginning with a #.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
+ */
+export type Hash = string;
+
+/**
  * An object that is used to associate some arbitrary data with a location, but
  * that does not appear in the URL path.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/History/state
  */
 export type State = object | null;
+
+/**
+ * A unique string associated with a location. May be used to safely store
+ * and retrieve data in some other storage API, like `localStorage`.
+ */
+export type Key = string;
 
 /**
  * The pieces of a URL path.
@@ -48,21 +75,21 @@ export interface PathPieces {
    *
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
    */
-  pathname?: string;
+  pathname?: Pathname;
 
   /**
    * The URL search string, beginning with a ?.
    *
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
    */
-  search?: string;
+  search?: Search;
 
   /**
    * The URL fragment identifier, beginning with a #.
    *
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
    */
-  hash?: string;
+  hash?: Hash;
 }
 
 /**
@@ -83,7 +110,7 @@ export interface LocationPieces<S extends State = State> extends PathPieces {
    * and retrieve data in some other storage API, like `localStorage`. This
    * value is always "default" on the initial location.
    */
-  key?: string;
+  key?: Key;
 }
 
 /**
@@ -94,27 +121,27 @@ export interface LocationPieces<S extends State = State> extends PathPieces {
  * @typeParam S - The type for the state object (optional)
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/location
  */
-export interface Location<S extends State = State> extends LocationPieces<S> {
+export interface Location<S extends State = State> {
   /**
    * The URL pathname, beginning with a /.
    *
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
    */
-  pathname: string;
+  pathname: Pathname;
 
   /**
    * The URL search string, beginning with a ?.
    *
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
    */
-  search: string;
+  search: Search;
 
   /**
    * The URL fragment identifier, beginning with a #.
    *
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
    */
-  hash: string;
+  hash: Hash;
 
   /**
    * Additional state tied to this location.
@@ -128,7 +155,7 @@ export interface Location<S extends State = State> extends LocationPieces<S> {
    * and retrieve data in some other storage API, like `localStorage`. This
    * value is always "default" on the initial location.
    */
-  key: string;
+  key: Key;
 }
 
 /**
@@ -212,7 +239,7 @@ export interface History<S extends State = State> {
    *
    * @param to - The destination URL
    */
-  createHref(to: Path | PathPieces): string;
+  createHref(to: To): string;
 
   /**
    * Pushes a new location onto the history stack, increasing its length by one.
