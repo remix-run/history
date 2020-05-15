@@ -249,7 +249,7 @@ export interface History<S extends State = State> {
    * @param to - The new URL
    * @param state - Data to associate with the new location
    */
-  push(to: To, state?: State): void;
+  push(to: To, state?: S): void;
 
   /**
    * Replaces the current location in the history stack with a new one.  The
@@ -258,7 +258,7 @@ export interface History<S extends State = State> {
    * @param to - The new URL
    * @param state - Data to associate with the new location
    */
-  replace(to: To, state?: State): void;
+  replace(to: To, state?: S): void;
 
   /**
    * Navigates `n` entries backward/forward in the history stack relative to the
