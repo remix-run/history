@@ -335,7 +335,7 @@ const BeforeUnloadEventType = 'beforeunload';
 const HashChangeEventType = 'hashchange';
 const PopStateEventType = 'popstate';
 
-const readOnly: (obj: any) => any = __DEV__
+const readOnly: <T>(obj: T) => T = __DEV__
   ? obj => Object.freeze(obj)
   : obj => obj;
 
@@ -370,7 +370,7 @@ export function createBrowserHistory({
     let state = globalHistory.state || {};
     return [
       state.idx,
-      readOnly({
+      readOnly<Location>({
         pathname,
         search,
         hash,
@@ -441,8 +441,8 @@ export function createBrowserHistory({
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: To, state: State | null = null): Location {
-    return readOnly({
+  function getNextLocation(to: To, state: State = null): Location {
+    return readOnly<Location>({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
@@ -586,7 +586,7 @@ export function createHashHistory({
     let state = globalHistory.state || {};
     return [
       state.idx,
-      readOnly({
+      readOnly<Location>({
         pathname,
         search,
         hash,
@@ -681,8 +681,8 @@ export function createHashHistory({
     return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
   }
 
-  function getNextLocation(to: To, state: State | null = null): Location {
-    return readOnly({
+  function getNextLocation(to: To, state: State = null): Location {
+    return readOnly<Location>({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
@@ -837,7 +837,7 @@ export function createMemoryHistory({
   initialIndex?: number;
 } = {}): MemoryHistory {
   let entries: Location[] = initialEntries.map(entry => {
-    let location = readOnly({
+    let location = readOnly<Location>({
       pathname: '/',
       search: '',
       hash: '',
@@ -866,8 +866,8 @@ export function createMemoryHistory({
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: To, state: State | null = null): Location {
-    return readOnly({
+  function getNextLocation(to: To, state: State = null): Location {
+    return readOnly<Location>({
       ...location,
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
