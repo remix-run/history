@@ -264,9 +264,9 @@ export interface History<S extends State = State> {
    * Navigates `n` entries backward/forward in the history stack relative to the
    * current index. For example, a "back" navigation would use go(-1).
    *
-   * @param n - The delta in the stack index
+   * @param delta - The delta in the stack index
    */
-  go(n: number): void;
+  go(delta: number): void;
 
   /**
    * Navigates to the previous entry in the stack. Identical to go(-1).
@@ -391,18 +391,18 @@ export function createBrowserHistory({
 
       if (blockers.length) {
         if (nextIndex != null) {
-          let n = index - nextIndex;
-          if (n) {
+          let delta = index - nextIndex;
+          if (delta) {
             // Revert the POP
             blockedPopTx = {
               action: nextAction,
               location: nextLocation,
               retry() {
-                go(n * -1);
+                go(delta * -1);
               }
             };
 
-            go(n);
+            go(delta);
           }
         } else {
           // Trying to POP to a location with no index. We did not create
@@ -517,8 +517,8 @@ export function createBrowserHistory({
     }
   }
 
-  function go(n: number) {
-    globalHistory.go(n);
+  function go(delta: number) {
+    globalHistory.go(delta);
   }
 
   let history: BrowserHistory = {
@@ -607,18 +607,18 @@ export function createHashHistory({
 
       if (blockers.length) {
         if (nextIndex != null) {
-          let n = index - nextIndex;
-          if (n) {
+          let delta = index - nextIndex;
+          if (delta) {
             // Revert the POP
             blockedPopTx = {
               action: nextAction,
               location: nextLocation,
               retry() {
-                go(n * -1);
+                go(delta * -1);
               }
             };
 
-            go(n);
+            go(delta);
           }
         } else {
           // Trying to POP to a location with no index. We did not create
@@ -771,8 +771,8 @@ export function createHashHistory({
     }
   }
 
-  function go(n: number) {
-    globalHistory.go(n);
+  function go(delta: number) {
+    globalHistory.go(delta);
   }
 
   let history: HashHistory = {
@@ -932,12 +932,12 @@ export function createMemoryHistory({
     }
   }
 
-  function go(n: number) {
-    let nextIndex = clamp(index + n, 0, entries.length - 1);
+  function go(delta: number) {
+    let nextIndex = clamp(index + delta, 0, entries.length - 1);
     let nextAction = Action.Pop;
     let nextLocation = entries[nextIndex];
     function retry() {
-      go(n);
+      go(delta);
     }
 
     if (allowTx(nextAction, nextLocation, retry)) {
