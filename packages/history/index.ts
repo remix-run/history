@@ -118,8 +118,9 @@ export interface LocationPieces<S extends State = State> extends PathPieces {
  * information about the URL path, as well as some state and a key. Analogous
  * to the web's window.location API, but much smaller.
  *
- * @typeParam S - The type for the state object (optional)
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/location
+ *
+ * @typeParam S - The type for the state object (optional)
  */
 export interface Location<S extends State = State> {
   /**
@@ -207,7 +208,9 @@ export interface Blocker<S extends State = State> {
 }
 
 /**
- * A URL path or an object that contains the pieces of a URL path.
+ * Describes a {@link Location} that is the destination of some navigation,
+ * either via {@link history.push | `history.push`} or {@link history.replace |
+ * `history.replace`}. May be either a URL or the pieces of a URL path.
  */
 export type To = Path | PathPieces;
 
@@ -216,8 +219,8 @@ export type To = Path | PathPieces;
  * source of truth for the current location, as well as provides a set of
  * methods that may be used to change it.
  *
- * It is analogous to the web's window.history object, but with a smaller, more
- * focused API.
+ * It is analogous to the web's `window.history` object, but with a smaller,
+ * more focused API.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/history
  */
@@ -325,17 +328,13 @@ export interface MemoryHistory<S extends State = State> extends History<S> {
   index: number;
 }
 
-type HistoryState = {
-  usr: State;
-  key?: string;
-  idx: number;
-};
+/**
+ * Describes an entry in the history stack. Useful when providing entries to
+ * {@link createMemoryHistory} via its `initialEntries` option.
+ */
+export type InitialEntry = Path | LocationPieces;
 
-const BeforeUnloadEventType = 'beforeunload';
-const HashChangeEventType = 'hashchange';
-const PopStateEventType = 'popstate';
-
-const readOnly: <T>(obj: T) => T = __DEV__
+const readOnly: <T extends unknown>(obj: T) => T = __DEV__
   ? obj => Object.freeze(obj)
   : obj => obj;
 
@@ -345,6 +344,11 @@ function warning(cond: boolean, message: string) {
     if (typeof console !== 'undefined') console.warn(message);
 
     try {
+      // Welcome to debugging history!
+      //
+      // This error is thrown as a convenience so you can more easily
+      // find the source for a warning that appears in the console by
+      // enabling "pause on exceptions" in your JavaScript debugger.
       throw new Error(message);
       // eslint-disable-next-line no-empty
     } catch (e) {}
@@ -354,6 +358,16 @@ function warning(cond: boolean, message: string) {
 ////////////////////////////////////////////////////////////////////////////////
 // BROWSER
 ////////////////////////////////////////////////////////////////////////////////
+
+type HistoryState = {
+  usr: State;
+  key?: string;
+  idx: number;
+};
+
+const BeforeUnloadEventType = 'beforeunload';
+const HashChangeEventType = 'hashchange';
+const PopStateEventType = 'popstate';
 
 /**
  * Browser history stores the location in regular URLs. This is the standard for
@@ -822,8 +836,6 @@ export function createHashHistory({
 // MEMORY
 ////////////////////////////////////////////////////////////////////////////////
 
-export type InitialEntry = Path | LocationPieces;
-
 /**
  * Memory history stores the current location in memory. It is designed for use
  * in stateful non-browser environments like headless tests (in node.js) and
@@ -977,13 +989,13 @@ export function createMemoryHistory({
   return history;
 }
 
-function clamp(n: number, lowerBound: number, upperBound: number) {
-  return Math.min(Math.max(n, lowerBound), upperBound);
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // UTILS
 ////////////////////////////////////////////////////////////////////////////////
+
+function clamp(n: number, lowerBound: number, upperBound: number) {
+  return Math.min(Math.max(n, lowerBound), upperBound);
+}
 
 function promptBeforeUnload(event: BeforeUnloadEvent) {
   // Cancel the event.
