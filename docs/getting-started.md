@@ -21,9 +21,13 @@ environment:
   non-browser environments, like [React
   Native](https://facebook.github.io/react-native/) or tests
 
-The main bundle exports one method for each environment: `createBrowserHistory`
-for browsers, `createHashHistory` for using hash history in browsers,  and
-`createMemoryHistory` for creating an in-memory history.
+The main bundle exports one method for each environment:
+[`createBrowserHistory`](api-reference.md#createbrowserhistory-window-window-)
+for browsers,
+[`createHashHistory`](api-reference.md#createhashhistory-window-window-) for
+using hash history in browsers,  and
+[`createMemoryHistory`](api-reference.md#creatememoryhistory-initialentries-initialentry-initialindex-number-)
+for creating an in-memory history.
 
 In addition to the main bundle, the library also includes `history/browser` and
 `history/hash` bundles that export singletons you can use to quickly get a
@@ -36,7 +40,11 @@ history instance for [the current
 Basic usage looks like this:
 
 ```js
-// Import the browser history singleton instance.
+// Create your own history instance.
+import { createBrowserHistory } from 'history';
+let history = createBrowserHistory();
+
+// ... or just import the browser history singleton instance.
 import history from 'history/browser';
 
 // Alternatively, if you're using hash history import
@@ -87,8 +95,8 @@ let history = createBrowserHistory({
 
 Each `history` object has the following properties:
 
-- `history.location` - The current location (see below)
-- `history.action` - The current navigation action (see below)
+- [`history.location`](api-reference.md#historylocation) - The current location (see below)
+- [`history.action`](api-reference.md#historyaction) - The current navigation action (see below)
 
 Additionally, memory history provides `history.index` that tells you the current
 index in the history stack.
@@ -106,26 +114,24 @@ history.listen(({ action, location }) => {
 });
 ```
 
-The `location` object implements a subset of [the `window.location`
+The [`location`](api-reference.md#location) object implements a subset of [the
+`window.location`
 interface](https://developer.mozilla.org/en-US/docs/Web/API/Location),
 including:
 
-- `location.pathname` - The path of the URL
-- `location.search` - The URL query string
-- `location.hash` - The URL hash fragment
+- [`location.pathname`](api-reference.md#locationpathname) - The path of the URL
+- [`location.search`](api-reference.md#locationsearch) - The URL query string
+- [`location.hash`](api-reference.md#locationhash) - The URL hash fragment
+- [`location.state`](api-reference.md#locationstate) - Some extra state for this
+  location that does not reside in the URL (may be `null`)
+- [`location.key`](api-reference.md#locationkey) - A unique string representing this location
 
-Locations may also have the following properties:
+The [`action`](api-reference.md#action) is one of `Action.Push`, `Action.Replace`,
+or `Action.Pop` depending on how the user got to the current location.
 
-- `location.state` - Some extra state for this location that does not reside in 
-  the URL
-- `location.key` - A unique string representing this location
-
-The `action` is one of `PUSH`, `REPLACE`, or `POP` depending on how the user got
-to the current URL.
-
-- A `PUSH` means one more entry was added to the history stack
-- A `REPLACE` means the current entry in the stack was replaced
-- A `POP` means we went to some other location already in the stack
+- `Action.Push` means one more entry was added to the history stack
+- `Action.Replace` means the current entry in the stack was replaced
+- `Action.Pop` means we went to some other location already in the stack
 
 ## Cleaning up
 

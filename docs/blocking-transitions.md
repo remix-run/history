@@ -1,6 +1,8 @@
 # Blocking Transitions
 
-`history` lets you block navigation away from the current page. For example, you
+`history` lets you block navigation away from the current page using the
+[`history.block(blocker:
+Blocker)`](api-reference.md#historyblockblocker-blocker) API. For example, you
 can make sure the user knows that if they leave the current page they will lose
 some unsaved changes they've made.
 
@@ -22,8 +24,9 @@ let unblock = history.block(tx => {
 });
 ```
 
-This example uses `window.confirm`, but you could also use your own custom
-confirm dialog if you'd rather.
+This example uses
+[`window.confirm`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm),
+but you could also use your own custom confirm dialog if you'd prefer.
 
 ## Caveats
 

@@ -145,13 +145,19 @@ See [the Navigation guide](navigation.md) for more information.
 
 Navigates back/forward by `delta` entries in the stack.
 
+See [the Navigation guide](navigation.md) for more information.
+
 ### `history.back()`
 
 Goes back one entry in the history stack. Alias for `history.go(-1)`.
 
+See [the Navigation guide](navigation.md) for more information.
+
 ### `history.forward()`
 
 Goes forward one entry in the history stack. Alias for `history.go(1)`.
+
+See [the Navigation guide](navigation.md) for more information.
 
 ### `history.listen(listener: Listener)`
 
@@ -268,8 +274,12 @@ An "action" represents a type of change that occurred in the history stack.
 ## To
 
 A "to" value represents a destination location, but doesn't contain all the
-information that a normal [`location`](#location) object does.
+information that a normal [`location`](#location) object does. It is primarily
+used as the first argument to [`history.push`](#historypushto-to-state-state)
+and [`history.replace`](#historyreplaceto-to-state-state).
 
 <pre>
 type To = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L32">Path</a> | <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L72">PathPieces</a>;
 </pre>
+
+See [the Navigation guide](navigation.md) for more information.
