@@ -144,3 +144,29 @@ describe('a memory history', () => {
     });
   });
 });
+
+describe('a memory history with some initial entries', () => {
+  it('clamps the initial index to a valid value', () => {
+    let history = createMemoryHistory({
+      initialEntries: ['/one', '/two', '/three'],
+      initialIndex: 3 // invalid
+    });
+
+    expect(history.index).toBe(2);
+  });
+
+  it('starts at the last entry by default', () => {
+    let history = createMemoryHistory({
+      initialEntries: ['/one', '/two', '/three']
+    });
+
+    expect(history.index).toBe(2);
+    expect(history.location).toMatchObject({
+      pathname: '/three',
+      search: '',
+      hash: '',
+      state: null,
+      key: expect.any(String)
+    });
+  });
+});

@@ -831,7 +831,7 @@ export type InitialEntry = Path | LocationPieces;
  */
 export function createMemoryHistory({
   initialEntries = ['/'],
-  initialIndex = 0
+  initialIndex
 }: {
   initialEntries?: InitialEntry[];
   initialIndex?: number;
@@ -855,7 +855,11 @@ export function createMemoryHistory({
 
     return location;
   });
-  let index = clamp(initialIndex, 0, entries.length - 1);
+  let index = clamp(
+    initialIndex == null ? entries.length - 1 : initialIndex,
+    0,
+    entries.length - 1
+  );
 
   let action = Action.Pop;
   let location = entries[index];
