@@ -1,17 +1,33 @@
 # API Reference
 
-This document is a comprehensive API reference for [the "history" JavaScript
+This document is an API reference for [the history JavaScript
 library](https://github.com/ReactTraining/history).
 
-Although there are several interfaces in the history library, the main
-interfaces are:
+Although there are several APIs in the history library, the main interfaces are:
 
 - The create* methods:
-  - [`createBrowserHistory`](#createbrowserhistory-window-window-)
-  - [`createHashHistory`](#createhashhistory-window-window-)
-  - [`createMemoryHistory`](#creatememoryhistory-initialentries-initialentry-initialindex-number-)
+  - [`createBrowserHistory({ window?: Window })`](#createbrowserhistory-window-window-)
+  - [`createHashHistory({ window?: Window })`](#createhashhistory-window-window-)
+  - [`createMemoryHistory({ initialEntries?: InitialEntry[], initialIndex?: number })`](#creatememoryhistory-initialentries-initialentry-initialindex-number-)
 - The [`History`](#history) interface
+  - [`history.action`](#historyaction)
+  - [`history.location`](#historylocation)
+  - [`history.createHref(to: To)`](#historycreatehrefto-to)
+  - [`history.push(to: To, state?: State)`](#historypushto-to-state-state)
+  - [`history.replace(to: To, state?: State)`](#historyreplaceto-to-state-state)
+  - [`history.go(delta: number)`](#historygodelta-number)
+  - [`history.back()`](#historyback)
+  - [`history.forward()`](#historyforward)
+  - [`history.listen(listener: Listener)`](#historylistenlistener-listener)
+  - [`history.block(blocker: Blocker)`](#historyblockblocker-blocker)
 - The [`Location`](#location) interface
+  - [`location.pathname`](#locationpathname)
+  - [`location.search`](#locationsearch)
+  - [`location.hash`](#locationhash)
+  - [`location.state`](#locationstate)
+  - [`location.key`](#locationkey)
+- The [`Action`](#action) enum
+- The [`To`](#to) type alias
 
 ## `createBrowserHistory({ window?: Window })`
 
@@ -75,7 +91,7 @@ interface History&lt;S extends <a href="https://github.com/ReactTraining/history
   <a href="#historycreatehrefto-to">createHref</a>(to: <a href="#to">To</a>): string;
   <a href="#historypushto-to-state-state">push</a>(to: <a href="#to">To</a>, state?: S): void;
   <a href="#historyreplaceto-to-state-state">replace</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#historygodelta">go</a>(n: number): void;
+  <a href="#historygodelta-number">go</a>(n: number): void;
   <a href="#historyback">back</a>(): void;
   <a href="#historyforward">forward</a>(): void;
   <a href="#historylistenlistener-listener">listen</a>(listener: Listener&lt;S&gt;): () => void;
@@ -174,9 +190,9 @@ information.
 
 ## Location
 
-The word "location" in React Router refers to a particular entry in the history
-stack, usually analogous to a "page" or "screen" in your app. As the user clicks
-on links and moves around the app, the location changes.
+A `location` is a particular entry in the history stack, usually analogous to a
+"page" or "screen" in your app. As the user clicks on links and moves around the
+app, the current location changes.
 
 A `location` object has the following interface:
 

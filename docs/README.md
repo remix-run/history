@@ -17,4 +17,4 @@ You may also be interested in reading one of the following guides:
 - [Navigation](navigation.md)
 - [Blocking Transitions](blocking-transitions.md)
 
-A [comprehensive API Reference](api-reference.md) is also available.
+An [API Reference](api-reference.md) is also available.
