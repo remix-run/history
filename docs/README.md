@@ -16,3 +16,5 @@ You may also be interested in reading one of the following guides:
 - [Installation](installation.md)
 - [Navigation](navigation.md)
 - [Blocking Transitions](blocking-transitions.md)
+
+A [comprehensive API Reference](api-reference.md) is also available.
