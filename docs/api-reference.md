@@ -28,6 +28,7 @@ Although there are several APIs in the history library, the main interfaces are:
   - [`location.key`](#location.key)
 - The [`Action`](#action) enum
 - The [`To`](#to) type alias
+- The [`State`](#state) type alias
 
 <a name="createbrowserhistory"></a>
 ## `createBrowserHistory({ window?: Window })`
@@ -88,7 +89,7 @@ instance but with a smaller API. `history` objects maintain a "stack" of
 A `history` object has the following interface:
 
 <pre>
-interface History&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
+interface History&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
   readonly <a href="#history.action">action</a>: <a href="#action">Action</a>;
   readonly <a href="#history.location">location</a>: <a href="#location">Location</a>&lt;S&gt;;
   <a href="#history.createhref">createHref</a>(to: <a href="#to">To</a>): string;
@@ -102,23 +103,23 @@ interface History&lt;S extends <a href="https://github.com/ReactTraining/history
 }
 
 <a name="listener"></a>
-interface Listener&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
+interface Listener&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
   (update: <a href="#update">Update</a>&lt;S&gt;): void;
 }
 
 <a name="update"></a>
-interface Update&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
+interface Update&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
   action: <a href="#action">Action</a>;
   location: <a href="#location">Location</a>&lt;S&gt;;
 }
 
 <a name="blocker"></a>
-interface Blocker&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
+interface Blocker&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
   (tx: <a href="#transition">Transition</a>&lt;S&gt;): void;
 }
 
 <a name="transition"></a>
-interface Transition&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; extends Update&lt;S&gt; {
+interface Transition&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; extends Update&lt;S&gt; {
   retry(): void;
 }
 </pre>
@@ -224,7 +225,7 @@ interface Location {
   <a href="#location.pathname" title="location.pathname">pathname</a>: string;
   <a href="#location.search" title="location.search">search</a>: string;
   <a href="#location.hash" title="location.hash">hash</a>: string;
-  <a href="#location.state" title="location.state">state</a>: object | null;
+  <a href="#location.state" title="location.state">state</a>: <a href="#state">State</a>;
   <a href="#location.key" title="location.key">key</a>: string;
 }
 </pre>
@@ -259,7 +260,7 @@ See also
 <a name="location.state"></a>
 ### `location.state`
 
-The `location.state` property contains a user-supplied object of arbitrary data
+The `location.state` property contains a user-supplied [`State`](#state) object
 that is associated with this location. This can be a useful place to store any
 information you do not want to put in the URL, e.g. session-specific data.
 
@@ -280,8 +281,10 @@ network or device storage API.
 
 ## Action
 
-An "action" represents a type of change that occurred in the history stack.
-`Action` is an `enum` with three members:
+An
+[`Action`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L4)
+represents a type of change that occurred in the history stack. `Action` is an
+`enum` with three members:
 
 - <a name="action.pop"></a> `Action.Pop` - A change to an arbitrary index in the
   stack, such as a back or forward navigation. This does not describe the
@@ -293,15 +296,25 @@ An "action" represents a type of change that occurred in the history stack.
 - <a name="action.replace"></a> `Action.Replace` - Indicates the entry at the
   current index in the history stack being replaced by a new one.
 
+See [the Getting Started guide](getting-started.md) for more information.
+
 ## To
 
-A "to" value represents a destination location, but doesn't contain all the
-information that a normal [`location`](#location) object does. It is primarily
-used as the first argument to [`history.push`](#history.push) and
+A
+[`To`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L212)
+value represents a destination location, but doesn't contain all the information
+that a normal [`location`](#location) object does. It is primarily used as the
+first argument to [`history.push`](#history.push) and
 [`history.replace`](#history.replace).
 
-<pre>
-type To = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L32">Path</a> | <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L72">PathPieces</a>;
-</pre>
+See [the Navigation guide](navigation.md) for more information.
+
+## State
+
+A
+[`State`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61)
+value is an object of extra information that is associated with a
+[`Location`](#location) but that does not appear in the URL. This value is
+always associated with that location.
 
 See [the Navigation guide](navigation.md) for more information.
