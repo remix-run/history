@@ -3,6 +3,9 @@
 The history library provides history tracking and navigation primitives for
 JavaScript applications that run in browsers and other stateful environments.
 
+If you haven't yet, please take a second to read through [the Installation
+guide](installation.md) to get the library installed and running on your system.
+
 We provide 3 different methods for working with history, depending on your
 environment:
 
