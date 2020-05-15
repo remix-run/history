@@ -1,10 +1,9 @@
 # Blocking Transitions
 
 `history` lets you block navigation away from the current page using the
-[`history.block(blocker:
-Blocker)`](api-reference.md#historyblockblocker-blocker) API. For example, you
-can make sure the user knows that if they leave the current page they will lose
-some unsaved changes they've made.
+[`history.block(blocker: Blocker)`](api-reference.md#history.block) API. For
+example, you can make sure the user knows that if they leave the current page
+they will lose some unsaved changes they've made.
 
 ```js
 // Block navigation and register a callback that

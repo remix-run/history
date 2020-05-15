@@ -22,11 +22,9 @@ environment:
   Native](https://facebook.github.io/react-native/) or tests
 
 The main bundle exports one method for each environment:
-[`createBrowserHistory`](api-reference.md#createbrowserhistory-window-window-)
-for browsers,
-[`createHashHistory`](api-reference.md#createhashhistory-window-window-) for
-using hash history in browsers,  and
-[`createMemoryHistory`](api-reference.md#creatememoryhistory-initialentries-initialentry-initialindex-number-)
+[`createBrowserHistory`](api-reference.md#createbrowserhistory) for browsers,
+[`createHashHistory`](api-reference.md#createhashhistory) for using hash history
+in browsers,  and [`createMemoryHistory`](api-reference.md#creatememoryhistory)
 for creating an in-memory history.
 
 In addition to the main bundle, the library also includes `history/browser` and
@@ -95,8 +93,8 @@ let history = createBrowserHistory({
 
 Each `history` object has the following properties:
 
-- [`history.location`](api-reference.md#historylocation) - The current location (see below)
-- [`history.action`](api-reference.md#historyaction) - The current navigation action (see below)
+- [`history.location`](api-reference.md#history.location) - The current location (see below)
+- [`history.action`](api-reference.md#history.action) - The current navigation action (see below)
 
 Additionally, memory history provides `history.index` that tells you the current
 index in the history stack.
@@ -119,12 +117,12 @@ The [`location`](api-reference.md#location) object implements a subset of [the
 interface](https://developer.mozilla.org/en-US/docs/Web/API/Location),
 including:
 
-- [`location.pathname`](api-reference.md#locationpathname) - The path of the URL
-- [`location.search`](api-reference.md#locationsearch) - The URL query string
-- [`location.hash`](api-reference.md#locationhash) - The URL hash fragment
-- [`location.state`](api-reference.md#locationstate) - Some extra state for this
+- [`location.pathname`](api-reference.md#location.pathname) - The path of the URL
+- [`location.search`](api-reference.md#location.search) - The URL query string
+- [`location.hash`](api-reference.md#location.hash) - The URL hash fragment
+- [`location.state`](api-reference.md#location.state) - Some extra state for this
   location that does not reside in the URL (may be `null`)
-- [`location.key`](api-reference.md#locationkey) - A unique string representing this location
+- [`location.key`](api-reference.md#location.key) - A unique string representing this location
 
 The [`action`](api-reference.md#action) is one of `Action.Push`, `Action.Replace`,
 or `Action.Pop` depending on how the user got to the current location.

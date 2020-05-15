@@ -6,29 +6,30 @@ library](https://github.com/ReactTraining/history).
 Although there are several APIs in the history library, the main interfaces are:
 
 - The create* methods:
-  - [`createBrowserHistory({ window?: Window })`](#createbrowserhistory-window-window-)
-  - [`createHashHistory({ window?: Window })`](#createhashhistory-window-window-)
-  - [`createMemoryHistory({ initialEntries?: InitialEntry[], initialIndex?: number })`](#creatememoryhistory-initialentries-initialentry-initialindex-number-)
+  - [`createBrowserHistory({ window?: Window })`](#createbrowserhistory)
+  - [`createHashHistory({ window?: Window })`](#createhashhistory)
+  - [`createMemoryHistory({ initialEntries?: InitialEntry[], initialIndex?: number })`](#creatememoryhistory)
 - The [`History`](#history) interface
-  - [`history.action`](#historyaction)
-  - [`history.location`](#historylocation)
-  - [`history.createHref(to: To)`](#historycreatehrefto-to)
-  - [`history.push(to: To, state?: State)`](#historypushto-to-state-state)
-  - [`history.replace(to: To, state?: State)`](#historyreplaceto-to-state-state)
-  - [`history.go(delta: number)`](#historygodelta-number)
-  - [`history.back()`](#historyback)
-  - [`history.forward()`](#historyforward)
-  - [`history.listen(listener: Listener)`](#historylistenlistener-listener)
-  - [`history.block(blocker: Blocker)`](#historyblockblocker-blocker)
+  - [`history.action`](#history.action)
+  - [`history.location`](#history.location)
+  - [`history.createHref(to: To)`](#history.createhref)
+  - [`history.push(to: To, state?: State)`](#history.push)
+  - [`history.replace(to: To, state?: State)`](#history.replace)
+  - [`history.go(delta: number)`](#history.go)
+  - [`history.back()`](#history.back)
+  - [`history.forward()`](#history.forward)
+  - [`history.listen(listener: Listener)`](#history.listen)
+  - [`history.block(blocker: Blocker)`](#history.block)
 - The [`Location`](#location) interface
-  - [`location.pathname`](#locationpathname)
-  - [`location.search`](#locationsearch)
-  - [`location.hash`](#locationhash)
-  - [`location.state`](#locationstate)
-  - [`location.key`](#locationkey)
+  - [`location.pathname`](#location.pathname)
+  - [`location.search`](#location.search)
+  - [`location.hash`](#location.hash)
+  - [`location.state`](#location.state)
+  - [`location.key`](#location.key)
 - The [`Action`](#action) enum
 - The [`To`](#to) type alias
 
+<a name="createbrowserhistory"></a>
 ## `createBrowserHistory({ window?: Window })`
 
 Returns a [`BrowserHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L306) instance for the given `window`, which defaults to
@@ -42,6 +43,7 @@ let history = createBrowserHistory();
 
 See [the Getting Started guide](getting-started.md) for more information.
 
+<a name="createhashhistory"></a>
 ## `createHashHistory({ window?: Window })`
 
 Returns a [`HashHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L317) instance for the given `window`, which defaults to [the
@@ -55,6 +57,7 @@ let history = createHashHistory();
 
 See [the Getting Started guide](getting-started.md) for more information.
 
+<a name="creatememoryhistory"></a>
 ## `createMemoryHistory({ initialEntries?: InitialEntry[], initialIndex?: number })`
 
 Returns a [`MemoryHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L324) instance.
@@ -86,79 +89,92 @@ A `history` object has the following interface:
 
 <pre>
 interface History&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
-  readonly <a href="#historyaction">action</a>: <a href="#action">Action</a>;
-  readonly <a href="#historylocation">location</a>: <a href="#location">Location</a>&lt;S&gt;;
-  <a href="#historycreatehrefto-to">createHref</a>(to: <a href="#to">To</a>): string;
-  <a href="#historypushto-to-state-state">push</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#historyreplaceto-to-state-state">replace</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#historygodelta-number">go</a>(n: number): void;
-  <a href="#historyback">back</a>(): void;
-  <a href="#historyforward">forward</a>(): void;
-  <a href="#historylistenlistener-listener">listen</a>(listener: Listener&lt;S&gt;): () => void;
-  <a href="#historyblockblocker-blocker">block</a>(blocker: Blocker&lt;S&gt;): () => void;
+  readonly <a href="#history.action">action</a>: <a href="#action">Action</a>;
+  readonly <a href="#history.location">location</a>: <a href="#location">Location</a>&lt;S&gt;;
+  <a href="#history.createhref">createHref</a>(to: <a href="#to">To</a>): string;
+  <a href="#history.push">push</a>(to: <a href="#to">To</a>, state?: S): void;
+  <a href="#history.replace">replace</a>(to: <a href="#to">To</a>, state?: S): void;
+  <a href="#history.go">go</a>(n: number): void;
+  <a href="#history.back">back</a>(): void;
+  <a href="#history.forward">forward</a>(): void;
+  <a href="#history.listen">listen</a>(listener: <a href="#listener">Listener</a>&lt;S&gt;): () => void;
+  <a href="#history.block">block</a>(blocker: <a href="#blocker">Blocker</a>&lt;S&gt;): () => void;
 }
 
+<a name="listener"></a>
 interface Listener&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
-  (update: Update&lt;S&gt;): void;
+  (update: <a href="#update">Update</a>&lt;S&gt;): void;
 }
 
+<a name="update"></a>
 interface Update&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
   action: <a href="#action">Action</a>;
   location: <a href="#location">Location</a>&lt;S&gt;;
 }
 
+<a name="blocker"></a>
 interface Blocker&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; {
-  (tx: Transition&lt;S&gt;): void;
+  (tx: <a href="#transition">Transition</a>&lt;S&gt;): void;
 }
 
+<a name="transition"></a>
 interface Transition&lt;S extends <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a> = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61">State</a>&gt; extends Update&lt;S&gt; {
   retry(): void;
 }
 </pre>
 
+<a name="history.action"></a>
 ### `history.action`
 
 The current (most recent) [`Action`](#action) that modified the history stack.
 
+<a name="history.location"></a>
 ### `history.location`
 
 The current [`Location`](#location).
 
+<a name="history.createhref"></a>
 ### `history.createHref(to: To)`
 
 Returns a string suitable for use as an `<a href>` value that will navigate to
 the given destination.
 
+<a name="history.push"></a>
 ### `history.push(to: To, state?: State)`
 
 Pushes a new entry onto the stack.
 
 See [the Navigation guide](navigation.md) for more information.
 
+<a name="history.replace"></a>
 ### `history.replace(to: To, state?: State)`
 
 Replaces the current entry in the stack with a new one.
 
 See [the Navigation guide](navigation.md) for more information.
 
+<a name="history.go"></a>
 ### `history.go(delta: number)`
 
 Navigates back/forward by `delta` entries in the stack.
 
 See [the Navigation guide](navigation.md) for more information.
 
+<a name="history.back"></a>
 ### `history.back()`
 
 Goes back one entry in the history stack. Alias for `history.go(-1)`.
 
 See [the Navigation guide](navigation.md) for more information.
 
+<a name="history.forward"></a>
 ### `history.forward()`
 
 Goes forward one entry in the history stack. Alias for `history.go(1)`.
 
 See [the Navigation guide](navigation.md) for more information.
 
+<a name="history.listen"></a>
 ### `history.listen(listener: Listener)`
 
 Starts listening for location changes and calls the given callback when it does.
@@ -176,6 +192,7 @@ unlisten();
 See [the Getting Started guide](getting-started.md#listening) for more
 information.
 
+<a name="history.block"></a>
 ### `history.block(blocker: Blocker)`
 
 Prevents changes to the history stack from happening. This is useful when you
@@ -204,14 +221,15 @@ A `location` object has the following interface:
 
 <pre>
 interface Location {
-  <a href="#locationpathname" title="location.pathname">pathname</a>: string;
-  <a href="#locationsearch" title="location.search">search</a>: string;
-  <a href="#locationhash" title="location.hash">hash</a>: string;
-  <a href="#locationstate" title="location.state">state</a>: object | null;
-  <a href="#locationkey" title="location.key">key</a>: string;
+  <a href="#location.pathname" title="location.pathname">pathname</a>: string;
+  <a href="#location.search" title="location.search">search</a>: string;
+  <a href="#location.hash" title="location.hash">hash</a>: string;
+  <a href="#location.state" title="location.state">state</a>: object | null;
+  <a href="#location.key" title="location.key">key</a>: string;
 }
 </pre>
 
+<a name="location.pathname"></a>
 ### `location.pathname`
 
 The `location.pathname` property contains an initial `/` followed by the
@@ -219,6 +237,7 @@ remainder of the URL up to the `?`.
 
 See also [`URL.pathname`](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname).
 
+<a name="location.search"></a>
 ### `location.search`
 
 The `location.search` property contains an initial `?` followed by the
@@ -227,6 +246,7 @@ may be the empty string (i.e. `''`).
 
 See also [`URL.search`](https://developer.mozilla.org/en-US/docs/Web/API/URL/search).
 
+<a name="location.hash"></a>
 ### `location.hash`
 
 The `location.hash` property contains an initial `#` followed by fragment
@@ -236,6 +256,7 @@ empty string (i.e. `''`).
 See also
 [`URL.hash`](https://developer.mozilla.org/en-US/docs/Web/API/URL/hash).
 
+<a name="location.state"></a>
 ### `location.state`
 
 The `location.state` property contains a user-supplied object of arbitrary data
@@ -246,6 +267,7 @@ Note: In web browsers, this state is managed using the browser's built-in
 `pushState`, `replaceState`, and `popstate` APIs. See also
 [`History.state`](https://developer.mozilla.org/en-US/docs/Web/API/History/state).
 
+<a name="location.key"></a>
 ### `location.key`
 
 The `location.key` property is a unique string associated with this location. On
@@ -261,22 +283,22 @@ network or device storage API.
 An "action" represents a type of change that occurred in the history stack.
 `Action` is an `enum` with three members:
 
-- `Action.Pop` - A change to an arbitrary index in the stack, such as a back or
-  forward navigation. This does not describe the direction of the navigation,
-  only that the index changed. This is the default action for newly created
-  history objects.
-- `Action.Push` - Indicates a new entry being added to the history stack, such
-  as when a link is clicked and a new page loads. When this happens, all
-  subsequent entries in the stack are lost.
-- `Action.Replace` - Indicates the entry at the current index in the history
-  stack being replaced by a new one.
+- <a name="action.pop"></a> `Action.Pop` - A change to an arbitrary index in the
+  stack, such as a back or forward navigation. This does not describe the
+  direction of the navigation, only that the index changed. This is the default
+  action for newly created history objects.
+- <a name="action.push"></a> `Action.Push` - Indicates a new entry being added
+  to the history stack, such as when a link is clicked and a new page loads.
+  When this happens, all subsequent entries in the stack are lost.
+- <a name="action.replace"></a> `Action.Replace` - Indicates the entry at the
+  current index in the history stack being replaced by a new one.
 
 ## To
 
 A "to" value represents a destination location, but doesn't contain all the
 information that a normal [`location`](#location) object does. It is primarily
-used as the first argument to [`history.push`](#historypushto-to-state-state)
-and [`history.replace`](#historyreplaceto-to-state-state).
+used as the first argument to [`history.push`](#history.push) and
+[`history.replace`](#history.replace).
 
 <pre>
 type To = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L32">Path</a> | <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L72">PathPieces</a>;

@@ -3,11 +3,11 @@
 `history` objects may be used to programmatically change the current location
 using the following methods:
 
-- [`history.push(to: To, state?: State)`](api-reference.md#historypushto-to-state-state)
-- [`history.replace(to: To, state?: State)`](api-reference.md#historyreplaceto-to-state-state)
-- [`history.go(delta: number)`](api-reference.md#historygodelta-number)
-- [`history.back()`](api-reference.md#historyback)
-- [`history.forward()`](api-reference.md#historyforward)
+- [`history.push(to: To, state?: State)`](api-reference.md#history.push)
+- [`history.replace(to: To, state?: State)`](api-reference.md#history.replace)
+- [`history.go(delta: number)`](api-reference.md#history.go)
+- [`history.back()`](api-reference.md#history.back)
+- [`history.forward()`](api-reference.md#history.forward)
 
 An example:
 
