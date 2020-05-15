@@ -1,7 +1,10 @@
-# API Reference
+# history API Reference
 
-This document is an API reference for [the history JavaScript
-library](https://github.com/ReactTraining/history).
+This is the API reference for [the history JavaScript
+library](https://github.com/ReactTraining/history). The source code is
+TypeScript, but it is compiled to JavaScript before publishing. The function
+signatures in this reference all include their TypeScript type annotations for
+conciseness and clarity.
 
 Although there are several APIs in the history library, the main interfaces are:
 
