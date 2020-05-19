@@ -61,18 +61,18 @@ function validateSegmentsCanBeDecoded(pathname){
   
   for(var i = 0; i < segments.length; ++i) {
     try {
-  	  decodeURIComponent(segments[i]);
+      decodeURIComponent(segments[i]);
     } catch (e) {
-  	  if (e instanceof URIError) {
-  	    throw new URIError(
-		  'Pathname "' +
-  		  location.pathname +
-  		  '" has segment(s) that cannot be decoded. ' +
-  		  'This is likely caused by an invalid percent-encoding.'
-  	    );
-  	  } else {
-  	    throw e;
-  	  }
+      if (e instanceof URIError) {
+        throw new URIError(
+          'Pathname "' +
+          pathname +
+          '" has segment(s) that cannot be decoded. ' +
+          'This is likely caused by an invalid percent-encoding.'
+        );
+      } else {
+        throw e;
+      }
     }
   }
 }
