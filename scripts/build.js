@@ -1,10 +1,9 @@
-const execSync = require('child_process').execSync;
 const path = require('path');
+const execSync = require('child_process').execSync;
 
-function exec(cmd) {
-  execSync(cmd, { env: process.env, stdio: 'inherit' });
-}
+let config = path.resolve(__dirname, 'rollup/history.config.js');
 
-let config = path.resolve(__dirname, 'builds/history.js');
-
-exec(`rollup -c ${config}`);
+execSync(`rollup -c ${config}`, {
+  env: process.env,
+  stdio: 'inherit'
+});

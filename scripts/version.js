@@ -12,17 +12,15 @@ function packageJson(packageName) {
   return path.join(rootDir, 'packages', packageName, 'package.json');
 }
 
-function exec(cmd) {
-  return execSync(cmd, { env: process.env }).toString();
-}
-
 function invariant(cond, message) {
   if (!cond) throw new Error(message);
 }
 
 function ensureCleanWorkingDirectory() {
-  let status = exec(`git status --porcelain`);
-  let lines = status.trim().split('\n');
+  let status = execSync(`git status --porcelain`)
+    .toString()
+    .trim();
+  let lines = status.split('\n');
   invariant(
     lines.every(line => line === '' || line.startsWith('?')),
     'Working directory is not clean. Please commit or stash your changes.'
@@ -98,8 +96,8 @@ async function run() {
     console.log(chalk.green(`  Updated history to version ${version}`));
 
     // 4. Commit and tag
-    exec(`git commit --all --message="Version ${version}"`);
-    exec(`git tag -a -m "Version ${version}" v${version}`);
+    execSync(`git commit --all --message="Version ${version}"`);
+    execSync(`git tag -a -m "Version ${version}" v${version}`);
     console.log(chalk.green(`  Committed and tagged version ${version}`));
   } catch (error) {
     console.log();

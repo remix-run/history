@@ -1,5 +1,5 @@
-const execSync = require('child_process').execSync;
 const path = require('path');
+const execSync = require('child_process').execSync;
 
 const jsonfile = require('jsonfile');
 const semver = require('semver');

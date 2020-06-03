@@ -1,10 +1,9 @@
-const execSync = require('child_process').execSync;
 const path = require('path');
-
-function exec(cmd) {
-  execSync(cmd, { env: process.env, stdio: 'inherit' });
-}
+const execSync = require('child_process').execSync;
 
 let karmaConfig = path.resolve(__dirname, 'karma.conf.js');
 
-exec(`karma start ${karmaConfig}`);
+execSync(`karma start ${karmaConfig}`, {
+  env: process.env,
+  stdio: 'inherit'
+});
