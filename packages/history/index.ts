@@ -328,12 +328,6 @@ export interface MemoryHistory<S extends State = State> extends History<S> {
   index: number;
 }
 
-/**
- * Describes an entry in the history stack. Useful when providing entries to
- * {@link createMemoryHistory} via its `initialEntries` option.
- */
-export type InitialEntry = Path | LocationPieces;
-
 const readOnly: <T extends unknown>(obj: T) => T = __DEV__
   ? obj => Object.freeze(obj)
   : obj => obj;
@@ -370,13 +364,19 @@ const HashChangeEventType = 'hashchange';
 const PopStateEventType = 'popstate';
 
 /**
+ * The type of options that are available in {@link createBrowserHistory}.
+ */
+export type BrowserHistoryOptions = { window?: Window };
+
+/**
  * Browser history stores the location in regular URLs. This is the standard for
  * most web apps, but it requires some configuration on the server to ensure you
  * serve the same app at multiple URLs.
  */
-export function createBrowserHistory({
-  window = document.defaultView as Window
-}: { window?: Window } = {}): BrowserHistory {
+export function createBrowserHistory(
+  options: BrowserHistoryOptions = {}
+): BrowserHistory {
+  let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
   function getIndexAndLocation(): [number, Location] {
@@ -583,14 +583,20 @@ export function createBrowserHistory({
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * The type of options that are available in {@link createHashHistory}.
+ */
+export type HashHistoryOptions = { window?: Window };
+
+/**
  * Hash history stores the location in window.location.hash. This makes it ideal
  * for situations where you don't want to send the location to the server for
  * some reason, either because you do cannot configure it or the URL space is
  * reserved for something else.
  */
-export function createHashHistory({
-  window = document.defaultView as Window
-}: { window?: Window } = {}): HashHistory {
+export function createHashHistory(
+  options: HashHistoryOptions = {}
+): HashHistory {
+  let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
   function getIndexAndLocation(): [number, Location] {
@@ -837,17 +843,28 @@ export function createHashHistory({
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Describes an entry in the history stack. Useful when providing entries to
+ * {@link createMemoryHistory} via its `initialEntries` option.
+ */
+export type InitialEntry = Path | LocationPieces;
+
+/**
+ * The type of options that are available in {@link createMemoryHistory}.
+ */
+export type MemoryHistoryOptions = {
+  initialEntries?: InitialEntry[];
+  initialIndex?: number;
+};
+
+/**
  * Memory history stores the current location in memory. It is designed for use
  * in stateful non-browser environments like headless tests (in node.js) and
  * React Native.
  */
-export function createMemoryHistory({
-  initialEntries = ['/'],
-  initialIndex
-}: {
-  initialEntries?: InitialEntry[];
-  initialIndex?: number;
-} = {}): MemoryHistory {
+export function createMemoryHistory(
+  options: MemoryHistoryOptions = {}
+): MemoryHistory {
+  let { initialEntries = ['/'], initialIndex } = options;
   let entries: Location[] = initialEntries.map(entry => {
     let location = readOnly<Location>({
       pathname: '/',
