@@ -94,8 +94,6 @@ export interface PathPieces {
 
 /**
  * The pieces of a Location object.
- *
- * @typeParam S - The type for the state object (optional)
  */
 export interface LocationPieces<S extends State = State> extends PathPieces {
   /**
@@ -119,8 +117,6 @@ export interface LocationPieces<S extends State = State> extends PathPieces {
  * to the web's window.location API, but much smaller.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/location
- *
- * @typeParam S - The type for the state object (optional)
  */
 export interface Location<S extends State = State> {
   /**
@@ -161,8 +157,6 @@ export interface Location<S extends State = State> {
 
 /**
  * A change to the current location.
- *
- * @typeParam S - The type for the location's state object (optional)
  */
 export interface Update<S extends State = State> {
   /**
@@ -178,8 +172,6 @@ export interface Update<S extends State = State> {
 
 /**
  * A function that receives notifications about location changes.
- *
- * @typeParam S - The type for the location's state object (optional)
  */
 export interface Listener<S extends State = State> {
   (update: Update<S>): void;
@@ -188,8 +180,6 @@ export interface Listener<S extends State = State> {
 /**
  * A change to the current location that was blocked. May be retried
  * after obtaining user confirmation.
- *
- * @typeParam S - The type for the location's state object (optional)
  */
 export interface Transition<S extends State = State> extends Update<S> {
   /**
@@ -200,8 +190,6 @@ export interface Transition<S extends State = State> extends Update<S> {
 
 /**
  * A function that receives transitions when navigation is blocked.
- *
- * @typeParam S - The type for the location's state object (optional)
  */
 export interface Blocker<S extends State = State> {
   (tx: Transition<S>): void;
