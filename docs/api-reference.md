@@ -1,41 +1,32 @@
-<a name="history-api-reference"></a>
+<a name="top"></a>
 
 # history API Reference
 
-This is the API reference for [the history JavaScript library](https://github.com/ReactTraining/history). The source code is TypeScript, but it is compiled to JavaScript before publishing. The function signatures in this reference all include their TypeScript type annotations for conciseness and clarity.
+This is the API reference for [the history JavaScript library](https://github.com/ReactTraining/history).
 
-Although there are several APIs in the history library, the main interfaces are:
+The [source code](https://github.com/ReactTraining/history/tree/dev/packages/history) for this library is written in TypeScript, but it is compiled to JavaScript before publishing. Some of the function signatures in this reference include their TypeScript type annotations, but you can always refer to the original source as well.
 
-- The create\* methods:
-  - [`createBrowserHistory({ window?: Window })`](#createbrowserhistory)
-  - [`createHashHistory({ window?: Window })`](#createhashhistory)
-  - [`createMemoryHistory({ initialEntries?: InitialEntry[], initialIndex?: number })`](#creatememoryhistory)
-- The [`History`](#history) interface
-  - [`history.action`](#history.action)
-  - [`history.location`](#history.location)
-  - [`history.createHref(to: To)`](#history.createhref)
-  - [`history.push(to: To, state?: State)`](#history.push)
-  - [`history.replace(to: To, state?: State)`](#history.replace)
-  - [`history.go(delta: number)`](#history.go)
-  - [`history.back()`](#history.back)
-  - [`history.forward()`](#history.forward)
-  - [`history.listen(listener: Listener)`](#history.listen)
-  - [`history.block(blocker: Blocker)`](#history.block)
-- The [`Location`](#location) interface
-  - [`location.pathname`](#location.pathname)
-  - [`location.search`](#location.search)
-  - [`location.hash`](#location.hash)
-  - [`location.state`](#location.state)
-  - [`location.key`](#location.key)
-- The [`Action`](#action) enum
-- The [`To`](#to) type alias
-- The [`State`](#state) type alias
+<a name="overview"></a>
 
-<a name="createbrowserhistory"></a>
+## Overview
 
-## `createBrowserHistory({ window?: Window })`
+This library includes three `history` object initializers for the different modes we support. They are:
 
-Returns a [`BrowserHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L306) instance for the given `window`, which defaults to [the `defaultView` of the current `document`](https://developer.mozilla.org/en-US/docs/Web/API/Document/defaultView).
+- [Browser history](#browserhistory)
+- [Hash history](#hashhistory)
+- [Memory history](#memoryhistory)
+
+<a name="browserhistory"></a>
+
+### Browser History
+
+A "browser history" object is designed to be run in modern web browsers that support the HTML5 history interface including `pushState`, `replaceState`, and the `popstate` event.
+
+```ts
+declare createBrowserHistory({ window?: Window }): BrowserHistory;
+```
+
+`createBrowserHistory` returns a [`BrowserHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L306) instance for the given `window`, which defaults to [the `defaultView` of the current `document`](https://developer.mozilla.org/en-US/docs/Web/API/Document/defaultView).
 
 ```ts
 import { createBrowserHistory } from 'history';
@@ -44,11 +35,17 @@ let history = createBrowserHistory();
 
 See [the Getting Started guide](getting-started.md) for more information.
 
-<a name="createhashhistory"></a>
+<a name="hashhistory"></a>
 
-## `createHashHistory({ window?: Window })`
+### Hash History
 
-Returns a [`HashHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L317) instance for the given `window`, which defaults to [the `defaultView` of the current `document`](https://developer.mozilla.org/en-US/docs/Web/API/Document/defaultView).
+A "hash history" object is designed to be run in modern web browsers that support the HTML5 history interface including `pushState`, `replaceState`, and the `popstate` event. The main difference between this and [browser history](#createbrowserhistory) is that a hash history stores the current location in the `hash` portion of the URL, which means that it is not ever sent to the server.
+
+```ts
+declare createHashHistory({ window?: Window }): HashHistory;
+```
+
+`createHashHistory` returns a [`HashHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L317) instance for the given `window`, which defaults to [the `defaultView` of the current `document`](https://developer.mozilla.org/en-US/docs/Web/API/Document/defaultView).
 
 ```ts
 import { createHashHistory } from 'history';
@@ -57,11 +54,22 @@ let history = createHashHistory();
 
 See [the Getting Started guide](getting-started.md) for more information.
 
-<a name="creatememoryhistory"></a>
+<a name="memoryhistory"></a>
 
-## `createMemoryHistory({ initialEntries?: InitialEntry[], initialIndex?: number })`
+### Memory History
 
-Returns a [`MemoryHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L324) instance.
+A "memory history" object stores all locations internally in an array. This makes it ideal as a reference implementation and for situations where you need complete control over the history stack, like tests and React Native.
+
+```ts
+declare createMemoryHistory({
+  initialEntries?: InitialEntry[],
+  initialIndex?: number
+}): MemoryHistory;
+
+type InitialEntry = Path | LocationPieces;
+```
+
+`createMemoryHistory` returns a [`MemoryHistory`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L324) instance.
 
 ```ts
 import { createMemoryHistory } from 'history';
@@ -69,10 +77,6 @@ let history = createMemoryHistory();
 ```
 
 You can provide initial entries to this history instance through the `initialEntries` property, which defaults to `['/']` (a single location at the root `/` URL). The `initialIndex` defaults to the index of the last item in `initialEntries`.
-
-<pre>
-type InitialEntry = <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L32">Path</a> | <a href="https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L100">LocationPieces</a>;
-</pre>
 
 See [the Getting Started guide](getting-started.md) for more information.
 
@@ -258,15 +262,9 @@ This can be useful in situations where you need to keep track of 2 different sta
 
 An [`Action`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L4) represents a type of change that occurred in the history stack. `Action` is an `enum` with three members:
 
-- <a name="action.pop"></a> `Action.Pop` - A change to an arbitrary index in the
-  stack, such as a back or forward navigation. This does not describe the
-  direction of the navigation, only that the index changed. This is the default
-  action for newly created history objects.
-- <a name="action.push"></a> `Action.Push` - Indicates a new entry being added
-  to the history stack, such as when a link is clicked and a new page loads.
-  When this happens, all subsequent entries in the stack are lost.
-- <a name="action.replace"></a> `Action.Replace` - Indicates the entry at the
-  current index in the history stack being replaced by a new one.
+- <a name="action.pop"></a> `Action.Pop` - A change to an arbitrary index in the stack, such as a back or forward navigation. This does not describe the direction of the navigation, only that the index changed. This is the default action for newly created history objects.
+- <a name="action.push"></a> `Action.Push` - Indicates a new entry being added to the history stack, such as when a link is clicked and a new page loads. When this happens, all subsequent entries in the stack are lost.
+- <a name="action.replace"></a> `Action.Replace` - Indicates the entry at the current index in the history stack being replaced by a new one.
 
 See [the Getting Started guide](getting-started.md) for more information.
 
@@ -285,3 +283,22 @@ See [the Navigation guide](navigation.md) for more information.
 A [`State`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61) value is an object of extra information that is associated with a [`Location`](#location) but that does not appear in the URL. This value is always associated with that location.
 
 See [the Navigation guide](navigation.md) for more information.
+
+<a name="creating-and-parsing-paths"></a>
+
+## Creating and Parsing Paths
+
+The library also exports `createPath` and `parsePath` methods that are useful when working with URL paths.
+
+```ts
+declare createPath(pieces: PathPieces): Path;
+declare parsePath(path: Path): PathPieces;
+
+type Path = string;
+
+interface PathPieces {
+  pathname?: string;
+  search?: string;
+  hash?: string;
+}
+```
