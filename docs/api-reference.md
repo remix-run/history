@@ -6,15 +6,17 @@ This is the API reference for [the history JavaScript library](https://github.co
 
 The [source code](https://github.com/ReactTraining/history/tree/dev/packages/history) for this library is written in TypeScript, but it is compiled to JavaScript before publishing. Some of the function signatures in this reference include their TypeScript type annotations, but you can always refer to the original source as well.
 
-<a name="overview"></a>
+<a name="setup"></a>
 
-## Overview
+## Setup
 
 This library includes three `history` object initializers for the different modes we support. They are:
 
-- [Browser history](#browserhistory)
-- [Hash history](#hashhistory)
-- [Memory history](#memoryhistory)
+- [Browser history](#browserhistory) - for building web apps
+- [Hash history](#hashhistory) - for building web apps where you don't want to/can't send the URL to the server for some reason
+- [Memory history](#memoryhistory) - for building native apps and testing
+
+An app should only ever need to use one of these modes.
 
 <a name="browserhistory"></a>
 
