@@ -79,22 +79,22 @@ See [the Getting Started guide](getting-started.md) for more information.
 
 ### `createBrowserHistory`
 
-<pre>
+```tsx
 declare createBrowserHistory({ window?: Window }): BrowserHistory;
 
-interface BrowserHistory&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
-  readonly <a href="#history.action">action</a>: <a href="#action">Action</a>;
-  readonly <a href="#history.location">location</a>: <a href="#location">Location</a>&lt;S&gt;;
-  <a href="#history.createhref">createHref</a>(to: <a href="#to">To</a>): string;
-  <a href="#history.push">push</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#history.replace">replace</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#history.go">go</a>(n: number): void;
-  <a href="#history.back">back</a>(): void;
-  <a href="#history.forward">forward</a>(): void;
-  <a href="#history.listen">listen</a>(listener: Listener&lt;S&gt;): () => void;
-  <a href="#history.block">block</a>(blocker: Blocker&lt;S&gt;): () => void;
+interface BrowserHistory<S extends State = State> {
+  readonly action: Action;
+  readonly location: Location<S>;
+  createHref(to: To): string;
+  push(to: To, state?: S): void;
+  replace(to: To, state?: S): void;
+  go(n: number): void;
+  back(): void;
+  forward(): void;
+  listen(listener: Listener<S>): () => void;
+  block(blocker: Blocker<S>): () => void;
 }
-</pre>
+```
 
 A browser history object keeps track of the browsing history of an application using the browser's built-in history stack. It is designed to run in modern web browsers that support the HTML5 history interface including `pushState`, `replaceState`, and the `popstate` event.
 
@@ -131,22 +131,22 @@ interface PartialPath {
 
 ### `createHashHistory`
 
-<pre>
+```ts
 declare createHashHistory({ window?: Window }): HashHistory;
 
-interface HashHistory&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
-  readonly <a href="#history.action">action</a>: <a href="#action">Action</a>;
-  readonly <a href="#history.location">location</a>: <a href="#location">Location</a>&lt;S&gt;;
-  <a href="#history.createhref">createHref</a>(to: <a href="#to">To</a>): string;
-  <a href="#history.push">push</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#history.replace">replace</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#history.go">go</a>(n: number): void;
-  <a href="#history.back">back</a>(): void;
-  <a href="#history.forward">forward</a>(): void;
-  <a href="#history.listen">listen</a>(listener: Listener&lt;S&gt;): () => void;
-  <a href="#history.block">block</a>(blocker: Blocker&lt;S&gt;): () => void;
+interface HashHistory<S extends State = State> {
+  readonly action: Action;
+  readonly location: Location<S>;
+  createHref(to: To): string;
+  push(to: To, state?: S): void;
+  replace(to: To, state?: S): void;
+  go(n: number): void;
+  back(): void;
+  forward(): void;
+  listen(listener: Listener<S>): () => void;
+  block(blocker: Blocker<S>): () => void;
 }
-</pre>
+```
 
 A hash history object keeps track of the browsing history of an application using the browser's built-in history stack. It is designed to be run in modern web browsers that support the HTML5 history interface including `pushState`, `replaceState`, and the `popstate` event.
 
@@ -166,7 +166,7 @@ See [the Getting Started guide](getting-started.md) for more information.
 
 ### `createMemoryHistory`
 
-<pre>
+```ts
 declare createMemoryHistory({
   initialEntries?: InitialEntry[],
   initialIndex?: number
@@ -174,20 +174,20 @@ declare createMemoryHistory({
 
 type InitialEntry = string | PartialLocation;
 
-interface MemoryHistory&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
-  readonly <a href="#history.index">index</a>: number;
-  readonly <a href="#history.action">action</a>: <a href="#action">Action</a>;
-  readonly <a href="#history.location">location</a>: <a href="#location">Location</a>&lt;S&gt;;
-  <a href="#history.createhref">createHref</a>(to: <a href="#to">To</a>): string;
-  <a href="#history.push">push</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#history.replace">replace</a>(to: <a href="#to">To</a>, state?: S): void;
-  <a href="#history.go">go</a>(n: number): void;
-  <a href="#history.back">back</a>(): void;
-  <a href="#history.forward">forward</a>(): void;
-  <a href="#history.listen">listen</a>(listener: Listener&lt;S&gt;): () => void;
-  <a href="#history.block">block</a>(blocker: Blocker&lt;S&gt;): () => void;
+interface MemoryHistory<S extends State = State> {
+  readonly index: number;
+  readonly action: Action;
+  readonly location: Location<S>;
+  createHref(to: To): string;
+  push(to: To, state?: S): void;
+  replace(to: To, state?: S): void;
+  go(n: number): void;
+  back(): void;
+  forward(): void;
+  listen(listener: Listener<S>): () => void;
+  block(blocker: Blocker<S>): () => void;
 }
-</pre>
+```
 
 A memory history object keeps track of the browsing history of an application using an internal array. This makes it ideal in situations where you need complete control over the history stack, like React Native and tests.
 
@@ -340,15 +340,15 @@ See [the Navigation guide](navigation.md) for more information.
 
 ### Location
 
-<pre>
-interface Location&lt;S extends <a href="#state">State</a> = <a href="#state">State</a>&gt; {
-  <a href="#location.pathname">pathname</a>: string;
-  <a href="#location.search">search</a>: string;
-  <a href="#location.hash">hash</a>: string;
-  <a href="#location.state">state</a>: S;
-  <a href="#location.key">key</a>: string;
+```ts
+interface Location<S extends State = State> {
+  pathname: string;
+  search: string;
+  hash: string;
+  state: S;
+  key: string;
 }
-</pre>
+```
 
 A `location` is a particular entry in the history stack, usually analogous to a "page" or "screen" in your app. As the user clicks on links and moves around the app, the current location changes.
 
