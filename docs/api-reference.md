@@ -400,6 +400,10 @@ This can be useful in situations where you need to keep track of 2 different sta
 
 ### State
 
+```ts
+type State = object | null;
+```
+
 A [`State`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61) value is an object of extra information that is associated with a [`Location`](#location) but that does not appear in the URL. This value is always associated with that location.
 
 See [the Navigation guide](navigation.md) for more information.
@@ -407,6 +411,16 @@ See [the Navigation guide](navigation.md) for more information.
 <a name="to"></a>
 
 ### To
+
+```ts
+type To = string | PartialPath;
+
+interface PartialPath {
+  pathname?: string;
+  search?: string;
+  hash?: string;
+}
+```
 
 A [`To`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L212) value represents a destination location, but doesn't contain all the information that a normal [`location`](#location) object does. It is primarily used as the first argument to [`history.push`](#history.push) and [`history.replace`](#history.replace).
 
