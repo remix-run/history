@@ -1,5 +1,7 @@
 /**
  * Actions represent the type of change to a location value.
+ *
+ * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#action
  */
 export enum Action {
   /**
@@ -28,21 +30,21 @@ export enum Action {
 /**
  * A URL pathname, beginning with a /.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
+ * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.pathname
  */
 export type Pathname = string;
 
 /**
  * A URL search string, beginning with a ?.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
+ * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.search
  */
 export type Search = string;
 
 /**
  * A URL fragment identifier, beginning with a #.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
+ * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.hash
  */
 export type Hash = string;
 
@@ -50,13 +52,15 @@ export type Hash = string;
  * An object that is used to associate some arbitrary data with a location, but
  * that does not appear in the URL path.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/History/state
+ * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.state
  */
 export type State = object | null;
 
 /**
  * A unique string associated with a location. May be used to safely store
  * and retrieve data in some other storage API, like `localStorage`.
+ *
+ * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.key
  */
 export type Key = string;
 
@@ -67,21 +71,21 @@ export interface Path {
   /**
    * A URL pathname, beginning with a /.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.pathname
    */
   pathname: Pathname;
 
   /**
    * A URL search string, beginning with a ?.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.search
    */
   search: Search;
 
   /**
    * A URL fragment identifier, beginning with a #.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.hash
    */
   hash: Hash;
 }
@@ -96,7 +100,7 @@ export interface Location<S extends State = State> extends Path {
   /**
    * An object of arbitrary data associated with this location.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/History/state
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.state
    */
   state: S;
 
@@ -105,6 +109,8 @@ export interface Location<S extends State = State> extends Path {
    * and retrieve data in some other storage API, like `localStorage`.
    *
    * Note: This value is always "default" on the initial location.
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.key
    */
   key: Key;
 }
@@ -116,21 +122,21 @@ export interface PartialPath {
   /**
    * The URL pathname, beginning with a /.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.pathname
    */
   pathname?: Pathname;
 
   /**
    * The URL search string, beginning with a ?.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/search
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.search
    */
   search?: Search;
 
   /**
    * The URL fragment identifier, beginning with a #.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/Location/hash
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.hash
    */
   hash?: Hash;
 }
@@ -142,7 +148,7 @@ export interface PartialLocation<S extends State = State> extends PartialPath {
   /**
    * An object of arbitrary data associated with this location.
    *
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/History/state
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.state
    */
   state?: S;
 
@@ -151,6 +157,8 @@ export interface PartialLocation<S extends State = State> extends PartialPath {
    * and retrieve data in some other storage API, like `localStorage`.
    *
    * Note: This value is always "default" on the initial location.
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.key
    */
   key?: Key;
 }
@@ -207,20 +215,22 @@ export type To = string | PartialPath;
  * source of truth for the current location, as well as provides a set of
  * methods that may be used to change it.
  *
- * It is analogous to the web's `window.history` object, but with a smaller,
- * more focused API.
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/history
+ * It is similar to the DOM's `window.history` object, but with a smaller, more
+ * focused API.
  */
 export interface History<S extends State = State> {
   /**
    * The last action that modified the current location. This will always be
    * Action.Pop when a history instance is first created. This value is mutable.
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.action
    */
   readonly action: Action;
 
   /**
    * The current location. This value is mutable.
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.location
    */
   readonly location: Location<S>;
 
@@ -229,6 +239,8 @@ export interface History<S extends State = State> {
    * the value of an <a href> attribute.
    *
    * @param to - The destination URL
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.createHref
    */
   createHref(to: To): string;
 
@@ -239,6 +251,8 @@ export interface History<S extends State = State> {
    *
    * @param to - The new URL
    * @param state - Data to associate with the new location
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.push
    */
   push(to: To, state?: S): void;
 
@@ -248,6 +262,8 @@ export interface History<S extends State = State> {
    *
    * @param to - The new URL
    * @param state - Data to associate with the new location
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.replace
    */
   replace(to: To, state?: S): void;
 
@@ -256,6 +272,8 @@ export interface History<S extends State = State> {
    * current index. For example, a "back" navigation would use go(-1).
    *
    * @param delta - The delta in the stack index
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.go
    */
   go(delta: number): void;
 
@@ -264,11 +282,15 @@ export interface History<S extends State = State> {
    *
    * Warning: if the current location is the first location in the stack, this
    * will unload the current document.
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.back
    */
   back(): void;
 
   /**
    * Navigates to the next entry in the stack. Identical to go(1).
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.forward
    */
   forward(): void;
 
@@ -278,6 +300,8 @@ export interface History<S extends State = State> {
    *
    * @param listener - A function that will be called when the location changes
    * @returns unlisten - A function that may be used to stop listening
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.listen
    */
   listen(listener: Listener<S>): () => void;
 
@@ -287,6 +311,8 @@ export interface History<S extends State = State> {
    *
    * @param blocker - A function that will be called when a transition is blocked
    * @returns unblock - A function that may be used to stop blocking
+   *
+   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.block
    */
   block(blocker: Blocker<S>): () => void;
 }
