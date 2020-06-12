@@ -1,7 +1,7 @@
 /**
  * Actions represent the type of change to a location value.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#action
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#action
  */
 export enum Action {
   /**
@@ -30,21 +30,21 @@ export enum Action {
 /**
  * A URL pathname, beginning with a /.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.pathname
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.pathname
  */
 export type Pathname = string;
 
 /**
  * A URL search string, beginning with a ?.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.search
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.search
  */
 export type Search = string;
 
 /**
  * A URL fragment identifier, beginning with a #.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.hash
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.hash
  */
 export type Hash = string;
 
@@ -52,7 +52,7 @@ export type Hash = string;
  * An object that is used to associate some arbitrary data with a location, but
  * that does not appear in the URL path.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.state
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.state
  */
 export type State = object | null;
 
@@ -60,7 +60,7 @@ export type State = object | null;
  * A unique string associated with a location. May be used to safely store
  * and retrieve data in some other storage API, like `localStorage`.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.key
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.key
  */
 export type Key = string;
 
@@ -71,21 +71,21 @@ export interface Path {
   /**
    * A URL pathname, beginning with a /.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.pathname
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.pathname
    */
   pathname: Pathname;
 
   /**
    * A URL search string, beginning with a ?.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.search
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.search
    */
   search: Search;
 
   /**
    * A URL fragment identifier, beginning with a #.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.hash
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.hash
    */
   hash: Hash;
 }
@@ -94,13 +94,13 @@ export interface Path {
  * An entry in a history stack. A location contains information about the
  * URL path, as well as possibly some arbitrary state and a key.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location
  */
 export interface Location<S extends State = State> extends Path {
   /**
    * An object of arbitrary data associated with this location.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.state
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.state
    */
   state: S;
 
@@ -110,7 +110,7 @@ export interface Location<S extends State = State> extends Path {
    *
    * Note: This value is always "default" on the initial location.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.key
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.key
    */
   key: Key;
 }
@@ -122,21 +122,21 @@ export interface PartialPath {
   /**
    * The URL pathname, beginning with a /.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.pathname
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.pathname
    */
   pathname?: Pathname;
 
   /**
    * The URL search string, beginning with a ?.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.search
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.search
    */
   search?: Search;
 
   /**
    * The URL fragment identifier, beginning with a #.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.hash
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.hash
    */
   hash?: Hash;
 }
@@ -148,7 +148,7 @@ export interface PartialLocation<S extends State = State> extends PartialPath {
   /**
    * An object of arbitrary data associated with this location.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.state
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.state
    */
   state?: S;
 
@@ -158,7 +158,7 @@ export interface PartialLocation<S extends State = State> extends PartialPath {
    *
    * Note: This value is always "default" on the initial location.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#location.key
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.key
    */
   key?: Key;
 }
@@ -223,14 +223,14 @@ export interface History<S extends State = State> {
    * The last action that modified the current location. This will always be
    * Action.Pop when a history instance is first created. This value is mutable.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.action
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.action
    */
   readonly action: Action;
 
   /**
    * The current location. This value is mutable.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.location
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.location
    */
   readonly location: Location<S>;
 
@@ -240,7 +240,7 @@ export interface History<S extends State = State> {
    *
    * @param to - The destination URL
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.createHref
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.createHref
    */
   createHref(to: To): string;
 
@@ -252,7 +252,7 @@ export interface History<S extends State = State> {
    * @param to - The new URL
    * @param state - Data to associate with the new location
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.push
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.push
    */
   push(to: To, state?: S): void;
 
@@ -263,7 +263,7 @@ export interface History<S extends State = State> {
    * @param to - The new URL
    * @param state - Data to associate with the new location
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.replace
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.replace
    */
   replace(to: To, state?: S): void;
 
@@ -273,7 +273,7 @@ export interface History<S extends State = State> {
    *
    * @param delta - The delta in the stack index
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.go
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.go
    */
   go(delta: number): void;
 
@@ -283,14 +283,14 @@ export interface History<S extends State = State> {
    * Warning: if the current location is the first location in the stack, this
    * will unload the current document.
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.back
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.back
    */
   back(): void;
 
   /**
    * Navigates to the next entry in the stack. Identical to go(1).
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.forward
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.forward
    */
   forward(): void;
 
@@ -301,7 +301,7 @@ export interface History<S extends State = State> {
    * @param listener - A function that will be called when the location changes
    * @returns unlisten - A function that may be used to stop listening
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.listen
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.listen
    */
   listen(listener: Listener<S>): () => void;
 
@@ -312,7 +312,7 @@ export interface History<S extends State = State> {
    * @param blocker - A function that will be called when a transition is blocked
    * @returns unblock - A function that may be used to stop blocking
    *
-   * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#history.block
+   * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.block
    */
   block(blocker: Blocker<S>): () => void;
 }
@@ -322,7 +322,7 @@ export interface History<S extends State = State> {
  * browser environment. This is the standard for most web apps and provides the
  * cleanest URLs the browser's address bar.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#browserhistory
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#browserhistory
  */
 export interface BrowserHistory<S extends State = State> extends History<S> {}
 
@@ -335,7 +335,7 @@ export interface BrowserHistory<S extends State = State> extends History<S> {}
  * shared hosting environments that do not provide fine-grained controls over
  * which pages are served at which URLs.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#hashhistory
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#hashhistory
  */
 export interface HashHistory<S extends State = State> extends History<S> {}
 
@@ -344,7 +344,7 @@ export interface HashHistory<S extends State = State> extends History<S> {}
  * environments where there is no web browser, such as node tests or React
  * Native.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#memoryhistory
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#memoryhistory
  */
 export interface MemoryHistory<S extends State = State> extends History<S> {
   index: number;
@@ -392,7 +392,7 @@ export type BrowserHistoryOptions = { window?: Window };
  * most web apps, but it requires some configuration on the server to ensure you
  * serve the same app at multiple URLs.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#createbrowserhistory
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#createbrowserhistory
  */
 export function createBrowserHistory(
   options: BrowserHistoryOptions = {}
@@ -611,7 +611,7 @@ export type HashHistoryOptions = { window?: Window };
  * some reason, either because you do cannot configure it or the URL space is
  * reserved for something else.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#createhashhistory
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#createhashhistory
  */
 export function createHashHistory(
   options: HashHistoryOptions = {}
@@ -877,7 +877,7 @@ export type MemoryHistoryOptions = {
  * Memory history stores the current location in memory. It is designed for use
  * in stateful non-browser environments like tests and React Native.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#creatememoryhistory
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#creatememoryhistory
  */
 export function createMemoryHistory(
   options: MemoryHistoryOptions = {}
@@ -1073,7 +1073,7 @@ function createKey() {
 /**
  * Creates a string URL path from the given pathname, search, and hash components.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#createpath
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#createpath
  */
 export function createPath({
   pathname = '/',
@@ -1086,7 +1086,7 @@ export function createPath({
 /**
  * Parses a string URL path into its separate pathname, search, and hash components.
  *
- * @see https://github.com/ReactTraining/history/tree/dev/docs/api-reference.md#parsepath
+ * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#parsepath
  */
 export function parsePath(path: string) {
   let partialPath: PartialPath = {};

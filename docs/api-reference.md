@@ -60,13 +60,13 @@ If you're building a link, you'll want to use [`history.createHref`](#history.cr
 
 ## Reference
 
-The [source code](https://github.com/ReactTraining/history/tree/dev/packages/history) for the history library is written in TypeScript, but it is compiled to JavaScript before publishing. Some of the function signatures in this reference include their TypeScript type annotations, but you can always refer to the original source as well.
+The [source code](https://github.com/ReactTraining/history/tree/master/packages/history) for the history library is written in TypeScript, but it is compiled to JavaScript before publishing. Some of the function signatures in this reference include their TypeScript type annotations, but you can always refer to the original source as well.
 
 <a name="action"></a>
 
 ### Action
 
-An [`Action`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L4) represents a type of change that occurred in the history stack. `Action` is an `enum` with three members:
+An `Action` represents a type of change that occurred in the history stack. `Action` is an `enum` with three members:
 
 - <a name="action.pop"></a> `Action.Pop` - A change to an arbitrary index in the stack, such as a back or forward navigation. This does not describe the direction of the navigation, only that the index changed. This is the default action for newly created history objects.
 - <a name="action.push"></a> `Action.Push` - Indicates a new entry being added to the history stack, such as when a link is clicked and a new page loads. When this happens, all subsequent entries in the stack are lost.
