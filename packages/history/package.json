@@ -1,9 +1,11 @@
 {
-  "name": "history",
+  "name": "@umijs/history",
   "version": "5.0.0",
   "description": "Manage session history with JavaScript",
-  "author": "React Training <hello@reacttraining.com>",
-  "repository": "ReactTraining/history",
+  "authors": [
+    "ycjcl868 <chaolinjin@gmail.com> (https://github.com/ycjcl868)"
+  ],
+  "repository": "umijs/history",
   "license": "MIT",
   "main": "main.js",
   "module": "index.js",
@@ -11,6 +13,7 @@
   "unpkg": "umd/history.production.min.js",
   "sideEffects": false,
   "dependencies": {
+    "query-string": "^6.13.6",
     "@babel/runtime": "^7.7.6"
   },
   "keywords": [
