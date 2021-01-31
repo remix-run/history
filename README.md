@@ -34,3 +34,5 @@ If you're interested in helping out, please read [our contributing guidelines](C
 A big thank-you to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to run our build in real browsers.
 
 Also, thanks to [Dan Shaw](https://www.npmjs.com/~dshaw) for letting us use the `history` npm package name. Thanks, Dan!
+
+## I'm just adding this here to the README file as my first contribution to a repo!
