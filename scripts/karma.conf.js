@@ -69,7 +69,7 @@ module.exports = function(config) {
     singleRun: true,
     customLaunchers: customLaunchers,
     browsers: ['Chrome' /*, 'Firefox'*/],
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'webpack'],
     reporters: ['mocha'],
     files: ['tests.webpack.js'],
     preprocessors: {

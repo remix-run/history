@@ -1,4 +1,4 @@
-import babel from 'rollup-plugin-babel';
+import { babel, getBabelOutputPlugin } from '@rollup/plugin-babel';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import copy from 'rollup-plugin-copy';
 import prettier from 'rollup-plugin-prettier';
