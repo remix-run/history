@@ -27,7 +27,7 @@ If you're interested in helping out, please read [our contributing guidelines](C
 
 ## About
 
-`history` is developed and maintained by [React Training](https://reacttraining.com). If you're interested in learning more about what React can do for your company, please [get in touch](mailto:hello@reacttraining.com)!
+`history` is developed and maintained by [Remix](https://remix.run). If you're interested in learning more about what React can do for your company, please [get in touch](mailto:hello@remix.run)!
 
 ## Thanks
 
