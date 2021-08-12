@@ -1,4 +1,4 @@
-import { babel, getBabelOutputPlugin } from '@rollup/plugin-babel';
+import { babel } from '@rollup/plugin-babel';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import copy from 'rollup-plugin-copy';
 import prettier from 'rollup-plugin-prettier';
@@ -35,7 +35,7 @@ const modules = [
           'babel-plugin-dev-expression',
           ['@babel/plugin-transform-runtime', { useESModules: true }]
         ],
-        runtimeHelpers: true
+        babelHelpers: 'runtime'
       }),
       compiler(),
       copy({
@@ -48,7 +48,7 @@ const modules = [
       })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
-  ...['browser', 'hash'].map(env => {
+  ...['browser', 'hash'].map((env) => {
     return {
       input: `${SOURCE_DIR}/${env}.ts`,
       output: {
@@ -68,7 +68,8 @@ const modules = [
           exclude: /node_modules/,
           extensions: ['.ts'],
           presets: [['@babel/preset-env', { loose: true }]],
-          plugins: ['babel-plugin-dev-expression']
+          plugins: ['babel-plugin-dev-expression'],
+          babelHelpers: 'bundled'
         }),
         compiler()
       ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
@@ -96,9 +97,13 @@ const webModules = [
         exclude: /node_modules/,
         extensions: ['.ts'],
         presets: ['@babel/preset-modules'],
-        plugins: ['babel-plugin-dev-expression']
+        plugins: ['babel-plugin-dev-expression'],
+        babelHelpers: 'bundled'
       }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('development'),
+        preventAssignment: false
+      }),
       compiler()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
@@ -121,9 +126,13 @@ const webModules = [
         exclude: /node_modules/,
         extensions: ['.ts'],
         presets: ['@babel/preset-modules'],
-        plugins: ['babel-plugin-dev-expression']
+        plugins: ['babel-plugin-dev-expression'],
+        babelHelpers: 'bundled'
       }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        preventAssignment: false
+      }),
       compiler(),
       terser({ ecma: 8, safari10: true })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
@@ -145,9 +154,13 @@ const globals = [
         exclude: /node_modules/,
         extensions: ['.ts'],
         presets: [['@babel/preset-env', { loose: true }]],
-        plugins: ['babel-plugin-dev-expression']
+        plugins: ['babel-plugin-dev-expression'],
+        babelHelpers: 'bundled'
       }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('development'),
+        preventAssignment: false
+      }),
       compiler()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
@@ -165,9 +178,13 @@ const globals = [
         exclude: /node_modules/,
         extensions: ['.ts'],
         presets: [['@babel/preset-env', { loose: true }]],
-        plugins: ['babel-plugin-dev-expression']
+        plugins: ['babel-plugin-dev-expression'],
+        babelHelpers: 'bundled'
       }),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        preventAssignment: false
+      }),
       compiler(),
       terser()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
@@ -185,4 +202,6 @@ const node = [
   }
 ];
 
-export default [...modules, ...webModules, ...globals, ...node];
+const config = [...modules, ...webModules, ...globals, ...node];
+
+export default config;

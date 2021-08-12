@@ -1,7 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 
-module.exports = function(config) {
+module.exports = function (config) {
   var customLaunchers = {
     BS_Chrome: {
       name: 'Chrome',
@@ -69,25 +69,32 @@ module.exports = function(config) {
     singleRun: true,
     customLaunchers: customLaunchers,
     browsers: ['Chrome' /*, 'Firefox'*/],
-    frameworks: ['mocha', 'webpack'],
+    frameworks: ['mocha' /*, 'webpack' */],
     reporters: ['mocha'],
     files: ['tests.webpack.js'],
     preprocessors: {
       'tests.webpack.js': ['webpack', 'sourcemap']
     },
     webpack: {
+      // TODO: Webpack 4+
+      // mode: 'none',
       devtool: 'inline-source-map',
       resolve: {
-        modules: [path.resolve(__dirname, '../build'), 'node_modules']
+        modules: [path.resolve(__dirname, '../'), 'node_modules'],
+        alias: {
+          history: path.resolve(__dirname, '../build/history')
+        }
       },
       module: {
-        loaders: [
+        rules: [
           {
             test: /__tests__\/.*\.js$/,
             exclude: /node_modules/,
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env']
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env']
+              }
             }
           }
         ]
