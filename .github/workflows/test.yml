@@ -17,6 +17,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+        # https://github.com/actions/setup-node/issues/213#issuecomment-833724757
+      - name: Install npm v7
+        run: npm i -g npm@7 --registry=https://registry.npmjs.org
+
       - name: Install dependencies
         run: npm ci
 
