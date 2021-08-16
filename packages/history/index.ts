@@ -312,11 +312,11 @@ export interface MemoryHistory<S extends State = State> extends History<S> {
   index: number;
 }
 
-const readOnly: <T extends unknown>(obj: T) => T = __DEV__
-  ? obj => Object.freeze(obj)
-  : obj => obj;
+const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
+  ? (obj) => Object.freeze(obj)
+  : (obj) => obj;
 
-function warning(cond: boolean, message: string) {
+function warning(cond: any, message: string) {
   if (!cond) {
     // eslint-disable-next-line no-console
     if (typeof console !== 'undefined') console.warn(message);
@@ -545,7 +545,7 @@ export function createBrowserHistory(
         window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
       }
 
-      return function() {
+      return function () {
         unblock();
 
         // Remove the beforeunload listener so the document may
@@ -582,9 +582,11 @@ export function createHashHistory(
   let globalHistory = window.history;
 
   function getIndexAndLocation(): [number, Location] {
-    let { pathname = '/', search = '', hash = '' } = parsePath(
-      window.location.hash.substr(1)
-    );
+    let {
+      pathname = '/',
+      search = '',
+      hash = ''
+    } = parsePath(window.location.hash.substr(1));
     let state = globalHistory.state || {};
     return [
       state.idx,
@@ -804,7 +806,7 @@ export function createHashHistory(
         window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
       }
 
-      return function() {
+      return function () {
         unblock();
 
         // Remove the beforeunload listener so the document may
@@ -845,7 +847,7 @@ export function createMemoryHistory(
   options: MemoryHistoryOptions = {}
 ): MemoryHistory {
   let { initialEntries = ['/'], initialIndex } = options;
-  let entries: Location[] = initialEntries.map(entry => {
+  let entries: Location[] = initialEntries.map((entry) => {
     let location = readOnly<Location>({
       pathname: '/',
       search: '',
@@ -1016,20 +1018,18 @@ function createEvents<F extends Function>(): Events<F> {
     },
     push(fn: F) {
       handlers.push(fn);
-      return function() {
-        handlers = handlers.filter(handler => handler !== fn);
+      return function () {
+        handlers = handlers.filter((handler) => handler !== fn);
       };
     },
     call(arg) {
-      handlers.forEach(fn => fn && fn(arg));
+      handlers.forEach((fn) => fn && fn(arg));
     }
   };
 }
 
 function createKey() {
-  return Math.random()
-    .toString(36)
-    .substr(2, 8);
+  return Math.random().toString(36).substr(2, 8);
 }
 
 /**
