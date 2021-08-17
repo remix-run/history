@@ -1063,7 +1063,6 @@ function normalizeHref(to: To | PartialPath) {
  * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#parsepath
  */
 export function parsePath(path: string): PartialPath {
-  path = String(path);
   let partialPath: PartialPath = {};
 
   if (path) {
