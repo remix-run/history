@@ -170,7 +170,7 @@ export interface Blocker<S extends State = State> {
  * `history.push` or `history.replace`. May be either a URL or the pieces of a
  * URL path.
  */
-export type To = string | PartialPath;
+export type To = string | number | PartialPath;
 
 /**
  * A history is an interface to the navigation stack. The history serves as the
@@ -434,14 +434,14 @@ export function createBrowserHistory(
     globalHistory.replaceState({ ...globalHistory.state, idx: index }, '');
   }
 
-  function createHref(to: To) {
-    return typeof to === 'string' ? to : createPath(to);
+  function createHref(to: To): string {
+    return normalizeHref(to);
   }
 
   function getNextLocation(to: To, state: State = null): Location {
     return readOnly<Location>({
       ...location,
-      ...(typeof to === 'string' ? parsePath(to) : to),
+      ...normalizePath(to),
       state,
       key: createKey()
     });
@@ -682,13 +682,13 @@ export function createHashHistory(
   }
 
   function createHref(to: To) {
-    return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
+    return getBaseHref() + '#' + normalizeHref(to);
   }
 
   function getNextLocation(to: To, state: State = null): Location {
     return readOnly<Location>({
       ...location,
-      ...(typeof to === 'string' ? parsePath(to) : to),
+      ...normalizePath(to),
       state,
       key: createKey()
     });
@@ -877,14 +877,14 @@ export function createMemoryHistory(
   let listeners = createEvents<Listener>();
   let blockers = createEvents<Blocker>();
 
-  function createHref(to: To) {
-    return typeof to === 'string' ? to : createPath(to);
+  function createHref(to: To): string {
+    return normalizeHref(to);
   }
 
   function getNextLocation(to: To, state: State = null): Location {
     return readOnly<Location>({
       ...location,
-      ...(typeof to === 'string' ? parsePath(to) : to),
+      ...normalizePath(to),
       state,
       key: createKey()
     });
@@ -1049,12 +1049,21 @@ export function createPath({
   return pathname;
 }
 
+function normalizePath(path: To | PartialPath): PartialPath {
+  return typeof path === 'object' ? path : parsePath(String(path));
+}
+
+function normalizeHref(to: To | PartialPath) {
+  return typeof to === 'object' ? createPath(to) : String(to);
+}
+
 /**
  * Parses a string URL path into its separate pathname, search, and hash components.
  *
  * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#parsepath
  */
-export function parsePath(path: string) {
+export function parsePath(path: string): PartialPath {
+  path = String(path);
   let partialPath: PartialPath = {};
 
   if (path) {
