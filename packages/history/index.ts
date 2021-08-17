@@ -102,7 +102,7 @@ export interface Location<S extends State = State> extends Path {
    *
    * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.state
    */
-  state: S;
+  state: S | null;
 
   /**
    * A unique string associated with this location. May be used to safely store
@@ -123,7 +123,7 @@ export type PartialPath = Partial<Path>;
 /**
  * A partial Location object that may be missing some properties.
  */
-export type PartialLocation = Partial<Location>;
+export type PartialLocation<S extends State = State> = Partial<Location<S>>;
 
 /**
  * A change to the current location.
@@ -216,7 +216,7 @@ export interface History<S extends State = State> {
    *
    * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.push
    */
-  push(to: To, state?: S): void;
+  push(to: To, state?: S | null): void;
 
   /**
    * Replaces the current location in the history stack with a new one.  The
@@ -227,7 +227,7 @@ export interface History<S extends State = State> {
    *
    * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.replace
    */
-  replace(to: To, state?: S): void;
+  replace(to: To, state?: S | null): void;
 
   /**
    * Navigates `n` entries backward/forward in the history stack relative to the
