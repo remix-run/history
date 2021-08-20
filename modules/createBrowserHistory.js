@@ -148,7 +148,14 @@ function createBrowserHistory(props = {}) {
   // Public interface
 
   function createHref(location) {
-    return basename + createPath(location);
+    /*
+      @NOTE: @BUG @FIX - forget encodeURI for path params with % symbol (% parse to url as '%', not '%25' by windows.history.pushState
+    */
+    // return basename + createPath(location)
+    return basename + createPath({
+      ...location,
+      pathname: location.pathname && encodeURI(location.pathname)
+    });
   }
 
   function push(path, state) {
