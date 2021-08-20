@@ -47,7 +47,12 @@ const esm = [
         runtimeHelpers: true,
         plugins: [['@babel/transform-runtime', { useESModules: true }]]
       }),
-      sizeSnapshot()
+      /*
+        @NOTE: @BUG @WORK_AROUND - CRASH when build:
+        [!] (size-snapshot plugin) Error: ModuleNotFoundError: Module not found: Error: Can't resolve './LocationUtils.js' in '/'
+        Maybe - use new core-js@3 https://github.com/atlassian/react-beautiful-dnd/issues/1046#issuecomment-492889964
+      */
+      // sizeSnapshot()
     ]
   }
 ];
