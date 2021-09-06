@@ -21,7 +21,7 @@ For changes released in version 4.6.3 and earlier, please see [the `CHANGES.md` 
 
 ## Development
 
-Development of the current stable release, version 5, happens on [the `master` branch](https://github.com/ReactTraining/history/tree/master). Please keep in mind that this branch may include some work that has not yet been published as part of an official release. However, since `master` is always stable, you should feel free to build your own working release straight from master at any time.
+Development of the current stable release, version 5, happens on [the `main` branch](https://github.com/remix-run/history/tree/main). Please keep in mind that this branch may include some work that has not yet been published as part of an official release. However, since `main` is always stable, you should feel free to build your own working release straight from main at any time.
 
 If you're interested in helping out, please read [our contributing guidelines](CONTRIBUTING.md).
 
