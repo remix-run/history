@@ -1043,28 +1043,28 @@ export function createPath({
  *
  * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#parsepath
  */
-export function parsePath(path: string) {
-  let partialPath: PartialPath = {
+export function parsePath(path: string): PartialPath {
+  let parsedPath: PartialPath = {
     search: ''
   };
 
   if (path) {
     let hashIndex = path.indexOf('#');
     if (hashIndex >= 0) {
-      partialPath.hash = path.substr(hashIndex);
+      parsedPath.hash = path.substr(hashIndex);
       path = path.substr(0, hashIndex);
     }
 
     let searchIndex = path.indexOf('?');
     if (searchIndex >= 0) {
-      partialPath.search = path.substr(searchIndex);
+      parsedPath.search = path.substr(searchIndex);
       path = path.substr(0, searchIndex);
     }
 
     if (path) {
-      partialPath.pathname = path;
+      parsedPath.pathname = path;
     }
   }
 
-  return partialPath;
+  return parsedPath;
 }
