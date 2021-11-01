@@ -433,7 +433,9 @@ export function createBrowserHistory(
   // state defaults to `null` because `window.history.state` does
   function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
-      ...location,
+      pathname: location.pathname,
+      hash: '',
+      search: '',
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
@@ -680,7 +682,9 @@ export function createHashHistory(
 
   function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
-      ...location,
+      pathname: location.pathname,
+      hash: '',
+      search: '',
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
@@ -876,7 +880,9 @@ export function createMemoryHistory(
 
   function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
-      ...location,
+      pathname: location.pathname,
+      search: '',
+      hash: '',
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
@@ -1044,9 +1050,7 @@ export function createPath({
  * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#parsepath
  */
 export function parsePath(path: string): PartialPath {
-  let parsedPath: PartialPath = {
-    search: ''
-  };
+  let parsedPath: PartialPath = {};
 
   if (path) {
     let hashIndex = path.indexOf('#');
