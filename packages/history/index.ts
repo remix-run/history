@@ -1051,7 +1051,9 @@ export function createPath({
  * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#parsepath
  */
 export function parsePath(path: string) {
-  let partialPath: PartialPath = {};
+  let partialPath: PartialPath = {
+    search: ''
+  };
 
   if (path) {
     let hashIndex = path.indexOf('#');

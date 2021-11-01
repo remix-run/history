@@ -20,6 +20,17 @@ export default (history, done) => {
         state: null,
         key: expect.any(String)
       });
+
+      history.replace('/');
+    },
+    ({ action, location }) => {
+      expect(action).toBe('REPLACE');
+      expect(location).toMatchObject({
+        pathname: '/',
+        search: '',
+        state: null,
+        key: expect.any(String)
+      });
     }
   ];
 
