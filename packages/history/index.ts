@@ -1049,6 +1049,9 @@ export function createPath({
   search = '',
   hash = ''
 }: PartialPath) {
+  if (hash && hash !== '#') {
+    hash = hash.charAt(0) === '#' ? hash : `#${hash}`;
+  }
   return pathname + search + hash;
 }
 
