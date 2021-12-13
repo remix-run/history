@@ -1,3 +1,5 @@
+For this fork, here is the [published branch](https://github.com/thejohnhoffer/history/tree/v5.2.0-noslash.2.0). That branch is a response to [history issue 912](https://github.com/remix-run/history/issues/912), and here's [a template for its use](https://github.com/thejohnhoffer/history/tree/publish-noslash). It can be installed as `history-noslash` from `npm` and `yarn` [here](https://yarnpkg.com/package/history-noslash#readme).
+
 # history &middot; [![npm package][npm-badge]][npm] [![Travis][build-badge]][build]
 
 [npm-badge]: https://img.shields.io/npm/v/history.svg?style=flat-square
