@@ -98,7 +98,7 @@ export interface Path {
  */
 export interface Location<S extends State = State> extends Path {
   /**
-   * An object of arbitrary data associated with this location.
+   * A value of arbitrary data associated with this location.
    *
    * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#location.state
    */
@@ -128,7 +128,7 @@ export type PartialLocation<S extends State = State> = Partial<Location<S>>;
 /**
  * A change to the current location.
  */
-export interface Update<S extends State = State> {
+export interface Update {
   /**
    * The action that triggered the change.
    */
@@ -137,21 +137,21 @@ export interface Update<S extends State = State> {
   /**
    * The new location.
    */
-  location: Location<S>;
+  location: Location;
 }
 
 /**
  * A function that receives notifications about location changes.
  */
-export interface Listener<S extends State = State> {
-  (update: Update<S>): void;
+export interface Listener {
+  (update: Update): void;
 }
 
 /**
  * A change to the current location that was blocked. May be retried
  * after obtaining user confirmation.
  */
-export interface Transition<S extends State = State> extends Update<S> {
+export interface Transition extends Update {
   /**
    * Retries the update to the current location.
    */
@@ -161,8 +161,8 @@ export interface Transition<S extends State = State> extends Update<S> {
 /**
  * A function that receives transitions when navigation is blocked.
  */
-export interface Blocker<S extends State = State> {
-  (tx: Transition<S>): void;
+export interface Blocker {
+  (tx: Transition): void;
 }
 
 /**
@@ -194,7 +194,7 @@ export interface History<S extends State = State> {
    *
    * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.location
    */
-  readonly location: Location<S>;
+  readonly location: Location;
 
   /**
    * Returns a valid href for the given `to` value that may be used as
@@ -265,7 +265,7 @@ export interface History<S extends State = State> {
    *
    * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.listen
    */
-  listen(listener: Listener<S>): () => void;
+  listen(listener: Listener): () => void;
 
   /**
    * Prevents the current location from changing and sets up a listener that
@@ -276,7 +276,7 @@ export interface History<S extends State = State> {
    *
    * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#history.block
    */
-  block(blocker: Blocker<S>): () => void;
+  block(blocker: Blocker): () => void;
 }
 
 /**
@@ -338,7 +338,7 @@ function warning(cond: any, message: string) {
 ////////////////////////////////////////////////////////////////////////////////
 
 type HistoryState = {
-  usr: State;
+  usr: any;
   key?: string;
   idx: number;
 };
@@ -438,9 +438,12 @@ export function createBrowserHistory(
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: To, state: State = null): Location {
+  // state defaults to `null` because `window.history.state` does
+  function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
-      ...location,
+      pathname: location.pathname,
+      hash: '',
+      search: '',
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
@@ -473,7 +476,7 @@ export function createBrowserHistory(
     listeners.call({ action, location });
   }
 
-  function push(to: To, state?: State) {
+  function push(to: To, state?: any) {
     let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -497,7 +500,7 @@ export function createBrowserHistory(
     }
   }
 
-  function replace(to: To, state?: State) {
+  function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -685,9 +688,11 @@ export function createHashHistory(
     return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
   }
 
-  function getNextLocation(to: To, state: State = null): Location {
+  function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
-      ...location,
+      pathname: location.pathname,
+      hash: '',
+      search: '',
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
@@ -720,7 +725,7 @@ export function createHashHistory(
     listeners.call({ action, location });
   }
 
-  function push(to: To, state?: State) {
+  function push(to: To, state?: any) {
     let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -751,7 +756,7 @@ export function createHashHistory(
     }
   }
 
-  function replace(to: To, state?: State) {
+  function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -881,9 +886,11 @@ export function createMemoryHistory(
     return typeof to === 'string' ? to : createPath(to);
   }
 
-  function getNextLocation(to: To, state: State = null): Location {
+  function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
-      ...location,
+      pathname: location.pathname,
+      search: '',
+      hash: '',
       ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
@@ -902,7 +909,7 @@ export function createMemoryHistory(
     listeners.call({ action, location });
   }
 
-  function push(to: To, state?: State) {
+  function push(to: To, state?: any) {
     let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -923,7 +930,7 @@ export function createMemoryHistory(
     }
   }
 
-  function replace(to: To, state?: State) {
+  function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
     function retry() {
@@ -1054,26 +1061,26 @@ export function createPath({
  *
  * @see https://github.com/ReactTraining/history/tree/master/docs/api-reference.md#parsepath
  */
-export function parsePath(path: string) {
-  let partialPath: PartialPath = {};
+export function parsePath(path: string): PartialPath {
+  let parsedPath: PartialPath = {};
 
   if (path) {
     let hashIndex = path.indexOf('#');
     if (hashIndex >= 0) {
-      partialPath.hash = path.substr(hashIndex);
+      parsedPath.hash = path.substr(hashIndex);
       path = path.substr(0, hashIndex);
     }
 
     let searchIndex = path.indexOf('?');
     if (searchIndex >= 0) {
-      partialPath.search = path.substr(searchIndex);
+      parsedPath.search = path.substr(searchIndex);
       path = path.substr(0, searchIndex);
     }
 
     if (path) {
-      partialPath.pathname = path;
+      parsedPath.pathname = path;
     }
   }
 
-  return partialPath;
+  return parsedPath;
 }
