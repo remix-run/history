@@ -599,10 +599,6 @@ export function createHashHistory(
     return parsePath(pathname.replace('/', hashRoot));
   }
 
-  function validateLocation({pathname}) {
-    return pathname === parsePathOutput(pathname)
-  }
-
   function getIndexAndLocation(): [number, Location] {
     let {
       pathname = '/',
@@ -752,8 +748,8 @@ export function createHashHistory(
     }
 
     warning(
-      validateLocation(nextLocation),
-      `Locations must start with "${hashRoot}" in hash history.push(${JSON.stringify(
+      nextLocation.pathname.charAt(0) === '/',
+      `Relative pathnames are not supported in hash history.push(${JSON.stringify(
         to
       )})`
     );
@@ -783,8 +779,8 @@ export function createHashHistory(
     }
 
     warning(
-      validateLocation(nextLocation),
-      `Locations must start with "${hashRoot}" in hash history.replace(${JSON.stringify(
+      nextLocation.pathname.charAt(0) === '/',
+      `Relative pathnames are not supported in hash history.replace(${JSON.stringify(
         to
       )})`
     );
