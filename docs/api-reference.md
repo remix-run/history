@@ -2,7 +2,7 @@
 
 # history API Reference
 
-This is the API reference for [the history JavaScript library](https://github.com/ReactTraining/history).
+This is the API reference for [the history JavaScript library](https://github.com/remix-run/history).
 
 The history library provides an API for tracking application history using [location](#location) objects that contain URLs and state. This reference includes type signatures and return values for the interfaces in the library. Please read the [getting started guide](getting-started.md) if you're looking for explanations about how to use the library to accomplish a specific task.
 
@@ -50,17 +50,17 @@ To prevent the location from changing, use [`history.block`](#history.block). Th
 
 <a name="creating-hrefs"></a>
 
-### Creating Hrefs
+### Creating `href` values
 
 If you're building a link, you'll want to use [`history.createHref`](#history.createhref) to get a URL you can use as the value of `<a href>`.
 
-----------
+---
 
 <a name="reference"></a>
 
 ## Reference
 
-The [source code](https://github.com/ReactTraining/history/tree/master/packages/history) for the history library is written in TypeScript, but it is compiled to JavaScript before publishing. Some of the function signatures in this reference include their TypeScript type annotations, but you can always refer to the original source as well.
+The [source code](https://github.com/remix-run/history/tree/main/packages/history) for the history library is written in TypeScript, but it is compiled to JavaScript before publishing. Some of the function signatures in this reference include their TypeScript type annotations, but you can always refer to the original source as well.
 
 <a name="action"></a>
 
@@ -77,27 +77,41 @@ See [the Getting Started guide](getting-started.md) for more information.
 <a name="createbrowserhistory"></a>
 <a name="browserhistory"></a>
 
+### `History`
+
+A `History` object represents the shared interface for `BrowserHistory`, `HashHistory`, and `MemoryHistory`.
+
+<details>
+  <summary>Type declaration</summary>
+
+```ts
+interface History {
+  readonly action: Action;
+  readonly location: Location;
+  createHref(to: To): string;
+  push(to: To, state?: any): void;
+  replace(to: To, state?: any): void;
+  go(delta: number): void;
+  back(): void;
+  forward(): void;
+  listen(listener: Listener): () => void;
+  block(blocker: Blocker): () => void;
+}
+```
+
+</details>
+
 ### `createBrowserHistory`
 
 <details>
   <summary>Type declaration</summary>
 
 ```tsx
-declare createBrowserHistory({ window?: Window }): BrowserHistory;
+function createBrowserHistory(options?: { window?: Window }): BrowserHistory;
 
-interface BrowserHistory<S extends State = State> {
-  readonly action: Action;
-  readonly location: Location<S>;
-  createHref(to: To): string;
-  push(to: To, state?: S): void;
-  replace(to: To, state?: S): void;
-  go(n: number): void;
-  back(): void;
-  forward(): void;
-  listen(listener: Listener<S>): () => void;
-  block(blocker: Blocker<S>): () => void;
-}
+interface BrowserHistory extends History {}
 ```
+
 </details>
 
 A browser history object keeps track of the browsing history of an application using the browser's built-in history stack. It is designed to run in modern web browsers that support the HTML5 history interface including `pushState`, `replaceState`, and the `popstate` event.
@@ -121,15 +135,16 @@ See [the Getting Started guide](getting-started.md) for more information.
   <summary>Type declaration</summary>
 
 ```ts
-declare createPath(partialPath: PartialPath): string;
-declare parsePath(path: string): PartialPath;
+function createPath(partialPath: Partial<Path>): string;
+function parsePath(path: string): Partial<Path>;
 
-interface PartialPath {
-  pathname?: string;
-  search?: string;
-  hash?: string;
+interface Path {
+  pathname: string;
+  search: string;
+  hash: string;
 }
 ```
+
 </details>
 
 The `createPath` and `parsePath` functions are useful for creating and parsing URL paths.
@@ -148,21 +163,11 @@ parsePath('/login?next=home'); // { pathname: '/login', search: '?next=home' }
   <summary>Type declaration</summary>
 
 ```ts
-declare createHashHistory({ window?: Window }): HashHistory;
+createHashHistory({ window?: Window }): HashHistory;
 
-interface HashHistory<S extends State = State> {
-  readonly action: Action;
-  readonly location: Location<S>;
-  createHref(to: To): string;
-  push(to: To, state?: S): void;
-  replace(to: To, state?: S): void;
-  go(n: number): void;
-  back(): void;
-  forward(): void;
-  listen(listener: Listener<S>): () => void;
-  block(blocker: Blocker<S>): () => void;
-}
+interface HashHistory extends History {}
 ```
+
 </details>
 
 A hash history object keeps track of the browsing history of an application using the browser's built-in history stack. It is designed to be run in modern web browsers that support the HTML5 history interface including `pushState`, `replaceState`, and the `popstate` event.
@@ -187,27 +192,18 @@ See [the Getting Started guide](getting-started.md) for more information.
   <summary>Type declaration</summary>
 
 ```ts
-declare createMemoryHistory({
+function createMemoryHistory({
   initialEntries?: InitialEntry[],
   initialIndex?: number
 }): MemoryHistory;
 
-type InitialEntry = string | PartialLocation;
+type InitialEntry = string | Partial<Location>;
 
-interface MemoryHistory<S extends State = State> {
+interface MemoryHistory extends History {
   readonly index: number;
-  readonly action: Action;
-  readonly location: Location<S>;
-  createHref(to: To): string;
-  push(to: To, state?: S): void;
-  replace(to: To, state?: S): void;
-  go(n: number): void;
-  back(): void;
-  forward(): void;
-  listen(listener: Listener<S>): () => void;
-  block(blocker: Blocker<S>): () => void;
 }
 ```
+
 </details>
 
 A memory history object keeps track of the browsing history of an application using an internal array. This makes it ideal in situations where you need complete control over the history stack, like React Native and tests.
@@ -249,16 +245,17 @@ See [the Navigation guide](navigation.md) for more information.
   <summary>Type declaration</summary>
 
 ```ts
-interface Blocker<S extends State = State> {
-  (tx: Transition<S>): void;
+interface Blocker {
+  (tx: Transition): void;
 }
 
-interface Transition<S extends State = State> {
+interface Transition {
   action: Action;
-  location: Location<S>;
+  location: Location;
   retry(): void;
 }
 ```
+
 </details>
 
 Prevents changes to the history stack from happening. This is useful when you want to prevent the user navigating away from the current page, for example when they have some unsaved data on the current page.
@@ -316,15 +313,16 @@ The current index in the history stack.
   <summary>Type declaration</summary>
 
 ```ts
-interface Listener<S extends State = State> {
-  (update: Update<S>): void;
+interface Listener {
+  (update: Update): void;
 }
 
-interface Update<S extends State = State> {
+interface Update {
   action: Action;
-  location: Location<S>;
+  location: Location;
 }
 ```
+
 </details>
 
 Starts listening for location changes and calls the given callback with an `Update` when it does.
@@ -351,7 +349,7 @@ Also see [`history.listen`](#history.listen).
 
 <a name="history.push"></a>
 
-### `history.push(to: To, state?: State)`
+### `history.push(to: To, state?: any)`
 
 Pushes a new entry onto the stack.
 
@@ -359,7 +357,7 @@ See [the Navigation guide](navigation.md) for more information.
 
 <a name="history.replace"></a>
 
-### `history.replace(to: To, state?: State)`
+### `history.replace(to: To, state?: any)`
 
 Replaces the current entry in the stack with a new one.
 
@@ -373,14 +371,15 @@ See [the Navigation guide](navigation.md) for more information.
   <summary>Type declaration</summary>
 
 ```ts
-interface Location<S extends State = State> {
+interface Location {
   pathname: string;
   search: string;
   hash: string;
-  state: S;
+  state: unknown;
   key: string;
 }
 ```
+
 </details>
 
 A `location` is a particular entry in the history stack, usually analogous to a "page" or "screen" in your app. As the user clicks on links and moves around the app, the current location changes.
@@ -433,15 +432,7 @@ This can be useful in situations where you need to keep track of 2 different sta
 
 ### State
 
-<details>
-  <summary>Type declaration</summary>
-
-```ts
-type State = object | null;
-```
-</details>
-
-A [`State`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L61) value is an object of extra information that is associated with a [`Location`](#location) but that does not appear in the URL. This value is always associated with that location.
+A `State` value is an arbitrary value that holds extra information associated with a [`Location`](#location) but does not appear in the URL. This value is always associated with that location.
 
 See [the Navigation guide](navigation.md) for more information.
 
@@ -453,16 +444,17 @@ See [the Navigation guide](navigation.md) for more information.
   <summary>Type declaration</summary>
 
 ```ts
-type To = string | PartialPath;
+type To = string | Partial<Path>;
 
-interface PartialPath {
-  pathname?: string;
-  search?: string;
-  hash?: string;
+interface Path {
+  pathname: string;
+  search: string;
+  hash: string;
 }
 ```
+
 </details>
 
-A [`To`](https://github.com/ReactTraining/history/blob/0f992736/packages/history/index.ts#L212) value represents a destination location, but doesn't contain all the information that a normal [`location`](#location) object does. It is primarily used as the first argument to [`history.push`](#history.push) and [`history.replace`](#history.replace).
+A [`To`](https://github.com/remix-run/history/blob/main/packages/history/index.ts#L178) value represents a destination location, but doesn't contain all the information that a normal [`location`](#location) object does. It is primarily used as the first argument to [`history.push`](#history.push) and [`history.replace`](#history.replace).
 
 See [the Navigation guide](navigation.md) for more information.

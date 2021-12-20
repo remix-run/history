@@ -198,7 +198,7 @@ const node = [
       file: `${OUTPUT_DIR}/main.js`,
       format: 'cjs'
     },
-    plugins: [compiler()].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
+    plugins: PRETTY ? prettier({ parser: 'babel' }) : []
   }
 ];
 

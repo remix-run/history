@@ -43,7 +43,6 @@ module.exports = function (config) {
     }
     // Safari throws an error if you use replaceState more
     // than 100 times in 30 seconds :/
-    // See https://travis-ci.com/ReactTraining/history/jobs/254197476
     // BS_Safari: {
     //   base: 'BrowserStack',
     //   os: 'OS X',
