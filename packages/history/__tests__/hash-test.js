@@ -146,8 +146,10 @@ export const testHashHistory = (root, createHistory) => {
   });
 }
 
+/*
 describe('a hash history', () => {
   testHashHistory('#/', () => {
     return createHashHistory();
   })  
 });
+*/
