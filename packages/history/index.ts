@@ -573,7 +573,7 @@ export function createBrowserHistory(
 // HASH
 ////////////////////////////////////////////////////////////////////////////////
 
-export type HashHistoryOptions = { window?: Window };
+export type HashHistoryOptions = { window?: Window, hashRoot?: string };
 
 /**
  * Hash history stores the location in window.location.hash. This makes it ideal
@@ -589,12 +589,26 @@ export function createHashHistory(
   let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
+  let { hashRoot = "/" } = options;
+
+  function parsePathInput(pathname) {
+    return parsePath(pathname.replace(hashRoot, "/"));
+  }
+
+  function parsePathOutput(pathname) {
+    return parsePath(pathname.replace(/^\//, hashRoot));
+  }
+
+  function validateLocation({pathname}) {
+    return pathname === parsePathOutput(pathname)
+  }
+
   function getIndexAndLocation(): [number, Location] {
     let {
       pathname = '/',
       search = '',
       hash = ''
-    } = parsePath(window.location.hash.substr(1));
+    } = parsePathInput(window.location.hash.substr(1));
     let state = globalHistory.state || {};
     return [
       state.idx,
@@ -698,7 +712,7 @@ export function createHashHistory(
       pathname: location.pathname,
       hash: '',
       search: '',
-      ...(typeof to === 'string' ? parsePath(to) : to),
+      ...(typeof to === 'string' ? parsePathOutput(to) : to),
       state,
       key: createKey()
     });
@@ -738,8 +752,8 @@ export function createHashHistory(
     }
 
     warning(
-      nextLocation.pathname.charAt(0) === '/',
-      `Relative pathnames are not supported in hash history.push(${JSON.stringify(
+      validateLocation(nextLocation),
+      `Locations must start with "${hashRoot}" in hash history.push(${JSON.stringify(
         to
       )})`
     );
@@ -769,8 +783,8 @@ export function createHashHistory(
     }
 
     warning(
-      nextLocation.pathname.charAt(0) === '/',
-      `Relative pathnames are not supported in hash history.replace(${JSON.stringify(
+      validateLocation(nextLocation),
+      `Locations must start with "${hashRoot}" in hash history.replace(${JSON.stringify(
         to
       )})`
     );
