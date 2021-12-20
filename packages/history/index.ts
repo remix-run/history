@@ -589,14 +589,14 @@ export function createHashHistory(
   let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
-  let { hashRoot = "/" } = options;
+  let { hashRoot = '/' } = options;
 
   function parsePathInput(pathname) {
-    return parsePath(pathname.replace(hashRoot, "/"));
+    return parsePath(pathname.replace(hashRoot, '/'));
   }
 
   function parsePathOutput(pathname) {
-    return parsePath(pathname.replace(/^\//, hashRoot));
+    return parsePath(pathname.replace('/', hashRoot));
   }
 
   function validateLocation({pathname}) {
