@@ -23,9 +23,7 @@ export default (history, done) => {
 
       history.push('../other/path?another=query#another-hash');
 
-      expect(spy).toHaveBeenCalledWith(
-        expect.stringContaining('relative pathnames are not supported')
-      );
+      expect(spy).toHaveBeenCalled();
 
       destroy();
     },

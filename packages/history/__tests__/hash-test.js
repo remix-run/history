@@ -21,11 +21,11 @@ import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.j
 // const canGoWithoutReload = window.navigator.userAgent.indexOf('Firefox') === -1;
 // const describeGo = canGoWithoutReload ? describe : describe.skip;
 
-describe('a hash history', () => {
+export const testHashHistory = (root, createHistory) => {
   let history;
   beforeEach(() => {
-    window.history.replaceState(null, null, '#/');
-    history = createHashHistory();
+    window.history.replaceState(null, null, root);
+    history = createHistory()
   });
 
   it('knows how to create hrefs from location objects', () => {
@@ -144,4 +144,10 @@ describe('a hash history', () => {
       BlockPopWithoutListening(history, done);
     });
   });
+}
+
+describe('a hash history', () => {
+  testHashHistory('#/', () => {
+    return createHashHistory();
+  })  
 });
