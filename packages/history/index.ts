@@ -591,20 +591,19 @@ export function createHashHistory(
 
   let { hashRoot = '/' } = options;
 
-  function parsePathInput(pathname) {
-    return parsePath(pathname.replace(hashRoot, '/'));
+  function prefixPathname([base, root]: string[], partial: Partial<Path>) {
+    const pathname = (partial.pathname || base).replace(base, root);
+    return { pathname, ...partial };
   }
-
-  function parsePathOutput(pathname) {
-    return parsePath(pathname.replace('/', hashRoot));
-  }
+  const pathFromGlobal = prefixPathname.bind(null, [hashRoot, '/']);
+  const pathToGlobal = prefixPathname.bind(null, ['/', hashRoot]);
 
   function getIndexAndLocation(): [number, Location] {
     let {
       pathname = '/',
       search = '',
       hash = ''
-    } = parsePathInput(window.location.hash.substr(1));
+    } = pathFromGlobal(parsePath(window.location.hash.substr(1)))
     let state = globalHistory.state || {};
     return [
       state.idx,
@@ -708,7 +707,7 @@ export function createHashHistory(
       pathname: location.pathname,
       hash: '',
       search: '',
-      ...(typeof to === 'string' ? parsePathOutput(to) : to),
+      ...(typeof to === 'string' ? parsePath(to) : to),
       state,
       key: createKey()
     });
@@ -724,7 +723,7 @@ export function createHashHistory(
         key: nextLocation.key,
         idx: index
       },
-      createHref(nextLocation)
+      createHref(pathToGlobal(nextLocation))
     ];
   }
 

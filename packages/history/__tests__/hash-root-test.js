@@ -18,5 +18,5 @@ describe('a hash history with no slash', () => {
         return Reflect.get(target, prop, _);
       }
     });
-  })  
+  })
 });
