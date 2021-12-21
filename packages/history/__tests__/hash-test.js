@@ -32,8 +32,7 @@ export const testHashHistory = (initialRoot, options) => {
     const { hashRoot = "/" } = options || {};
     const historyHref = createPath(history.location);
     const windowHref = window.location.hash.substr(1);
-    expect(historyHref.replace('/', hashRoot)).toEqual(windowHref);
-    expect(historyHref).toEqual(windowHref.replace(hashRoot, '/'));
+    expect(historyHref.replace(/^\//, hashRoot)).toEqual(windowHref);
   })
 
   it('knows how to create hrefs from location objects', () => {

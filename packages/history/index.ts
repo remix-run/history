@@ -592,8 +592,11 @@ export function createHashHistory(
   let { hashRoot = '/' } = options;
 
   function prefixPathname([base, root]: string[], partial: Partial<Path>) {
-    const pathname = (partial.pathname || base).replace(base, root);
-    return { ...partial, pathname };
+    const input = partial.pathname || base;
+    const pathname = input.replace(base, root);
+    return input.match(/^\.+\//) ? partial : {
+      ...partial, pathname
+    };
   }
   const pathFromGlobal = prefixPathname.bind(null, [hashRoot, '/']);
   const pathToGlobal = prefixPathname.bind(null, ['/', hashRoot]);
