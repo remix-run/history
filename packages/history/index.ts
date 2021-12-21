@@ -593,7 +593,7 @@ export function createHashHistory(
 
   function prefixPathname([base, root]: string[], partial: Partial<Path>) {
     const pathname = (partial.pathname || base).replace(base, root);
-    return { pathname, ...partial };
+    return { ...partial, pathname };
   }
   const pathFromGlobal = prefixPathname.bind(null, [hashRoot, '/']);
   const pathToGlobal = prefixPathname.bind(null, ['/', hashRoot]);
