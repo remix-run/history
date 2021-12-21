@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { createHashHistory } from 'history';
+import { createHashHistory, createPath } from 'history';
 
 import Listen from './TestSequences/Listen.js';
 import InitialLocationDefaultKey from './TestSequences/InitialLocationDefaultKey.js';
@@ -21,12 +21,20 @@ import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.j
 // const canGoWithoutReload = window.navigator.userAgent.indexOf('Firefox') === -1;
 // const describeGo = canGoWithoutReload ? describe : describe.skip;
 
-export const testHashHistory = (root, createHistory) => {
+export const testHashHistory = (initialRoot, options) => {
   let history;
   beforeEach(() => {
-    window.history.replaceState(null, null, root);
-    history = createHistory()
+    window.history.replaceState(null, null, initialRoot);
+    history = createHashHistory(options);
   });
+  afterEach(() => {
+    // Test window location at every step
+    const { hashRoot = "/" } = options || {};
+    const historyHref = createPath(history.location);
+    const windowHref = window.location.hash.substr(1);
+    expect(historyHref.replace('/', hashRoot)).toEqual(windowHref);
+    expect(historyHref).toEqual(windowHref.replace(hashRoot, '/'));
+  })
 
   it('knows how to create hrefs from location objects', () => {
     const href = history.createHref({
@@ -147,7 +155,5 @@ export const testHashHistory = (root, createHistory) => {
 }
 
 describe('a hash history', () => {
-  testHashHistory('#/', () => {
-    return createHashHistory();
-  })
+  testHashHistory('#/')
 });

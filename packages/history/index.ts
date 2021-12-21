@@ -603,7 +603,7 @@ export function createHashHistory(
       pathname = '/',
       search = '',
       hash = ''
-    } = pathFromGlobal(parsePath(window.location.hash.substr(1)))
+    } = pathFromGlobal(parsePath(window.location.hash.substr(1)));
     let state = globalHistory.state || {};
     return [
       state.idx,
