@@ -593,7 +593,7 @@ export function createHashHistory(
 
   function prefixPathname([base, root]: string[], partial: Partial<Path>) {
     const input = partial.pathname || base;
-    return input.match(/^\.+\//) ? partial : {
+    return input.match(/^\.\.\//) ? partial : {
       ...partial, pathname: input.replace(base, root)
     };
   }
