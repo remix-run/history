@@ -20,9 +20,8 @@ function ensureCleanWorkingDirectory() {
   let status = execSync(`git status --porcelain`)
     .toString()
     .trim();
-  let lines = status.split('\n');
   invariant(
-    lines.every(line => line === '' || line.startsWith('?')),
+    status === '',
     'Working directory is not clean. Please commit or stash your changes.'
   );
 }
