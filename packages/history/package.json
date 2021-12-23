@@ -1,6 +1,6 @@
 {
   "name": "history",
-  "version": "5.1.1",
+  "version": "5.1.0",
   "description": "Manage session history with JavaScript",
   "author": "Remix Software <hello@remix.run>",
   "repository": "remix-run/history",
