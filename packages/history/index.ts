@@ -289,8 +289,8 @@ export interface MemoryHistory extends History {
 }
 
 const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
-  ? (obj) => Object.freeze(obj)
-  : (obj) => obj;
+  ? obj => Object.freeze(obj)
+  : obj => obj;
 
 function warning(cond: any, message: string) {
   if (!cond) {
@@ -488,7 +488,7 @@ export function createHashHistory(
       pathname = '/',
       search = '',
       hash = ''
-    } = parsePath(window.location.hash.substr(1));
+    } = parsePath(window.location.hash.substring(1));
     let state = globalHistory.state || {};
     return [
       state.idx,
@@ -675,7 +675,7 @@ export function createMemoryHistory(
   options: MemoryHistoryOptions = {}
 ): MemoryHistory {
   let { initialEntries = ['/'], initialIndex } = options;
-  let entries: Location[] = initialEntries.map((entry) => {
+  let entries: Location[] = initialEntries.map(entry => {
     let location = readOnly<Location>({
       pathname: '/',
       search: '',
@@ -816,17 +816,17 @@ function createEvents<F extends Function>(): Events<F> {
     push(fn: F) {
       handlers.push(fn);
       return function () {
-        handlers = handlers.filter((handler) => handler !== fn);
+        handlers = handlers.filter(handler => handler !== fn);
       };
     },
     call(arg) {
-      handlers.forEach((fn) => fn && fn(arg));
+      handlers.forEach(fn => fn && fn(arg));
     }
   };
 }
 
 function createKey() {
-  return Math.random().toString(36).substr(2, 8);
+  return Math.random().toString(36).substring(2, 8);
 }
 
 /**
@@ -857,14 +857,14 @@ export function parsePath(path: string): Partial<Path> {
   if (path) {
     let hashIndex = path.indexOf('#');
     if (hashIndex >= 0) {
-      parsedPath.hash = path.substr(hashIndex);
-      path = path.substr(0, hashIndex);
+      parsedPath.hash = path.substring(hashIndex);
+      path = path.substring(0, hashIndex);
     }
 
     let searchIndex = path.indexOf('?');
     if (searchIndex >= 0) {
-      parsedPath.search = path.substr(searchIndex);
-      path = path.substr(0, searchIndex);
+      parsedPath.search = path.substring(searchIndex);
+      path = path.substring(0, searchIndex);
     }
 
     if (path) {
