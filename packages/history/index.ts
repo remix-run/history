@@ -1,33 +1,4 @@
 /**
- * Actions represent the type of change to a location value.
- *
- * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#action
- */
-export enum Action {
-  /**
-   * A POP indicates a change to an arbitrary index in the history stack, such
-   * as a back or forward navigation. It does not describe the direction of the
-   * navigation, only that the current index changed.
-   *
-   * Note: This is the default action for newly created history objects.
-   */
-  Pop = 'POP',
-
-  /**
-   * A PUSH indicates a new entry being added to the history stack, such as when
-   * a link is clicked and a new page loads. When this happens, all subsequent
-   * entries in the stack are lost.
-   */
-  Push = 'PUSH',
-
-  /**
-   * A REPLACE indicates the entry at the current index in the history stack
-   * being replaced by a new one.
-   */
-  Replace = 'REPLACE'
-}
-
-/**
  * A URL pathname, beginning with a /.
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.pathname
@@ -135,11 +106,6 @@ export type PartialLocation = Partial<Location>;
  */
 export interface Update {
   /**
-   * The action that triggered the change.
-   */
-  action: Action;
-
-  /**
    * The new location.
    */
   location: Location;
@@ -168,14 +134,6 @@ export type To = string | Partial<Path>;
  * focused API.
  */
 export interface History {
-  /**
-   * The last action that modified the current location. This will always be
-   * Action.Pop when a history instance is first created. This value is mutable.
-   *
-   * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#history.action
-   */
-  readonly action: Action;
-
   /**
    * The current location. This value is mutable.
    *
@@ -353,12 +311,11 @@ export function createBrowserHistory(
   }
 
   function handlePop() {
-    applyTx(Action.Pop);
+    applyTx();
   }
 
   window.addEventListener(PopStateEventType, handlePop);
 
-  let action = Action.Pop;
   let [index, location] = getIndexAndLocation();
   let listeners = createEvents<Listener>();
 
@@ -397,14 +354,12 @@ export function createBrowserHistory(
     ];
   }
 
-  function applyTx(nextAction: Action) {
-    action = nextAction;
+  function applyTx() {
     [index, location] = getIndexAndLocation();
-    listeners.call({ action, location });
+    listeners.call({ location });
   }
 
   function push(to: To, state?: any) {
-    let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
 
     let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
@@ -419,11 +374,10 @@ export function createBrowserHistory(
       window.location.assign(url);
     }
 
-    applyTx(nextAction);
+    applyTx();
   }
 
   function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
 
     let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
@@ -431,7 +385,7 @@ export function createBrowserHistory(
     // TODO: Support forced reloading
     globalHistory.replaceState(historyState, '', url);
 
-    applyTx(nextAction);
+    applyTx();
   }
 
   function go(delta: number) {
@@ -439,9 +393,6 @@ export function createBrowserHistory(
   }
 
   let history: BrowserHistory = {
-    get action() {
-      return action;
-    },
     get location() {
       return location;
     },
@@ -503,7 +454,7 @@ export function createHashHistory(
   }
 
   function handlePop() {
-    applyTx(Action.Pop);
+    applyTx();
   }
 
   window.addEventListener(PopStateEventType, handlePop);
@@ -519,7 +470,6 @@ export function createHashHistory(
     }
   });
 
-  let action = Action.Pop;
   let [index, location] = getIndexAndLocation();
   let listeners = createEvents<Listener>();
 
@@ -570,14 +520,12 @@ export function createHashHistory(
     ];
   }
 
-  function applyTx(nextAction: Action) {
-    action = nextAction;
+  function applyTx() {
     [index, location] = getIndexAndLocation();
-    listeners.call({ action, location });
+    listeners.call({ location });
   }
 
   function push(to: To, state?: any) {
-    let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
 
     warning(
@@ -599,11 +547,10 @@ export function createHashHistory(
       window.location.assign(url);
     }
 
-    applyTx(nextAction);
+    applyTx();
   }
 
   function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
 
     warning(
@@ -618,7 +565,7 @@ export function createHashHistory(
     // TODO: Support forced reloading
     globalHistory.replaceState(historyState, '', url);
 
-    applyTx(nextAction);
+    applyTx();
   }
 
   function go(delta: number) {
@@ -626,9 +573,6 @@ export function createHashHistory(
   }
 
   let history: HashHistory = {
-    get action() {
-      return action;
-    },
     get location() {
       return location;
     },
@@ -700,7 +644,6 @@ export function createMemoryHistory(
     entries.length - 1
   );
 
-  let action = Action.Pop;
   let location = entries[index];
   let listeners = createEvents<Listener>();
 
@@ -719,14 +662,12 @@ export function createMemoryHistory(
     });
   }
 
-  function applyTx(nextAction: Action, nextLocation: Location) {
-    action = nextAction;
+  function applyTx(nextLocation: Location) {
     location = nextLocation;
-    listeners.call({ action, location });
+    listeners.call({ location });
   }
 
   function push(to: To, state?: any) {
-    let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
 
     warning(
@@ -738,11 +679,10 @@ export function createMemoryHistory(
 
     index += 1;
     entries.splice(index, entries.length, nextLocation);
-    applyTx(nextAction, nextLocation);
+    applyTx(nextLocation);
   }
 
   function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
 
     warning(
@@ -753,23 +693,19 @@ export function createMemoryHistory(
     );
 
     entries[index] = nextLocation;
-    applyTx(nextAction, nextLocation);
+    applyTx(nextLocation);
   }
 
   function go(delta: number) {
     let nextIndex = clamp(index + delta, 0, entries.length - 1);
-    let nextAction = Action.Pop;
     let nextLocation = entries[nextIndex];
     index = nextIndex;
-    applyTx(nextAction, nextLocation);
+    applyTx(nextLocation);
   }
 
   let history: MemoryHistory = {
     get index() {
       return index;
-    },
-    get action() {
-      return action;
     },
     get location() {
       return location;
@@ -801,22 +737,18 @@ function clamp(n: number, lowerBound: number, upperBound: number) {
 }
 
 type Events<F> = {
-  length: number;
   push: (fn: F) => () => void;
   call: (arg: any) => void;
 };
 
 function createEvents<F extends Function>(): Events<F> {
-  let handlers: F[] = [];
+  let handlers = new Set<F>();
 
   return {
-    get length() {
-      return handlers.length;
-    },
     push(fn: F) {
-      handlers.push(fn);
-      return function () {
-        handlers = handlers.filter(handler => handler !== fn);
+      handlers.add(fn);
+      return () => {
+        handlers.delete(fn);
       };
     },
     call(arg) {
