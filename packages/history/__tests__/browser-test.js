@@ -14,8 +14,6 @@ import ReplaceState from './TestSequences/ReplaceState.js';
 import EncodedReservedCharacters from './TestSequences/EncodedReservedCharacters.js';
 import GoBack from './TestSequences/GoBack.js';
 import GoForward from './TestSequences/GoForward.js';
-import BlockEverything from './TestSequences/BlockEverything.js';
-import BlockPopWithoutListening from './TestSequences/BlockPopWithoutListening.js';
 
 describe('a browser history', () => {
   let history;
@@ -126,18 +124,6 @@ describe('a browser history', () => {
   describe('forward', () => {
     it('calls change listeners with the next location', done => {
       GoForward(history, done);
-    });
-  });
-
-  describe('block', () => {
-    it('blocks all transitions', done => {
-      BlockEverything(history, done);
-    });
-  });
-
-  describe('block a POP without listening', () => {
-    it('receives the next ({ action, location })', done => {
-      BlockPopWithoutListening(history, done);
     });
   });
 });

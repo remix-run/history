@@ -153,24 +153,6 @@ export interface Listener {
 }
 
 /**
- * A change to the current location that was blocked. May be retried
- * after obtaining user confirmation.
- */
-export interface Transition extends Update {
-  /**
-   * Retries the update to the current location.
-   */
-  retry(): void;
-}
-
-/**
- * A function that receives transitions when navigation is blocked.
- */
-export interface Blocker {
-  (tx: Transition): void;
-}
-
-/**
  * Describes a location that is the destination of some navigation, either via
  * `history.push` or `history.replace`. May be either a URL or the pieces of a
  * URL path.
@@ -271,17 +253,6 @@ export interface History {
    * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#history.listen
    */
   listen(listener: Listener): () => void;
-
-  /**
-   * Prevents the current location from changing and sets up a listener that
-   * will be called instead.
-   *
-   * @param blocker - A function that will be called when a transition is blocked
-   * @returns unblock - A function that may be used to stop blocking
-   *
-   * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#history.block
-   */
-  block(blocker: Blocker): () => void;
 }
 
 /**
@@ -348,7 +319,6 @@ type HistoryState = {
   idx: number;
 };
 
-const BeforeUnloadEventType = 'beforeunload';
 const HashChangeEventType = 'hashchange';
 const PopStateEventType = 'popstate';
 
@@ -382,49 +352,8 @@ export function createBrowserHistory(
     ];
   }
 
-  let blockedPopTx: Transition | null = null;
   function handlePop() {
-    if (blockedPopTx) {
-      blockers.call(blockedPopTx);
-      blockedPopTx = null;
-    } else {
-      let nextAction = Action.Pop;
-      let [nextIndex, nextLocation] = getIndexAndLocation();
-
-      if (blockers.length) {
-        if (nextIndex != null) {
-          let delta = index - nextIndex;
-          if (delta) {
-            // Revert the POP
-            blockedPopTx = {
-              action: nextAction,
-              location: nextLocation,
-              retry() {
-                go(delta * -1);
-              }
-            };
-
-            go(delta);
-          }
-        } else {
-          // Trying to POP to a location with no index. We did not create
-          // this location, so we can't effectively block the navigation.
-          warning(
-            false,
-            // TODO: Write up a doc that explains our blocking strategy in
-            // detail and link to it here so people can understand better what
-            // is going on and how to avoid it.
-            `You are trying to block a POP navigation to a location that was not ` +
-              `created by the history library. The block will fail silently in ` +
-              `production, but in general you should do all navigation with the ` +
-              `history library (instead of using window.history.pushState directly) ` +
-              `to avoid this situation.`
-          );
-        }
-      } else {
-        applyTx(nextAction);
-      }
-    }
+    applyTx(Action.Pop);
   }
 
   window.addEventListener(PopStateEventType, handlePop);
@@ -432,7 +361,6 @@ export function createBrowserHistory(
   let action = Action.Pop;
   let [index, location] = getIndexAndLocation();
   let listeners = createEvents<Listener>();
-  let blockers = createEvents<Blocker>();
 
   if (index == null) {
     index = 0;
@@ -469,12 +397,6 @@ export function createBrowserHistory(
     ];
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void) {
-    return (
-      !blockers.length || (blockers.call({ action, location, retry }), false)
-    );
-  }
-
   function applyTx(nextAction: Action) {
     action = nextAction;
     [index, location] = getIndexAndLocation();
@@ -484,42 +406,32 @@ export function createBrowserHistory(
   function push(to: To, state?: any) {
     let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
-    function retry() {
-      push(to, state);
+
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
+
+    // TODO: Support forced reloading
+    // try...catch because iOS limits us to 100 pushState calls :/
+    try {
+      globalHistory.pushState(historyState, '', url);
+    } catch (error) {
+      // They are going to lose state here, but there is no real
+      // way to warn them about it since the page will refresh...
+      window.location.assign(url);
     }
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
-
-      // TODO: Support forced reloading
-      // try...catch because iOS limits us to 100 pushState calls :/
-      try {
-        globalHistory.pushState(historyState, '', url);
-      } catch (error) {
-        // They are going to lose state here, but there is no real
-        // way to warn them about it since the page will refresh...
-        window.location.assign(url);
-      }
-
-      applyTx(nextAction);
-    }
+    applyTx(nextAction);
   }
 
   function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
-    function retry() {
-      replace(to, state);
-    }
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
 
-      // TODO: Support forced reloading
-      globalHistory.replaceState(historyState, '', url);
+    // TODO: Support forced reloading
+    globalHistory.replaceState(historyState, '', url);
 
-      applyTx(nextAction);
-    }
+    applyTx(nextAction);
   }
 
   function go(delta: number) {
@@ -545,24 +457,6 @@ export function createBrowserHistory(
     },
     listen(listener) {
       return listeners.push(listener);
-    },
-    block(blocker) {
-      let unblock = blockers.push(blocker);
-
-      if (blockers.length === 1) {
-        window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
-      }
-
-      return function () {
-        unblock();
-
-        // Remove the beforeunload listener so the document may
-        // still be salvageable in the pagehide event.
-        // See https://html.spec.whatwg.org/#unloading-documents
-        if (!blockers.length) {
-          window.removeEventListener(BeforeUnloadEventType, promptBeforeUnload);
-        }
-      };
     }
   };
 
@@ -608,49 +502,8 @@ export function createHashHistory(
     ];
   }
 
-  let blockedPopTx: Transition | null = null;
   function handlePop() {
-    if (blockedPopTx) {
-      blockers.call(blockedPopTx);
-      blockedPopTx = null;
-    } else {
-      let nextAction = Action.Pop;
-      let [nextIndex, nextLocation] = getIndexAndLocation();
-
-      if (blockers.length) {
-        if (nextIndex != null) {
-          let delta = index - nextIndex;
-          if (delta) {
-            // Revert the POP
-            blockedPopTx = {
-              action: nextAction,
-              location: nextLocation,
-              retry() {
-                go(delta * -1);
-              }
-            };
-
-            go(delta);
-          }
-        } else {
-          // Trying to POP to a location with no index. We did not create
-          // this location, so we can't effectively block the navigation.
-          warning(
-            false,
-            // TODO: Write up a doc that explains our blocking strategy in
-            // detail and link to it here so people can understand better
-            // what is going on and how to avoid it.
-            `You are trying to block a POP navigation to a location that was not ` +
-              `created by the history library. The block will fail silently in ` +
-              `production, but in general you should do all navigation with the ` +
-              `history library (instead of using window.history.pushState directly) ` +
-              `to avoid this situation.`
-          );
-        }
-      } else {
-        applyTx(nextAction);
-      }
-    }
+    applyTx(Action.Pop);
   }
 
   window.addEventListener(PopStateEventType, handlePop);
@@ -669,7 +522,6 @@ export function createHashHistory(
   let action = Action.Pop;
   let [index, location] = getIndexAndLocation();
   let listeners = createEvents<Listener>();
-  let blockers = createEvents<Blocker>();
 
   if (index == null) {
     index = 0;
@@ -718,12 +570,6 @@ export function createHashHistory(
     ];
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void) {
-    return (
-      !blockers.length || (blockers.call({ action, location, retry }), false)
-    );
-  }
-
   function applyTx(nextAction: Action) {
     action = nextAction;
     [index, location] = getIndexAndLocation();
@@ -733,9 +579,6 @@ export function createHashHistory(
   function push(to: To, state?: any) {
     let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
-    function retry() {
-      push(to, state);
-    }
 
     warning(
       nextLocation.pathname.charAt(0) === '/',
@@ -744,29 +587,24 @@ export function createHashHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
 
-      // TODO: Support forced reloading
-      // try...catch because iOS limits us to 100 pushState calls :/
-      try {
-        globalHistory.pushState(historyState, '', url);
-      } catch (error) {
-        // They are going to lose state here, but there is no real
-        // way to warn them about it since the page will refresh...
-        window.location.assign(url);
-      }
-
-      applyTx(nextAction);
+    // TODO: Support forced reloading
+    // try...catch because iOS limits us to 100 pushState calls :/
+    try {
+      globalHistory.pushState(historyState, '', url);
+    } catch (error) {
+      // They are going to lose state here, but there is no real
+      // way to warn them about it since the page will refresh...
+      window.location.assign(url);
     }
+
+    applyTx(nextAction);
   }
 
   function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
-    function retry() {
-      replace(to, state);
-    }
 
     warning(
       nextLocation.pathname.charAt(0) === '/',
@@ -775,14 +613,12 @@ export function createHashHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
 
-      // TODO: Support forced reloading
-      globalHistory.replaceState(historyState, '', url);
+    // TODO: Support forced reloading
+    globalHistory.replaceState(historyState, '', url);
 
-      applyTx(nextAction);
-    }
+    applyTx(nextAction);
   }
 
   function go(delta: number) {
@@ -808,24 +644,6 @@ export function createHashHistory(
     },
     listen(listener) {
       return listeners.push(listener);
-    },
-    block(blocker) {
-      let unblock = blockers.push(blocker);
-
-      if (blockers.length === 1) {
-        window.addEventListener(BeforeUnloadEventType, promptBeforeUnload);
-      }
-
-      return function () {
-        unblock();
-
-        // Remove the beforeunload listener so the document may
-        // still be salvageable in the pagehide event.
-        // See https://html.spec.whatwg.org/#unloading-documents
-        if (!blockers.length) {
-          window.removeEventListener(BeforeUnloadEventType, promptBeforeUnload);
-        }
-      };
     }
   };
 
@@ -885,7 +703,6 @@ export function createMemoryHistory(
   let action = Action.Pop;
   let location = entries[index];
   let listeners = createEvents<Listener>();
-  let blockers = createEvents<Blocker>();
 
   function createHref(to: To) {
     return typeof to === 'string' ? to : createPath(to);
@@ -902,12 +719,6 @@ export function createMemoryHistory(
     });
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void) {
-    return (
-      !blockers.length || (blockers.call({ action, location, retry }), false)
-    );
-  }
-
   function applyTx(nextAction: Action, nextLocation: Location) {
     action = nextAction;
     location = nextLocation;
@@ -917,9 +728,6 @@ export function createMemoryHistory(
   function push(to: To, state?: any) {
     let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
-    function retry() {
-      push(to, state);
-    }
 
     warning(
       location.pathname.charAt(0) === '/',
@@ -928,19 +736,14 @@ export function createMemoryHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      index += 1;
-      entries.splice(index, entries.length, nextLocation);
-      applyTx(nextAction, nextLocation);
-    }
+    index += 1;
+    entries.splice(index, entries.length, nextLocation);
+    applyTx(nextAction, nextLocation);
   }
 
   function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
-    function retry() {
-      replace(to, state);
-    }
 
     warning(
       location.pathname.charAt(0) === '/',
@@ -949,24 +752,16 @@ export function createMemoryHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
-      entries[index] = nextLocation;
-      applyTx(nextAction, nextLocation);
-    }
+    entries[index] = nextLocation;
+    applyTx(nextAction, nextLocation);
   }
 
   function go(delta: number) {
     let nextIndex = clamp(index + delta, 0, entries.length - 1);
     let nextAction = Action.Pop;
     let nextLocation = entries[nextIndex];
-    function retry() {
-      go(delta);
-    }
-
-    if (allowTx(nextAction, nextLocation, retry)) {
-      index = nextIndex;
-      applyTx(nextAction, nextLocation);
-    }
+    index = nextIndex;
+    applyTx(nextAction, nextLocation);
   }
 
   let history: MemoryHistory = {
@@ -991,9 +786,6 @@ export function createMemoryHistory(
     },
     listen(listener) {
       return listeners.push(listener);
-    },
-    block(blocker) {
-      return blockers.push(blocker);
     }
   };
 
@@ -1006,13 +798,6 @@ export function createMemoryHistory(
 
 function clamp(n: number, lowerBound: number, upperBound: number) {
   return Math.min(Math.max(n, lowerBound), upperBound);
-}
-
-function promptBeforeUnload(event: BeforeUnloadEvent) {
-  // Cancel the event.
-  event.preventDefault();
-  // Chrome (and legacy IE) requires returnValue to be set.
-  event.returnValue = '';
 }
 
 type Events<F> = {
