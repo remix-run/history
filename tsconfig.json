@@ -1,14 +1,4 @@
 {
-  "include": ["packages", "types"],
-  "compilerOptions": {
-    "lib": ["dom", "esnext"],
-    "module": "esnext",
-    "target": "es2018",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true
-  }
+  "files": [],
+  "references": [{ "path": "packages/history" }]
 }

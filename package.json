@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "node ./scripts/build.js",
+    "build": "node ./scripts/build.js && tsc",
     "clean": "git clean -fdX .",
     "lint": "eslint .",
     "publish": "node ./scripts/publish.js",
@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "@ampproject/filesize": "^4.3.0",
-    "@ampproject/rollup-plugin-closure-compiler": "0.27.0",
     "@babel/core": "^7.15.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-modules": "0.1.4",
+    "@babel/preset-typescript": "^7.16.7",
     "@babel/runtime": "^7.15.3",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-replace": "^3.0.0",

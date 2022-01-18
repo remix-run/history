@@ -1,10 +1,8 @@
 import { babel } from '@rollup/plugin-babel';
-import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import copy from 'rollup-plugin-copy';
 import prettier from 'rollup-plugin-prettier';
 import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript2';
 
 const PRETTY = !!process.env.PRETTY;
 const SOURCE_DIR = 'packages/history';
@@ -18,26 +16,12 @@ const modules = [
       format: 'esm',
       sourcemap: !PRETTY
     },
-    external: ['@babel/runtime/helpers/esm/extends'],
     plugins: [
-      typescript({
-        tsconfigDefaults: {
-          compilerOptions: {
-            declaration: true
-          }
-        }
-      }),
       babel({
+        babelHelpers: 'bundled',
         exclude: /node_modules/,
-        extensions: ['.ts'],
-        presets: [['@babel/preset-env', { loose: true }]],
-        plugins: [
-          'babel-plugin-dev-expression',
-          ['@babel/plugin-transform-runtime', { useESModules: true }]
-        ],
-        babelHelpers: 'runtime'
+        extensions: ['.ts', '.tsx']
       }),
-      compiler(),
       copy({
         targets: [
           { src: 'README.md', dest: OUTPUT_DIR },
@@ -57,21 +41,12 @@ const modules = [
         sourcemap: !PRETTY
       },
       plugins: [
-        typescript({
-          tsconfigDefaults: {
-            compilerOptions: {
-              declaration: true
-            }
-          }
-        }),
         babel({
+          babelHelpers: 'bundled',
           exclude: /node_modules/,
-          extensions: ['.ts'],
-          presets: [['@babel/preset-env', { loose: true }]],
-          plugins: ['babel-plugin-dev-expression'],
-          babelHelpers: 'bundled'
-        }),
-        compiler()
+          extensions: ['.ts', '.tsx'],
+          plugins: ['babel-plugin-dev-expression']
+        })
       ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
     };
   })
@@ -86,25 +61,15 @@ const webModules = [
       sourcemap: !PRETTY
     },
     plugins: [
-      typescript({
-        tsconfigOverride: {
-          compilerOptions: {
-            target: 'es2016'
-          }
-        }
-      }),
       babel({
+        babelHelpers: 'bundled',
         exclude: /node_modules/,
-        extensions: ['.ts'],
-        presets: ['@babel/preset-modules'],
-        plugins: ['babel-plugin-dev-expression'],
-        babelHelpers: 'bundled'
+        extensions: ['.ts', '.tsx']
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
-        preventAssignment: false
-      }),
-      compiler()
+        preventAssignment: true
+      })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
@@ -115,25 +80,15 @@ const webModules = [
       sourcemap: !PRETTY
     },
     plugins: [
-      typescript({
-        tsconfigOverride: {
-          compilerOptions: {
-            target: 'es2016'
-          }
-        }
-      }),
       babel({
+        babelHelpers: 'bundled',
         exclude: /node_modules/,
-        extensions: ['.ts'],
-        presets: ['@babel/preset-modules'],
-        plugins: ['babel-plugin-dev-expression'],
-        babelHelpers: 'bundled'
+        extensions: ['.ts', '.tsx']
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
-        preventAssignment: false
+        preventAssignment: true
       }),
-      compiler(),
       terser({ ecma: 8, safari10: true })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
@@ -149,19 +104,16 @@ const globals = [
       name: 'HistoryLibrary'
     },
     plugins: [
-      typescript(),
       babel({
+        babelHelpers: 'bundled',
         exclude: /node_modules/,
-        extensions: ['.ts'],
-        presets: [['@babel/preset-env', { loose: true }]],
-        plugins: ['babel-plugin-dev-expression'],
-        babelHelpers: 'bundled'
+        extensions: ['.ts', '.tsx'],
+        plugins: ['babel-plugin-dev-expression']
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
-        preventAssignment: false
-      }),
-      compiler()
+        preventAssignment: true
+      })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
@@ -173,19 +125,16 @@ const globals = [
       name: 'HistoryLibrary'
     },
     plugins: [
-      typescript(),
       babel({
+        babelHelpers: 'bundled',
         exclude: /node_modules/,
-        extensions: ['.ts'],
-        presets: [['@babel/preset-env', { loose: true }]],
-        plugins: ['babel-plugin-dev-expression'],
-        babelHelpers: 'bundled'
+        extensions: ['.ts', '.tsx'],
+        plugins: ['babel-plugin-dev-expression']
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
-        preventAssignment: false
+        preventAssignment: true
       }),
-      compiler(),
       terser()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
@@ -196,7 +145,8 @@ const node = [
     input: `${SOURCE_DIR}/node-main.js`,
     output: {
       file: `${OUTPUT_DIR}/main.js`,
-      format: 'cjs'
+      format: 'cjs',
+      exports: 'auto'
     },
     plugins: PRETTY ? prettier({ parser: 'babel' }) : []
   }
