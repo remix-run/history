@@ -13,8 +13,7 @@ export default (history, done) => {
 
       history.replace('/home');
     },
-    ({ action, location }) => {
-      expect(action).toBe('REPLACE');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/home'
       });
@@ -23,8 +22,7 @@ export default (history, done) => {
 
       history.replace('/home');
     },
-    ({ action, location }) => {
-      expect(action).toBe('REPLACE');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/home'
       });

@@ -11,8 +11,7 @@ export default (history, done) => {
 
       history.push('/home?the=query#the-hash', { the: 'state' });
     },
-    ({ action, location }) => {
-      expect(action).toBe('PUSH');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/home',
         search: '?the=query',

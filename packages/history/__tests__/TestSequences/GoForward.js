@@ -11,24 +11,21 @@ export default (history, done) => {
 
       history.push('/home');
     },
-    ({ action, location }) => {
-      expect(action).toEqual('PUSH');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/home'
       });
 
       history.back();
     },
-    ({ action, location }) => {
-      expect(action).toEqual('POP');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/'
       });
 
       history.forward();
     },
-    ({ action, location }) => {
-      expect(action).toEqual('POP');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/home'
       });

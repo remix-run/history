@@ -11,8 +11,7 @@ export default (history, done) => {
 
       history.push('/home?the=query#the-hash');
     },
-    ({ action, location }) => {
-      expect(action).toBe('PUSH');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/home',
         search: '?the=query',
@@ -21,8 +20,7 @@ export default (history, done) => {
 
       history.push('?another=query#another-hash');
     },
-    ({ action, location }) => {
-      expect(action).toBe('PUSH');
+    ({ location }) => {
       expect(location).toMatchObject({
         pathname: '/home',
         search: '?another=query',
