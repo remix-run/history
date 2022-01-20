@@ -70,6 +70,13 @@ export interface Path {
  */
 export interface Location extends Path {
   /**
+   * The combined pathname, search, and hash values of a URL.
+   *
+   * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.href
+   */
+  href: string;
+
+  /**
    * A value of arbitrary data associated with this location.
    *
    * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.state
@@ -267,6 +274,111 @@ function warning(cond: any, message: string) {
   }
 }
 
+function createUrlBasedHistory(
+  window: Window,
+  getCurrentPath: () => Partial<Path>,
+  getBaseHref: () => string,
+  bindEvents: (applyTx: () => void, getLocation: () => Location) => void,
+  onPush: (nextLocation: Location, to: To) => void = () => {},
+  onReplace: (nextLocation: Location, to: To) => void = () => {}
+) {
+  let globalHistory = window.history;
+
+  let listeners = createEvents<Listener>();
+
+  function createHref(to: To) {
+    return getBaseHref() + (typeof to === 'string' ? to : createPath(to));
+  }
+
+  function getLocation(): Location {
+    let { pathname, search, hash } = getCurrentPath();
+    let state = globalHistory.state || {};
+    return createLocation({
+      pathname,
+      search,
+      hash,
+      state: state.usr || null,
+      key: state.key || 'default'
+    });
+  }
+
+  // state defaults to `null` because `window.history.state` does
+  function getNextLocation(to: To, state: any = null): Location {
+    return createLocation({
+      pathname: getCurrentPath().pathname,
+      ...(typeof to === 'string' ? parsePath(to) : to),
+      state
+    });
+  }
+
+  function getHistoryStateAndUrl(
+    nextLocation: Location
+  ): [HistoryState, string] {
+    return [
+      {
+        usr: nextLocation.state,
+        key: nextLocation.key
+      },
+      createHref(nextLocation)
+    ];
+  }
+
+  function onUpdate() {
+    let location = getLocation();
+    listeners.call({ location });
+  }
+
+  function push(to: To, state?: any) {
+    let nextLocation = getNextLocation(to, state);
+    onPush(nextLocation, to);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
+    // TODO: Support forced reloading
+    // try...catch because iOS limits us to 100 pushState calls :/
+    try {
+      globalHistory.pushState(historyState, '', url);
+    } catch (error) {
+      // They are going to lose state here, but there is no real
+      // way to warn them about it since the page will refresh...
+      window.location.assign(url);
+    }
+    onUpdate();
+  }
+
+  function replace(to: To, state?: any) {
+    let nextLocation = getNextLocation(to, state);
+    onReplace(nextLocation, to);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
+    // TODO: Support forced reloading
+    globalHistory.replaceState(historyState, '', url);
+    onUpdate();
+  }
+
+  function go(delta: number) {
+    globalHistory.go(delta);
+  }
+
+  bindEvents(onUpdate, getLocation);
+
+  return {
+    get location() {
+      return getLocation();
+    },
+    createHref,
+    push,
+    replace,
+    go,
+    back() {
+      go(-1);
+    },
+    forward() {
+      go(1);
+    },
+    listen(listener: Listener) {
+      return listeners.push(listener);
+    }
+  };
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // BROWSER
 ////////////////////////////////////////////////////////////////////////////////
@@ -292,115 +404,15 @@ export function createBrowserHistory(
   options: BrowserHistoryOptions = {}
 ): BrowserHistory {
   let { window = document.defaultView! } = options;
-  let globalHistory = window.history;
 
-  function getLocation(): Location {
-    let { pathname, search, hash } = window.location;
-    let state = globalHistory.state || {};
-    return readOnly<Location>({
-      pathname,
-      search,
-      hash,
-      state: state.usr || null,
-      key: state.key || 'default'
-    });
+  let getCurrentPath = () => window.location;
+  let getBaseHref = () => '';
+
+  function bindEvents(onUpdate: () => void) {
+    window.addEventListener(PopStateEventType, onUpdate);
   }
 
-  function handlePop() {
-    applyTx();
-  }
-
-  window.addEventListener(PopStateEventType, handlePop);
-
-  let location = getLocation();
-  let listeners = createEvents<Listener>();
-
-  function createHref(to: To) {
-    return typeof to === 'string' ? to : createPath(to);
-  }
-
-  // state defaults to `null` because `window.history.state` does
-  function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
-      pathname: location.pathname,
-      hash: '',
-      search: '',
-      ...(typeof to === 'string' ? parsePath(to) : to),
-      state,
-      key: createKey()
-    });
-  }
-
-  function getHistoryStateAndUrl(
-    nextLocation: Location
-  ): [HistoryState, string] {
-    return [
-      {
-        usr: nextLocation.state,
-        key: nextLocation.key
-      },
-      createHref(nextLocation)
-    ];
-  }
-
-  function applyTx() {
-    location = getLocation();
-    listeners.call({ location });
-  }
-
-  function push(to: To, state?: any) {
-    let nextLocation = getNextLocation(to, state);
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    // try...catch because iOS limits us to 100 pushState calls :/
-    try {
-      globalHistory.pushState(historyState, '', url);
-    } catch (error) {
-      // They are going to lose state here, but there is no real
-      // way to warn them about it since the page will refresh...
-      window.location.assign(url);
-    }
-
-    applyTx();
-  }
-
-  function replace(to: To, state?: any) {
-    let nextLocation = getNextLocation(to, state);
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    globalHistory.replaceState(historyState, '', url);
-
-    applyTx();
-  }
-
-  function go(delta: number) {
-    globalHistory.go(delta);
-  }
-
-  let history: BrowserHistory = {
-    get location() {
-      return location;
-    },
-    createHref,
-    push,
-    replace,
-    go,
-    back() {
-      go(-1);
-    },
-    forward() {
-      go(1);
-    },
-    listen(listener) {
-      return listeners.push(listener);
-    }
-  };
-
-  return history;
+  return createUrlBasedHistory(window, getCurrentPath, getBaseHref, bindEvents);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -421,46 +433,13 @@ export function createHashHistory(
   options: HashHistoryOptions = {}
 ): HashHistory {
   let { window = document.defaultView! } = options;
-  let globalHistory = window.history;
 
-  function getLocation(): Location {
-    let {
-      pathname = '/',
-      search = '',
-      hash = ''
-    } = parsePath(window.location.hash.substring(1));
-    let state = globalHistory.state || {};
-    return readOnly<Location>({
-      pathname,
-      search,
-      hash,
-      state: state.usr || null,
-      key: state.key || 'default'
-    });
+  function getCurrentPath() {
+    return parsePath(window.location.hash.substring(1));
   }
-
-  function handlePop() {
-    applyTx();
-  }
-
-  window.addEventListener(PopStateEventType, handlePop);
-
-  // popstate does not fire on hashchange in IE 11 and old (trident) Edge
-  // https://developer.mozilla.org/de/docs/Web/API/Window/popstate_event
-  window.addEventListener(HashChangeEventType, () => {
-    let nextLocation = getLocation();
-
-    // Ignore extraneous hashchange events.
-    if (createPath(nextLocation) !== createPath(location)) {
-      handlePop();
-    }
-  });
-
-  let location = getLocation();
-  let listeners = createEvents<Listener>();
 
   function getBaseHref() {
-    let base = document.querySelector('base');
+    let base = window.document.querySelector('base');
     let href = '';
 
     if (base && base.getAttribute('href')) {
@@ -469,108 +448,50 @@ export function createHashHistory(
       href = hashIndex === -1 ? url : url.slice(0, hashIndex);
     }
 
-    return href;
+    return href + '#';
   }
 
-  function createHref(to: To) {
-    return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
-  }
-
-  function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
-      pathname: location.pathname,
-      hash: '',
-      search: '',
-      ...(typeof to === 'string' ? parsePath(to) : to),
-      state,
-      key: createKey()
-    });
-  }
-
-  function getHistoryStateAndUrl(
-    nextLocation: Location
-  ): [HistoryState, string] {
-    return [
-      {
-        usr: nextLocation.state,
-        key: nextLocation.key
-      },
-      createHref(nextLocation)
-    ];
-  }
-
-  function applyTx() {
-    location = getLocation();
-    listeners.call({ location });
-  }
-
-  function push(to: To, state?: any) {
-    let nextLocation = getNextLocation(to, state);
-
+  function onPush(nextLocation: Location, to: To) {
     warning(
       nextLocation.pathname.charAt(0) === '/',
       `Relative pathnames are not supported in hash history.push(${JSON.stringify(
         to
       )})`
     );
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    // try...catch because iOS limits us to 100 pushState calls :/
-    try {
-      globalHistory.pushState(historyState, '', url);
-    } catch (error) {
-      // They are going to lose state here, but there is no real
-      // way to warn them about it since the page will refresh...
-      window.location.assign(url);
-    }
-
-    applyTx();
   }
 
-  function replace(to: To, state?: any) {
-    let nextLocation = getNextLocation(to, state);
-
+  function onReplace(nextLocation: Location, to: To) {
     warning(
       nextLocation.pathname.charAt(0) === '/',
       `Relative pathnames are not supported in hash history.replace(${JSON.stringify(
         to
       )})`
     );
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    globalHistory.replaceState(historyState, '', url);
-
-    applyTx();
   }
 
-  function go(delta: number) {
-    globalHistory.go(delta);
+  function bindEvents(onUpdate: () => void, getLocation: () => Location) {
+    window.addEventListener(PopStateEventType, onUpdate);
+
+    // popstate does not fire on hashchange in IE 11 and old (trident) Edge
+    // https://developer.mozilla.org/de/docs/Web/API/Window/popstate_event
+    window.addEventListener(HashChangeEventType, () => {
+      let nextLocation = getLocation();
+
+      // Ignore extraneous hashchange events.
+      if (createPath(nextLocation) !== createPath(getLocation())) {
+        onUpdate();
+      }
+    });
   }
 
-  let history: HashHistory = {
-    get location() {
-      return location;
-    },
-    createHref,
-    push,
-    replace,
-    go,
-    back() {
-      go(-1);
-    },
-    forward() {
-      go(1);
-    },
-    listen(listener) {
-      return listeners.push(listener);
-    }
-  };
-
-  return history;
+  return createUrlBasedHistory(
+    window,
+    getCurrentPath,
+    getBaseHref,
+    bindEvents,
+    onPush,
+    onReplace
+  );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -599,12 +520,7 @@ export function createMemoryHistory(
 ): MemoryHistory {
   let { initialEntries = ['/'], initialIndex } = options;
   let entries: Location[] = initialEntries.map(entry => {
-    let location = readOnly<Location>({
-      pathname: '/',
-      search: '',
-      hash: '',
-      state: null,
-      key: createKey(),
+    let location = createLocation({
       ...(typeof entry === 'string' ? parsePath(entry) : entry)
     });
 
@@ -631,13 +547,10 @@ export function createMemoryHistory(
   }
 
   function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
+    return createLocation({
       pathname: location.pathname,
-      search: '',
-      hash: '',
       ...(typeof to === 'string' ? parsePath(to) : to),
-      state,
-      key: createKey()
+      state
     });
   }
 
@@ -755,6 +668,23 @@ export function createPath({
   if (hash && hash !== '#')
     pathname += hash.charAt(0) === '#' ? hash : '#' + hash;
   return pathname;
+}
+
+function createLocation({
+  pathname = '/',
+  search = '',
+  hash = '',
+  state = null,
+  key = createKey()
+}: Partial<Location>): Location {
+  return readOnly<Location>({
+    pathname,
+    search,
+    hash,
+    href: pathname + search + hash,
+    state,
+    key
+  });
 }
 
 /**
