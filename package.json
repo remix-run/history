@@ -65,10 +65,10 @@
   },
   "filesize": {
     "build/history/history.production.min.js": {
-      "none": "5 kB"
+      "none": "5.06 kB"
     },
     "build/history/umd/history.production.min.js": {
-      "none": "6 kB"
+      "none": "6.03 kB"
     }
   }
 }
