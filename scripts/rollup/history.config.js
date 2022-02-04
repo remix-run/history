@@ -1,5 +1,4 @@
 import { babel } from '@rollup/plugin-babel';
-import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import copy from 'rollup-plugin-copy';
 import prettier from 'rollup-plugin-prettier';
 import replace from '@rollup/plugin-replace';
@@ -37,7 +36,6 @@ const modules = [
         ],
         babelHelpers: 'runtime'
       }),
-      compiler(),
       copy({
         targets: [
           { src: 'README.md', dest: OUTPUT_DIR },
@@ -70,8 +68,7 @@ const modules = [
           presets: [['@babel/preset-env', { loose: true }]],
           plugins: ['babel-plugin-dev-expression'],
           babelHelpers: 'bundled'
-        }),
-        compiler()
+        })
       ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
     };
   })
@@ -103,8 +100,7 @@ const webModules = [
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
         preventAssignment: false
-      }),
-      compiler()
+      })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
@@ -133,7 +129,6 @@ const webModules = [
         'process.env.NODE_ENV': JSON.stringify('production'),
         preventAssignment: false
       }),
-      compiler(),
       terser({ ecma: 8, safari10: true })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
@@ -160,8 +155,7 @@ const globals = [
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
         preventAssignment: false
-      }),
-      compiler()
+      })
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   },
   {
@@ -185,7 +179,6 @@ const globals = [
         'process.env.NODE_ENV': JSON.stringify('production'),
         preventAssignment: false
       }),
-      compiler(),
       terser()
     ].concat(PRETTY ? prettier({ parser: 'babel' }) : [])
   }
