@@ -315,6 +315,7 @@ export interface HashHistory extends History {}
  */
 export interface MemoryHistory extends History {
   readonly index: number;
+  readonly entries: Location[];
 }
 
 const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
@@ -972,6 +973,9 @@ export function createMemoryHistory(
   let history: MemoryHistory = {
     get index() {
       return index;
+    },
+    get entries() {
+      return entries;
     },
     get action() {
       return action;
