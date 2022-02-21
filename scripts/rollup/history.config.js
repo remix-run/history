@@ -22,7 +22,8 @@ const modules = [
       typescript({
         tsconfigDefaults: {
           compilerOptions: {
-            declaration: true
+            declaration: true,
+            sourceMap: !PRETTY
           }
         }
       }),
@@ -58,7 +59,8 @@ const modules = [
         typescript({
           tsconfigDefaults: {
             compilerOptions: {
-              declaration: true
+              declaration: true,
+              sourceMap: !PRETTY
             }
           }
         }),
@@ -86,7 +88,8 @@ const webModules = [
       typescript({
         tsconfigOverride: {
           compilerOptions: {
-            target: 'es2016'
+            target: 'es2016',
+            sourceMap: !PRETTY
           }
         }
       }),
@@ -114,7 +117,8 @@ const webModules = [
       typescript({
         tsconfigOverride: {
           compilerOptions: {
-            target: 'es2016'
+            target: 'es2016',
+            sourceMap: !PRETTY
           }
         }
       }),
@@ -144,7 +148,11 @@ const globals = [
       name: 'HistoryLibrary'
     },
     plugins: [
-      typescript(),
+      typescript({
+        tsconfigOverride: {
+          sourceMap: !PRETTY
+        }
+      }),
       babel({
         exclude: /node_modules/,
         extensions: ['.ts'],
@@ -167,7 +175,11 @@ const globals = [
       name: 'HistoryLibrary'
     },
     plugins: [
-      typescript(),
+      typescript({
+        tsconfigOverride: {
+          sourceMap: !PRETTY
+        }
+      }),
       babel({
         exclude: /node_modules/,
         extensions: ['.ts'],
