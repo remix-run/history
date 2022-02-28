@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////////////////////////
+//#region TYPES
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Actions represent the type of change to a location value.
  *
@@ -287,30 +291,10 @@ export interface HashHistory extends History {}
 export interface MemoryHistory extends History {
   readonly index: number;
 }
-
-const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
-  ? (obj) => Object.freeze(obj)
-  : (obj) => obj;
-
-function warning(cond: any, message: string) {
-  if (!cond) {
-    // eslint-disable-next-line no-console
-    if (typeof console !== "undefined") console.warn(message);
-
-    try {
-      // Welcome to debugging history!
-      //
-      // This error is thrown as a convenience so you can more easily
-      // find the source for a warning that appears in the console by
-      // enabling "pause on exceptions" in your JavaScript debugger.
-      throw new Error(message);
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
-  }
-}
+//#endregion
 
 ////////////////////////////////////////////////////////////////////////////////
-// BROWSER
+//#region BROWSER
 ////////////////////////////////////////////////////////////////////////////////
 
 type HistoryState = {
@@ -462,9 +446,10 @@ export function createBrowserHistory(
 
   return history;
 }
+//#endregion
 
 ////////////////////////////////////////////////////////////////////////////////
-// HASH
+//#region HASH
 ////////////////////////////////////////////////////////////////////////////////
 
 export type HashHistoryOptions = { window?: Window };
@@ -649,9 +634,10 @@ export function createHashHistory(
 
   return history;
 }
+//#endregion
 
 ////////////////////////////////////////////////////////////////////////////////
-// MEMORY
+//#region MEMORY
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -792,10 +778,32 @@ export function createMemoryHistory(
 
   return history;
 }
+//#endregion
 
 ////////////////////////////////////////////////////////////////////////////////
-// UTILS
+//#region UTILS
 ////////////////////////////////////////////////////////////////////////////////
+
+const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
+  ? (obj) => Object.freeze(obj)
+  : (obj) => obj;
+
+function warning(cond: any, message: string) {
+  if (!cond) {
+    // eslint-disable-next-line no-console
+    if (typeof console !== "undefined") console.warn(message);
+
+    try {
+      // Welcome to debugging history!
+      //
+      // This error is thrown as a convenience so you can more easily
+      // find the source for a warning that appears in the console by
+      // enabling "pause on exceptions" in your JavaScript debugger.
+      throw new Error(message);
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
+  }
+}
 
 function clamp(n: number, lowerBound: number, upperBound: number) {
   return Math.min(Math.max(n, lowerBound), upperBound);
@@ -875,3 +883,4 @@ export function parsePath(path: string): Partial<Path> {
 
   return parsedPath;
 }
+//#endregion
