@@ -300,7 +300,6 @@ export interface MemoryHistory extends History {
 type HistoryState = {
   usr: any;
   key?: string;
-  idx: number;
 };
 
 const HashChangeEventType = "hashchange";
@@ -321,19 +320,16 @@ export function createBrowserHistory(
   let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
-  function getIndexAndLocation(): [number, Location] {
+  function getLocation(): Location {
     let { pathname, search, hash } = window.location;
     let state = globalHistory.state || {};
-    return [
-      state.idx,
-      readOnly<Location>({
-        pathname,
-        search,
-        hash,
-        state: state.usr || null,
-        key: state.key || "default",
-      }),
-    ];
+    return readOnly<Location>({
+      pathname,
+      search,
+      hash,
+      state: state.usr || null,
+      key: state.key || "default",
+    });
   }
 
   function handlePop() {
@@ -343,13 +339,8 @@ export function createBrowserHistory(
   window.addEventListener(PopStateEventType, handlePop);
 
   let action = Action.Pop;
-  let [index, location] = getIndexAndLocation();
+  let location = getLocation();
   let listeners = createEvents<Listener>();
-
-  if (index == null) {
-    index = 0;
-    globalHistory.replaceState({ ...globalHistory.state, idx: index }, "");
-  }
 
   function createHref(to: To) {
     return typeof to === "string" ? to : createPath(to);
@@ -368,14 +359,12 @@ export function createBrowserHistory(
   }
 
   function getHistoryStateAndUrl(
-    nextLocation: Location,
-    index: number
+    nextLocation: Location
   ): [HistoryState, string] {
     return [
       {
         usr: nextLocation.state,
         key: nextLocation.key,
-        idx: index,
       },
       createHref(nextLocation),
     ];
@@ -383,7 +372,7 @@ export function createBrowserHistory(
 
   function applyTx(nextAction: Action) {
     action = nextAction;
-    [index, location] = getIndexAndLocation();
+    location = getLocation();
     listeners.call({ action, location });
   }
 
@@ -391,7 +380,7 @@ export function createBrowserHistory(
     let nextAction = Action.Push;
     let nextLocation = getNextLocation(to, state);
 
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
 
     // TODO: Support forced reloading
     // try...catch because iOS limits us to 100 pushState calls :/
@@ -410,7 +399,7 @@ export function createBrowserHistory(
     let nextAction = Action.Replace;
     let nextLocation = getNextLocation(to, state);
 
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
 
     // TODO: Support forced reloading
     globalHistory.replaceState(historyState, "", url);
@@ -468,23 +457,20 @@ export function createHashHistory(
   let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
-  function getIndexAndLocation(): [number, Location] {
+  function getLocation(): Location {
     let {
       pathname = "/",
       search = "",
       hash = "",
     } = parsePath(window.location.hash.substr(1));
     let state = globalHistory.state || {};
-    return [
-      state.idx,
-      readOnly<Location>({
-        pathname,
-        search,
-        hash,
-        state: state.usr || null,
-        key: state.key || "default",
-      }),
-    ];
+    return readOnly<Location>({
+      pathname,
+      search,
+      hash,
+      state: state.usr || null,
+      key: state.key || "default",
+    });
   }
 
   function handlePop() {
@@ -496,7 +482,7 @@ export function createHashHistory(
   // popstate does not fire on hashchange in IE 11 and old (trident) Edge
   // https://developer.mozilla.org/de/docs/Web/API/Window/popstate_event
   window.addEventListener(HashChangeEventType, () => {
-    let [, nextLocation] = getIndexAndLocation();
+    let nextLocation = getLocation();
 
     // Ignore extraneous hashchange events.
     if (createPath(nextLocation) !== createPath(location)) {
@@ -505,13 +491,8 @@ export function createHashHistory(
   });
 
   let action = Action.Pop;
-  let [index, location] = getIndexAndLocation();
+  let location = getLocation();
   let listeners = createEvents<Listener>();
-
-  if (index == null) {
-    index = 0;
-    globalHistory.replaceState({ ...globalHistory.state, idx: index }, "");
-  }
 
   function getBaseHref() {
     let base = document.querySelector("base");
@@ -542,14 +523,12 @@ export function createHashHistory(
   }
 
   function getHistoryStateAndUrl(
-    nextLocation: Location,
-    index: number
+    nextLocation: Location
   ): [HistoryState, string] {
     return [
       {
         usr: nextLocation.state,
         key: nextLocation.key,
-        idx: index,
       },
       createHref(nextLocation),
     ];
@@ -557,7 +536,7 @@ export function createHashHistory(
 
   function applyTx(nextAction: Action) {
     action = nextAction;
-    [index, location] = getIndexAndLocation();
+    location = getLocation();
     listeners.call({ action, location });
   }
 
@@ -572,7 +551,7 @@ export function createHashHistory(
       )})`
     );
 
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
 
     // TODO: Support forced reloading
     // try...catch because iOS limits us to 100 pushState calls :/
@@ -598,7 +577,7 @@ export function createHashHistory(
       )})`
     );
 
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
 
     // TODO: Support forced reloading
     globalHistory.replaceState(historyState, "", url);
