@@ -317,123 +317,16 @@ export type BrowserHistoryOptions = { window?: Window };
 export function createBrowserHistory(
   options: BrowserHistoryOptions = {}
 ): BrowserHistory {
-  let { window = document.defaultView! } = options;
-  let globalHistory = window.history;
-
-  function getLocation(): Location {
-    let { pathname, search, hash } = window.location;
-    let state = globalHistory.state || {};
-    return readOnly<Location>({
-      pathname,
-      search,
-      hash,
-      state: state.usr || null,
-      key: state.key || "default",
-    });
+  function getPath(): Path {
+    const { pathname, search, hash } = window.location;
+    return { pathname, search, hash };
   }
-
-  function handlePop() {
-    applyTx(Action.Pop);
-  }
-
-  window.addEventListener(PopStateEventType, handlePop);
-
-  let action = Action.Pop;
-  let location = getLocation();
-  let listeners = createEvents<Listener>();
 
   function createHref(to: To) {
     return typeof to === "string" ? to : createPath(to);
   }
 
-  // state defaults to `null` because `window.history.state` does
-  function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
-      pathname: location.pathname,
-      hash: "",
-      search: "",
-      ...(typeof to === "string" ? parsePath(to) : to),
-      state,
-      key: createKey(),
-    });
-  }
-
-  function getHistoryStateAndUrl(
-    nextLocation: Location
-  ): [HistoryState, string] {
-    return [
-      {
-        usr: nextLocation.state,
-        key: nextLocation.key,
-      },
-      createHref(nextLocation),
-    ];
-  }
-
-  function applyTx(nextAction: Action) {
-    action = nextAction;
-    location = getLocation();
-    listeners.call({ action, location });
-  }
-
-  function push(to: To, state?: any) {
-    let nextAction = Action.Push;
-    let nextLocation = getNextLocation(to, state);
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    // try...catch because iOS limits us to 100 pushState calls :/
-    try {
-      globalHistory.pushState(historyState, "", url);
-    } catch (error) {
-      // They are going to lose state here, but there is no real
-      // way to warn them about it since the page will refresh...
-      window.location.assign(url);
-    }
-
-    applyTx(nextAction);
-  }
-
-  function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
-    let nextLocation = getNextLocation(to, state);
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    globalHistory.replaceState(historyState, "", url);
-
-    applyTx(nextAction);
-  }
-
-  function go(delta: number) {
-    globalHistory.go(delta);
-  }
-
-  let history: BrowserHistory = {
-    get action() {
-      return action;
-    },
-    get location() {
-      return location;
-    },
-    createHref,
-    push,
-    replace,
-    go,
-    back() {
-      go(-1);
-    },
-    forward() {
-      go(1);
-    },
-    listen(listener) {
-      return listeners.push(listener);
-    },
-  };
-
-  return history;
+  return createUrlBasedHistory(options, getPath, createHref);
 }
 //#endregion
 
@@ -454,45 +347,14 @@ export type HashHistoryOptions = { window?: Window };
 export function createHashHistory(
   options: HashHistoryOptions = {}
 ): HashHistory {
-  let { window = document.defaultView! } = options;
-  let globalHistory = window.history;
-
-  function getLocation(): Location {
+  function getPath(): Path {
     let {
       pathname = "/",
       search = "",
       hash = "",
     } = parsePath(window.location.hash.substr(1));
-    let state = globalHistory.state || {};
-    return readOnly<Location>({
-      pathname,
-      search,
-      hash,
-      state: state.usr || null,
-      key: state.key || "default",
-    });
+    return { pathname, search, hash };
   }
-
-  function handlePop() {
-    applyTx(Action.Pop);
-  }
-
-  window.addEventListener(PopStateEventType, handlePop);
-
-  // popstate does not fire on hashchange in IE 11 and old (trident) Edge
-  // https://developer.mozilla.org/de/docs/Web/API/Window/popstate_event
-  window.addEventListener(HashChangeEventType, () => {
-    let nextLocation = getLocation();
-
-    // Ignore extraneous hashchange events.
-    if (createPath(nextLocation) !== createPath(location)) {
-      handlePop();
-    }
-  });
-
-  let action = Action.Pop;
-  let location = getLocation();
-  let listeners = createEvents<Listener>();
 
   function getBaseHref() {
     let base = document.querySelector("base");
@@ -511,107 +373,43 @@ export function createHashHistory(
     return getBaseHref() + "#" + (typeof to === "string" ? to : createPath(to));
   }
 
-  function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
-      pathname: location.pathname,
-      hash: "",
-      search: "",
-      ...(typeof to === "string" ? parsePath(to) : to),
-      state,
-      key: createKey(),
-    });
-  }
-
-  function getHistoryStateAndUrl(
-    nextLocation: Location
-  ): [HistoryState, string] {
-    return [
-      {
-        usr: nextLocation.state,
-        key: nextLocation.key,
-      },
-      createHref(nextLocation),
-    ];
-  }
-
-  function applyTx(nextAction: Action) {
-    action = nextAction;
-    location = getLocation();
-    listeners.call({ action, location });
-  }
-
-  function push(to: To, state?: any) {
-    let nextAction = Action.Push;
-    let nextLocation = getNextLocation(to, state);
-
+  function onPush(nextLocation: Location, to: To) {
     warning(
       nextLocation.pathname.charAt(0) === "/",
       `Relative pathnames are not supported in hash history.push(${JSON.stringify(
         to
       )})`
     );
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    // try...catch because iOS limits us to 100 pushState calls :/
-    try {
-      globalHistory.pushState(historyState, "", url);
-    } catch (error) {
-      // They are going to lose state here, but there is no real
-      // way to warn them about it since the page will refresh...
-      window.location.assign(url);
-    }
-
-    applyTx(nextAction);
   }
 
-  function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
-    let nextLocation = getNextLocation(to, state);
-
+  function onReplace(nextLocation: Location, to: To) {
     warning(
       nextLocation.pathname.charAt(0) === "/",
       `Relative pathnames are not supported in hash history.replace(${JSON.stringify(
         to
       )})`
     );
-
-    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
-
-    // TODO: Support forced reloading
-    globalHistory.replaceState(historyState, "", url);
-
-    applyTx(nextAction);
   }
 
-  function go(delta: number) {
-    globalHistory.go(delta);
+  function onHashChange(
+    location: Location,
+    nextLocation: Location,
+    applyTx: (a: Action) => void
+  ) {
+    // Ignore extraneous hashchange events.
+    if (createPath(nextLocation) !== createPath(location)) {
+      applyTx(Action.Pop);
+    }
   }
 
-  let history: HashHistory = {
-    get action() {
-      return action;
-    },
-    get location() {
-      return location;
-    },
+  return createUrlBasedHistory(
+    options,
+    getPath,
     createHref,
-    push,
-    replace,
-    go,
-    back() {
-      go(-1);
-    },
-    forward() {
-      go(1);
-    },
-    listen(listener) {
-      return listeners.push(listener);
-    },
-  };
-
-  return history;
+    onPush,
+    onReplace,
+    onHashChange
+  );
 }
 //#endregion
 
@@ -762,6 +560,133 @@ export function createMemoryHistory(
 ////////////////////////////////////////////////////////////////////////////////
 //#region UTILS
 ////////////////////////////////////////////////////////////////////////////////
+
+function createUrlBasedHistory(
+  options: BrowserHistoryOptions | HashHistoryOptions,
+  getPath: () => Path,
+  createHref: (to: To) => string,
+  onPush?: (n: Location, t: To) => void,
+  onReplace?: (n: Location, t: To) => void,
+  onHashChange?: (l: Location, n: Location, apply: (a2: Action) => void) => void
+): History {
+  let { window = document.defaultView! } = options;
+  let globalHistory = window.history;
+  let action = Action.Pop;
+  let location = getLocation();
+  let listeners = createEvents<Listener>();
+
+  function getLocation() {
+    let state = globalHistory.state || {};
+    return readOnly<Location>({
+      ...getPath(),
+      state: state.usr || null,
+      key: state.key || "default",
+    });
+  }
+
+  function handlePop() {
+    applyTx(Action.Pop);
+  }
+
+  // state defaults to `null` because `window.history.state` does
+  function getNextLocation(to: To, state: any = null): Location {
+    return readOnly<Location>({
+      pathname: location.pathname,
+      hash: "",
+      search: "",
+      ...(typeof to === "string" ? parsePath(to) : to),
+      state,
+      key: createKey(),
+    });
+  }
+
+  function getHistoryStateAndUrl(
+    nextLocation: Location
+  ): [HistoryState, string] {
+    return [
+      {
+        usr: nextLocation.state,
+        key: nextLocation.key,
+      },
+      createHref(nextLocation),
+    ];
+  }
+
+  function applyTx(nextAction: Action) {
+    action = nextAction;
+    location = getLocation();
+    listeners.call({ action, location });
+  }
+
+  function push(to: To, state?: any) {
+    let nextAction = Action.Push;
+    let nextLocation = getNextLocation(to, state);
+    onPush && onPush(nextLocation, to);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
+
+    // TODO: Support forced reloading
+    // try...catch because iOS limits us to 100 pushState calls :/
+    try {
+      globalHistory.pushState(historyState, "", url);
+    } catch (error) {
+      // They are going to lose state here, but there is no real
+      // way to warn them about it since the page will refresh...
+      window.location.assign(url);
+    }
+
+    applyTx(nextAction);
+  }
+
+  function replace(to: To, state?: any) {
+    let nextAction = Action.Replace;
+    let nextLocation = getNextLocation(to, state);
+    onReplace && onReplace(nextLocation, to);
+    let [historyState, url] = getHistoryStateAndUrl(nextLocation);
+
+    // TODO: Support forced reloading
+    globalHistory.replaceState(historyState, "", url);
+
+    applyTx(nextAction);
+  }
+
+  function go(delta: number) {
+    globalHistory.go(delta);
+  }
+
+  window.addEventListener(PopStateEventType, handlePop);
+
+  if (onHashChange) {
+    // popstate does not fire on hashchange in IE 11 and old (trident) Edge
+    // https://developer.mozilla.org/de/docs/Web/API/Window/popstate_event
+    window.addEventListener(HashChangeEventType, () =>
+      onHashChange(location, getLocation(), applyTx)
+    );
+  }
+
+  let history: History = {
+    get action() {
+      return action;
+    },
+    get location() {
+      return location;
+    },
+    createHref,
+    push,
+    replace,
+    go,
+    back() {
+      go(-1);
+    },
+    forward() {
+      go(1);
+    },
+    listen(listener) {
+      return listeners.push(listener);
+    },
+  };
+
+  return history;
+}
 
 const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
   ? (obj) => Object.freeze(obj)
