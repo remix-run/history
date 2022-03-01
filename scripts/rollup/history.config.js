@@ -5,7 +5,7 @@ import replace from "@rollup/plugin-replace";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 
-const PRETTY = !!process.env.PRETTY;
+const PRETTY = process.env.PRETTY === 'true';
 const SOURCE_DIR = "packages/history";
 const OUTPUT_DIR = "build/history";
 
@@ -15,7 +15,7 @@ const modules = [
     output: {
       file: `${OUTPUT_DIR}/index.js`,
       format: "esm",
-      sourcemap: !PRETTY,
+      sourcemap: PRETTY,
     },
     external: ["@babel/runtime/helpers/esm/extends"],
     plugins: [
@@ -23,6 +23,7 @@ const modules = [
         tsconfigDefaults: {
           compilerOptions: {
             declaration: true,
+            sourceMap: PRETTY,
           },
         },
       }),
@@ -52,13 +53,14 @@ const modules = [
       output: {
         file: `${OUTPUT_DIR}/${env}.js`,
         format: "esm",
-        sourcemap: !PRETTY,
+        sourcemap: PRETTY,
       },
       plugins: [
         typescript({
           tsconfigDefaults: {
             compilerOptions: {
               declaration: true,
+              sourceMap: PRETTY,
             },
           },
         }),
@@ -80,13 +82,14 @@ const webModules = [
     output: {
       file: `${OUTPUT_DIR}/history.development.js`,
       format: "esm",
-      sourcemap: !PRETTY,
+      sourcemap: PRETTY,
     },
     plugins: [
       typescript({
         tsconfigOverride: {
           compilerOptions: {
             target: "es2016",
+            sourceMap: PRETTY,
           },
         },
       }),
@@ -108,13 +111,14 @@ const webModules = [
     output: {
       file: `${OUTPUT_DIR}/history.production.min.js`,
       format: "esm",
-      sourcemap: !PRETTY,
+      sourcemap: PRETTY,
     },
     plugins: [
       typescript({
         tsconfigOverride: {
           compilerOptions: {
             target: "es2016",
+            sourceMap: PRETTY,
           },
         },
       }),
@@ -140,11 +144,17 @@ const globals = [
     output: {
       file: `${OUTPUT_DIR}/umd/history.development.js`,
       format: "umd",
-      sourcemap: !PRETTY,
+      sourcemap: PRETTY,
       name: "HistoryLibrary",
     },
     plugins: [
-      typescript(),
+      typescript({
+        tsconfigOverride: {
+          compilerOptions: {
+            sourceMap: PRETTY,
+          },
+        },
+      }),
       babel({
         exclude: /node_modules/,
         extensions: [".ts"],
@@ -163,11 +173,17 @@ const globals = [
     output: {
       file: `${OUTPUT_DIR}/umd/history.production.min.js`,
       format: "umd",
-      sourcemap: !PRETTY,
+      sourcemap: PRETTY,
       name: "HistoryLibrary",
     },
     plugins: [
-      typescript(),
+      typescript({
+        tsconfigOverride: {
+          compilerOptions: {
+            sourceMap: PRETTY,
+          },
+        },
+      }),
       babel({
         exclude: /node_modules/,
         extensions: [".ts"],
