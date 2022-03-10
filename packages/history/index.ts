@@ -573,7 +573,7 @@ export function createBrowserHistory(
 // HASH
 ////////////////////////////////////////////////////////////////////////////////
 
-export type HashHistoryOptions = { window?: Window };
+export type HashHistoryOptions = { window?: Window, hashRoot?: string };
 
 /**
  * Hash history stores the location in window.location.hash. This makes it ideal
@@ -589,12 +589,23 @@ export function createHashHistory(
   let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
+  let { hashRoot = '/' } = options;
+
+  function prefixPathname([base, root]: string[], partial: Partial<Path>) {
+    const input = partial.pathname || base;
+    return input.match(/^\.\.\//) ? partial : {
+      ...partial, pathname: input.replace(base, root)
+    };
+  }
+  const pathFromGlobal = prefixPathname.bind(null, [hashRoot, '/']);
+  const pathToGlobal = prefixPathname.bind(null, ['/', hashRoot]);
+
   function getIndexAndLocation(): [number, Location] {
     let {
       pathname = "/",
       search = "",
-      hash = "",
-    } = parsePath(window.location.hash.substr(1));
+      hash = ""
+    } = pathFromGlobal(parsePath(window.location.hash.substr(1)));
     let state = globalHistory.state || {};
     return [
       state.idx,
@@ -714,7 +725,7 @@ export function createHashHistory(
         key: nextLocation.key,
         idx: index,
       },
-      createHref(nextLocation),
+      createHref(pathToGlobal(nextLocation))
     ];
   }
 
