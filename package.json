@@ -4,6 +4,7 @@
     "build": "node ./scripts/build.js",
     "clean": "git clean -fdX .",
     "lint": "eslint .",
+    "format": "prettier --ignore-path .eslintignore --write .",
     "publish": "node ./scripts/publish.js",
     "size": "filesize",
     "test": "node ./scripts/test.js",
@@ -47,7 +48,7 @@
     "karma-sourcemap-loader": "0.3.8",
     "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
-    "prettier": "^2.3.2",
+    "prettier": "^2.5.1",
     "prompt-confirm": "^2.0.4",
     "rollup": "^2.56.2",
     "rollup-plugin-copy": "^3.4.0",
@@ -65,10 +66,10 @@
   },
   "filesize": {
     "build/history/history.production.min.js": {
-      "none": "5 kB"
+      "none": "5.06 kB"
     },
     "build/history/umd/history.production.min.js": {
-      "none": "6 kB"
+      "none": "6.03 kB"
     }
   }
 }
