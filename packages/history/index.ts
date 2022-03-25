@@ -11,20 +11,20 @@ export enum Action {
    *
    * Note: This is the default action for newly created history objects.
    */
-  Pop = 'POP',
+  Pop = "POP",
 
   /**
    * A PUSH indicates a new entry being added to the history stack, such as when
    * a link is clicked and a new page loads. When this happens, all subsequent
    * entries in the stack are lost.
    */
-  Push = 'PUSH',
+  Push = "PUSH",
 
   /**
    * A REPLACE indicates the entry at the current index in the history stack
    * being replaced by a new one.
    */
-  Replace = 'REPLACE'
+  Replace = "REPLACE",
 }
 
 /**
@@ -325,7 +325,7 @@ const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
 function warning(cond: any, message: string) {
   if (!cond) {
     // eslint-disable-next-line no-console
-    if (typeof console !== 'undefined') console.warn(message);
+    if (typeof console !== "undefined") console.warn(message);
 
     try {
       // Welcome to debugging history!
@@ -349,9 +349,9 @@ type HistoryState = {
   idx: number;
 };
 
-const BeforeUnloadEventType = 'beforeunload';
-const HashChangeEventType = 'hashchange';
-const PopStateEventType = 'popstate';
+const BeforeUnloadEventType = "beforeunload";
+const HashChangeEventType = "hashchange";
+const PopStateEventType = "popstate";
 
 export type BrowserHistoryOptions = { window?: Window };
 
@@ -378,8 +378,8 @@ export function createBrowserHistory(
         search,
         hash,
         state: state.usr || null,
-        key: state.key || 'default'
-      })
+        key: state.key || "default",
+      }),
     ];
   }
 
@@ -402,7 +402,7 @@ export function createBrowserHistory(
               location: nextLocation,
               retry() {
                 go(delta * -1);
-              }
+              },
             };
 
             go(delta);
@@ -437,22 +437,22 @@ export function createBrowserHistory(
 
   if (index == null) {
     index = 0;
-    globalHistory.replaceState({ ...globalHistory.state, idx: index }, '');
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, "");
   }
 
   function createHref(to: To) {
-    return typeof to === 'string' ? to : createPath(to);
+    return typeof to === "string" ? to : createPath(to);
   }
 
   // state defaults to `null` because `window.history.state` does
   function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
       pathname: location.pathname,
-      hash: '',
-      search: '',
-      ...(typeof to === 'string' ? parsePath(to) : to),
+      hash: "",
+      search: "",
+      ...(typeof to === "string" ? parsePath(to) : to),
       state,
-      key: createKey()
+      key: createKey(),
     });
   }
 
@@ -464,9 +464,9 @@ export function createBrowserHistory(
       {
         usr: nextLocation.state,
         key: nextLocation.key,
-        idx: index
+        idx: index,
       },
-      createHref(nextLocation)
+      createHref(nextLocation),
     ];
   }
 
@@ -495,7 +495,7 @@ export function createBrowserHistory(
       // TODO: Support forced reloading
       // try...catch because iOS limits us to 100 pushState calls :/
       try {
-        globalHistory.pushState(historyState, '', url);
+        globalHistory.pushState(historyState, "", url);
       } catch (error) {
         // They are going to lose state here, but there is no real
         // way to warn them about it since the page will refresh...
@@ -517,7 +517,7 @@ export function createBrowserHistory(
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
 
       // TODO: Support forced reloading
-      globalHistory.replaceState(historyState, '', url);
+      globalHistory.replaceState(historyState, "", url);
 
       applyTx(nextAction);
     }
@@ -564,7 +564,7 @@ export function createBrowserHistory(
           window.removeEventListener(BeforeUnloadEventType, promptBeforeUnload);
         }
       };
-    }
+    },
   };
 
   return history;
@@ -592,9 +592,9 @@ export function createHashHistory(
 
   function getIndexAndLocation(): [number, Location] {
     let {
-      pathname = '/',
-      search = '',
-      hash = ''
+      pathname = "/",
+      search = "",
+      hash = "",
     } = parsePath(window.location.hash.substr(1));
     let state = globalHistory.state || {};
     return [
@@ -604,8 +604,8 @@ export function createHashHistory(
         search,
         hash,
         state: state.usr || null,
-        key: state.key || 'default'
-      })
+        key: state.key || "default",
+      }),
     ];
   }
 
@@ -628,7 +628,7 @@ export function createHashHistory(
               location: nextLocation,
               retry() {
                 go(delta * -1);
-              }
+              },
             };
 
             go(delta);
@@ -674,16 +674,16 @@ export function createHashHistory(
 
   if (index == null) {
     index = 0;
-    globalHistory.replaceState({ ...globalHistory.state, idx: index }, '');
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, "");
   }
 
   function getBaseHref() {
-    let base = document.querySelector('base');
-    let href = '';
+    let base = document.querySelector("base");
+    let href = "";
 
-    if (base && base.getAttribute('href')) {
+    if (base && base.getAttribute("href")) {
       let url = window.location.href;
-      let hashIndex = url.indexOf('#');
+      let hashIndex = url.indexOf("#");
       href = hashIndex === -1 ? url : url.slice(0, hashIndex);
     }
 
@@ -691,17 +691,17 @@ export function createHashHistory(
   }
 
   function createHref(to: To) {
-    return getBaseHref() + '#' + (typeof to === 'string' ? to : createPath(to));
+    return getBaseHref() + "#" + (typeof to === "string" ? to : createPath(to));
   }
 
   function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
       pathname: location.pathname,
-      hash: '',
-      search: '',
-      ...(typeof to === 'string' ? parsePath(to) : to),
+      hash: "",
+      search: "",
+      ...(typeof to === "string" ? parsePath(to) : to),
       state,
-      key: createKey()
+      key: createKey(),
     });
   }
 
@@ -713,9 +713,9 @@ export function createHashHistory(
       {
         usr: nextLocation.state,
         key: nextLocation.key,
-        idx: index
+        idx: index,
       },
-      createHref(nextLocation)
+      createHref(nextLocation),
     ];
   }
 
@@ -739,7 +739,7 @@ export function createHashHistory(
     }
 
     warning(
-      nextLocation.pathname.charAt(0) === '/',
+      nextLocation.pathname.charAt(0) === "/",
       `Relative pathnames are not supported in hash history.push(${JSON.stringify(
         to
       )})`
@@ -751,7 +751,7 @@ export function createHashHistory(
       // TODO: Support forced reloading
       // try...catch because iOS limits us to 100 pushState calls :/
       try {
-        globalHistory.pushState(historyState, '', url);
+        globalHistory.pushState(historyState, "", url);
       } catch (error) {
         // They are going to lose state here, but there is no real
         // way to warn them about it since the page will refresh...
@@ -770,7 +770,7 @@ export function createHashHistory(
     }
 
     warning(
-      nextLocation.pathname.charAt(0) === '/',
+      nextLocation.pathname.charAt(0) === "/",
       `Relative pathnames are not supported in hash history.replace(${JSON.stringify(
         to
       )})`
@@ -780,7 +780,7 @@ export function createHashHistory(
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
 
       // TODO: Support forced reloading
-      globalHistory.replaceState(historyState, '', url);
+      globalHistory.replaceState(historyState, "", url);
 
       applyTx(nextAction);
     }
@@ -827,7 +827,7 @@ export function createHashHistory(
           window.removeEventListener(BeforeUnloadEventType, promptBeforeUnload);
         }
       };
-    }
+    },
   };
 
   return history;
@@ -857,19 +857,19 @@ export type MemoryHistoryOptions = {
 export function createMemoryHistory(
   options: MemoryHistoryOptions = {}
 ): MemoryHistory {
-  let { initialEntries = ['/'], initialIndex } = options;
+  let { initialEntries = ["/"], initialIndex } = options;
   let entries: Location[] = initialEntries.map((entry) => {
     let location = readOnly<Location>({
-      pathname: '/',
-      search: '',
-      hash: '',
+      pathname: "/",
+      search: "",
+      hash: "",
       state: null,
       key: createKey(),
-      ...(typeof entry === 'string' ? parsePath(entry) : entry)
+      ...(typeof entry === "string" ? parsePath(entry) : entry),
     });
 
     warning(
-      location.pathname.charAt(0) === '/',
+      location.pathname.charAt(0) === "/",
       `Relative pathnames are not supported in createMemoryHistory({ initialEntries }) (invalid entry: ${JSON.stringify(
         entry
       )})`
@@ -889,17 +889,17 @@ export function createMemoryHistory(
   let blockers = createEvents<Blocker>();
 
   function createHref(to: To) {
-    return typeof to === 'string' ? to : createPath(to);
+    return typeof to === "string" ? to : createPath(to);
   }
 
   function getNextLocation(to: To, state: any = null): Location {
     return readOnly<Location>({
       pathname: location.pathname,
-      search: '',
-      hash: '',
-      ...(typeof to === 'string' ? parsePath(to) : to),
+      search: "",
+      hash: "",
+      ...(typeof to === "string" ? parsePath(to) : to),
       state,
-      key: createKey()
+      key: createKey(),
     });
   }
 
@@ -923,7 +923,7 @@ export function createMemoryHistory(
     }
 
     warning(
-      location.pathname.charAt(0) === '/',
+      location.pathname.charAt(0) === "/",
       `Relative pathnames are not supported in memory history.push(${JSON.stringify(
         to
       )})`
@@ -944,7 +944,7 @@ export function createMemoryHistory(
     }
 
     warning(
-      location.pathname.charAt(0) === '/',
+      location.pathname.charAt(0) === "/",
       `Relative pathnames are not supported in memory history.replace(${JSON.stringify(
         to
       )})`
@@ -998,7 +998,7 @@ export function createMemoryHistory(
     },
     block(blocker) {
       return blockers.push(blocker);
-    }
+    },
   };
 
   return history;
@@ -1016,7 +1016,7 @@ function promptBeforeUnload(event: BeforeUnloadEvent) {
   // Cancel the event.
   event.preventDefault();
   // Chrome (and legacy IE) requires returnValue to be set.
-  event.returnValue = '';
+  event.returnValue = "";
 }
 
 type Events<F> = {
@@ -1040,7 +1040,7 @@ function createEvents<F extends Function>(): Events<F> {
     },
     call(arg) {
       handlers.forEach((fn) => fn && fn(arg));
-    }
+    },
   };
 }
 
@@ -1054,14 +1054,14 @@ function createKey() {
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#createpath
  */
 export function createPath({
-  pathname = '/',
-  search = '',
-  hash = ''
+  pathname = "/",
+  search = "",
+  hash = "",
 }: Partial<Path>) {
-  if (search && search !== '?')
-    pathname += search.charAt(0) === '?' ? search : '?' + search;
-  if (hash && hash !== '#')
-    pathname += hash.charAt(0) === '#' ? hash : '#' + hash;
+  if (search && search !== "?")
+    pathname += search.charAt(0) === "?" ? search : "?" + search;
+  if (hash && hash !== "#")
+    pathname += hash.charAt(0) === "#" ? hash : "#" + hash;
   return pathname;
 }
 
@@ -1074,13 +1074,13 @@ export function parsePath(path: string): Partial<Path> {
   let parsedPath: Partial<Path> = {};
 
   if (path) {
-    let hashIndex = path.indexOf('#');
+    let hashIndex = path.indexOf("#");
     if (hashIndex >= 0) {
       parsedPath.hash = path.substr(hashIndex);
       path = path.substr(0, hashIndex);
     }
 
-    let searchIndex = path.indexOf('?');
+    let searchIndex = path.indexOf("?");
     if (searchIndex >= 0) {
       parsedPath.search = path.substr(searchIndex);
       path = path.substr(0, searchIndex);
