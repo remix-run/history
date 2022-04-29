@@ -857,13 +857,13 @@ export function createMemoryHistory(
   options: MemoryHistoryOptions = {}
 ): MemoryHistory {
   let { initialEntries = ["/"], initialIndex } = options;
-  let entries: Location[] = initialEntries.map((entry) => {
+  let entries: Location[] = initialEntries.map((entry, index) => {
     let location = readOnly<Location>({
       pathname: "/",
       search: "",
       hash: "",
       state: null,
-      key: createKey(),
+      key: index === 0 ? "default" : createKey(),
       ...(typeof entry === "string" ? parsePath(entry) : entry),
     });
 
