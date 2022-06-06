@@ -1,10 +1,15 @@
 {
   "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/history"
+    ]
+  },
   "scripts": {
     "build": "node ./scripts/build.js",
     "clean": "git clean -fdX .",
-    "lint": "eslint .",
     "format": "prettier --ignore-path .eslintignore --write .",
+    "lint": "eslint .",
     "publish": "node ./scripts/publish.js",
     "size": "filesize",
     "test": "node ./scripts/test.js",
@@ -58,11 +63,6 @@
     "semver": "^7.3.5",
     "typescript": "^4.3.5",
     "webpack": "^3.12.0"
-  },
-  "workspaces": {
-    "packages": [
-      "packages/history"
-    ]
   },
   "filesize": {
     "build/history/history.production.min.js": {
