@@ -1015,6 +1015,8 @@ function promptBeforeUnload(event: BeforeUnloadEvent) {
   event.returnValue = "";
 }
 
+type EventHandler = (...args: any[]) => any;
+
 type Events<F> = {
   length: number;
   push: (fn: F) => () => void;
