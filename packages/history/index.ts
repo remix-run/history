@@ -1017,13 +1017,13 @@ function promptBeforeUnload(event: BeforeUnloadEvent) {
 
 type EventHandler = (...args: any[]) => any;
 
-type Events<F> = {
+type Events<F extends EventHandler> = {
   length: number;
   push: (fn: F) => () => void;
-  call: (arg: any) => void;
+  call: (...arg: Parameters<F>) => void;
 };
 
-function createEvents<F extends Function>(): Events<F> {
+function createEvents<F extends EventHandler>(): Events<F> {
   let handlers: F[] = [];
 
   return {
@@ -1036,8 +1036,8 @@ function createEvents<F extends Function>(): Events<F> {
         handlers = handlers.filter((handler) => handler !== fn);
       };
     },
-    call(arg) {
-      handlers.forEach((fn) => fn && fn(arg));
+    call(...arg) {
+      handlers.forEach((fn) => fn && fn(...arg));
     },
   };
 }
