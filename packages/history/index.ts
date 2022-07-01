@@ -282,6 +282,17 @@ export interface History {
    * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#history.block
    */
   block(blocker: Blocker): () => void;
+
+  /**
+   * Prevents the current location from changing and sets up a listener that
+   * will be called instead, but without setting a beforeUnload listener.
+   *
+   * @param blocker - A function that will be called when a transition is blocked
+   * @returns unblock - A function that may be used to stop blocking
+   *
+   * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#history.block
+   */
+  noUnloadBlock(blocker: Blocker): () => void;
 }
 
 /**
@@ -386,12 +397,15 @@ export function createBrowserHistory(
   function handlePop() {
     if (blockedPopTx) {
       blockers.call(blockedPopTx);
+      if (!blockers.length) {
+        noUnloadBlockers.call(blockedPopTx);
+      }
       blockedPopTx = null;
     } else {
       let nextAction = Action.Pop;
       let [nextIndex, nextLocation] = getIndexAndLocation();
 
-      if (blockers.length) {
+      if (blockers.length || noUnloadBlockers.length) {
         if (nextIndex != null) {
           let delta = index - nextIndex;
           if (delta) {
@@ -433,6 +447,7 @@ export function createBrowserHistory(
   let [index, location] = getIndexAndLocation();
   let listeners = createEvents<Listener>();
   let blockers = createEvents<Blocker>();
+  let noUnloadBlockers = createEvents<Blocker>();
 
   if (index == null) {
     index = 0;
@@ -470,8 +485,16 @@ export function createBrowserHistory(
   }
 
   function allowTx(action: Action, location: Location, retry: () => void) {
+    const allow =
+      !blockers.length || (blockers.call({ action, location, retry }), false);
+    
+    if (!allow) {
+      noUnloadBlockers.clear();
+    }
+    
     return (
-      !blockers.length || (blockers.call({ action, location, retry }), false)
+      allow &&
+      (!noUnloadBlockers.length || (noUnloadBlockers.call({ action, location, retry }), false))
     );
   }
 
@@ -545,6 +568,13 @@ export function createBrowserHistory(
     },
     listen(listener) {
       return listeners.push(listener);
+    },
+    noUnloadBlock(blocker) {
+      let unblock = noUnloadBlockers.push(blocker);
+
+      return function () {
+        unblock();
+      };
     },
     block(blocker) {
       let unblock = blockers.push(blocker);
@@ -809,6 +839,9 @@ export function createHashHistory(
     listen(listener) {
       return listeners.push(listener);
     },
+    noUnloadBlock() {
+      return function () {}
+    },
     block(blocker) {
       let unblock = blockers.push(blocker);
 
@@ -992,6 +1025,9 @@ export function createMemoryHistory(
     listen(listener) {
       return listeners.push(listener);
     },
+    noUnloadBlock() {
+      return function () {};
+    },
     block(blocker) {
       return blockers.push(blocker);
     },
@@ -1019,6 +1055,7 @@ type Events<F> = {
   length: number;
   push: (fn: F) => () => void;
   call: (arg: any) => void;
+  clear: () => void;
 };
 
 function createEvents<F extends Function>(): Events<F> {
@@ -1036,6 +1073,9 @@ function createEvents<F extends Function>(): Events<F> {
     },
     call(arg) {
       handlers.forEach((fn) => fn && fn(arg));
+    },
+    clear() {
+      handlers = [];
     },
   };
 }

@@ -15,7 +15,9 @@ import EncodedReservedCharacters from "./TestSequences/EncodedReservedCharacters
 import GoBack from "./TestSequences/GoBack.js";
 import GoForward from "./TestSequences/GoForward.js";
 import BlockEverything from "./TestSequences/BlockEverything.js";
+import BlockEverythingNoUnload from "./TestSequences/BlockEverythingNoUnload";
 import BlockPopWithoutListening from "./TestSequences/BlockPopWithoutListening.js";
+import BlockSupersedesNoUnloadBlock from "./TestSequences/BlockSupersedesNoUnloadBlock";
 
 describe("a browser history", () => {
   let history;
@@ -135,9 +137,21 @@ describe("a browser history", () => {
     });
   });
 
+  describe("blockNoUnload", () => {
+    it("blocks all transitions with no beforeunload event", (done) => {
+      BlockEverythingNoUnload(history, done);
+    });
+  });
+
   describe("block a POP without listening", () => {
     it("receives the next ({ action, location })", (done) => {
       BlockPopWithoutListening(history, done);
+    });
+  });
+
+  describe("blockSupersedesNoUnload", () => {
+    it("normal block supersedes no unload block", (done) => {
+      BlockSupersedesNoUnloadBlock(history, done);
     });
   });
 });
