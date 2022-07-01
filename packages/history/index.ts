@@ -397,7 +397,9 @@ export function createBrowserHistory(
   function handlePop() {
     if (blockedPopTx) {
       blockers.call(blockedPopTx);
-      noUnloadBlockers.call(blockedPopTx);
+      if (!blockers.length) {
+        noUnloadBlockers.call(blockedPopTx);
+      }
       blockedPopTx = null;
     } else {
       let nextAction = Action.Pop;
