@@ -4,14 +4,16 @@ import { execSteps } from "./utils.js";
 
 export default (history, done) => {
   let steps = [
-    ({ location }) => {
+    ({ index, location }) => {
+      expect(index).toBe(0);
       expect(location).toMatchObject({
         pathname: "/",
       });
 
       history.replace("/home?the=query#the-hash", { the: "state" });
     },
-    ({ action, location }) => {
+    ({ index, action, location }) => {
+      expect(index).toBe(0);
       expect(action).toBe("REPLACE");
       expect(location).toMatchObject({
         pathname: "/home",

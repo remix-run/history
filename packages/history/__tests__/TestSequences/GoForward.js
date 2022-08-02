@@ -4,14 +4,16 @@ import { execSteps } from "./utils.js";
 
 export default (history, done) => {
   let steps = [
-    ({ location }) => {
+    ({ index, location }) => {
+      expect(index).toBe(0);
       expect(location).toMatchObject({
         pathname: "/",
       });
 
       history.push("/home");
     },
-    ({ action, location }) => {
+    ({ index, action, location }) => {
+      expect(index).toBe(1);
       expect(action).toEqual("PUSH");
       expect(location).toMatchObject({
         pathname: "/home",
@@ -19,7 +21,8 @@ export default (history, done) => {
 
       history.back();
     },
-    ({ action, location }) => {
+    ({ index, action, location }) => {
+      expect(index).toBe(0);
       expect(action).toEqual("POP");
       expect(location).toMatchObject({
         pathname: "/",
@@ -27,7 +30,8 @@ export default (history, done) => {
 
       history.forward();
     },
-    ({ action, location }) => {
+    ({ index, action, location }) => {
+      expect(index).toBe(1);
       expect(action).toEqual("POP");
       expect(location).toMatchObject({
         pathname: "/home",
