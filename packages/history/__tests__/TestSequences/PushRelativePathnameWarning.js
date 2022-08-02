@@ -4,14 +4,16 @@ import { execSteps, spyOn } from "./utils.js";
 
 export default (history, done) => {
   let steps = [
-    ({ location }) => {
+    ({ index, location }) => {
+      expect(index).toBe(0);
       expect(location).toMatchObject({
         pathname: "/",
       });
 
       history.push("/the/path?the=query#the-hash");
     },
-    ({ action, location }) => {
+    ({ index, action, location }) => {
+      expect(index).toBe(1);
       expect(action).toBe("PUSH");
       expect(location).toMatchObject({
         pathname: "/the/path",
@@ -29,7 +31,8 @@ export default (history, done) => {
 
       destroy();
     },
-    ({ location }) => {
+    ({ index, location }) => {
+      expect(index).toBe(2);
       expect(location).toMatchObject({
         pathname: "../other/path",
         search: "?another=query",

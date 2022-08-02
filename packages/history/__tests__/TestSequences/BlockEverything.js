@@ -4,7 +4,8 @@ import { execSteps } from "./utils.js";
 
 export default (history, done) => {
   let steps = [
-    ({ location }) => {
+    ({ index, location }) => {
+      expect(index).toBe(0);
       expect(location).toMatchObject({
         pathname: "/",
       });
@@ -13,6 +14,7 @@ export default (history, done) => {
 
       history.push("/home");
 
+      expect(history.index).toBe(0);
       expect(history.location).toMatchObject({
         pathname: "/",
       });

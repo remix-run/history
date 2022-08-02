@@ -44,6 +44,7 @@ export function execSteps(steps, history, done) {
     unlisten = history.listen(execNextStep);
 
     execNextStep({
+      index: history.index,
       action: history.action,
       location: history.location,
     });

@@ -135,6 +135,10 @@ export type PartialLocation = Partial<Location>;
  */
 export interface Update {
   /**
+   * The new index.
+   */
+  index: number;
+  /**
    * The action that triggered the change.
    */
   action: Action;
@@ -186,6 +190,11 @@ export type To = string | Partial<Path>;
  * focused API.
  */
 export interface History {
+  /**
+   * The current index. This value is mutable.
+   */
+  readonly index: number;
+
   /**
    * The last action that modified the current location. This will always be
    * Action.Pop when a history instance is first created. This value is mutable.
@@ -313,9 +322,7 @@ export interface HashHistory extends History {}
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#memoryhistory
  */
-export interface MemoryHistory extends History {
-  readonly index: number;
-}
+export interface MemoryHistory extends History {}
 
 const readOnly: <T>(obj: T) => Readonly<T> = __DEV__
   ? (obj) => Object.freeze(obj)
@@ -397,6 +404,7 @@ export function createBrowserHistory(
           if (delta) {
             // Revert the POP
             blockedPopTx = {
+              index: nextIndex,
               action: nextAction,
               location: nextLocation,
               retry() {
@@ -469,16 +477,22 @@ export function createBrowserHistory(
     ];
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void) {
+  function allowTx(
+    index: number,
+    action: Action,
+    location: Location,
+    retry: () => void
+  ) {
     return (
-      !blockers.length || (blockers.call({ action, location, retry }), false)
+      !blockers.length ||
+      (blockers.call({ index, action, location, retry }), false)
     );
   }
 
   function applyTx(nextAction: Action) {
     action = nextAction;
     [index, location] = getIndexAndLocation();
-    listeners.call({ action, location });
+    listeners.call({ index, action, location });
   }
 
   function push(to: To, state?: any) {
@@ -488,7 +502,7 @@ export function createBrowserHistory(
       push(to, state);
     }
 
-    if (allowTx(nextAction, nextLocation, retry)) {
+    if (allowTx(index + 1, nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
 
       // TODO: Support forced reloading
@@ -512,7 +526,7 @@ export function createBrowserHistory(
       replace(to, state);
     }
 
-    if (allowTx(nextAction, nextLocation, retry)) {
+    if (allowTx(index, nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
 
       // TODO: Support forced reloading
@@ -527,6 +541,9 @@ export function createBrowserHistory(
   }
 
   let history: BrowserHistory = {
+    get index() {
+      return index;
+    },
     get action() {
       return action;
     },
@@ -623,6 +640,7 @@ export function createHashHistory(
           if (delta) {
             // Revert the POP
             blockedPopTx = {
+              index: nextIndex,
               action: nextAction,
               location: nextLocation,
               retry() {
@@ -718,16 +736,22 @@ export function createHashHistory(
     ];
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void) {
+  function allowTx(
+    index: number,
+    action: Action,
+    location: Location,
+    retry: () => void
+  ) {
     return (
-      !blockers.length || (blockers.call({ action, location, retry }), false)
+      !blockers.length ||
+      (blockers.call({ index, action, location, retry }), false)
     );
   }
 
   function applyTx(nextAction: Action) {
     action = nextAction;
     [index, location] = getIndexAndLocation();
-    listeners.call({ action, location });
+    listeners.call({ index, action, location });
   }
 
   function push(to: To, state?: any) {
@@ -744,7 +768,7 @@ export function createHashHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
+    if (allowTx(index + 1, nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index + 1);
 
       // TODO: Support forced reloading
@@ -775,7 +799,7 @@ export function createHashHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
+    if (allowTx(index, nextAction, nextLocation, retry)) {
       let [historyState, url] = getHistoryStateAndUrl(nextLocation, index);
 
       // TODO: Support forced reloading
@@ -790,6 +814,9 @@ export function createHashHistory(
   }
 
   let history: HashHistory = {
+    get index() {
+      return index;
+    },
     get action() {
       return action;
     },
@@ -902,16 +929,22 @@ export function createMemoryHistory(
     });
   }
 
-  function allowTx(action: Action, location: Location, retry: () => void) {
+  function allowTx(
+    index: number,
+    action: Action,
+    location: Location,
+    retry: () => void
+  ) {
     return (
-      !blockers.length || (blockers.call({ action, location, retry }), false)
+      !blockers.length ||
+      (blockers.call({ index, action, location, retry }), false)
     );
   }
 
   function applyTx(nextAction: Action, nextLocation: Location) {
     action = nextAction;
     location = nextLocation;
-    listeners.call({ action, location });
+    listeners.call({ index, action, location });
   }
 
   function push(to: To, state?: any) {
@@ -928,7 +961,7 @@ export function createMemoryHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
+    if (allowTx(index + 1, nextAction, nextLocation, retry)) {
       index += 1;
       entries.splice(index, entries.length, nextLocation);
       applyTx(nextAction, nextLocation);
@@ -949,7 +982,7 @@ export function createMemoryHistory(
       )})`
     );
 
-    if (allowTx(nextAction, nextLocation, retry)) {
+    if (allowTx(index, nextAction, nextLocation, retry)) {
       entries[index] = nextLocation;
       applyTx(nextAction, nextLocation);
     }
@@ -963,7 +996,7 @@ export function createMemoryHistory(
       go(delta);
     }
 
-    if (allowTx(nextAction, nextLocation, retry)) {
+    if (allowTx(nextIndex, nextAction, nextLocation, retry)) {
       index = nextIndex;
       applyTx(nextAction, nextLocation);
     }

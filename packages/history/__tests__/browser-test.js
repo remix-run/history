@@ -24,6 +24,10 @@ describe("a browser history", () => {
     history = createBrowserHistory();
   });
 
+  it("has an index property", () => {
+    expect(typeof history.index).toBe("number");
+  });
+
   it("knows how to create hrefs from location objects", () => {
     const href = history.createHref({
       pathname: "/the/path",
