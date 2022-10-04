@@ -323,8 +323,8 @@ export interface MemoryHistory extends History {
 }
 
 /**
- * A constant domain history is similar to browser history, however it will block
- * back and forward navigation if it would redirect you to a different domain.
+ * A constant domain history is similar to browser history,
+ * but it will block back and forward navigation to a different domain.
  *
  * @see /docs/...
  */
@@ -1025,8 +1025,8 @@ export function createMemoryHistory(
 export type ConstantDomainHistoryOptions = { window?: Window };
 
 /**
- * A constant domain history is similar to browser history, however it will block
- * back and forward navigation if it would redirect you to a different domain.
+ * A constant domain history is similar to browser history,
+ * but it will block back and forward navigation to a different domain.
  *
  */
 export function createConstantDomainHistory(
