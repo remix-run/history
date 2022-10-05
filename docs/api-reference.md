@@ -14,9 +14,10 @@ The history library provides an API for tracking application history using [loca
 
 ### Environments
 
-The history library includes support for three different "environments", or modes of operation.
+The history library includes support for four different "environments", or modes of operation.
 
 - [Browser history](#createbrowserhistory) is used in web apps
+- [Constant Domain history](#createconstantdomainhistory) is similar to browser history, but it will block back and forward navigation to a different domain.
 - [Hash history](#createhashhistory) is used in web apps where you don't want to/can't send the URL to the server for some reason
 - [Memory history](#creatememoryhistory) - is used in native apps and testing
 
@@ -79,7 +80,7 @@ See [the Getting Started guide](getting-started.md) for more information.
 
 ### `History`
 
-A `History` object represents the shared interface for `BrowserHistory`, `HashHistory`, and `MemoryHistory`.
+A `History` object represents the shared interface for `BrowserHistory`, `ConstantDomainHistory`, `HashHistory`, and `MemoryHistory`.
 
 <details>
   <summary>Type declaration</summary>
@@ -91,9 +92,9 @@ interface History {
   createHref(to: To): string;
   push(to: To, state?: any): void;
   replace(to: To, state?: any): void;
-  go(delta: number): void;
-  back(): void;
-  forward(): void;
+  go(delta: number): boolean;
+  back(): boolean;
+  forward(): boolean;
   listen(listener: Listener): () => void;
   block(blocker: Blocker): () => void;
 }
@@ -124,6 +125,66 @@ let history = createBrowserHistory();
 ```
 
 See [the Getting Started guide](getting-started.md) for more information.
+
+<a name="createconstantdomainhistory"></a>
+<a name="constantdomainhistory"></a>
+
+### `createConstantDomainHistory`
+
+<details>
+  <summary>Type declaration</summary>
+
+```tsx
+function createConstantDomainHistory(options?: {
+  window?: Window;
+}): ConstantDomainHistory;
+
+interface ConstantDomainHistory extends History {}
+```
+
+</details>
+
+A constant domain history is similar to browser history, but it will block back and forward navigation to a different domain.
+
+#### The Problem
+
+For security reasons, browsers block accessing the entries on the history stack itself, hence it is impossible to check upfront where history.back() and history.forward() will bring you.
+When using these functions in a web app you usually only want to navigate on the same app and avoid going back to a different domain.
+
+Examples of potentially unwanted scenarios:
+
+Imagine you've built a web app, with a navigation menu that contains a couple of links to various pages and a go back button that is supposed to go back to the previously visited page (on your app).
+
+- Start from a different page (e.g. google.com) > overwrite the url with the url of your app > press enter to load > press the go back button on your app => you will go back to google.com and there is no way to avoid that or to check if the previous history entry was from a different domain.
+- You implemented authentication with a 3rd party system. On the first visit you redirect to the authentication provider which will redirect you back to your web app after successfully logged in. Now press the go back button => you will go back to the login (success) page again even though you are already logged in.
+- You could try to keep your own history stack in memory, but this is lost when you refresh your browser. Also, this is unaware of any pages you visited before your own app. Hence it will never be an exact copy of your browser's real history stack.
+
+#### Solution
+
+We can't access the history stack, but we do control the next location to navigate to. So on **every** redirect (push and replace) within your app, we set a flag `fromDomain` with the current domain in the [location state](https://developer.mozilla.org/en-US/docs/Web/API/History/state) (which is stored in the browser's history stack and hence persisted between reloads). This flag is sufficient to know if the current location was reached from a page of your own web app and hence if it is safe to go back.
+If this flag is not set (or set to a different domain) it means the previously visited page was not from your own web app. The [`history.back`](#history.back) function will now return a flag if the going back navigation was blocked or not. If it returns true (navigation was blocked) you can implement a safe fallback to navigate somewhere else (on your app).
+
+NOTE: This solution only works correctly if you set the `fromDomain` flag consistently from every redirect in your app. Hence it is required to create a singleton history object and **only** use these functions.
+To help with this, an ESLint rule [`no-native-navigation`](../rules/no-native-navigation.js) was added that prohibits the direct usage of the native browser's history and location API.
+
+#### Limitation
+
+The history API also provides functions to navigate an arbitrary amount of entries back or forth in the history stack. Since the above solution only gives you some knowledge what the direct predecessor of the current location is, the go(delta !== -1 ) and forward() functions will always return true and don't navigate.
+
+#### Example
+
+```ts
+import { createConstantDomainHistory } from "history";
+let history = createBrowserHistory();
+
+let blocked = history.back(); // Go back, only if we will go back to the same domain.
+if (blocked) {
+  history.push("/"); // Fallback in case going back was prevented.
+}
+
+blocked = history.forward(); // Will always be blocked and return true
+blocked = history.go(-2); // Will always be blocked and return true
+```
 
 <a name="createpath"></a>
 <a name="parsepath"></a>
@@ -234,6 +295,7 @@ See also [`history.listen`](#history.listen).
 ### `history.back()`
 
 Goes back one entry in the history stack. Alias for `history.go(-1)`.
+Will return a boolean that indicates when the navigation was blocked or not.
 
 See [the Navigation guide](navigation.md) for more information.
 
@@ -284,6 +346,7 @@ the given destination.
 ### `history.forward()`
 
 Goes forward one entry in the history stack. Alias for `history.go(1)`.
+Will return a boolean that indicates when the navigation was blocked or not.
 
 See [the Navigation guide](navigation.md) for more information.
 
@@ -292,6 +355,7 @@ See [the Navigation guide](navigation.md) for more information.
 ### `history.go(delta: number)`
 
 Navigates back/forward by `delta` entries in the stack.
+Will return a boolean that indicates when the navigation was blocked or not.
 
 See [the Navigation guide](navigation.md) for more information.
 
