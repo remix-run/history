@@ -326,7 +326,7 @@ export interface MemoryHistory extends History {
  * A constant domain history is similar to browser history,
  * but it will block back and forward navigation to a different domain.
  *
- * @see /docs/...
+ * @see /docs/api-reference.md#constantdomainhistory
  */
 export interface ConstantDomainHistory extends BrowserHistory {}
 
@@ -1028,12 +1028,13 @@ export type ConstantDomainHistoryOptions = { window?: Window };
  * A constant domain history is similar to browser history,
  * but it will block back and forward navigation to a different domain.
  *
+ * @see /docs/api-reference.md#constantdomainhistory
  */
 export function createConstantDomainHistory(
   options: BrowserHistoryOptions = {}
 ): BrowserHistory {
-  // TODO see if / how we can share common functionality with createBrowserHistory
-  // as most of this function is duplication only push, replace and go functions differ
+  // TODO see if / how we can share common functionality with createBrowserHistory,
+  // most of this function is duplication, only push, replace and go functions differ.
   let { window = document.defaultView! } = options;
   let globalHistory = window.history;
 
@@ -1210,16 +1211,16 @@ export function createConstantDomainHistory(
         false,
         `go(delta) with a delta != -1 cannot be used as it can't be verified you'll end up on the same domain`
       );
-      // return true to notify the navigation was blocked
+      // Return true to notify the navigation was blocked
       return true;
     }
     // In case go back 1 entry, check if we came from the same domain
     if (globalHistory.state?.fromDomain === window?.location.hostname) {
-      // It is safe to go back since we know we came from the same domain
+      // It is safe to go back
       globalHistory.go(delta);
       return false;
     } else {
-      // block going back to a different domain
+      // Block going back to a different domain
       return true;
     }
   }

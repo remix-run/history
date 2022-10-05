@@ -126,6 +126,9 @@ let history = createBrowserHistory();
 
 See [the Getting Started guide](getting-started.md) for more information.
 
+<a name="createconstantdomainhistory"></a>
+<a name="constantdomainhistory"></a>
+
 ### `createConstantDomainHistory`
 
 <details>
@@ -148,7 +151,7 @@ A constant domain history is similar to browser history, but it will block back 
 For security reasons, browsers block accessing the entries on the history stack itself, hence it is impossible to check upfront where history.back() and history.forward() will bring you.
 When using these functions in a web app you usually only want to navigate on the same app and avoid going back to a different domain.
 
-Examples of potentially unwanted scenario's:
+Examples of potentially unwanted scenarios:
 
 Imagine you've built a web app, with a navigation menu that contains a couple of links to various pages and a go back button that is supposed to go back to the previously visited page (on your app).
 
@@ -158,27 +161,29 @@ Imagine you've built a web app, with a navigation menu that contains a couple of
 
 #### Solution
 
-We can't access the history stack, but we do control the next location to navigate to. So on **every** redirect (push and replace) within your app, we set a flag `fromDomain` with the current domain in the [location state](https://developer.mozilla.org/en-US/docs/Web/API/History/state) (which is stored in the browser's history stack and hence persisted between reloads!). This flag is sufficient to know if the current location was reached from a page of your own web app and hence if it is safe to go back.
-If this flag is not set (or set to a different domain) it means the previously visited page was not from your own web app. Hence the [`history.back`](#history.back) will now return a flag if the back navigation was blocked or not. If it returns true (navigation was blocked) you can implement a safe fallback to navigate somehwere else (on your app).
+We can't access the history stack, but we do control the next location to navigate to. So on **every** redirect (push and replace) within your app, we set a flag `fromDomain` with the current domain in the [location state](https://developer.mozilla.org/en-US/docs/Web/API/History/state) (which is stored in the browser's history stack and hence persisted between reloads). This flag is sufficient to know if the current location was reached from a page of your own web app and hence if it is safe to go back.
+If this flag is not set (or set to a different domain) it means the previously visited page was not from your own web app. The [`history.back`](#history.back) function will now return a flag if the going back navigation was blocked or not. If it returns true (navigation was blocked) you can implement a safe fallback to navigate somewhere else (on your app).
 
 NOTE: This solution only works correctly if you set the `fromDomain` flag consistently from every redirect in your app. Hence it is required to create a singleton history object and **only** use these functions.
-To help with this you could add an ESLint rule that prohibits the direct usage of the native browser's history and location API.
+To help with this, an ESLint rule [`no-native-navigation`](../rules/no-native-navigation.js) was added that prohibits the direct usage of the native browser's history and location API.
 
 #### Limitation
 
-The history API also provides function to navigate an arbitrary amount of entries back or forth in the history stack. Since the above solution only gives you some knowledge what the direct predecessor of the current location is, the go(delta !== -1 ) and forward() functions will always return true and don't navigate.
+The history API also provides functions to navigate an arbitrary amount of entries back or forth in the history stack. Since the above solution only gives you some knowledge what the direct predecessor of the current location is, the go(delta !== -1 ) and forward() functions will always return true and don't navigate.
+
+#### Example
 
 ```ts
 import { createConstantDomainHistory } from "history";
 let history = createBrowserHistory();
 
-let blocked = history.back(); // go back, only if we will go back to the same domain
+let blocked = history.back(); // Go back, only if we will go back to the same domain.
 if (blocked) {
   history.push("/"); // Fallback in case going back was prevented.
 }
 
-blocked = history.forward(); // will always be blocked and return true
-blocked = history.go(-2); // will always be blocked and return true
+blocked = history.forward(); // Will always be blocked and return true
+blocked = history.go(-2); // Will always be blocked and return true
 ```
 
 <a name="createpath"></a>
