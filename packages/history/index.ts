@@ -443,18 +443,6 @@ export function createBrowserHistory(
     return typeof to === "string" ? to : createPath(to);
   }
 
-  // state defaults to `null` because `window.history.state` does
-  function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
-      pathname: location.pathname,
-      hash: "",
-      search: "",
-      ...(typeof to === "string" ? parsePath(to) : to),
-      state,
-      key: createKey(),
-    });
-  }
-
   function getHistoryStateAndUrl(
     nextLocation: Location,
     index: number
@@ -483,7 +471,7 @@ export function createBrowserHistory(
 
   function push(to: To, state?: any) {
     let nextAction = Action.Push;
-    let nextLocation = getNextLocation(to, state);
+    let nextLocation = getNextLocation(location, to, state);
     function retry() {
       push(to, state);
     }
@@ -507,7 +495,7 @@ export function createBrowserHistory(
 
   function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
-    let nextLocation = getNextLocation(to, state);
+    let nextLocation = getNextLocation(location, to, state);
     function retry() {
       replace(to, state);
     }
@@ -693,17 +681,6 @@ export function createHashHistory(
     return getBaseHref() + "#" + (typeof to === "string" ? to : createPath(to));
   }
 
-  function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
-      pathname: location.pathname,
-      hash: "",
-      search: "",
-      ...(typeof to === "string" ? parsePath(to) : to),
-      state,
-      key: createKey(),
-    });
-  }
-
   function getHistoryStateAndUrl(
     nextLocation: Location,
     index: number
@@ -732,7 +709,7 @@ export function createHashHistory(
 
   function push(to: To, state?: any) {
     let nextAction = Action.Push;
-    let nextLocation = getNextLocation(to, state);
+    let nextLocation = getNextLocation(location, to, state);
     function retry() {
       push(to, state);
     }
@@ -763,7 +740,7 @@ export function createHashHistory(
 
   function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
-    let nextLocation = getNextLocation(to, state);
+    let nextLocation = getNextLocation(location, to, state);
     function retry() {
       replace(to, state);
     }
@@ -891,17 +868,6 @@ export function createMemoryHistory(
     return typeof to === "string" ? to : createPath(to);
   }
 
-  function getNextLocation(to: To, state: any = null): Location {
-    return readOnly<Location>({
-      pathname: location.pathname,
-      search: "",
-      hash: "",
-      ...(typeof to === "string" ? parsePath(to) : to),
-      state,
-      key: createKey(),
-    });
-  }
-
   function allowTx(action: Action, location: Location, retry: () => void) {
     return (
       !blockers.length || (blockers.call({ action, location, retry }), false)
@@ -916,7 +882,7 @@ export function createMemoryHistory(
 
   function push(to: To, state?: any) {
     let nextAction = Action.Push;
-    let nextLocation = getNextLocation(to, state);
+    let nextLocation = getNextLocation(location, to, state);
     function retry() {
       push(to, state);
     }
@@ -937,7 +903,7 @@ export function createMemoryHistory(
 
   function replace(to: To, state?: any) {
     let nextAction = Action.Replace;
-    let nextLocation = getNextLocation(to, state);
+    let nextLocation = getNextLocation(location, to, state);
     function retry() {
       replace(to, state);
     }
@@ -1088,4 +1054,35 @@ export function parsePath(path: string): Partial<Path> {
   }
 
   return parsedPath;
+}
+
+/**
+ * Constructs new location object.
+ *
+ * @param from The current location.
+ * @param to
+ * @param [state=null] Defaults to `null` because `window.history.state` does.
+ */
+ function getNextLocation(from: Location, to: To, state: any = null): Location {
+  let normalizedTo;
+  if ( typeof to === "string" ) {
+    normalizedTo = parsePath(to);
+  } else if (to instanceof URL) {
+    normalizedTo = {
+      pathname: to.pathname,
+      search: to.search,
+      hash: to.hash
+    }
+  } else {
+    normalizedTo = to;
+  }
+
+  return readOnly<Location>({
+    pathname: from.pathname,
+    hash: "",
+    search: "",
+    ...normalizedTo,
+    state,
+    key: createKey(),
+  });
 }
