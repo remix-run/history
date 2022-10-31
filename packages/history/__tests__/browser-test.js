@@ -6,11 +6,13 @@ import Listen from "./TestSequences/Listen.js";
 import PushNewLocation from "./TestSequences/PushNewLocation.js";
 import PushSamePath from "./TestSequences/PushSamePath.js";
 import PushState from "./TestSequences/PushState.js";
+import PushURL from "./TestSequences/PushURL.js";
 import PushMissingPathname from "./TestSequences/PushMissingPathname.js";
 import PushRelativePathname from "./TestSequences/PushRelativePathname.js";
 import ReplaceNewLocation from "./TestSequences/ReplaceNewLocation.js";
 import ReplaceSamePath from "./TestSequences/ReplaceSamePath.js";
 import ReplaceState from "./TestSequences/ReplaceState.js";
+import ReplaceURL from "./TestSequences/ReplaceURL.js";
 import EncodedReservedCharacters from "./TestSequences/EncodedReservedCharacters.js";
 import GoBack from "./TestSequences/GoBack.js";
 import GoForward from "./TestSequences/GoForward.js";
@@ -81,6 +83,12 @@ describe("a browser history", () => {
     });
   });
 
+  describe("push URL", () => {
+    it("calls change listeners with the new location", (done) => {
+      PushURL(history, done);
+    });
+  });
+
   describe("push with no pathname", () => {
     it("reuses the current location pathname", (done) => {
       PushMissingPathname(history, done);
@@ -108,6 +116,12 @@ describe("a browser history", () => {
   describe("replace state", () => {
     it("calls change listeners with the new location", (done) => {
       ReplaceState(history, done);
+    });
+  });
+
+  describe("replace URL", () => {
+    it("calls change listeners with the new location", (done) => {
+      ReplaceURL(history, done);
     });
   });
 
