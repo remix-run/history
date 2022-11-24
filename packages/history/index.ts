@@ -436,7 +436,7 @@ export function createBrowserHistory(
 
   if (index == null) {
     index = 0;
-    globalHistory.replaceState({ ...globalHistory.state, idx: index }, "");
+    globalHistory.replaceState({ ...globalHistory.state, idx: index }, "", createHref(location));
   }
 
   function createHref(to: To) {
