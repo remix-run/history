@@ -3,7 +3,7 @@
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#action
  */
-export enum Action {
+export type Action =
   /**
    * A POP indicates a change to an arbitrary index in the history stack, such
    * as a back or forward navigation. It does not describe the direction of the
@@ -11,42 +11,41 @@ export enum Action {
    *
    * Note: This is the default action for newly created history objects.
    */
-  Pop = "POP",
+  | "POP"
 
   /**
    * A PUSH indicates a new entry being added to the history stack, such as when
    * a link is clicked and a new page loads. When this happens, all subsequent
    * entries in the stack are lost.
    */
-  Push = "PUSH",
+  | "PUSH"
 
   /**
    * A REPLACE indicates the entry at the current index in the history stack
    * being replaced by a new one.
    */
-  Replace = "REPLACE",
-}
+  | "REPLACE";
 
 /**
  * A URL pathname, beginning with a /.
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.pathname
  */
-export type Pathname = string;
+export type Pathname = `/${string}`;
 
 /**
  * A URL search string, beginning with a ?.
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.search
  */
-export type Search = string;
+export type Search = `?${string}`;
 
 /**
  * A URL fragment identifier, beginning with a #.
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.hash
  */
-export type Hash = string;
+export type Hash = `#${string}`;
 
 /**
  * An object that is used to associate some arbitrary data with a location, but
@@ -188,7 +187,7 @@ export type To = string | Partial<Path>;
 export interface History {
   /**
    * The last action that modified the current location. This will always be
-   * Action.Pop when a history instance is first created. This value is mutable.
+   * 'POP' when a history instance is first created. This value is mutable.
    *
    * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#history.action
    */
@@ -388,7 +387,7 @@ export function createBrowserHistory(
       blockers.call(blockedPopTx);
       blockedPopTx = null;
     } else {
-      let nextAction = Action.Pop;
+      let nextAction: Action = "POP" as const;
       let [nextIndex, nextLocation] = getIndexAndLocation();
 
       if (blockers.length) {
@@ -429,7 +428,7 @@ export function createBrowserHistory(
 
   window.addEventListener(PopStateEventType, handlePop);
 
-  let action = Action.Pop;
+  let action: Action = "POP";
   let [index, location] = getIndexAndLocation();
   let listeners = createEvents<Listener>();
   let blockers = createEvents<Blocker>();
@@ -482,7 +481,7 @@ export function createBrowserHistory(
   }
 
   function push(to: To, state?: any) {
-    let nextAction = Action.Push;
+    let nextAction: Action = "PUSH" as const;
     let nextLocation = getNextLocation(to, state);
     function retry() {
       push(to, state);
@@ -506,7 +505,7 @@ export function createBrowserHistory(
   }
 
   function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
+    let nextAction: Action = "REPLACE";
     let nextLocation = getNextLocation(to, state);
     function retry() {
       replace(to, state);
@@ -614,7 +613,7 @@ export function createHashHistory(
       blockers.call(blockedPopTx);
       blockedPopTx = null;
     } else {
-      let nextAction = Action.Pop;
+      let nextAction: Action = "POP";
       let [nextIndex, nextLocation] = getIndexAndLocation();
 
       if (blockers.length) {
@@ -666,7 +665,7 @@ export function createHashHistory(
     }
   });
 
-  let action = Action.Pop;
+  let action: Action = "POP";
   let [index, location] = getIndexAndLocation();
   let listeners = createEvents<Listener>();
   let blockers = createEvents<Blocker>();
@@ -731,7 +730,7 @@ export function createHashHistory(
   }
 
   function push(to: To, state?: any) {
-    let nextAction = Action.Push;
+    let nextAction: Action = "PUSH";
     let nextLocation = getNextLocation(to, state);
     function retry() {
       push(to, state);
@@ -762,7 +761,7 @@ export function createHashHistory(
   }
 
   function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
+    let nextAction: Action = "REPLACE";
     let nextLocation = getNextLocation(to, state);
     function retry() {
       replace(to, state);
@@ -882,7 +881,7 @@ export function createMemoryHistory(
     entries.length - 1
   );
 
-  let action = Action.Pop;
+  let action: Action = "POP";
   let location = entries[index];
   let listeners = createEvents<Listener>();
   let blockers = createEvents<Blocker>();
@@ -915,7 +914,7 @@ export function createMemoryHistory(
   }
 
   function push(to: To, state?: any) {
-    let nextAction = Action.Push;
+    let nextAction: Action = "PUSH";
     let nextLocation = getNextLocation(to, state);
     function retry() {
       push(to, state);
@@ -936,7 +935,7 @@ export function createMemoryHistory(
   }
 
   function replace(to: To, state?: any) {
-    let nextAction = Action.Replace;
+    let nextAction: Action = "REPLACE";
     let nextLocation = getNextLocation(to, state);
     function retry() {
       replace(to, state);
@@ -957,7 +956,7 @@ export function createMemoryHistory(
 
   function go(delta: number) {
     let nextIndex = clamp(index + delta, 0, entries.length - 1);
-    let nextAction = Action.Pop;
+    let nextAction: Action = "POP";
     let nextLocation = entries[nextIndex];
     function retry() {
       go(delta);
