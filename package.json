@@ -11,7 +11,7 @@
     "version": "node ./scripts/version.js",
     "watch": "node ./scripts/watch.js"
   },
-  "dependencies": {
+  "devDependencies": {
     "@ampproject/filesize": "^4.3.0",
     "@ampproject/rollup-plugin-closure-compiler": "0.27.0",
     "@babel/core": "^7.15.0",
