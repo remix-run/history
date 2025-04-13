@@ -38,14 +38,14 @@ export type Pathname = `/${string}`;
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.search
  */
-export type Search = `?${string}`;
+export type Search = `?${string}` | '';
 
 /**
  * A URL fragment identifier, beginning with a #.
  *
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#location.hash
  */
-export type Hash = `#${string}`;
+export type Hash = `#${string}` | '';
 
 /**
  * An object that is used to associate some arbitrary data with a location, but
@@ -90,6 +90,17 @@ export interface Path {
   hash: Hash;
 }
 
+function normalizePathname(path: string): Pathname {
+  return path.startsWith('/') ? path as Pathname : `/${path}`;
+}
+
+function normalizeSearch(s: string): Search {
+  return s.startsWith('?') ? s as Search : '';
+}
+
+function normalizeHash(h: string): Hash {
+  return h.startsWith('#') ? h as Hash : '';
+ }
 /**
  * An entry in a history stack. A location contains information about the
  * URL path, as well as possibly some arbitrary state and a key.
@@ -372,9 +383,9 @@ export function createBrowserHistory(
     return [
       state.idx,
       readOnly<Location>({
-        pathname,
-        search,
-        hash,
+        pathname: normalizePathname(pathname),
+        search: normalizeSearch(search),
+        hash: normalizeHash(hash),
         state: state.usr || null,
         key: state.key || "default",
       }),
@@ -593,7 +604,7 @@ export function createHashHistory(
       pathname = "/",
       search = "",
       hash = "",
-    } = parsePath(window.location.hash.substr(1));
+    } = parsePath(window.location.hash.substring(1));
     let state = globalHistory.state || {};
     return [
       state.idx,
@@ -1040,7 +1051,7 @@ function createEvents<F extends Function>(): Events<F> {
 }
 
 function createKey() {
-  return Math.random().toString(36).substr(2, 8);
+  return Math.random().toString(36).substring(2, 8);
 }
 
 /**
@@ -1071,18 +1082,21 @@ export function parsePath(path: string): Partial<Path> {
   if (path) {
     let hashIndex = path.indexOf("#");
     if (hashIndex >= 0) {
-      parsedPath.hash = path.substr(hashIndex);
-      path = path.substr(0, hashIndex);
+      // FIXME: decent triming helper
+      parsedPath.hash = normalizeHash(path.substring(hashIndex));
+      path = path.substring(0, hashIndex);
     }
 
     let searchIndex = path.indexOf("?");
     if (searchIndex >= 0) {
-      parsedPath.search = path.substr(searchIndex);
-      path = path.substr(0, searchIndex);
+      // FIXME: decent triming helper
+      parsedPath.search = normalizeSearch(path.substring(searchIndex));
+      path = path.substring(0, searchIndex);
     }
 
     if (path) {
-      parsedPath.pathname = path;
+      // FIXME:
+      parsedPath.pathname = normalizePathname(path);
     }
   }
 
