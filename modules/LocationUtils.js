@@ -1,5 +1,6 @@
 import resolvePathname from 'resolve-pathname';
 import valueEqual from 'value-equal';
+import warning from './warning.js';
 
 import { parsePath } from './PathUtils.js';
 
@@ -45,6 +46,20 @@ export function createLocation(path, state, key, currentLocation) {
     } else {
       throw e;
     }
+  }
+
+  // Security fix: Normalize embedded double-slashes to prevent open redirect vulnerability (CVE-2025-68470)
+  // Paths like "//evil.com" could be interpreted as protocol-relative URLs leading to external redirects
+  if (location.pathname && location.pathname.includes('//')) {
+    const oldPathname = location.pathname;
+    location.pathname = location.pathname.replace(/\/\/+/g, '/');
+    warning(
+      false,
+      'Pathnames cannot have embedded double slashes - normalizing ' +
+        oldPathname +
+        ' -> ' +
+        location.pathname
+    );
   }
 
   if (key) location.key = key;
